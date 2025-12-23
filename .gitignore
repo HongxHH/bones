@@ -10,6 +10,9 @@
 *.txt
 *.md
 
+*.pyc
+*.pyo
+
 /player/output/
 /honghong/
 /experiment/
