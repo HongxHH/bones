@@ -114,7 +114,6 @@ class BufferGreedyController(Module, NESController):
                     best_action = idx_action
 
         action_enh = best_action
-        # action_enh = 0
 
         if self.buff_down - self.buff_enh - self.seg_time <= self.enhance_time[action_down][action_enh]: # 缓冲区不足时，不进行增强
             action_enh = 0

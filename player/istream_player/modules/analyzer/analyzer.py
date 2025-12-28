@@ -71,7 +71,6 @@ class AnalyzerSegment:
     enhance_frame_interval: Optional[int] = None         # 超分间隔帧数（后续可变）
     fast_complete_threshold: Optional[float] = None      # fast-complete 阈值（秒）
     fast_complete: Optional[bool] = None                 # 是否触发 fast-complete
-    vmaf_diff: Optional[float] = None                   # 段增强后的离线 VMAF 差值
     enhance_ratio: Optional[float] = None                # 段中模型增强帧数占总帧数的比例
     base_vmaf: Optional[float] = None                    # 段增强前的离线 VMAF
     enhance_vmaf: Optional[float] = None                # 段增强后的理想离线 VMAF
@@ -455,15 +454,13 @@ class PlaybackAnalyzer(
                     e_idx = int(analyzer_segment.enhance_action)
                     # 这里我们需要更加精细化的QOE,因为即使该段进行了增强，但是也可能触发了Fast模式，仅增强了部分，因此还要扣除没有增强的部分
                     if analyzer_segment.fast_complete:
-                        vmaf_diff = float(self.quality_table[q_idx, e_idx]) - float(self.quality_table[q_idx, 0])
                         if analyzer_segment.enhanced_cnt == 0:
                             ratio = 0
                         else:
                             ratio = analyzer_segment.enhanced_cnt / (analyzer_segment.enhanced_cnt + analyzer_segment.interpolated_cnt)
                         analyzer_segment.enhance_vmaf = self.quality_table[q_idx, e_idx]
-                        analyzer_segment.vmaf_diff = vmaf_diff
                         analyzer_segment.enhance_ratio = ratio
-                        analyzer_segment.real_vmaf = analyzer_segment.base_vmaf + vmaf_diff * ratio
+                        analyzer_segment.real_vmaf = analyzer_segment.base_vmaf * (1 - ratio) + analyzer_segment.enhance_vmaf * ratio
                     else:
                         analyzer_segment.real_vmaf = float(self.quality_table[q_idx, e_idx])
                 else:

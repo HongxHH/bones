@@ -107,7 +107,7 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
         # 提前检测的缓冲水位阈值（秒），低于此值且段即将播放时触发快速完成
         self._fast_complete_threshold = 2  # 默认2秒（将被动态调整）
         # 提前检测的检查间隔（帧数）
-        self._check_interval_frames = 20  # 每20帧检查一次
+        self._check_interval_frames = 40  #
         # 是否使用提前检测
         self.use_fast_complete = False
         # 已经增强的帧数
@@ -498,7 +498,7 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                 if not fast_complete:
                     self.latency_table[segment.download_action, segment.enhance_action] = (end_time - start_time) / (self.seg_time * self.frame_rate)
                 # 记录增强完成信息
-                self.log.info(f"Complete enhancing segment index: {self._current_enhancing_index}, download action: {segment.download_action}, enhance action: {segment.enhance_action}, latency: {enhance_latency}, enhanced frames: {self._enhanced_frames}, interpolated frames: {interpolated_cnt}, enhance FPS: {enhance_fps}, enhance frame interval: {self.enhance_frame_interval}, fast complete threshold: {self._fast_complete_threshold}, fast complete triggered: {fast_complete}, enhance end to play time: {enhance_end_to_play_time}")
+                self.log.info(f"Complete enhancing segment index: {self._current_enhancing_index}, download action: {segment.download_action}, enhance action: {segment.enhance_action}, latency: {enhance_latency}, enhanced frames: {self._enhanced_frames}, interpolated frames: {interpolated_cnt}, enhance FPS: {enhance_fps}, enhance frame interval: {self.enhance_frame_interval},threshold: {self._fast_complete_threshold}, enhance end to play time: {enhance_end_to_play_time}")
                  # 重置与增强相关的计数器
                 self._enhanced_frames = 0
                 # 清除当前增强段索引
@@ -567,74 +567,55 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
         
         return self.plan_generator.get_plan_list(num_frames)
 
-    async def _update_dynamic_threshold(self):
+    def _update_dynamic_threshold(self):
         """
         动态更新 fast_complete 阈值
         """
 
-        self._fast_complete_threshold = 2
-
         # 当前计算任务剩余时间
-        # self.remain_task_level = self.remain_task()
+        current_time = time.time()
+        self.remain_task_level = self.remain_task()
 
+        # 1) 基础阈值：完成当前任务需要的时间
+        base_threshold = self.remain_task_level
 
+        # 2) 卡顿惩罚：清理过期记录后，根据最近卡顿总时长增加缓冲需求
+        self._stall_history = [
+            (stall_time, stall_duration)
+            for stall_time, stall_duration in self._stall_history
+            if current_time - stall_time <= self._stall_history_window
+        ]
+        stall_penalty = 0.0
+        if self._stall_history:
+            recent_stall_duration = sum(duration for _, duration in self._stall_history)
+            stall_penalty = recent_stall_duration * self._stall_penalty_factor
 
+        # 3) 缓冲区趋势惩罚：记录最新缓冲水位并检测下降速率
+        current_buffer_level = self.download_buffer.renderer_remain_task_level()
+        self._buffer_history.append((current_time, current_buffer_level))
+        if len(self._buffer_history) > self._buffer_history_size:
+            self._buffer_history.pop(0)
 
+        buffer_decline_penalty = 0.0
+        if len(self._buffer_history) >= 3:
+            recent_levels = [level for _, level in self._buffer_history[-3:]]
+            recent_times = [t for t, _ in self._buffer_history[-3:]]
+            if recent_levels[-1] < recent_levels[0]:
+                time_span = recent_times[-1] - recent_times[0]
+                if time_span > 0:
+                    decline_rate = (recent_levels[0] - recent_levels[-1]) / time_span
+                    if decline_rate > 0:
+                        buffer_decline_penalty = self._buffer_decline_penalty * min(decline_rate, 2.0)
 
+        # 4) 计算并约束动态阈值
+        dynamic_threshold = base_threshold + stall_penalty + buffer_decline_penalty
+        self._fast_complete_threshold = max(self._min_threshold, min(self._max_threshold, dynamic_threshold))
 
-        # current_time = time.time()  # 用于时间相关的过滤，如清理过期卡顿记录、更新缓冲区历史
-
-        # task_total = self.task_total
-        # current_renderer_remain_buffer_level = self.download_buffer.renderer_remain_task_level()
-
-        
-        # # 1. 基础阈值：基于预期增强时间
-        # base_threshold = task_total * self._base_threshold_factor
-        
-        # # 2. 清理过期的卡顿历史（只保留最近 N 秒内的）
-        # self._stall_history = [
-        #     (stall_time, stall_duration)
-        #     for stall_time, stall_duration in self._stall_history
-        #     if current_time - stall_time <= self._stall_history_window
-        # ]
-        
-        # # 3. 计算卡顿惩罚
-        # stall_penalty = 0.0
-        # if len(self._stall_history) > 0:
-        #     # 计算最近卡顿的总时长
-        #     recent_stall_duration = sum(duration for _, duration in self._stall_history)
-        #     # 卡顿惩罚与最近卡顿时长成正比：最近卡顿时长 * 卡顿惩罚系数
-        #     stall_penalty = recent_stall_duration * self._stall_penalty_factor
-        
-        # # 4. 更新缓冲区历史
-        # self._buffer_history.append((current_time, current_renderer_remain_buffer_level))
-        # # 只保留最近 N 次卡顿记录
-        # if len(self._buffer_history) > self._buffer_history_size:
-        #     self._buffer_history.pop(0)
-        
-        # # 5. 计算缓冲区下降惩罚
-        # buffer_decline_penalty = 0.0
-        # if len(self._buffer_history) >= 3:
-        #     # 计算最近几次缓冲区水位的下降趋势
-        #     recent_levels = [level for _, level in self._buffer_history[-3:]]
-        #     recent_times = [t for t, _ in self._buffer_history[-3:]]
-            
-        #     if recent_levels[-1] < recent_levels[0]:
-        #         # 缓冲区在下降，计算平均下降速率（秒/秒）
-        #         time_span = recent_times[-1] - recent_times[0]
-        #         if time_span > 0:
-        #             decline_rate = (recent_levels[0] - recent_levels[-1]) / time_span
-        #             # 如果下降速率较快（每秒下降超过 0.3 秒），增加阈值
-        #             if decline_rate > 0.3:
-        #                 buffer_decline_penalty = self._buffer_decline_penalty * min(decline_rate, 2.0)  # 限制最大惩罚
-        
-        # # 6. 综合计算最终阈值
-        # dynamic_threshold = base_threshold + stall_penalty + buffer_decline_penalty
-        
-        # # 7. 限制在合理范围内
-        # self._fast_complete_threshold = max(self._min_threshold, min(self._max_threshold, dynamic_threshold))
-    
-        # self.log.info(f"Dynamic threshold updated: {self._fast_complete_threshold:.2f}s")
+        self.log.info(
+            f"Dynamic threshold updated -> base: {base_threshold:.2f}s, "
+            f"stall_penalty: {stall_penalty:.2f}s, buffer_penalty: {buffer_decline_penalty:.2f}s, "
+            f"final: {self._fast_complete_threshold:.2f}s"
+        )
 
 
     def _record_stall(self, stall_time: float, stall_duration: float):
@@ -662,16 +643,15 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
         """
         # 获取下一个要播放的段索引
         next_index = self.download_buffer.get_next_render_segment_index()
-        self._update_dynamic_threshold()
         # 如果当前增强的段就是下一个要播放的段
         if self._current_enhancing_index == next_index:
-            # 获取当前缓冲水位
-            buffer_level = self.download_buffer.renderer_remain_task_level() 
-            if buffer_level <= self._fast_complete_threshold:
+            self._update_dynamic_threshold()
+            render_remain_level = self.download_buffer.renderer_remain_task_level()
+            if render_remain_level <= self._fast_complete_threshold:
                 # 缓冲水位很低，段即将被播放，需要快速完成
                 self.log.info(
                     f"Fast complete triggered: segment {self._current_enhancing_index} is next to play, "
-                    f"renderer remain level: {buffer_level:.2f}s, "
+                    f"renderer remain level: {render_remain_level:.2f}s, "
                     f"dynamic threshold: {self._fast_complete_threshold:.2f}s, "
                     f"current enhance cnt: {cnt}"
                 )
