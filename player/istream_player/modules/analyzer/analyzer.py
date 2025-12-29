@@ -77,7 +77,8 @@ class AnalyzerSegment:
     real_vmaf: Optional[float] = None                    # 段增强后的实际离线 VMAF
     abort_reason: Optional[str] = None                   # 若被中止，记录中止原因
     wasted_enhanced_cnt: Optional[int] = None            # 若被中止，浪费的增强帧数
-    enhance_end_to_play_time: Optional[float] = None      # 若执行了增强动作，增强完成后该增强段距离播放开始的时间 (渲染器剩余时长 + 中间隔得段数*段时长)
+    enhance_start_to_play_time: Optional[float] = None   #  增强开始到播放开始的时间 (渲染器剩余时长 + 中间隔得段数*段时长)
+    enhance_end_to_play_time: Optional[float] = None      # 若执行完成了增强动作，增强完成后该增强段距离播放开始的时间 (渲染器剩余时长 + 中间隔得段数*段时长)
 
     @property 
     def stop_ratio(self) -> Optional[float]:
@@ -443,6 +444,7 @@ class PlaybackAnalyzer(
                 analyzer_segment.enhance_frame_interval = stats.get("enhance_frame_interval")
                 analyzer_segment.fast_complete_threshold = stats.get("fast_complete_threshold")
                 analyzer_segment.fast_complete = stats.get("fast_complete_triggered")
+                analyzer_segment.enhance_start_to_play_time = stats.get("enhance_start_to_play_time")
                 analyzer_segment.enhance_end_to_play_time = stats.get("enhance_end_to_play_time")
             
             # 基于质量表推算该段增强后的离线 VMAF

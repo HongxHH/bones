@@ -87,7 +87,7 @@ class PlayerConfig:
     # 带宽测量模块 - 负责网络带宽的实时测量
     mod_bw: str = "bw_meter"
     # 网络感知调度器模块 - 基于网络状态的智能调度算法
-    mod_nes: str = "nas" # bones dynamic_greedy bola_greedy buffer_greedy tput_greedy nas
+    mod_nes: str = "bones" # bones dynamic_greedy bola_greedy buffer_greedy tput_greedy nas
     # 任务调度器模块 - 管理各种任务的调度执行
     mod_scheduler: str = "scheduler"
     # 下载缓冲区模块 - 管理下载数据的缓冲

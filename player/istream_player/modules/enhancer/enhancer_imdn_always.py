@@ -1,4 +1,5 @@
 import asyncio
+from curses import use_default_colors
 import json
 import logging
 
@@ -18,6 +19,7 @@ from istream_player.core.player import PlayerEventListener
 from istream_player.models.mpd_objects import Segment
 from istream_player.core.player import Player
 from istream_player.core.downloader import (DownloadManager, DownloadRequest, DownloadType)
+from istream_player.core.renderer import Renderer
 from .imdn_model import IMDN, IMDN_RTC
 from .enhancement_plan import (
     EnhancementDecision, 
@@ -36,7 +38,7 @@ import tempfile
 
 # IMDN增强器实现类 - 继承自Module、Enhancer和PlayerEventListener接口
 # 负责使用IMDN（Information Multi-Distillation Network）模型对低分辨率视频进行超分辨率增强
-@ModuleOption("imdn_always", default=True, requires=["model_downloader", DownloadBufferImpl, EnhanceBufferImpl, Scheduler, Player])
+@ModuleOption("imdn_always", default=True, requires=["model_downloader", DownloadBufferImpl, EnhanceBufferImpl, Scheduler, Renderer, Player])
 class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
     # 获取日志记录器实例，用于记录IMDN增强相关的日志信息
     log = logging.getLogger("IMDNEnhancerAlways")
@@ -83,6 +85,8 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
         self.frame_rate = 30
         # 时间因子，用于调整增强速度的变化
         self.time_factor = 1.  # enhancement speed variation factor
+        # 安全因子
+        self.safe_factor = 1  # safety factor
         # 任务开始时间，用于计算剩余任务时间
         self.task_start = None
         # 任务总时间，用于计算剩余任务时间
@@ -107,7 +111,7 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
         # 提前检测的缓冲水位阈值（秒），低于此值且段即将播放时触发快速完成
         self._fast_complete_threshold = 2  # 默认2秒（将被动态调整）
         # 提前检测的检查间隔（帧数）
-        self._check_interval_frames = 40  #
+        self._check_interval_frames = 15  #
         # 是否使用提前检测
         self.use_fast_complete = False
         # 已经增强的帧数
@@ -115,9 +119,9 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
         # 段的总帧数 默认120帧
         self._num_frames = 120
 
+        self.cnt = 0
+
         # ======动态预警阈值调整相关=========
-        # 基础阈值系数：阈值 = task_total * base_threshold_factor
-        self._base_threshold_factor = 0.7  # 基础阈值系数（0.6-0.8 之间较合理）
         # 最小阈值（秒）
         self._min_threshold = 0.5
         # 最大阈值（秒）
@@ -150,6 +154,7 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                     download_buffer: DownloadBufferImpl,
                     enhance_buffer: EnhanceBufferImpl,
                     scheduler: Scheduler,
+                    renderer: Renderer,
                     player: Player,
                     **kwargs
     ):
@@ -185,7 +190,8 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
         self.scheduler = scheduler
         # 保存模型下载管理器实例的引用
         self.download_manager = model_downloader
-
+        # 保存渲染器实例的引用
+        self.renderer = renderer
         # 将当前实例注册为播放器的事件监听器
         player.add_listener(self)
 
@@ -305,17 +311,19 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                 # 初始化中止原因
                 abort_reason = ""
 
+                enhance_start_to_play_time = (self.renderer.remain_task() +
+                                                    (self._current_enhancing_index - self.download_buffer.get_next_render_segment_index()) * self.seg_time)
                 # 记录增强开始信息
-                self.log.info(f"Enhancing segment index: {self._current_enhancing_index }, download action: {segment.download_action}, enhance action: {level}")
+                self.log.info(f"Enhancing segment index: {self._current_enhancing_index },"
+                              f"download action: {segment.download_action}, "
+                              f"enhance action: {level}, "
+                              f"enhance start to play time: {enhance_start_to_play_time:.3f}s")
 
                 # 记录增强开始时间戳
-                start_time = time.time()
+                start_time = time.perf_counter()
                 self.task_start = start_time
                 # 获取该增强级别的预期延迟
                 self.task_total = self.get_latency_table()[segment.download_action, segment.enhance_action]
-                # 新段开始增强时更新阈值
-                if self.use_fast_complete:
-                    self._update_dynamic_threshold()
 
                 # 检查是否需要中止增强
                 repr_idx = segment.repr_id
@@ -328,6 +336,9 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                 if segment.url in self.played_urls:
                     abort = True
                     abort_reason = "Already played before enhance"
+                if self.use_fast_complete and enhance_start_to_play_time < 0.3:
+                    abort = True
+                    abort_reason = "Remaining time less than min threshold"  # 剩余时长小于阈值，直接中止
                 if abort:
                     self.abort_total += 1
                     # 记录段级别的中止原因与统计（此时尚未开始增强帧，浪费帧数为0）
@@ -339,6 +350,7 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                     segment.fast_complete_triggered = False
                     # 将统计结果写入全局缓存，供 Analyzer 在播放时按 URL 查询
                     self.segment_stats[segment.url] = {
+                        "enhance_start_to_play_time": enhance_start_to_play_time,
                         "enhance_start_time": start_time,
                         "enhance_end_time": None,
                         "is_enhance": segment.is_enhance,
@@ -351,7 +363,7 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                     self.log.info(
                         f"Abort enhancing segment index: {self._current_enhancing_index}, "
                         f"download action: {segment.download_action}, "
-                        f"enhance action: {segment.enhance_action}, reason: {abort_reason}"
+                        f"enhance action: {segment.enhance_action}, reason: {abort_reason}, enhance start to play time: {enhance_start_to_play_time:.3f}s"
                     )
                     break
 
@@ -368,25 +380,20 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                 display_W, display_H = self.config.display_width, self.config.display_height
                 # 创建张量转换器
                 tensor_converter = TensorConverter(decode_W, decode_H, display_W, display_H, gpu_id=0)
-
-                # start_time = time.time()
+                # start_time = time.perf_counter()
                 # 生成帧增强计划（提前标记所有帧的处理策略）
                 enhancement_plan = self._generate_enhancement_plan(segment, self._num_frames )
-                # self.log.info(f"Generate enhancement plan time: {time.time() - start_time}")
+                # self.log.info(f"Generate enhancement plan time: {time.perf_counter() - start_time}")
 
                 plan_iter = iter(enhancement_plan)
 
                 model = self.model_pool[(scale, level)]
                 # model_cnt = 1 # 取值 1 2 3
 
-                # 初始化增强结果列表（张量或Surface）
-                result : List[object] = []
-                # 初始化帧计数器
-                cnt = 0
-                # 初始化已增强帧计数器
-                self._enhanced_frames = 0
-                # 标记是否需要快速完成（abort时使用）
-                fast_complete = False
+                result : List[object] = [] # 初始化增强结果列表（张量或Surface）
+                self.cnt = 0 # 初始化帧计数器
+                self._enhanced_frames = 0 # 初始化已增强帧计数器
+                fast_complete = False # 标记是否需要快速完成（abort时使用）
 
                 # 逐帧解码和增强循环
                 while True:
@@ -399,8 +406,9 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                         break
 
                     # 提前检测：检查段是否即将被播放（每N帧检查一次）
-                    if self.use_fast_complete and not fast_complete and cnt % self._check_interval_frames == 0:
-                        fast_complete = self._should_fast_complete(cnt)
+                    # 注意：必须确保 cnt > 0，避免在第一帧（cnt=0）就触发检查导致整个段都不增强
+                    if self.use_fast_complete and not fast_complete and self.cnt > 0 and self.cnt % self._check_interval_frames == 0:
+                        fast_complete = self.check_fast_complete("来源于增强中")
                     # 如果进入快速完成模式，所有剩余帧都使用快速插值
                     if fast_complete:
                         surf_enh = surf.Clone(decoder.gpu_id)
@@ -418,7 +426,7 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                     # 将增强结果添加到结果列表
                     result.append(surf_enh)
                     # 增加帧计数
-                    cnt += 1
+                    self.cnt += 1
                     # 让出控制权给其他任务
                     await asyncio.sleep(0)  # yield to other tasks
 
@@ -443,8 +451,9 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                     segment.fast_complete_triggered = fast_complete
                     # 将统计结果写入全局缓存，供 Analyzer 在播放时按 URL 查询
                     self.segment_stats[segment.url] = {
+                        "enhance_start_to_play_time": enhance_start_to_play_time,
                         "enhance_start_time": start_time,
-                        "enhance_end_time": time.time(),
+                        "enhance_end_time": time.perf_counter(),
                         "is_enhance": segment.is_enhance,
                         "abort_reason": segment.abort_reason,
                         "wasted_enhanced_cnt": segment.wasted_enhanced_cnt,
@@ -465,18 +474,19 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                 # 正常完成：将增强结果保存到段对象
                 segment.decode_data = result
                 is_enhance = True  # 执行了增强
-                end_time = time.time() # 记录增强结束时间
+                end_time = time.perf_counter() # 记录增强结束时间
                 enhance_latency = end_time - start_time
                 # 若执行了增强动作，增强完成后该增强段距离播放开始的时间 (渲染器剩余时长 + abs（中间隔得段数*段时长）)
-                enhance_end_to_play_time = (self.download_buffer.renderer_remain_task_level() +
+                enhance_end_to_play_time = (self.renderer.remain_task() +
                                                     abs((self.download_buffer.get_next_render_segment_index() -
                                                          self._current_enhancing_index)) * self.seg_time)
                 # 记录与评估相关的统计信息，便于 PlaybackAnalyzer 聚合
-                interpolated_cnt = cnt - self._enhanced_frames
-                enhance_fps = cnt / (end_time - start_time) if end_time > start_time else None
+                interpolated_cnt = self.cnt - self._enhanced_frames
+                enhance_fps = self.cnt / (end_time - start_time) if end_time > start_time else None
 
                 # 将统计结果写入全局缓存，供 Analyzer 按照 URL 查询
                 self.segment_stats[segment.url] = {
+                    "enhance_start_to_play_time": enhance_start_to_play_time,
                     "enhance_start_time": start_time,
                     "enhance_end_time": end_time,
                     "is_enhance": is_enhance,
@@ -498,11 +508,24 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                 if not fast_complete:
                     self.latency_table[segment.download_action, segment.enhance_action] = (end_time - start_time) / (self.seg_time * self.frame_rate)
                 # 记录增强完成信息
-                self.log.info(f"Complete enhancing segment index: {self._current_enhancing_index}, download action: {segment.download_action}, enhance action: {segment.enhance_action}, latency: {enhance_latency}, enhanced frames: {self._enhanced_frames}, interpolated frames: {interpolated_cnt}, enhance FPS: {enhance_fps}, enhance frame interval: {self.enhance_frame_interval},threshold: {self._fast_complete_threshold}, enhance end to play time: {enhance_end_to_play_time}")
+                self.log.info(f"Complete enhancing segment index: {self._current_enhancing_index},"
+                            f"download action: {segment.download_action}, "
+                            f"enhance action: {segment.enhance_action}, "
+                            f"enhance start to play time: {enhance_start_to_play_time:.3f}s, "
+                            f"latency: {enhance_latency:.3f}s, "
+                            f"enhanced frames: {self._enhanced_frames}, "
+                            f"interpolated frames: {interpolated_cnt}, "
+                            f"enhance FPS: {enhance_fps:.3f}fps, "
+                            f"enhance frame interval: {self.enhance_frame_interval}, "
+                            f"threshold: {self._fast_complete_threshold:.3f}s, "
+                            f"enhance end to play time: {enhance_end_to_play_time:.3f}s")
                  # 重置与增强相关的计数器
                 self._enhanced_frames = 0
                 # 清除当前增强段索引
                 self._current_enhancing_index = None
+                self.cnt = 0
+                self.task_start = None
+                self.task_total = None
 
 
     # 增强单帧的方法
@@ -567,13 +590,13 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
         
         return self.plan_generator.get_plan_list(num_frames)
 
-    def _update_dynamic_threshold(self):
+    def _update_dynamic_threshold(self,info:str):
         """
         动态更新 fast_complete 阈值
         """
 
         # 当前计算任务剩余时间
-        current_time = time.time()
+        current_time = time.perf_counter()
         self.remain_task_level = self.remain_task()
 
         # 1) 基础阈值：完成当前任务需要的时间
@@ -591,7 +614,7 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
             stall_penalty = recent_stall_duration * self._stall_penalty_factor
 
         # 3) 缓冲区趋势惩罚：记录最新缓冲水位并检测下降速率
-        current_buffer_level = self.download_buffer.renderer_remain_task_level()
+        current_buffer_level = self.renderer.remain_task()
         self._buffer_history.append((current_time, current_buffer_level))
         if len(self._buffer_history) > self._buffer_history_size:
             self._buffer_history.pop(0)
@@ -612,9 +635,10 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
         self._fast_complete_threshold = max(self._min_threshold, min(self._max_threshold, dynamic_threshold))
 
         self.log.info(
-            f"Dynamic threshold updated -> base: {base_threshold:.2f}s, "
+            f"Dynamic threshold updated -> {info},enhance index: {self._current_enhancing_index}, base: {base_threshold:.2f}s, "
             f"stall_penalty: {stall_penalty:.2f}s, buffer_penalty: {buffer_decline_penalty:.2f}s, "
-            f"final: {self._fast_complete_threshold:.2f}s"
+            f"final: {self._fast_complete_threshold:.2f}s ,"
+            f"remain task level: {self.renderer.remain_task():.3f}s"
         )
 
 
@@ -624,7 +648,7 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
         """
         self._stall_history.append((stall_time, stall_duration))
         # 清理过期记录
-        current_time = time.time()
+        current_time = time.perf_counter()
         self._stall_history = [
             (stall_time, stall_duration)
             for stall_time, stall_duration in self._stall_history
@@ -632,12 +656,9 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
         ]
 
     # 检查当前增强的段是否即将被播放（提前检测）
-    def _should_fast_complete(self, cnt: int) -> bool:
+    def check_fast_complete(self,info:str) -> bool:
         """
         检查当前增强的段是否即将被播放，如果是则应该快速完成
-        Args
-            cnt: 当前已处理的帧数
-
         Returns:
             bool: 如果应该快速完成返回True，否则返回False
         """
@@ -645,15 +666,15 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
         next_index = self.download_buffer.get_next_render_segment_index()
         # 如果当前增强的段就是下一个要播放的段
         if self._current_enhancing_index == next_index:
-            self._update_dynamic_threshold()
-            render_remain_level = self.download_buffer.renderer_remain_task_level()
+            self._update_dynamic_threshold(info)
+            render_remain_level = self.renderer.remain_task()
             if render_remain_level <= self._fast_complete_threshold:
                 # 缓冲水位很低，段即将被播放，需要快速完成
                 self.log.info(
                     f"Fast complete triggered: segment {self._current_enhancing_index} is next to play, "
                     f"renderer remain level: {render_remain_level:.2f}s, "
                     f"dynamic threshold: {self._fast_complete_threshold:.2f}s, "
-                    f"current enhance cnt: {cnt}"
+                    f"current enhancing cnt: {self.cnt}, "
                 )
                 return True  
         return False
@@ -761,7 +782,7 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                     # 同步CUDA操作
                     torch.cuda.synchronize()
                     # 开始测量
-                    start_time = time.time()
+                    start_time = time.perf_counter()
                     for i in range(self.measure_epoch):
                         tensor = data_pool[i + self.warmup_epoch]
                         model(tensor)
@@ -769,7 +790,7 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                     # 同步CUDA操作
                     torch.cuda.synchronize()
                     # 结束测量
-                    end_time = time.time()
+                    end_time = time.perf_counter()
                     # 计算平均延迟
                     latency_set[(scale, level)] = (end_time - start_time) / self.measure_epoch
 
@@ -787,7 +808,7 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
     def get_latency_table(self):
         try:
             # 返回调整后的延迟表（考虑时间因子、段时间和帧率）
-            return self.latency_table * self.time_factor * self.seg_time * self.frame_rate
+            return self.latency_table * self.time_factor * self.seg_time * self.frame_rate * self.safe_factor
         except:
             return None
 
@@ -827,7 +848,12 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
         if self.task_start is None:
             return 0
         # 返回剩余任务时间（总时间 - 已用时间）
-        return max(self.task_total - (time.time() - self.task_start), 0)
+        return max(self.task_total - (time.perf_counter() - self.task_start), 0)
+
+    # 播放完成后，将延迟信息写回文件
+    def write_latency_table(self):
+        json.dump(self.latency_table.tolist(), open("latency_table.json", "w"), indent=4)
+
 
     # 段播放开始事件处理器
     async def on_segment_playback_start(self, segments: Dict[int, Segment]):
@@ -838,6 +864,8 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
             self.played_urls.append(segment.url)
         # 设置中止检查标志
         self.check_abort = True
+        # if self.use_fast_complete and self.task_start is not None:
+        #     self.check_fast_complete("来源于段开始播放监听")
         return
 
     # 播放状态变化事件处理器（用于记录卡顿）
@@ -845,7 +873,7 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
         """
         监听播放状态变化，记录卡顿事件
         """
-        current_time = time.time()
+        current_time = time.perf_counter()
         
         # 检测卡顿开始：从 READY 变为 BUFFERING
         if old_state == State.READY and new_state == State.BUFFERING:
@@ -859,10 +887,9 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                 stall_duration = current_time - self._current_stall_start_time
                 # 记录卡顿事件（会自动触发阈值强制更新）
                 self._record_stall(self._current_stall_start_time, stall_duration)
-                # 卡顿结束后立即更新阈值（因为卡顿会影响后续决策）
-                if self.use_fast_complete:
-                    self._update_dynamic_threshold()
-
+                # # 卡顿结束后立即更新阈值（因为卡顿会影响后续决策）
+                # if self.use_fast_complete and self.task_start is not None:
+                #     self.check_fast_complete("来源于卡顿变化")
                 # 清除卡顿开始时间
                 self._current_stall_start_time = None
 
@@ -870,7 +897,8 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
     async def cleanup(self) -> None:
         # 设置增强器为非就绪状态
         self._is_ready = False
+        # 将延迟信息写回文件
+        self.write_latency_table()
         # 清理增强缓冲区
         await self.enhance_buffer.cleanup()
-        self.log.info(f"Abort total: {self.abort_total}")
         return

@@ -336,6 +336,10 @@ class OpenCVRenderer(Module, Renderer, PlayerEventListener):
         except Exception as e:
             self.log.error(f"Error rendering frame: {e}")
 
+    # 添加监听器方法 - 将监听器添加到监听器列表
+    def add_listener(self, listener: PlayerEventListener):
+        pass
+
     async def _wait_if_paused(self):
         """如果处于暂停状态，则阻塞渲染直到恢复"""
         while self.is_paused and self.is_playing:
