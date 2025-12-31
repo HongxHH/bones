@@ -30,7 +30,7 @@ class FPSLogger:
         # 帧计数器，用于统计在间隔时间内的帧数
         self.framecount = 0
         # 上次记录时间戳，用于计算时间间隔
-        self.seconds = time.time()
+        self.seconds = time.perf_counter()
 
         self.fps = 0
 
@@ -38,13 +38,13 @@ class FPSLogger:
         # 增加帧计数
         self.framecount += 1
         # 检查是否到达记录间隔
-        if self.seconds + self.interval < time.time():
+        if self.seconds + self.interval < time.perf_counter():
             # 计算FPS（帧数除以时间间隔）
             self.fps = self.framecount / self.interval
             # 重置帧计数
             self.framecount = 0
             # 更新记录时间戳
-            self.seconds = time.time()
+            self.seconds = time.perf_counter()
             # 根据参数决定输出方式
             if titlebar:
                 return fmt.format(self.fps)
@@ -203,7 +203,7 @@ class OpenCVRenderer(Module, Renderer, PlayerEventListener):
     def remain_task(self):
         if self.task_start is None: # 如果任务未开始，返回0
             return 0
-        return max(self.task_total - (time.time() - self.task_start), 0) # 返回剩余任务时间（总时间 - 已用时间）
+        return max(self.task_total - (time.perf_counter() - self.task_start), 0) # 返回剩余任务时间（总时间 - 已用时间）
 
     async def on_segment_playback_start(self, segments: Dict[int, Segment]):
         """当片段开始播放时调用"""
@@ -219,7 +219,7 @@ class OpenCVRenderer(Module, Renderer, PlayerEventListener):
             self.enhance_latency = segment.enhance_latency # 增强延迟时间
             self.enhance_scale = segment.enhance_scale # 增强比例
             self.last_render_time = None
-            self.task_start = time.time() # 记录任务开始时间
+            self.task_start = time.perf_counter() # 记录任务开始时间
             self.task_total = segment.duration # 记录任务总时间
             self.decision_time_buffer_level = segment.decision_time_buffer_level #  abr算法做出决策时的缓冲区剩余时长
 
@@ -244,14 +244,14 @@ class OpenCVRenderer(Module, Renderer, PlayerEventListener):
                 break
 
             if self.last_render_time is None:
-                self.last_render_time = time.time()
+                self.last_render_time = time.perf_counter()
 
             # 渲染帧
             await self._render_one_frame(surf)
 
             # 控制帧率
             next_render_time = self.last_render_time + 1 / self.fps
-            sleep_time = max(next_render_time - time.time(), 0)
+            sleep_time = max(next_render_time - time.perf_counter(), 0)
             await asyncio.sleep(sleep_time)
             self.last_render_time = next_render_time
 
@@ -259,14 +259,14 @@ class OpenCVRenderer(Module, Renderer, PlayerEventListener):
         """渲染预解码的片段数据"""
         for surf in decode_data: 
             if self.last_render_time is None: # 如果上次渲染时间未记录，记录当前时间
-                self.last_render_time = time.time() # 记录上次渲染时间
+                self.last_render_time = time.perf_counter() # 记录上次渲染时间
 
             # 渲染帧
             await self._render_one_frame(surf)
 
             # 控制帧率
             next_render_time = self.last_render_time + 1 / self.fps
-            sleep_time = max(next_render_time - time.time(), 0)
+            sleep_time = max(next_render_time - time.perf_counter(), 0)
             await asyncio.sleep(sleep_time)
             self.last_render_time = next_render_time
 

@@ -1,5 +1,5 @@
 import asyncio
-from curses import use_default_colors
+
 import json
 import logging
 
@@ -122,24 +122,17 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
         self.cnt = 0
 
         # ======动态预警阈值调整相关=========
-        # 最小阈值（秒）
-        self._min_threshold = 0.5
-        # 最大阈值（秒）
-        self._max_threshold = 3.0
-        # 卡顿历史记录：存储 (时间戳, 持续时间) 的列表
-        self._stall_history: List[Tuple[float, float]] = []
-        # 卡顿历史窗口（秒），只考虑最近 N 秒内的卡顿
-        self._stall_history_window = 10.0
+        # 最小阈值（秒）- 根据增强级别不同，设置不同的最小阈值
+        self._min_threshold = {1: 0.2, 2: 0.3, 3: 0.4}
+
         # 缓冲区水位历史：存储 (时间戳, 水位) 的列表
         self._buffer_history: List[Tuple[float, float]] = []
         # 缓冲区历史窗口大小（记录最近 N 次检查的水位）
         self._buffer_history_size = 10
-        # 卡顿惩罚系数：最近有卡顿时，阈值增加 = 最近卡顿时长 * stall_penalty_factor
-        self._stall_penalty_factor = 0.5
         # 缓冲区下降惩罚：如果缓冲区持续下降，增加阈值
-        self._buffer_decline_penalty = 0.3
-        # 当前卡顿开始时间（用于跟踪正在进行的卡顿）
-        self._current_stall_start_time: Optional[float] = None
+        self._buffer_decline_penalty = 0.15
+        # 最近一次动态阈值更新时的渲染剩余时长，用于估算间隔消耗速度
+        self._last_render_remain_level: Optional[float] = None
 
         # ======卡顿记录相关=========
         # 段级增强统计信息缓存（按 URL 索引），供 Analyzer 聚合使用
@@ -306,6 +299,7 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                 segment = segments[as_idx]
                 # 获取增强级别
                 level = segment.enhance_action
+                self.enhance_action = level
                 # 初始化中止标志
                 abort = False
                 # 初始化中止原因
@@ -348,6 +342,7 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                     segment.enhance_frame_interval = self.enhance_frame_interval
                     segment.fast_complete_threshold = self._fast_complete_threshold
                     segment.fast_complete_triggered = False
+                    self.task_start = None
                     # 将统计结果写入全局缓存，供 Analyzer 在播放时按 URL 查询
                     self.segment_stats[segment.url] = {
                         "enhance_start_to_play_time": enhance_start_to_play_time,
@@ -406,29 +401,30 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                         break
 
                     # 提前检测：检查段是否即将被播放（每N帧检查一次）
-                    # 注意：必须确保 cnt > 0，避免在第一帧（cnt=0）就触发检查导致整个段都不增强
                     if self.use_fast_complete and not fast_complete and self.cnt > 0 and self.cnt % self._check_interval_frames == 0:
-                        fast_complete = self.check_fast_complete("来源于增强中")
+                        fast_complete = self.check_fast_complete()
+
                     # 如果进入快速完成模式，所有剩余帧都使用快速插值
                     if fast_complete:
                         surf_enh = surf.Clone(decoder.gpu_id)
+                        # frames: List[nvc.Surface] = decoder.decode_all_frames()
+                        # await asyncio.sleep(0)
+                        # result.extend(frames)
+                        # self.cnt += len(frames)
+                        # break
                     else:
                         # 正常处理：根据计划决定增强或插值
                         decision = next(plan_iter, None)
                         if decision.should_enhance:
                             surf_enh = await self.enhance_one_frame(surf, model, tensor_converter)
-                            # surf_enh = await self.enhance_one_frame(surf, self.model_pool[(scale, model_cnt)], tensor_converter)
-                            # model_cnt = model_cnt % 3 + 1
                             self._enhanced_frames += 1
                         else:
                             surf_enh = surf.Clone(decoder.gpu_id)
                     
-                    # 将增强结果添加到结果列表
-                    result.append(surf_enh)
-                    # 增加帧计数
-                    self.cnt += 1
-                    # 让出控制权给其他任务
-                    await asyncio.sleep(0)  # yield to other tasks
+                    result.append(surf_enh) # 将增强结果添加到结果列表
+                    self.cnt += 1  # 增加帧计数
+
+                    await asyncio.sleep(0)  # 让出控制权给其他任务
 
                     # 检查是否需要中止当前增强任务
                     if self.check_abort and segment.url in self.played_urls:
@@ -469,6 +465,8 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                     )
                     # 清除当前增强段索引
                     self._current_enhancing_index = None
+                    self._last_render_remain_level = None
+                    self.task_start = None
                     break
 
                 # 正常完成：将增强结果保存到段对象
@@ -526,6 +524,7 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                 self.cnt = 0
                 self.task_start = None
                 self.task_total = None
+                self._last_render_remain_level = None
 
 
     # 增强单帧的方法
@@ -590,7 +589,7 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
         
         return self.plan_generator.get_plan_list(num_frames)
 
-    def _update_dynamic_threshold(self,info:str):
+    def _update_dynamic_threshold(self):
         """
         动态更新 fast_complete 阈值
         """
@@ -598,65 +597,49 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
         # 当前计算任务剩余时间
         current_time = time.perf_counter()
         self.remain_task_level = self.remain_task()
+        render_remain_level = self.renderer.remain_task()
 
-        # 1) 基础阈值：完成当前任务需要的时间
-        base_threshold = self.remain_task_level
+        # 间隔消耗惩罚：上一轮到当前的渲染剩余时长下降量
+        
+        if self._last_render_remain_level is None:
+            consumption_penalty = (current_time - self.task_start ) * 0.9
+        else:
+            consumption_penalty = self._last_render_remain_level - render_remain_level
+        base_threshold = consumption_penalty 
 
-        # 2) 卡顿惩罚：清理过期记录后，根据最近卡顿总时长增加缓冲需求
-        self._stall_history = [
-            (stall_time, stall_duration)
-            for stall_time, stall_duration in self._stall_history
-            if current_time - stall_time <= self._stall_history_window
-        ]
-        stall_penalty = 0.0
-        if self._stall_history:
-            recent_stall_duration = sum(duration for _, duration in self._stall_history)
-            stall_penalty = recent_stall_duration * self._stall_penalty_factor
-
-        # 3) 缓冲区趋势惩罚：记录最新缓冲水位并检测下降速率
-        current_buffer_level = self.renderer.remain_task()
-        self._buffer_history.append((current_time, current_buffer_level))
-        if len(self._buffer_history) > self._buffer_history_size:
-            self._buffer_history.pop(0)
-
+        # # 2) 缓冲区趋势惩罚：记录最新缓冲水位并检测下降速率
+        # self._buffer_history.append((current_time, render_remain_level))
+        # if len(self._buffer_history) > self._buffer_history_size:
+        #     self._buffer_history.pop(0)
         buffer_decline_penalty = 0.0
-        if len(self._buffer_history) >= 3:
-            recent_levels = [level for _, level in self._buffer_history[-3:]]
-            recent_times = [t for t, _ in self._buffer_history[-3:]]
-            if recent_levels[-1] < recent_levels[0]:
-                time_span = recent_times[-1] - recent_times[0]
-                if time_span > 0:
-                    decline_rate = (recent_levels[0] - recent_levels[-1]) / time_span
-                    if decline_rate > 0:
-                        buffer_decline_penalty = self._buffer_decline_penalty * min(decline_rate, 2.0)
+        # if len(self._buffer_history) >= 3:
+            # recent_levels = [level for _, level in self._buffer_history[-3:]]
+            # recent_times = [t for t, _ in self._buffer_history[-3:]]
+            # if recent_levels[-1] < recent_levels[0]:
+            #     time_span = recent_times[-1] - recent_times[0]
+            #     if time_span > 0:
+            #         decline_rate = (recent_levels[0] - recent_levels[-1]) / time_span
+            #         if decline_rate > 0:
+            #             buffer_decline_penalty = self._buffer_decline_penalty * min(decline_rate, 2.0)
 
-        # 4) 计算并约束动态阈值
-        dynamic_threshold = base_threshold + stall_penalty + buffer_decline_penalty
-        self._fast_complete_threshold = max(self._min_threshold, min(self._max_threshold, dynamic_threshold))
+        # 3) 计算并约束动态阈值
+        dynamic_threshold = base_threshold  + buffer_decline_penalty
+        self._fast_complete_threshold = max(self._min_threshold[self.enhance_action], dynamic_threshold)
+        self._last_render_remain_level = render_remain_level
 
         self.log.info(
-            f"Dynamic threshold updated -> {info},enhance index: {self._current_enhancing_index}, base: {base_threshold:.2f}s, "
-            f"stall_penalty: {stall_penalty:.2f}s, buffer_penalty: {buffer_decline_penalty:.2f}s, "
+            f"Dynamic threshold updated -> index: {self._current_enhancing_index}, enhance cnt: {self.cnt}, " 
+            f"base: {base_threshold:.2f}s, "
+            f"buffer_decline_penalty: {buffer_decline_penalty:.2f}s, "
+            f"consumption_penalty: {consumption_penalty:.2f}s, "
             f"final: {self._fast_complete_threshold:.2f}s ,"
-            f"remain task level: {self.renderer.remain_task():.3f}s"
+            f"render remain level: {render_remain_level:.3f}s"
         )
 
 
-    def _record_stall(self, stall_time: float, stall_duration: float):
-        """
-        记录卡顿事件（供外部调用，例如从 Player 事件监听器）
-        """
-        self._stall_history.append((stall_time, stall_duration))
-        # 清理过期记录
-        current_time = time.perf_counter()
-        self._stall_history = [
-            (stall_time, stall_duration)
-            for stall_time, stall_duration in self._stall_history
-            if current_time - stall_time <= self._stall_history_window
-        ]
 
     # 检查当前增强的段是否即将被播放（提前检测）
-    def check_fast_complete(self,info:str) -> bool:
+    def check_fast_complete(self) -> bool:
         """
         检查当前增强的段是否即将被播放，如果是则应该快速完成
         Returns:
@@ -666,7 +649,7 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
         next_index = self.download_buffer.get_next_render_segment_index()
         # 如果当前增强的段就是下一个要播放的段
         if self._current_enhancing_index == next_index:
-            self._update_dynamic_threshold(info)
+            self._update_dynamic_threshold()
             render_remain_level = self.renderer.remain_task()
             if render_remain_level <= self._fast_complete_threshold:
                 # 缓冲水位很低，段即将被播放，需要快速完成
@@ -864,8 +847,6 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
             self.played_urls.append(segment.url)
         # 设置中止检查标志
         self.check_abort = True
-        # if self.use_fast_complete and self.task_start is not None:
-        #     self.check_fast_complete("来源于段开始播放监听")
         return
 
     # 播放状态变化事件处理器（用于记录卡顿）
@@ -873,25 +854,6 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
         """
         监听播放状态变化，记录卡顿事件
         """
-        current_time = time.perf_counter()
-        
-        # 检测卡顿开始：从 READY 变为 BUFFERING
-        if old_state == State.READY and new_state == State.BUFFERING:
-            # 记录卡顿开始时间（用于后续计算卡顿时长）
-            self._current_stall_start_time = current_time
-        
-        # 检测卡顿结束：从 BUFFERING 变为 READY
-        elif old_state == State.BUFFERING and new_state == State.READY:
-            if self._current_stall_start_time is not None:
-                # 计算卡顿时长
-                stall_duration = current_time - self._current_stall_start_time
-                # 记录卡顿事件（会自动触发阈值强制更新）
-                self._record_stall(self._current_stall_start_time, stall_duration)
-                # # 卡顿结束后立即更新阈值（因为卡顿会影响后续决策）
-                # if self.use_fast_complete and self.task_start is not None:
-                #     self.check_fast_complete("来源于卡顿变化")
-                # 清除卡顿开始时间
-                self._current_stall_start_time = None
 
     # 清理方法
     async def cleanup(self) -> None:
