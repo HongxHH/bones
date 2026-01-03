@@ -473,8 +473,10 @@ class PlaybackAnalyzer(
             self.save_plots()
 
         # ===== 统计增强等级、中止原因和 fast_complete 节省的帧数 =====
-        # 统计各增强等级的使用次数（仅统计实际完成增强的段）
+        # 统计各增强等级的使用次数
         enhance_level_count: Dict[int, int] = {}
+        # 统计各增强等级的实际完成增强的段数
+        enhance_level_completed_count: Dict[int, int] = {}
         # 统计被中止或未执行增强的段的 abort 情况与浪费帧数
         abort_reason_count: Dict[str, int] = {}
         abort_wasted_frames_total: int = 0
@@ -484,10 +486,14 @@ class PlaybackAnalyzer(
         fast_complete_saved_frames_by_level: Dict[int, int] = {}
 
         for seg in self._segments_by_url.values():
-            # 实际完成增强的段（is_enhance=True）
-            if seg.is_enhance and seg.enhance_action is not None:
+
+            # 统计各增强等级的使用次数
+            if seg.enhance_action is not None:
                 lvl = int(seg.enhance_action)
                 enhance_level_count[lvl] = enhance_level_count.get(lvl, 0) + 1
+                # 实际完成增强的段（is_enhance=True）
+                if seg.is_enhance:
+                    enhance_level_completed_count[lvl] = enhance_level_completed_count.get(lvl, 0) + 1
 
             # 若增强动作 > 0 但最终未完成增强且没有记录 abort_reason，则视为"未开始或被跳过的增强"
             if (
@@ -508,13 +514,14 @@ class PlaybackAnalyzer(
                     abort_wasted_frames_by_level[lvl] = abort_wasted_frames_by_level.get(lvl, 0) + int(seg.wasted_enhanced_cnt)
 
             # 统计 fast_complete 节省的帧数（fast_complete=True 且 is_enhance=True，且 enhance_end_to_play_time < fast_complete_threshold）
+            # fast_complete 后模型增强的帧数就是节省的模型增强帧数
             if (
                 seg.fast_complete
                 and seg.is_enhance
                 and seg.enhanced_cnt is not None
                 and seg.enhance_end_to_play_time < seg.fast_complete_threshold
             ):
-                # fast_complete 后模型增强的帧数就是节省的模型增强帧数
+                
                 saved_frames = int(seg.enhanced_cnt)
                 fast_complete_saved_frames_total += saved_frames
                 lvl = int(seg.enhance_action)
@@ -555,6 +562,7 @@ class PlaybackAnalyzer(
             "enhancer_abort_total": abort_total,  # 中止总数
             "enhancer_use_fast_complete": use_fast_complete,  # 是否使用 fast-complete
             "enhance_level_count": enhance_level_count,  # 增强等级使用次数
+            "enhance_level_completed_count": enhance_level_completed_count,  # 增强等级实际完成增强的段数
             "abort_reason_count": abort_reason_count,  # 中止/跳过原因使用次数
             "abort_wasted_frames_total": abort_wasted_frames_total,  # 浪费的增强帧数总数
             "abort_wasted_frames_by_level": abort_wasted_frames_by_level,  # 浪费的增强帧数按等级统计
