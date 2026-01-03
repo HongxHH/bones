@@ -126,6 +126,8 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
         self._min_threshold = {1: 0.2, 2: 0.3, 3: 0.4}
         # 最近一次动态阈值更新时的渲染剩余时长，用于估算间隔消耗速度
         self._last_render_remain_level: Optional[float] = None
+        # 最近一次动态阈值更新的时间戳，用于计算相邻间隔的实际时间
+        self._last_threshold_update_time: Optional[float] = None
         # 动态阈值安全因子（用于应对波动）
         self._threshold_safe_factor = 1.1  # 初始值1.2，提供20%的安全余量
         # 安全因子更新参数
@@ -403,8 +405,9 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                         break
 
                     # 提前检测：检查段是否即将被播放（每N帧检查一次）
-                    if self.use_fast_complete and not fast_complete and self.cnt > 0 and self.cnt % self._check_interval_frames == 0:
-                        fast_complete = self.check_fast_complete()
+                    if self.use_fast_complete and not fast_complete:
+                        if self.cnt > 0 and self.cnt % self._check_interval_frames == 0:
+                            fast_complete = self.check_fast_complete()
 
                     # 如果进入快速完成模式，所有剩余帧都使用快速插值
                     if fast_complete:
@@ -468,6 +471,7 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                     # 清除当前增强段索引
                     self._current_enhancing_index = None
                     self._last_render_remain_level = None
+                    self._last_threshold_update_time = None
                     self.task_start = None
                     # 更新安全因子（发生abort，需要增加安全因子）
                     self._update_safe_factor(aborted=True, fast_complete_triggered=fast_complete)
@@ -529,6 +533,7 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                 self.task_start = None
                 self.task_total = None
                 self._last_render_remain_level = None
+                self._last_threshold_update_time = None
                 # 更新安全因子（正常完成）
                 self._update_safe_factor(aborted=False, fast_complete_triggered=fast_complete)
 
@@ -607,8 +612,24 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
 
         # 间隔消耗惩罚：上一轮到当前的渲染剩余时长下降量
         if self._last_render_remain_level is None:
-            consumption_penalty = (current_time - self.task_start ) * 0.9
+            # 第一次调用：如果没有上次更新时间，说明这是第一次调用
+            # 此时应该使用当前时间减去上次间隔时间，但由于没有记录，使用估算值
+            # 估算：假设每帧处理时间相同，根据已处理的帧数和间隔帧数来估算间隔时间
+            if self._last_threshold_update_time is None:
+                # 完全第一次调用：使用一个保守的估算值
+                # 根据已增强的帧数和间隔帧数，估算间隔时间
+                if self.cnt >= self._check_interval_frames:
+                    # 估算：总时间 * (间隔帧数 / 当前帧数)
+                    consumption_penalty = (current_time - self.task_start) * (self._check_interval_frames / self.cnt) * 0.9
+                else:
+                    # 如果当前帧数小于间隔帧数，使用总时间
+                    consumption_penalty = (current_time - self.task_start) * 0.9
+            else:
+                # 有上次更新时间，使用实际间隔时间
+                interval_time = current_time - self._last_threshold_update_time
+                consumption_penalty = interval_time * 0.9
         else:
+            # 非第一次调用：使用渲染剩余时长的下降量
             consumption_penalty = self._last_render_remain_level - render_remain_level
 
         # 应用安全因子，使阈值更保守以应对波动
@@ -616,8 +637,9 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
 
         self._fast_complete_threshold = max(self._min_threshold[self.enhance_action], consumption_penalty_with_safety)
 
-        # 更新最近一次渲染剩余时长
+        # 更新最近一次渲染剩余时长和更新时间
         self._last_render_remain_level = render_remain_level
+        self._last_threshold_update_time = current_time
 
         self.log.info(
             f"Dynamic threshold updated -> index: {self._current_enhancing_index}, enhance cnt: {self.cnt}, " 
