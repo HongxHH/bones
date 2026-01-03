@@ -90,11 +90,15 @@ class DecoderNvCodec():
         self.config = config
         self.segment = segment
         self.gpu_id = gpu_id
+        # 存储临时文件路径，用于后续清理
+        self.mp4_path = None
+        # 标记是否已清理
+        self._cleaned = False
 
         # 将M4S段文件转换为完整的MP4文件
-        mp4_path = self.m4s_to_mp4()
+        self.mp4_path = self.m4s_to_mp4()
         # 创建NVIDIA解码器实例
-        self.nv_dec = nvc.PyNvDecoder(mp4_path, gpu_id)
+        self.nv_dec = nvc.PyNvDecoder(self.mp4_path, gpu_id)
 
         # 根据是否需要调整尺寸确定转换器参数
         if resize:
@@ -185,6 +189,32 @@ class DecoderNvCodec():
                     _append(surf)
             else:
                 _append(surf)
+
+    def cleanup(self):
+        """
+        清理解码器资源
+        释放GPU资源和临时文件
+        """
+        if self._cleaned:
+            return
+
+        # 清理NVIDIA解码器（如果支持显式释放）
+        if self.nv_dec is not None:
+            # PyNvCodec 可能没有显式的释放方法，但我们可以尝试删除引用
+            del self.nv_dec
+            self.nv_dec = None
+
+        # 清理转换器（使用 hasattr 检查，因为初始化可能失败）
+        if self.converter is not None:
+            del self.converter
+            self.converter = None
+
+        # 删除临时MP4文件
+        if self.mp4_path and os.path.exists(self.mp4_path):
+            os.remove(self.mp4_path)
+            self.mp4_path = None
+
+        self._cleaned = True
 
 
     def m4s_to_mp4(self):

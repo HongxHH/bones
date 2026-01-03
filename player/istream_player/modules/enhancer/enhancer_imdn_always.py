@@ -412,11 +412,6 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                     # 如果进入快速完成模式，所有剩余帧都使用快速插值
                     if fast_complete:
                         surf_enh = surf.Clone(decoder.gpu_id)
-                        # frames: List[nvc.Surface] = decoder.decode_all_frames()
-                        # await asyncio.sleep(0)
-                        # result.extend(frames)
-                        # self.cnt += len(frames)
-                        # break
                     else:
                         # 正常处理：根据计划决定增强或插值
                         decision = next(plan_iter, None)
@@ -485,7 +480,7 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                 # 若执行了增强动作，增强完成后该增强段距离播放开始的时间 (渲染器剩余时长 + abs（中间隔得段数*段时长）)
                 enhance_end_to_play_time = (self.renderer.remain_task() +
                                                     abs((self.download_buffer.get_next_render_segment_index() -
-                                                         self._current_enhancing_index)) * self.seg_time)
+                                                            self._current_enhancing_index)) * self.seg_time)
                 # 记录与评估相关的统计信息，便于 PlaybackAnalyzer 聚合
                 interpolated_cnt = self.cnt - self._enhanced_frames
                 enhance_fps = self.cnt / (end_time - start_time) if end_time > start_time else None
@@ -525,7 +520,7 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                             f"enhance frame interval: {self.enhance_frame_interval}, "
                             f"threshold: {self._fast_complete_threshold:.3f}s, "
                             f"enhance end to play time: {enhance_end_to_play_time:.3f}s")
-                 # 重置与增强相关的计数器
+                    # 重置与增强相关的计数器
                 self._enhanced_frames = 0
                 # 清除当前增强段索引
                 self._current_enhancing_index = None
@@ -536,6 +531,11 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                 self._last_threshold_update_time = None
                 # 更新安全因子（正常完成）
                 self._update_safe_factor(aborted=False, fast_complete_triggered=fast_complete)
+
+                decoder.cleanup()
+                del tensor_converter
+                del decoder
+                torch.cuda.empty_cache()
 
 
     # 增强单帧的方法
