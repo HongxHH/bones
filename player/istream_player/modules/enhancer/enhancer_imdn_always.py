@@ -532,10 +532,6 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                 # 更新安全因子（正常完成）
                 self._update_safe_factor(aborted=False, fast_complete_triggered=fast_complete)
 
-                decoder.cleanup()
-                del tensor_converter
-                del decoder
-                torch.cuda.empty_cache()
 
 
     # 增强单帧的方法

@@ -232,8 +232,7 @@ class OpenCVRenderer(Module, Renderer, PlayerEventListener):
             else:
                 # 使用预解码数据
                 await self._render_segment_predecoded(segment, segment.decode_data) # 渲染预解码的片段
-                # 播放完成后清理预解码数据，释放内存
-                # self._cleanup_decode_data(segment.decode_data)
+                # 播放完成后释放内存
                 segment.decode_data = None
 
         self.is_playing = False # 设置播放状态标志为False
@@ -316,8 +315,8 @@ class OpenCVRenderer(Module, Renderer, PlayerEventListener):
             #     self.frame_recorder.submit(frame)
             # 添加信息覆盖层
             frame = self._add_overlay(frame)
-            if self.frame_recorder:
-                self.frame_recorder.submit(frame)
+            # if self.frame_recorder:
+            #     self.frame_recorder.submit(frame)
 
             # 显示帧
             cv2.imshow(self.window_name, frame)
@@ -341,8 +340,7 @@ class OpenCVRenderer(Module, Renderer, PlayerEventListener):
             self.log.error(f"Error rendering frame: {e}")
         finally:
             # 清理临时变量，释放内存
-            if 'frame' in locals():
-                del frame
+            del frame
 
     # 添加监听器方法 - 将监听器添加到监听器列表
     def add_listener(self, listener: PlayerEventListener):
@@ -361,54 +359,7 @@ class OpenCVRenderer(Module, Renderer, PlayerEventListener):
                 break
             await asyncio.sleep(0.01)
 
-    # def _cleanup_decode_data(self, decode_data):
-    #     """
-    #     清理预解码数据，释放内存
 
-    #     Args:
-    #         decode_data: 预解码的帧数据列表
-    #     """
-    #     if decode_data is None:
-    #         return
-
-    #     try:
-    #         # 清理每个帧的数据
-    #         for frame_data in decode_data:
-    #             try:
-    #                 # 如果是 PyNvCodec Surface，需要特殊处理
-    #                 if hasattr(frame_data, 'PlanePtr'):  # PyNvCodec Surface
-    #                     # PyNvCodec Surface 通常通过垃圾回收自动清理
-    #                     # 但我们可以尝试删除引用
-    #                     del frame_data
-    #                 elif hasattr(frame_data, 'cpu'):  # PyTorch Tensor
-    #                     # 清理 CUDA Tensor
-    #                     if frame_data.is_cuda:
-    #                         frame_data = frame_data.cpu()
-    #                     del frame_data
-    #                 else:
-    #                     # 其他类型的清理
-    #                     del frame_data
-    #             except Exception as e:
-    #                 self.log.debug(f"Error cleaning frame data: {e}")
-
-    #         # 清空列表
-    #         decode_data.clear()
-
-    #         # 强制垃圾回收
-    #         import gc
-    #         gc.collect()
-
-    #         # 清理 GPU 缓存
-    #         if torch is not None and hasattr(torch, 'cuda') and torch.cuda.is_available():
-    #             try:
-    #                 torch.cuda.empty_cache()
-    #             except Exception:
-    #                 pass
-
-    #         self.log.debug("Cleaned up decode data to free memory")
-
-    #     except Exception as e:
-    #         self.log.warning(f"Error during decode data cleanup: {e}")
     def _add_overlay(self, frame):
         """在帧上添加信息覆盖层"""
         overlay = frame.copy()
