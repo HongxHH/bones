@@ -87,7 +87,7 @@ class PlayerConfig:
     # 带宽测量模块 - 负责网络带宽的实时测量
     mod_bw: str = "bw_meter"
     # 网络感知调度器模块 - 基于网络状态的智能调度算法
-    mod_nes: str = "bones" # bones dynamic_greedy bola_greedy buffer_greedy tput_greedy nas
+    mod_nes: str = "dynamic_greedy" # bones dynamic_greedy bola_greedy buffer_greedy tput_greedy nas
     # 任务调度器模块 - 管理各种任务的调度执行
     mod_scheduler: str = "scheduler"
     # 下载缓冲区模块 - 管理下载数据的缓冲
@@ -102,6 +102,13 @@ class PlayerConfig:
     mod_renderer: str = "opencv"  # 可选的OpenCV渲染器 opencv、opengl、headless
     # 分析器模块列表 - 数据收集和分析组件，使用工厂函数创建默认列表
     mod_analyzer: list[str] = field(default_factory=lambda: ["data_collector"])
+
+
+    # 控制视频增强帧间隔
+    enhance_frame_interval = 0 # 0:每帧都增强
+    # 是否启用提前检测
+    use_fast_complete = False
+
 
     # ======================
     # 缓冲区配置
@@ -157,10 +164,7 @@ class PlayerConfig:
     # 渲染器运算设备 - 使用CUDA GPU进行渲染加速
     renderer_device = "cuda" # cpu/gpu
 
-    # 控制视频增强帧间隔
-    enhance_frame_interval = 0 # 0:每帧都增强
-    # 是否启用提前检测
-    use_fast_complete = True
+
 
     # ======================
     # 视频增强元数据配置

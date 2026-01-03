@@ -108,7 +108,8 @@ class BOLAGreedyController(Module, NESController):
 
         action_enh = best_action
         if self.buff_down - self.buff_enh - self.seg_time <= self.enhance_time[action_down][action_enh]:
-            self.action_enh = 0
+            action_enh = 0
+        self.action_enh = action_enh
         return self.action_enh
 
     def _bola_control(self):

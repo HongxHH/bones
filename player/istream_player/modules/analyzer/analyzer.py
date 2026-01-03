@@ -507,11 +507,12 @@ class PlaybackAnalyzer(
                     lvl = int(seg.enhance_action)
                     abort_wasted_frames_by_level[lvl] = abort_wasted_frames_by_level.get(lvl, 0) + int(seg.wasted_enhanced_cnt)
 
-            # 统计 fast_complete 节省的帧数（fast_complete=True 且 is_enhance=True，即没有被 abort）
+            # 统计 fast_complete 节省的帧数（fast_complete=True 且 is_enhance=True，且 enhance_end_to_play_time < fast_complete_threshold）
             if (
-                getattr(seg, "fast_complete", False)
+                seg.fast_complete
                 and seg.is_enhance
                 and seg.enhanced_cnt is not None
+                and seg.enhance_end_to_play_time < seg.fast_complete_threshold
             ):
                 # fast_complete 后模型增强的帧数就是节省的模型增强帧数
                 saved_frames = int(seg.enhanced_cnt)

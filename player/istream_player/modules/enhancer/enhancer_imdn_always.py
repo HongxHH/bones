@@ -124,15 +124,18 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
         # ======动态预警阈值调整相关=========
         # 最小阈值（秒）- 根据增强级别不同，设置不同的最小阈值
         self._min_threshold = {1: 0.2, 2: 0.3, 3: 0.4}
-
-        # 缓冲区水位历史：存储 (时间戳, 水位) 的列表
-        self._buffer_history: List[Tuple[float, float]] = []
-        # 缓冲区历史窗口大小（记录最近 N 次检查的水位）
-        self._buffer_history_size = 10
-        # 缓冲区下降惩罚：如果缓冲区持续下降，增加阈值
-        self._buffer_decline_penalty = 0.15
         # 最近一次动态阈值更新时的渲染剩余时长，用于估算间隔消耗速度
         self._last_render_remain_level: Optional[float] = None
+        # 动态阈值安全因子（用于应对波动）
+        self._threshold_safe_factor = 1.1  # 初始值1.2，提供20%的安全余量
+        # 安全因子更新参数
+        self._safe_factor_min = 1.0  # 安全因子最小值
+        self._safe_factor_max = 1.3  # 安全因子最大值
+        self._safe_factor_increase_step = 0.1  # 增加步长
+        self._safe_factor_decrease_step = 0.05  # 减少步长
+        # 安全因子更新历史记录（用于判断趋势）
+        self._safe_factor_history: List[Dict[str, Any]] = []  # 记录最近N次的结果
+        self._safe_factor_history_size = 5  # 历史记录大小
 
         # ======卡顿记录相关=========
         # 段级增强统计信息缓存（按 URL 索引），供 Analyzer 聚合使用
@@ -192,7 +195,7 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
         self.quality_table = self.get_quality_table()
         # 注释掉的质量表日志输出
         # self.log.info("Quality table: {}".format(self.quality_table))
-
+        
         self.use_fast_complete = config.use_fast_complete
 
     # 启动增强器的方法 - 初始化模型池和性能测量
@@ -330,7 +333,7 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                 if segment.url in self.played_urls:
                     abort = True
                     abort_reason = "Already played before enhance"
-                if self.use_fast_complete and enhance_start_to_play_time < 0.3:
+                if self.use_fast_complete and enhance_start_to_play_time < self._min_threshold[self.enhance_action ]:
                     abort = True
                     abort_reason = "Remaining time less than min threshold"  # 剩余时长小于阈值，直接中止
                 if abort:
@@ -383,7 +386,6 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                 plan_iter = iter(enhancement_plan)
 
                 model = self.model_pool[(scale, level)]
-                # model_cnt = 1 # 取值 1 2 3
 
                 result : List[object] = [] # 初始化增强结果列表（张量或Surface）
                 self.cnt = 0 # 初始化帧计数器
@@ -467,6 +469,8 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                     self._current_enhancing_index = None
                     self._last_render_remain_level = None
                     self.task_start = None
+                    # 更新安全因子（发生abort，需要增加安全因子）
+                    self._update_safe_factor(aborted=True, fast_complete_triggered=fast_complete)
                     break
 
                 # 正常完成：将增强结果保存到段对象
@@ -525,6 +529,8 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                 self.task_start = None
                 self.task_total = None
                 self._last_render_remain_level = None
+                # 更新安全因子（正常完成）
+                self._update_safe_factor(aborted=False, fast_complete_triggered=fast_complete)
 
 
     # 增强单帧的方法
@@ -600,43 +606,89 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
         render_remain_level = self.renderer.remain_task()
 
         # 间隔消耗惩罚：上一轮到当前的渲染剩余时长下降量
-        
         if self._last_render_remain_level is None:
             consumption_penalty = (current_time - self.task_start ) * 0.9
         else:
             consumption_penalty = self._last_render_remain_level - render_remain_level
-        base_threshold = consumption_penalty 
 
-        # # 2) 缓冲区趋势惩罚：记录最新缓冲水位并检测下降速率
-        # self._buffer_history.append((current_time, render_remain_level))
-        # if len(self._buffer_history) > self._buffer_history_size:
-        #     self._buffer_history.pop(0)
-        buffer_decline_penalty = 0.0
-        # if len(self._buffer_history) >= 3:
-            # recent_levels = [level for _, level in self._buffer_history[-3:]]
-            # recent_times = [t for t, _ in self._buffer_history[-3:]]
-            # if recent_levels[-1] < recent_levels[0]:
-            #     time_span = recent_times[-1] - recent_times[0]
-            #     if time_span > 0:
-            #         decline_rate = (recent_levels[0] - recent_levels[-1]) / time_span
-            #         if decline_rate > 0:
-            #             buffer_decline_penalty = self._buffer_decline_penalty * min(decline_rate, 2.0)
+        # 应用安全因子，使阈值更保守以应对波动
+        consumption_penalty_with_safety = consumption_penalty * self._threshold_safe_factor
 
-        # 3) 计算并约束动态阈值
-        dynamic_threshold = base_threshold  + buffer_decline_penalty
-        self._fast_complete_threshold = max(self._min_threshold[self.enhance_action], dynamic_threshold)
+        self._fast_complete_threshold = max(self._min_threshold[self.enhance_action], consumption_penalty_with_safety)
+
+        # 更新最近一次渲染剩余时长
         self._last_render_remain_level = render_remain_level
 
         self.log.info(
             f"Dynamic threshold updated -> index: {self._current_enhancing_index}, enhance cnt: {self.cnt}, " 
-            f"base: {base_threshold:.2f}s, "
-            f"buffer_decline_penalty: {buffer_decline_penalty:.2f}s, "
             f"consumption_penalty: {consumption_penalty:.2f}s, "
+            f"safe_factor: {self._threshold_safe_factor:.2f}, "
+            f"consumption_penalty_with_safety: {consumption_penalty_with_safety:.2f}s, "
             f"final: {self._fast_complete_threshold:.2f}s ,"
             f"render remain level: {render_remain_level:.3f}s"
         )
 
 
+
+    def _update_safe_factor(self, aborted: bool, fast_complete_triggered: bool):
+        """
+        根据增强结果动态更新安全因子
+        """
+        # 记录本次结果到历史
+        self._safe_factor_history.append({
+            "aborted": aborted,
+            "fast_complete_triggered": fast_complete_triggered,
+            "safe_factor": self._threshold_safe_factor
+        })
+        
+        # 保持历史记录大小
+        if len(self._safe_factor_history) > self._safe_factor_history_size:
+            self._safe_factor_history.pop(0)
+        
+        # 如果发生abort，增加安全因子（说明阈值太小，需要更保守）
+        if aborted:
+            old_factor = self._threshold_safe_factor
+            # 如果触发了fast_complete但仍然abort，说明安全因子严重不足，需要更大的增加
+            if fast_complete_triggered:
+                increase_step = self._safe_factor_increase_step * 2  # 双倍增加
+                # self.log.info(
+                #     f"Safe factor increased significantly (abort after fast_complete): "
+                #     f"{old_factor:.2f} -> {min(old_factor + increase_step, self._safe_factor_max):.2f}"
+                # )
+            else:
+                increase_step = self._safe_factor_increase_step
+                # self.log.info(
+                #     f"Safe factor increased due to abort: "
+                #     f"{old_factor:.2f} -> {min(old_factor + increase_step, self._safe_factor_max):.2f}"
+                # )
+            
+            self._threshold_safe_factor = min(
+                self._threshold_safe_factor + increase_step,
+                self._safe_factor_max
+            )
+            return
+        
+        # 如果正常完成，分析历史趋势来决定是否减少安全因子
+        if len(self._safe_factor_history) >= self._safe_factor_history_size:
+            # 检查最近N次是否都正常完成且没有触发fast_complete
+            recent_all_success = all(
+                not record["aborted"] and not record["fast_complete_triggered"]
+                for record in self._safe_factor_history[-self._safe_factor_history_size:]
+            )
+            
+            # 如果最近N次都正常完成且没有触发fast_complete，说明安全因子可能过大，可以适当减小
+            if recent_all_success:
+                old_factor = self._threshold_safe_factor
+                self._threshold_safe_factor = max(
+                    self._threshold_safe_factor - self._safe_factor_decrease_step,
+                    self._safe_factor_min
+                )
+                if old_factor != self._threshold_safe_factor:
+                    # self.log.info(
+                    #     f"Safe factor decreased (all recent segments completed successfully without fast_complete): "
+                    #     f"{old_factor:.2f} -> {self._threshold_safe_factor:.2f}"
+                    # )
+                    pass
 
     # 检查当前增强的段是否即将被播放（提前检测）
     def check_fast_complete(self) -> bool:
