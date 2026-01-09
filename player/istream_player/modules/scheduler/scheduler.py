@@ -283,7 +283,7 @@ class SchedulerImpl(Module, Scheduler):
                         segment.init_path = init_file.name
 
                     self.log.info(f"Stream {representation_str} initialized")
-                
+            
                 try:
                     # 获取当前索引的段
                     segment = representation.segments[self._index]

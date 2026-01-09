@@ -5,9 +5,7 @@ import os
 import sys
 from datetime import datetime
 from typing import Dict, List
-
 import yaml
-
 from istream_player.config.config import PlayerConfig
 from istream_player.core.module_composer import PlayerComposer
 

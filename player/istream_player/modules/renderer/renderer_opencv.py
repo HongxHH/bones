@@ -205,6 +205,11 @@ class OpenCVRenderer(Module, Renderer, PlayerEventListener):
         if self.task_start is None: # 如果任务未开始，返回0
             return 0
         return max(self.task_total - (time.perf_counter() - self.task_start), 0) # 返回剩余任务时间（总时间 - 已用时间）
+    
+    # 获取当前正在渲染的片段的索引
+    def get_current_render_segment_index(self):
+        return self.current_segment_index
+
 
     async def on_segment_playback_start(self, segments: Dict[int, Segment]):
         """当片段开始播放时调用"""
@@ -213,6 +218,7 @@ class OpenCVRenderer(Module, Renderer, PlayerEventListener):
         for as_idx in segments:
             segment = segments[as_idx] # 获取当前片段
             # 重置帧率节拍参考，避免跨片段累计导致加速或减速
+            self.current_segment_index = (int)(segment.url.split('segment_')[1].split('.')[0])
             self.current_segment_url = segment.url
             self.current_segment_download_action = segment.download_action
             self.current_segment_enhance_action = segment.enhance_action
@@ -260,9 +266,40 @@ class OpenCVRenderer(Module, Renderer, PlayerEventListener):
 
     async def _render_segment_predecoded(self, segment: Segment, decode_data):
         """渲染预解码的片段数据"""
-        for surf in decode_data: 
+        for item in decode_data:
+            # 检查是否是 DecoderWrapper（来自 fast_complete 模式）
+            if hasattr(item, 'decode_next_frame'):
+                # 处理 DecoderWrapper：实时解码剩余帧
+                await self._render_decoder_wrapper(item)
+            else:
+                # 处理预解码的 surface
+                if self.last_render_time is None: # 如果上次渲染时间未记录，记录当前时间
+                    self.last_render_time = time.perf_counter() # 记录上次渲染时间
+
+                # 渲染帧
+                await self._render_one_frame(item)
+
+                # 控制帧率
+                next_render_time = self.last_render_time + 1 / self.fps
+                sleep_time = max(next_render_time - time.perf_counter(), 0)
+                await asyncio.sleep(sleep_time)
+                self.last_render_time = next_render_time
+
+    async def _render_decoder_wrapper(self, decoder_wrapper):
+        """渲染 DecoderWrapper 中的帧（用于 fast_complete 模式）"""
+        self.log.debug(f"Rendering decoder wrapper with {decoder_wrapper.remaining_frames} remaining frames")
+
+        while decoder_wrapper.has_more_frames():
             if self.last_render_time is None: # 如果上次渲染时间未记录，记录当前时间
                 self.last_render_time = time.perf_counter() # 记录上次渲染时间
+
+            # 从解码器获取下一帧
+            surf = decoder_wrapper.decode_next_frame()
+            if surf is None:
+                break
+
+            # 让出控制权给其他任务
+            await asyncio.sleep(0)
 
             # 渲染帧
             await self._render_one_frame(surf)
@@ -282,7 +319,6 @@ class OpenCVRenderer(Module, Renderer, PlayerEventListener):
             if isinstance(surf, nvc.Surface):
                 surf = self._resize_surface_if_needed(surf) # 调整表面大小
                 self.nv_down.DownloadSingleSurface(surf, self.data) # 下载数据
-
 
                 # 转换为OpenCV格式 (BGR)
                 frame = self.data.reshape((self.height, self.width, 3))
@@ -365,7 +401,7 @@ class OpenCVRenderer(Module, Renderer, PlayerEventListener):
         overlay = frame.copy()
 
         # 通过current_segment_url解析当前段的index 提取'segment_'后的数字
-        index = self.current_segment_url.split('segment_')[1].split('.')[0]
+        index = self.current_segment_index
         # 添加播放信息
         info_text = [
             f"Resolution: {self.width}x{self.height}",

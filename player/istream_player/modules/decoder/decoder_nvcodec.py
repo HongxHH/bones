@@ -345,3 +345,30 @@ class TensorConverter:
         # 注释掉的表面克隆操作（备用方案）
         # return surface.Clone(self.gpu_id)
         return surface
+
+
+class DecoderWrapper:
+    """
+    解码器包装类，用于在 fast_complete 模式下将解码器传递给 renderer
+    避免在 enhancer 中进行不必要的内存拷贝
+    """
+    def __init__(self, decoder: DecoderNvCodec, remaining_frames: int):
+        self.decoder = decoder
+        self.remaining_frames = remaining_frames
+        self.decoded_frames = 0
+
+    def decode_next_frame(self) -> Optional[nvc.Surface]:
+        """
+        解码下一帧
+        """
+        if self.decoded_frames >= self.remaining_frames:
+            return None
+
+        surf = self.decoder.decode_one_frame()
+        if surf is not None:
+            self.decoded_frames += 1
+        return surf
+
+    def has_more_frames(self) -> bool:
+        """检查是否还有更多帧需要解码"""
+        return self.decoded_frames < self.remaining_frames

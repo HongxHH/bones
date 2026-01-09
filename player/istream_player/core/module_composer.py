@@ -282,8 +282,8 @@ class PlayerComposer:
 
         # 添加基本命令行参数
         parser.add_argument("--config", help="Configure using yaml/json", required=False)
-        parser.add_argument("-i", "--input", help="Manifest (MPD) file location", type=str, required=True)
-        parser.add_argument("-t", "--trace", help="Network trace location", type=str, required=False)
+        parser.add_argument("-i", "--input", help="Manifest (MPD) file location", type=str,default="data/video_mp4box/bbb.mpd" ,required=False)
+        parser.add_argument("-t", "--trace", help="Network trace location", type=str,default="data/3Glogs/report.2010-09-13_1003CEST.json",required=False)
         parser.add_argument("-v", "--verbose", help="Enable debug level output", action="store_true", required=False)
         parser.add_argument("-l", "--log", help="Log file path", type=str, required=False)
         parser.add_argument('-r', "--run_dir",  help="Run directory, will be automatically OVERWRITTEN", default="output/istream_run_dir")
