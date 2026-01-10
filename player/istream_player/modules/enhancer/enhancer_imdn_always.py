@@ -404,16 +404,17 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                 display_W, display_H = self.config.display_width, self.config.display_height
                 # 创建张量转换器
                 tensor_converter = TensorConverter(decode_W, decode_H, display_W, display_H, gpu_id=0)
+                # 获取模型
                 model = self.model_pool[(scale, level)]
+                # 初始化增强结果列表
+                result : List[object] = [] 
 
-                result : List[object] = [] # 初始化增强结果列表（张量或Surface）
                 self.cnt = 0 # 初始化帧计数器
                 self._enhanced_frames = 0 # 初始化已增强帧计数器
                 fast_complete = False # 标记是否需要快速完成（abort时使用）
-                # 清理 fast-complete 调试缓存
-                self._fast_complete_ucb_remain_s = None
-                self._fast_complete_switch_at_frame = None
 
+                # 清理 fast-complete 调试缓存
+                self._fast_complete_switch_at_frame = None
                 # 逐帧解码和增强循环
                 while True:
                     # 提前检测：检查段是否即将被播放（每N帧检查一次）
@@ -421,17 +422,15 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                         # 若已决定“再增强到某个帧号后切 fast-complete”，在切换点先重规划：
                         # 如果此时 slack 仍充裕、或统计变好，则推迟/取消切换, 只有真正预算不足时才切 fast
                         if self._fast_complete_switch_at_frame is not None and self.cnt >= self._fast_complete_switch_at_frame:
-                            # 只在“到达切换点”这一刻重规划，避免每帧都重复计算
+                            # 到达切换点时重规划
                             if self.cnt == self._fast_complete_switch_at_frame:
                                 fast_complete = self.check_fast_complete(current_frame_index=self.cnt)
                                 # 若重规划后仍然没有立刻触发 fast，则继续跑（可能会更新 switch_at）
                             else:
                                 fast_complete = True
-
                         # 否则按自适应检查间隔进行判定
-                        if self.cnt > 0 and self.cnt % self._check_interval_frames == 0:
+                        if not fast_complete and self.cnt > 0 and self.cnt % self._check_interval_frames == 0:
                             fast_complete = self.check_fast_complete(current_frame_index=self.cnt)
-
 
                     # 如果进入快速完成模式，直接使用解码器进行实时解码
                     if fast_complete:
@@ -440,7 +439,6 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                         # 创建解码器包装器，将解码器传递给 renderer 进行实时解码
                         decoder_wrapper = DecoderWrapper(decoder, remaining_frames)
                         result.append(decoder_wrapper)
-                        fast_complete = True
                         break  
 
                     # 解码一帧
@@ -502,7 +500,6 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                     )
                     # 重置增强状态（abort情况下不重置计数器）
                     self._reset_enhancement_state(reset_counters=False)
-
                     break
 
                 # 正常完成：将增强结果保存到段对象
@@ -545,8 +542,7 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                 # 更新延迟表，计算实际增强时间因子
                 if not fast_complete:
                     self.latency_table[segment.download_action, segment.enhance_action] = (end_time - start_time) / (self.seg_time * self.frame_rate)
-                # 重置与增强相关的计数器
-                self._enhanced_frames = 0
+                
                 # 重置增强状态（成功完成后重置所有计数器）
                 self._reset_enhancement_state(reset_counters=True)
                 # 记录增强完成信息
@@ -594,7 +590,8 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
         """
         # 清除当前增强段索引
         self._current_enhancing_index = None
-
+        # 重置与增强相关的计数器
+        self._enhanced_frames = 0
         self.task_start = None
 
         # 在成功完成时额外重置的字段
