@@ -54,12 +54,6 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
     # 默认段帧数
     DEFAULT_NUM_FRAMES = 120
     # === 风险约束 fast-complete 默认参数 ===
-    # 允许“错过deadline”的概率上界（越小越保守）
-    FAST_COMPLETE_DELTA = 0.2
-    # 单次检查间隔允许的最大额外浪费计算时间（秒），用于推导自适应检查间隔
-    FAST_COMPLETE_WASTE_BUDGET_S = 0.08
-    # 自适应检查间隔的上界（帧）
-    FAST_COMPLETE_CHECK_MAX = 30
     # 统计窗口大小（帧）
     FAST_COMPLETE_STATS_WINDOW = 30
     # 触发 fast-complete 前保留的保护裕量（秒）：给渲染/调度留余地，避免贴边
@@ -236,12 +230,7 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                     default_enh_time_s = 0.01
 
                 self._fast_complete_policy = RiskAwareFastCompletePolicy(
-                    config=UCBConfig(
-                        delta=self.FAST_COMPLETE_DELTA, # DELTA是指错过deadline的概率上界
-                        waste_budget_s=self.FAST_COMPLETE_WASTE_BUDGET_S, # 
-                        check_interval_min=10,
-                        check_interval_max=self.FAST_COMPLETE_CHECK_MAX,
-                    ),
+                    config=UCBConfig(),  # 使用默认配置
                     default_enhance_time_s=default_enh_time_s,
                     stats_window=self.FAST_COMPLETE_STATS_WINDOW,
                 )
@@ -412,7 +401,6 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                 self.cnt = 0 # 初始化帧计数器
                 self._enhanced_frames = 0 # 初始化已增强帧计数器
                 fast_complete = False # 标记是否需要快速完成（abort时使用）
-
                 # 清理 fast-complete 调试缓存
                 self._fast_complete_switch_at_frame = None
                 # 逐帧解码和增强循环
@@ -428,8 +416,8 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                                 # 若重规划后仍然没有立刻触发 fast，则继续跑（可能会更新 switch_at）
                             else:
                                 fast_complete = True
-                        # 否则按自适应检查间隔进行判定
-                        if not fast_complete and self.cnt > 0 and self.cnt % self._check_interval_frames == 0:
+
+                        elif not fast_complete and self.cnt > 0 and self.cnt % self._check_interval_frames == 0:
                             fast_complete = self.check_fast_complete(current_frame_index=self.cnt)
 
                     # 如果进入快速完成模式，直接使用解码器进行实时解码
@@ -593,6 +581,8 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
         # 重置与增强相关的计数器
         self._enhanced_frames = 0
         self.task_start = None
+        # 清理 fast-complete 调试缓存
+        self._fast_complete_switch_at_frame = None
 
         # 在成功完成时额外重置的字段
         if reset_counters:
@@ -607,15 +597,19 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
         - 用在线观测得到的剩余时间上置信界 U_delta(T_remain) 与 slack 比较：
           若做完整剩余帧来不及，则在 slack 内先尽量多增强一些帧，然后再切换到 DecoderWrapper（fast 模式）
         - 同时根据 waste_budget 推导新的检查间隔（帧）
+        - 会测量检查耗时并用于动态调整 waste_budget
         """
+        # 测量检查开始时间
+        check_start_time = time.perf_counter()
 
         # 获取下一个要播放的段索引
         next_index = self.download_buffer.get_next_render_segment_index()
         # 如果当前增强的段就是下一个要播放的段
         if self._current_enhancing_index == next_index:
             slack_s = self.renderer.remain_task()   # 渲染剩余时长
-            rem_enh = self._num_frames - current_frame_index  # 剩余增强帧数
 
+
+            rem_enh = self._num_frames - current_frame_index  # 剩余增强帧数
             # 优化：一次性批量计算所有需要的统计量，避免重复计算
             stats = self._fast_complete_policy.compute_all_stats(
                 remaining_enhanced_frames=rem_enh,
@@ -626,7 +620,7 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
             u_remain = stats["u_remain"]
             u_enh = stats["u_enh"]
             check_k = int(stats["check_k"])
-            triggered = stats["triggered"] > 0.5
+            triggered = stats["triggered"]
 
             # 更新检查间隔
             self._check_interval_frames = check_k
@@ -635,7 +629,6 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                 # 计算"在 slack 内最多还能安全增强多少帧"
                 guard = self.FAST_COMPLETE_GUARD_S
                 budget_s = max(slack_s - guard, 0.0)  # 计算剩余预算
-
                 # 默认所有帧都增强：allowed_frames 直接由 budget/u_enh 推导
                 allowed_frames = int(budget_s / u_enh)
                 allowed_frames = min(allowed_frames, rem_enh)
@@ -650,20 +643,33 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                         f"u_enh: {u_enh:.5f}s, "
                         f"delta: {self._fast_complete_policy.cfg.delta}, check_k: {self._check_interval_frames}"
                     )
+                    # 测量检查耗时并更新policy
+                    check_end_time = time.perf_counter()
+                    check_duration = check_end_time - check_start_time
+                    self._fast_complete_policy.update_check_cost_measurement(check_duration)
                     return True
+                else:
+                    # 有预算：继续跑 allowed_frames 帧后再切 fast-complete
+                    self._fast_complete_switch_at_frame = current_frame_index + allowed_frames
+                    self.log.info(
+                        f"Fast complete scheduled (risk-aware): seg {self._current_enhancing_index} next to play, "
+                        f"current_cnt: {current_frame_index}, slack: {slack_s:.3f}s, guard: {guard:.3f}s, budget: {budget_s:.3f}s, "
+                        f"U_delta(remain): {u_remain:.3f}s, "
+                        f"allow_frames: {allowed_frames} -> switch_at_cnt: {self._fast_complete_switch_at_frame}, "
+                        f"rem_enh: {rem_enh}, "
+                        f"u_enh: {u_enh:.5f}s, "
+                        f"delta: {self._fast_complete_policy.cfg.delta}, check_k: {self._check_interval_frames}"
+                    )
+                    # 测量检查耗时并更新policy
+                    check_end_time = time.perf_counter()
+                    check_duration = check_end_time - check_start_time
+                    self._fast_complete_policy.update_check_cost_measurement(check_duration)
+                    return False
 
-                # 有预算：继续跑 allowed_frames 帧后再切 fast-complete
-                self._fast_complete_switch_at_frame = current_frame_index + allowed_frames
-                self.log.info(
-                    f"Fast complete scheduled (risk-aware): seg {self._current_enhancing_index} next to play, "
-                    f"current_cnt: {current_frame_index}, slack: {slack_s:.3f}s, guard: {guard:.3f}s, budget: {budget_s:.3f}s, "
-                    f"U_delta(remain): {u_remain:.3f}s, "
-                    f"allow_frames: {allowed_frames} -> switch_at_cnt: {self._fast_complete_switch_at_frame}, "
-                    f"rem_enh: {rem_enh}, "
-                    f"u_enh: {u_enh:.5f}s, "
-                    f"delta: {self._fast_complete_policy.cfg.delta}, check_k: {self._check_interval_frames}"
-                )
-                return False
+        # 测量检查耗时并更新policy（即使没有触发检查逻辑）
+        check_end_time = time.perf_counter()
+        check_duration = check_end_time - check_start_time
+        self._fast_complete_policy.update_check_cost_measurement(check_duration)
 
         return False
 

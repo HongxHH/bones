@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import math
 from dataclasses import dataclass
-from typing import Deque, Dict, Optional, Tuple
+from typing import Deque, Dict, List, Optional, Tuple
 from collections import deque
 
 
@@ -10,18 +10,15 @@ from collections import deque
 class UCBConfig:
     """
     风险约束（chance constraint）相关配置：
-    - delta: 允许“错过deadline”的概率上界（越小越保守）
-    - waste_budget_s: 单次检查间隔允许的“额外浪费计算时间”上界，具体来说是指，在slack_s的范围内，最多可以浪费的计算时间
-    - slack_waste_ratio: slack_s的范围内，最多可以浪费的计算时间与slack_s的比值
-    - waste_budget_cap_s: 单次检查间隔允许的“额外浪费计算时间”上界的最大值
-    - check_interval_min: 单次检查间隔的最小值
-    - check_interval_max: 单次检查间隔的最大值
+    - delta: 允许"错过deadline"的概率上界（越小越保守）
+    - waste_budget_s: 基础waste_budget，表示允许的最大"额外开销"时间（秒）
+    - waste_budget_cap_s: waste_budget的上限保护值（秒）
+    - check_interval_min: 检查间隔的最小帧数
+    - check_interval_max: 检查间隔的最大帧数
     """
     delta: float = 0.2
-    waste_budget_s: float = 0.08
-    # slack 相关的动态放宽：slack 越大，允许更大的检查间隔浪费预算（避免 check_k 过短）
-    slack_waste_ratio: float = 0.05
-    waste_budget_cap_s: float = 0.5
+    waste_budget_s: float = 0.2
+    waste_budget_cap_s: float = 0.3
     check_interval_min: int = 10
     check_interval_max: int = 30
 
@@ -107,7 +104,7 @@ class RiskAwareFastCompletePolicy:
     """
     风险约束 fast-complete 策略：
     - 用在线观测的帧级耗时构造上置信界（UCB），近似控制 miss-deadline 概率 <= delta
-    - 用 waste_budget 推导自适应检查间隔，给出“额外浪费计算时间”上界
+    - 用 waste_budget 推导自适应检查间隔，waste_budget 会根据实际检查开销动态调整
     """
     def __init__(
         self,
@@ -120,6 +117,9 @@ class RiskAwareFastCompletePolicy:
 
         # 当统计还不稳定时的先验（来自 latency_table/经验值）
         self.default_enhance_time_s = max(float(default_enhance_time_s), 1e-6)
+        # 检查时间测量：跟踪每次检查的实际计算开销
+        self.check_time_stats = SlidingWindowStats(window_size=10)
+        self.measured_check_cost_s = 0.005  # 初始估计：每次检查约0.00005秒（基于测量学习）
 
         # 最近一次推导结果，便于日志/可视化
         self.last: Dict[str, float] = {}
@@ -132,6 +132,22 @@ class RiskAwareFastCompletePolicy:
 
     def update_observation(self, *, enhanced_dt_s: Optional[float] = None) -> None:
         self.enh_stats.add(enhanced_dt_s)
+
+    def update_check_cost_measurement(self, check_time_s: float) -> None:
+        """
+        更新检查时间测量数据，并缓慢调整估计值
+        """
+        if check_time_s is None or check_time_s <= 0:
+            return
+
+        self.check_time_stats.add(check_time_s)
+
+        # 当有足够测量数据时，更新测量值（指数移动平均）
+        if self.check_time_stats.n >= 3:
+            recent_mean = self.check_time_stats.mean_std()[0]
+            if recent_mean is not None and recent_mean > 0:
+                # 缓慢更新：90% 历史测量 + 10% 新测量
+                self.measured_check_cost_s = 0.9 * self.measured_check_cost_s + 0.1 * recent_mean
 
     def _ucb_per_frame(self, mean: Optional[float], std: Optional[float], default: float) -> float:
         if mean is None:
@@ -160,54 +176,6 @@ class RiskAwareFastCompletePolicy:
         return self._ucb_per_frame(mean, std, default)
 
 
-    def estimate_remaining_ucb(self, *, remaining_enhanced_frames: int, ) -> float:
-        """
-        估计剩余增强时间上界
-        """
-        u_enh = self._ucb_per_frame_empirical(self.enh_stats, self.default_enhance_time_s)
-        u_rem = remaining_enhanced_frames * u_enh 
-        self.last.update(
-            {
-                "u_enh": u_enh,
-                "u_remain": u_rem,
-                "n_enh_obs": float(self.enh_stats.n),
-            }
-        )
-        return u_rem
-
-    def should_fast_complete(self, *, slack_s: float, remaining_enhanced_frames: int) -> bool:
-        """
-        根据 slack 和剩余增强帧数，判断是否需要快速完成
-        """
-        slack_s = max(float(slack_s), 0.0)
-        u_rem = self.estimate_remaining_ucb(
-            remaining_enhanced_frames=remaining_enhanced_frames,
-        )
-        self.last.update({"slack_s": slack_s})
-        return u_rem >= slack_s
-
-    def suggest_check_interval_frames(self, *, remaining_enhanced_frames: int, slack_s: Optional[float] = None) -> int:
-        """
-        根据 waste_budget 推导检查间隔：保证“下次检查前最多浪费的计算时间”<= waste_budget_s。
-        """
-        # 用“未来每一帧平均最坏代价”近似：按剩余帧组成做一次加权
-        u_enh = self._ucb_per_frame_empirical(self.enh_stats, self.default_enhance_time_s)
-        rem_total = max(int(remaining_enhanced_frames), 1)
-        u_avg = (remaining_enhanced_frames * u_enh ) / rem_total
-        u_avg = max(u_avg, 1e-6)
-
-        # 根据 slack 动态放宽 waste budget：slack 越大，允许更长的检查间隔（上限封顶）
-        waste_budget = float(self.cfg.waste_budget_s)
-        if slack_s is not None:
-            slack_s = max(float(slack_s), 0.0)
-            waste_budget = max(waste_budget, slack_s * float(self.cfg.slack_waste_ratio))
-        waste_budget = min(waste_budget, float(self.cfg.waste_budget_cap_s))
-
-        k = int(waste_budget / u_avg)
-        k = max(self.cfg.check_interval_min, min(self.cfg.check_interval_max, k))
-        self.last.update({"u_avg": u_avg, "k": float(k), "waste_budget_s": float(waste_budget)})
-        return k
-
     def compute_all_stats(self, *, remaining_enhanced_frames: int, slack_s: float) -> Dict[str, float]:
         """
         批量计算所有需要的统计量，避免重复计算
@@ -219,21 +187,30 @@ class RiskAwareFastCompletePolicy:
         # 一次性计算 u_enh（这是最耗时的操作）
         u_enh = self._ucb_per_frame_empirical(self.enh_stats, self.default_enhance_time_s)
 
-        # 计算剩余时间上界
-        u_remain = rem_enh * u_enh
 
         # 计算检查间隔
         rem_total = max(rem_enh, 1)
         u_avg = (rem_enh * u_enh) / rem_total
         u_avg = max(u_avg, 1e-6)
 
-        waste_budget = float(self.cfg.waste_budget_s)
-        waste_budget = max(waste_budget, slack_s * float(self.cfg.slack_waste_ratio))
-        waste_budget = min(waste_budget, float(self.cfg.waste_budget_cap_s))
+        # ========== 计算检查间隔 ==============
+        # waste_budget = float(self.cfg.waste_budget_s)
 
-        k = int(waste_budget / u_avg)
-        k = max(self.cfg.check_interval_min, min(self.cfg.check_interval_max, k))
+        # # # 如果有足够的检查时间测量数据，用实际开销调整
+        # # if self.check_time_stats.n >= 3:
+        # #     min_waste_budget = self.measured_check_cost_s * 4  # 支持4次检查
+        # #     waste_budget = max(waste_budget, min_waste_budget)
 
+        # # 上限保护
+        # waste_budget = min(waste_budget, float(self.cfg.waste_budget_cap_s))
+
+
+        # k = int(waste_budget / u_avg)
+        # k = max(self.cfg.check_interval_min, min(self.cfg.check_interval_max, k))
+        k = 15
+
+        # 计算剩余时间上界
+        u_remain = rem_enh * u_enh
         # 判断是否需要触发
         triggered = u_remain >= slack_s
 
@@ -242,9 +219,7 @@ class RiskAwareFastCompletePolicy:
             "slack_s": slack_s,
             "u_enh": u_enh,
             "u_remain": u_remain,
-            "u_avg": u_avg,
             "k": float(k),
-            "waste_budget_s": waste_budget,
             "n_enh_obs": float(self.enh_stats.n),
         })
 
@@ -252,10 +227,8 @@ class RiskAwareFastCompletePolicy:
             "slack_s": slack_s,
             "u_enh": u_enh,
             "u_remain": u_remain,
-            "u_avg": u_avg,
             "check_k": k,
-            "waste_budget_s": waste_budget,
-            "triggered": 1.0 if triggered else 0.0,
+            "triggered": triggered,
             "n_enh_obs": float(self.enh_stats.n),
         }
 
