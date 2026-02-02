@@ -22,12 +22,7 @@ from istream_player.core.player import Player
 from istream_player.core.downloader import (DownloadManager, DownloadRequest, DownloadType)
 from istream_player.core.renderer import Renderer
 from .imdn_model import IMDN, IMDN_RTC
-from .enhancement_plan import (
-    EnhancementDecision, 
-    FrameEnhancementPlan, 
-    IntervalBasedPlan, 
-    ComplexityBasedPlan
-)
+
 import torch
 import os
 import time
@@ -35,6 +30,7 @@ import PyNvCodec as nvc
 import numpy as np
 from typing import Any, Dict, List, Optional, Tuple
 import tempfile
+from .fast_complete_policy import RiskAwareFastCompletePolicy, UCBConfig
 
 
 
@@ -57,20 +53,16 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
     MEASURE_EPOCH = 5
     # 默认段帧数
     DEFAULT_NUM_FRAMES = 120
-    # 提前检测检查间隔帧数
-    CHECK_INTERVAL_FRAMES = 15
+    # === 风险约束 fast-complete 默认参数 ===
+    # 统计窗口大小（帧）
+    FAST_COMPLETE_STATS_WINDOW = 30
+    # 触发 fast-complete 前保留的保护裕量（秒）：给渲染/调度留余地，避免贴边
+    FAST_COMPLETE_GUARD_S = 0.15
+    # ====================================================
     # 默认提前检测阈值（秒）
     DEFAULT_FAST_COMPLETE_THRESHOLD = 2.0
     # 最小阈值映射（按增强级别）
     MIN_THRESHOLDS = {1: 0.2, 2: 0.3, 3: 0.4}
-    # 安全因子参数
-    SAFE_FACTOR_MIN = 1.0
-    SAFE_FACTOR_MAX = 1.3
-    SAFE_FACTOR_INITIAL = 1.1
-    SAFE_FACTOR_INCREASE_STEP = 0.1
-    SAFE_FACTOR_DECREASE_STEP = 0.05
-    # 历史记录大小
-    SAFE_FACTOR_HISTORY_SIZE = 5
 
     def __init__(self):
         # 调用父类构造函数，初始化模块基础功能
@@ -129,18 +121,14 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
         self.played_urls = []
         # 记录总的中止增强次数
         self.abort_total = 0
-        # 控制超分间隔的帧数（0表示所有帧都超分）
-        self.enhance_frame_interval = None
-        # 帧增强计划生成器（当前使用基于间隔的计划，未来可扩展为基于复杂度）
-        self.plan_generator: Optional[FrameEnhancementPlan] = None
-        
+
         # ==提前检测相关==
         # 当前正在增强的段索引（用于提前检测）
         self._current_enhancing_index: Optional[int] = None
         # 提前检测的缓冲水位阈值（秒），低于此值且段即将播放时触发快速完成
         self._fast_complete_threshold = self.DEFAULT_FAST_COMPLETE_THRESHOLD  # 默认2秒（将被动态调整）
         # 提前检测的检查间隔（帧数）
-        self._check_interval_frames = self.CHECK_INTERVAL_FRAMES  #
+        self._check_interval_frames = 10
         # 是否使用提前检测
         self.use_fast_complete = False
         # 已经增强的帧数
@@ -148,29 +136,17 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
         # 段的总帧数 默认120帧
         self._num_frames = self.DEFAULT_NUM_FRAMES
 
+        # 风险约束 fast-complete 策略（在 start() 后可用 latency_table 初始化先验）
+        self._fast_complete_policy: Optional[RiskAwareFastCompletePolicy] = None
+        # 若需要“部分增强后再 fast-complete”，记录切换触发帧号（cnt >= 该值则切换）
+        self._fast_complete_switch_at_frame: Optional[int] = None
+
         self.cnt = 0
 
-        # ======动态预警阈值调整相关=========
-        # 最小阈值（秒）- 根据增强级别不同，设置不同的最小阈值
+        # 最小增强阈值（秒）- 根据增强级别不同，设置不同的最小阈值
         self._min_threshold = self.MIN_THRESHOLDS.copy()
-        # 最近一次动态阈值更新时的渲染剩余时长，用于估算间隔消耗速度
-        self._last_render_remain_level: Optional[float] = None
-        # 最近一次动态阈值更新的时间戳，用于计算相邻间隔的实际时间
-        self._last_threshold_update_time: Optional[float] = None
-        # 动态阈值安全因子（用于应对波动）
-        self._threshold_safe_factor = self.SAFE_FACTOR_INITIAL  # 初始值1.1，提供10%的安全余量
-        # 安全因子更新参数
-        self._safe_factor_min = self.SAFE_FACTOR_MIN  # 安全因子最小值
-        self._safe_factor_max = self.SAFE_FACTOR_MAX  # 安全因子最大值
-        self._safe_factor_increase_step = self.SAFE_FACTOR_INCREASE_STEP  # 增加步长
-        self._safe_factor_decrease_step = self.SAFE_FACTOR_DECREASE_STEP  # 减少步长
-        # 安全因子更新历史记录（用于判断趋势）
-        self._safe_factor_history: List[Dict[str, Any]] = []  # 记录最近N次的结果
-        self._safe_factor_history_size = self.SAFE_FACTOR_HISTORY_SIZE  # 历史记录大小
 
-        # ======卡顿记录相关=========
         # 段级增强统计信息缓存（按 URL 索引），供 Analyzer 聚合使用
-        #  避免因为 copy 未回写导致 Analyzer 读不到 abort 信息。
         self.segment_stats: Dict[str, Dict[str, Any]] = {}
 
 
@@ -198,17 +174,7 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
         # 从配置中获取运行目录，用于临时文件存储
         self.run_dir = config.run_dir
         # 获取超分间隔配置，默认0表示全帧超分
-        self.enhance_frame_interval = config.enhance_frame_interval
-
-
-        # 初始化帧增强计划生成器（当前使用基于间隔的策略）
-        # 未来可以通过配置选择不同的计划生成器（如基于复杂度）
-        self.plan_generator = IntervalBasedPlan(
-            interval=self.enhance_frame_interval if self.enhance_frame_interval is not None else 0,
-            default_enhance_level=1,  # 默认使用段指定的增强级别，这里先设为1
-            use_interpolation= False
-        )
-
+        self.enhance_frame_interval = 15
         # 保存下载缓冲区实例的引用
         self.download_buffer = download_buffer
         # 保存增强缓冲区实例的引用
@@ -221,13 +187,15 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
         self.renderer = renderer
         # 将当前实例注册为播放器的事件监听器
         player.add_listener(self)
+        # 是否使用快速完成
+        self.use_fast_complete = config.use_fast_complete
 
         # 获取质量表，用于评估不同增强级别的质量
         self.quality_table = self.get_quality_table()
         # 注释掉的质量表日志输出
         # self.log.info("Quality table: {}".format(self.quality_table))
         
-        self.use_fast_complete = config.use_fast_complete
+        
 
     # 启动增强器的方法 - 初始化模型池和性能测量
     async def start(self, adaptation_sets):
@@ -251,11 +219,25 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
             # 获取段持续时间
             self.seg_time = self.scheduler.mpd_provider.mpd.max_segment_duration
 
+            if self.use_fast_complete:
+                # 初始化风险约束 fast-complete 策略：
+                default_enh_time_s = None
+                if self.latency_table is not None:
+                    valid = self.latency_table[np.isfinite(self.latency_table) & (self.latency_table > 0)]
+                    default_enh_time_s = float(np.quantile(valid, 0.7))
+
+                if default_enh_time_s is None or not (default_enh_time_s > 0):
+                    default_enh_time_s = 0.01
+
+                self._fast_complete_policy = RiskAwareFastCompletePolicy(
+                    config=UCBConfig(),  # 使用默认配置
+                    default_enhance_time_s=default_enh_time_s,
+                    stats_window=self.FAST_COMPLETE_STATS_WINDOW,
+                )
+
             # 如果存在旧的质量表，使用它替换当前质量表
             if self.old_quality is not None:
                 self.quality_table = self.old_quality
-                # 注释掉的质量表日志输出
-                # self.log.info("Quality table: {}".format(self.quality_table))
 
             # 通知所有等待的线程增强器已就绪
             self._accessible.notify_all()
@@ -373,7 +355,7 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                     segment.is_enhance = False
                     segment.abort_reason = abort_reason
                     segment.wasted_enhanced_cnt = 0
-                    segment.enhance_frame_interval = self.enhance_frame_interval
+                    segment.enhance_frame_interval = 15
                     segment.fast_complete_threshold = self._fast_complete_threshold
                     segment.fast_complete_triggered = False
                     self.task_start = None
@@ -411,35 +393,40 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                 display_W, display_H = self.config.display_width, self.config.display_height
                 # 创建张量转换器
                 tensor_converter = TensorConverter(decode_W, decode_H, display_W, display_H, gpu_id=0)
-                # start_time = time.perf_counter()
-                # 生成帧增强计划（提前标记所有帧的处理策略）
-                enhancement_plan = self._generate_enhancement_plan(segment, self._num_frames )
-                # self.log.info(f"Generate enhancement plan time: {time.perf_counter() - start_time}")
-
-                plan_iter = iter(enhancement_plan)
-
+                # 获取模型
                 model = self.model_pool[(scale, level)]
+                # 初始化增强结果列表
+                result : List[object] = [] 
 
-                result : List[object] = [] # 初始化增强结果列表（张量或Surface）
                 self.cnt = 0 # 初始化帧计数器
                 self._enhanced_frames = 0 # 初始化已增强帧计数器
                 fast_complete = False # 标记是否需要快速完成（abort时使用）
-
+                # 清理 fast-complete 调试缓存
+                self._fast_complete_switch_at_frame = None
                 # 逐帧解码和增强循环
                 while True:
                     # 提前检测：检查段是否即将被播放（每N帧检查一次）
                     if self.use_fast_complete and not fast_complete:
-                        if self.cnt > 0 and self.cnt % self._check_interval_frames == 0:
-                            fast_complete = self.check_fast_complete()
+                        # 若已决定“再增强到某个帧号后切 fast-complete”，在切换点先重规划：
+                        # 如果此时 slack 仍充裕、或统计变好，则推迟/取消切换, 只有真正预算不足时才切 fast
+                        if self._fast_complete_switch_at_frame is not None and self.cnt >= self._fast_complete_switch_at_frame:
+                            # 到达切换点时重规划
+                            if self.cnt == self._fast_complete_switch_at_frame:
+                                fast_complete = self.check_fast_complete(current_frame_index=self.cnt)
+                                # 若重规划后仍然没有立刻触发 fast，则继续跑（可能会更新 switch_at）
+                            else:
+                                fast_complete = True
 
-                    # 如果进入快速完成模式，直接使用解码器进行实时解码，避免内存拷贝
+                        elif not fast_complete and self.cnt > 0 and self.cnt % self._check_interval_frames == 0:
+                            fast_complete = self.check_fast_complete(current_frame_index=self.cnt)
+
+                    # 如果进入快速完成模式，直接使用解码器进行实时解码
                     if fast_complete:
                         remaining_frames = self._num_frames - self.cnt 
                         self.log.info(f"Fast complete triggered at frame {self.cnt}, using decoder for remaining {remaining_frames} frames")
                         # 创建解码器包装器，将解码器传递给 renderer 进行实时解码
                         decoder_wrapper = DecoderWrapper(decoder, remaining_frames)
                         result.append(decoder_wrapper)
-                        fast_complete = True
                         break  
 
                     # 解码一帧
@@ -450,13 +437,12 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                     if surf is None:
                         break
 
-                    # 正常处理：根据计划决定增强或插值
-                    decision = next(plan_iter, None)
-                    if decision.should_enhance:
-                        surf_enh = await self.enhance_one_frame(surf, model, tensor_converter)
-                        self._enhanced_frames += 1
-                    else:
-                        surf_enh = surf.Clone(decoder.gpu_id)
+                    t0 = time.perf_counter()
+                    surf_enh = await self.enhance_one_frame(surf, model, tensor_converter)
+                    dt = time.perf_counter() - t0
+                    if self._fast_complete_policy is not None:
+                        self._fast_complete_policy.update_observation(enhanced_dt_s=dt)
+                    self._enhanced_frames += 1
 
                     result.append(surf_enh) # 将增强结果添加到结果列表
                     self.cnt += 1  # 增加帧计数
@@ -502,8 +488,6 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                     )
                     # 重置增强状态（abort情况下不重置计数器）
                     self._reset_enhancement_state(reset_counters=False)
-                    # 更新安全因子（发生abort，需要增加安全因子）
-                    self._update_safe_factor(aborted=True, fast_complete_triggered=fast_complete)
                     break
 
                 # 正常完成：将增强结果保存到段对象
@@ -546,6 +530,9 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                 # 更新延迟表，计算实际增强时间因子
                 if not fast_complete:
                     self.latency_table[segment.download_action, segment.enhance_action] = (end_time - start_time) / (self.seg_time * self.frame_rate)
+                
+                # 重置增强状态（成功完成后重置所有计数器）
+                self._reset_enhancement_state(reset_counters=True)
                 # 记录增强完成信息
                 self.log.info(f"Complete enhancing segment index: {self._current_enhancing_index},"
                             f"download action: {segment.download_action}, "
@@ -558,12 +545,7 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                             f"enhance frame interval: {self.enhance_frame_interval}, "
                             f"threshold: {self._fast_complete_threshold:.3f}s, "
                             f"enhance end to play time: {enhance_end_to_play_time:.3f}s")
-                    # 重置与增强相关的计数器
-                self._enhanced_frames = 0
-                # 重置增强状态（成功完成后重置所有计数器）
-                self._reset_enhancement_state(reset_counters=True)
-                # 更新安全因子（正常完成）
-                self._update_safe_factor(aborted=False, fast_complete_triggered=fast_complete)
+                    
 
     # 增强单帧的方法
     async def enhance_one_frame(self, surf: nvc.Surface, model: torch.nn.Module, tensor_converter: TensorConverter) -> torch.Tensor:
@@ -589,144 +571,6 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
         await asyncio.sleep(0)
         return tensor
 
-    # 生成帧增强计划
-    def _generate_enhancement_plan(self, segment: Segment, num_frames: int) -> List[EnhancementDecision]:
-        """
-        为段生成帧增强计划
-        
-        Args:
-            segment: 视频段对象
-            num_frames: 段的总帧数
-            
-        Returns:
-            List[EnhancementDecision]: 每帧的增强决策列表
-            
-        未来扩展：
-            - 可以从segment.complexity_list加载复杂度列表
-            - 可以根据segment的其他属性选择不同的计划生成器
-        """
-        # 检查是否有复杂度列表（未来扩展）
-        complexity_list = getattr(segment, 'complexity_list', None)
-        
-        # 如果提供了复杂度列表，使用基于复杂度的计划生成器
-        if complexity_list is not None and len(complexity_list) > 0:
-            complexity_plan = ComplexityBasedPlan(
-                complexity_threshold_low=0.3,
-                complexity_threshold_high=0.7,
-                low_level=1,
-                medium_level=segment.enhance_action,
-                high_level=3,
-                use_interpolation= False
-            )
-            return complexity_plan.get_plan_list(num_frames, complexity_list=complexity_list)
-        
-        # 否则使用基于间隔的计划生成器
-        # 更新增强级别以匹配当前段
-        if isinstance(self.plan_generator, IntervalBasedPlan):
-            self.plan_generator.default_enhance_level = segment.enhance_action
-        
-        return self.plan_generator.get_plan_list(num_frames)
-
-    def _update_dynamic_threshold(self):
-        """
-        动态更新 fast_complete 阈值
-        """
-
-        # 当前计算任务剩余时间
-        current_time = time.perf_counter()
-        self.remain_task_level = self.remain_task()
-        render_remain_level = self.renderer.remain_task()
-
-        # 间隔消耗惩罚：上一轮到当前的渲染剩余时长下降量
-        if self._last_render_remain_level is None:
-            # 第一次调用：如果没有上次更新时间，说明这是第一次调用
-            # 此时应该使用当前时间减去上次间隔时间，但由于没有记录，使用估算值
-            # 估算：假设每帧处理时间相同，根据已处理的帧数和间隔帧数来估算间隔时间
-            if self._last_threshold_update_time is None:
-                # 完全第一次调用：使用一个保守的估算值
-                # 根据已增强的帧数和间隔帧数，估算间隔时间
-                if self.cnt >= self._check_interval_frames:
-                    # 估算：总时间 * (间隔帧数 / 当前帧数)
-                    consumption_penalty = (current_time - self.task_start) * (self._check_interval_frames / self.cnt) * 0.9
-                else:
-                    # 如果当前帧数小于间隔帧数，使用总时间
-                    consumption_penalty = (current_time - self.task_start) * 0.9
-            else:
-                # 有上次更新时间，使用实际间隔时间
-                interval_time = current_time - self._last_threshold_update_time
-                consumption_penalty = interval_time * 0.9
-        else:
-            # 非第一次调用：使用渲染剩余时长的下降量
-            consumption_penalty = self._last_render_remain_level - render_remain_level
-
-        # 应用安全因子，使阈值更保守以应对波动
-        consumption_penalty_with_safety = consumption_penalty * self._threshold_safe_factor
-
-        self._fast_complete_threshold = max(self._min_threshold[self.enhance_action], consumption_penalty_with_safety)
-
-        # 更新最近一次渲染剩余时长和更新时间
-        self._last_render_remain_level = render_remain_level
-        self._last_threshold_update_time = current_time
-
-        self.log.info(
-            f"Dynamic threshold updated -> index: {self._current_enhancing_index}, enhance cnt: {self.cnt}, " 
-            f"consumption_penalty: {consumption_penalty:.2f}s, "
-            f"safe_factor: {self._threshold_safe_factor:.2f}, "
-            f"consumption_penalty_with_safety: {consumption_penalty_with_safety:.2f}s, "
-            f"final: {self._fast_complete_threshold:.2f}s ,"
-            f"render remain level: {render_remain_level:.3f}s, "
-            f"update use time:{time.perf_counter() - current_time:.5f}"
-        )
-
-
-
-    def _update_safe_factor(self, aborted: bool, fast_complete_triggered: bool):
-        """
-        根据增强结果动态更新安全因子
-        """
-        # 记录本次结果到历史
-        self._safe_factor_history.append({
-            "aborted": aborted,
-            "fast_complete_triggered": fast_complete_triggered,
-            "safe_factor": self._threshold_safe_factor
-        })
-        
-        # 保持历史记录大小
-        if len(self._safe_factor_history) > self._safe_factor_history_size:
-            self._safe_factor_history.pop(0)
-        
-        # 如果发生abort，增加安全因子（说明阈值太小，需要更保守）
-        if aborted:
-            old_factor = self._threshold_safe_factor
-            # 如果触发了fast_complete但仍然abort，说明安全因子严重不足，需要更大的增加
-            if fast_complete_triggered:
-                increase_step = self._safe_factor_increase_step * 2  # 双倍增加
-            else:
-                increase_step = self._safe_factor_increase_step
-            
-            self._threshold_safe_factor = min(
-                self._threshold_safe_factor + increase_step,
-                self._safe_factor_max
-            )
-            return
-        
-        # 如果正常完成，分析历史趋势来决定是否减少安全因子
-        if len(self._safe_factor_history) >= self._safe_factor_history_size:
-            # 检查最近N次是否都正常完成且没有触发fast_complete
-            recent_all_success = all(
-                not record["aborted"] and not record["fast_complete_triggered"]
-                for record in self._safe_factor_history[-self._safe_factor_history_size:]
-            )
-            
-            # 如果最近N次都正常完成且没有触发fast_complete，说明安全因子可能过大，可以适当减小
-            if recent_all_success:
-                old_factor = self._threshold_safe_factor
-                self._threshold_safe_factor = max(
-                    self._threshold_safe_factor - self._safe_factor_decrease_step,
-                    self._safe_factor_min
-                )
-                if old_factor != self._threshold_safe_factor:
-                    pass
 
     def _reset_enhancement_state(self, reset_counters: bool = False):
         """
@@ -734,9 +578,11 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
         """
         # 清除当前增强段索引
         self._current_enhancing_index = None
-        self._last_render_remain_level = None
-        self._last_threshold_update_time = None
+        # 重置与增强相关的计数器
+        self._enhanced_frames = 0
         self.task_start = None
+        # 清理 fast-complete 调试缓存
+        self._fast_complete_switch_at_frame = None
 
         # 在成功完成时额外重置的字段
         if reset_counters:
@@ -744,27 +590,87 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
             self.task_total = None
 
     # 检查当前增强的段是否即将被播放（提前检测）
-    def check_fast_complete(self) -> bool:
+    def check_fast_complete(self, current_frame_index: int = 0) -> bool:
         """
-        检查当前增强的段是否即将被播放，如果是则应该快速完成
-        Returns:
-            bool: 如果应该快速完成返回True，否则返回False
+        风险约束 fast-complete 判定 + 自适应检查间隔更新：
+        - 若本段即将播放（当前增强段 == next to play），计算 slack（播放裕量）
+        - 用在线观测得到的剩余时间上置信界 U_delta(T_remain) 与 slack 比较：
+          若做完整剩余帧来不及，则在 slack 内先尽量多增强一些帧，然后再切换到 DecoderWrapper（fast 模式）
+        - 同时根据 waste_budget 推导新的检查间隔（帧）
+        - 会测量检查耗时并用于动态调整 waste_budget
         """
+        # 测量检查开始时间
+        check_start_time = time.perf_counter()
+
         # 获取下一个要播放的段索引
         next_index = self.download_buffer.get_next_render_segment_index()
         # 如果当前增强的段就是下一个要播放的段
         if self._current_enhancing_index == next_index:
-            self._update_dynamic_threshold()
-            render_remain_level = self.renderer.remain_task()
-            if render_remain_level <= self._fast_complete_threshold:
-                # 缓冲水位很低，段即将被播放，需要快速完成
-                self.log.info(
-                    f"Fast complete triggered: segment {self._current_enhancing_index} is next to play, "
-                    f"renderer remain level: {render_remain_level:.2f}s, "
-                    f"dynamic threshold: {self._fast_complete_threshold:.2f}s, "
-                    f"current enhancing cnt: {self.cnt}, "
-                )
-                return True
+            slack_s = self.renderer.remain_task()   # 渲染剩余时长
+
+
+            rem_enh = self._num_frames - current_frame_index  # 剩余增强帧数
+            # 优化：一次性批量计算所有需要的统计量，避免重复计算
+            stats = self._fast_complete_policy.compute_all_stats(
+                remaining_enhanced_frames=rem_enh,
+                slack_s=slack_s,
+            )
+
+            # 从批量结果中提取所需值
+            u_remain = stats["u_remain"]
+            u_enh = stats["u_enh"]
+            check_k = int(stats["check_k"])
+            triggered = stats["triggered"]
+
+            # 更新检查间隔
+            self._check_interval_frames = check_k
+
+            if triggered:
+                # 计算"在 slack 内最多还能安全增强多少帧"
+                guard = self.FAST_COMPLETE_GUARD_S
+                budget_s = max(slack_s - guard, 0.0)  # 计算剩余预算
+                # 默认所有帧都增强：allowed_frames 直接由 budget/u_enh 推导
+                allowed_frames = int(budget_s / u_enh)
+                allowed_frames = min(allowed_frames, rem_enh)
+
+                if allowed_frames <= 0:
+                    # 没有预算：立刻切 fast-complete（剩余帧交给 DecoderWrapper）
+                    self.log.info(
+                        f"Fast complete triggered (risk-aware, immediate): seg {self._current_enhancing_index} next to play, "
+                        f"current_cnt: {current_frame_index}, slack: {slack_s:.3f}s, guard: {guard:.3f}s, budget: {budget_s:.3f}s, "
+                        f"U_delta(remain): {u_remain:.3f}s, "
+                        f"rem_enh: {rem_enh}, "
+                        f"u_enh: {u_enh:.5f}s, "
+                        f"delta: {self._fast_complete_policy.cfg.delta}, check_k: {self._check_interval_frames}"
+                    )
+                    # 测量检查耗时并更新policy
+                    check_end_time = time.perf_counter()
+                    check_duration = check_end_time - check_start_time
+                    self._fast_complete_policy.update_check_cost_measurement(check_duration)
+                    return True
+                else:
+                    # 有预算：继续跑 allowed_frames 帧后再切 fast-complete
+                    self._fast_complete_switch_at_frame = current_frame_index + allowed_frames
+                    self.log.info(
+                        f"Fast complete scheduled (risk-aware): seg {self._current_enhancing_index} next to play, "
+                        f"current_cnt: {current_frame_index}, slack: {slack_s:.3f}s, guard: {guard:.3f}s, budget: {budget_s:.3f}s, "
+                        f"U_delta(remain): {u_remain:.3f}s, "
+                        f"allow_frames: {allowed_frames} -> switch_at_cnt: {self._fast_complete_switch_at_frame}, "
+                        f"rem_enh: {rem_enh}, "
+                        f"u_enh: {u_enh:.5f}s, "
+                        f"delta: {self._fast_complete_policy.cfg.delta}, check_k: {self._check_interval_frames}"
+                    )
+                    # 测量检查耗时并更新policy
+                    check_end_time = time.perf_counter()
+                    check_duration = check_end_time - check_start_time
+                    self._fast_complete_policy.update_check_cost_measurement(check_duration)
+                    return False
+
+        # 测量检查耗时并更新policy（即使没有触发检查逻辑）
+        check_end_time = time.perf_counter()
+        check_duration = check_end_time - check_start_time
+        self._fast_complete_policy.update_check_cost_measurement(check_duration)
+
         return False
 
     # 加载模型池的方法

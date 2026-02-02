@@ -239,7 +239,10 @@ class OpenCVRenderer(Module, Renderer, PlayerEventListener):
                 # 使用预解码数据
                 await self._render_segment_predecoded(segment, segment.decode_data) # 渲染预解码的片段
                 # 播放完成后释放内存
+                # segment.decode_data = None
+                del segment.decode_data
                 segment.decode_data = None
+
 
         self.is_playing = False # 设置播放状态标志为False
 
@@ -350,7 +353,7 @@ class OpenCVRenderer(Module, Renderer, PlayerEventListener):
             # if self.frame_recorder:
             #     self.frame_recorder.submit(frame)
             # 添加信息覆盖层
-            frame = self._add_overlay(frame)
+            # frame = self._add_overlay(frame)
             # if self.frame_recorder:
             #     self.frame_recorder.submit(frame)
 
