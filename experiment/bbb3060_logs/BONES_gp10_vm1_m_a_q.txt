@@ -1,0 +1,40 @@
+Report: 3Glogs 
+average quality vmaf: 75.86727048382208 
+average oscillation vmaf: 6.8329925677138945 
+average quality ssim: 0.9655234271425317 
+average oscillation ssim: 0.015249834680494132 
+freeze time: 55290.85800502648 
+average bandwidth: 1182.2551554141091 
+qoe: 34.26015338464501 
+Report: 4Glogs 
+average quality vmaf: 99.33500003930817 
+average oscillation vmaf: 0.3472648132911392 
+average quality ssim: 0.9994725709119493 
+average oscillation ssim: 0.0003374452531645563 
+freeze time: 1.4551915228366852e-11 
+average bandwidth: 4639.235065723271 
+qoe: 98.98773522601701 
+Report: hd_fs 
+average quality vmaf: 92.80943962427045 
+average oscillation vmaf: 2.483248275126583 
+average quality ssim: 0.9888830523018883 
+average oscillation ssim: 0.005640608746835453 
+freeze time: 36.223348133380284 
+average bandwidth: 3635.2891466540887 
+qoe: 90.30340936918573 
+Report: sd_fs 
+average quality vmaf: 88.83712898601256 
+average oscillation vmaf: 3.4255595866202544 
+average quality ssim: 0.9830514681446537 
+average oscillation ssim: 0.00886534693037976 
+freeze time: 7588.639703285133 
+average bandwidth: 3389.0046024402563 
+qoe: 80.63884002625697 
+Report: All 
+average quality vmaf: 89.21220978335332 
+average oscillation vmaf: 3.272266310687968 
+average quality ssim: 0.9842326296252558 
+average oscillation ssim: 0.007523308902718476 
+freeze time: 15728.930264111252 
+average bandwidth: 3211.4459925579313 
+qoe: 76.04753450152617 
