@@ -1,0 +1,10 @@
+{
+  "trace1_stable3g": {
+    "playback time": 636699.0972762647,
+    "average quality vmaf": 83.07095927044024,
+    "average oscillation vmaf": 5.435432069620255,
+    "average quality ssim": 0.972745496855346,
+    "average oscillation ssim": 0.010719499999999995,
+    "freeze time": 0,
+    "freeze event": 0,
+    "average bandwidth": 

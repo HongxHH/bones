@@ -1,0 +1,350 @@
+{
+  "trace1_stable3g": {
+    "BONES": {
+      "playback time": 636699.0972762647,
+      "average quality vmaf": 83.07095927044024,
+      "average oscillation vmaf": 5.435432069620255,
+      "average quality ssim": 0.972745496855346,
+      "average oscillation ssim": 0.010719499999999995,
+      "freeze time": 0,
+      "freeze event": 0,
+      "average bandwidth": [
+        1307.913106918239
+      ],
+      "qoe": 77.63552720081998
+    },
+    "CA-scalar": {
+      "playback time": 636699.0972762647,
+      "average quality vmaf": 82.35453106289309,
+      "average oscillation vmaf": 5.657753170886077,
+      "average quality ssim": 0.9715279119496856,
+      "average oscillation ssim": 0.011527588607594935,
+      "freeze time": 4.3655745685100555e-11,
+      "freeze event": 1,
+      "average bandwidth": [
+        1305.6971194968555
+      ],
+      "qoe": 76.69677789200698,
+      "cf_per_level_mean": [
+        1.0,
+        0.9094659441230762,
+        0.8866499301636055,
+        0.8956739073412846,
+        0.9078810209951605
+      ],
+      "enhance_level_dist": {
+        "0": 60,
+        "1": 32,
+        "2": 34,
+        "3": 17,
+        "4": 16
+      }
+    },
+    "CA-per_level": {
+      "playback time": 636699.0972762647,
+      "average quality vmaf": 82.35453106289309,
+      "average oscillation vmaf": 5.657753170886077,
+      "average quality ssim": 0.9715279119496856,
+      "average oscillation ssim": 0.011527588607594935,
+      "freeze time": 4.3655745685100555e-11,
+      "freeze event": 1,
+      "average bandwidth": [
+        1305.6971194968555
+      ],
+      "qoe": 76.69677789200698,
+      "cf_per_level_mean": [
+        1.0,
+        0.9094659441230762,
+        0.8866499301636055,
+        0.8956739073412846,
+        0.9078810209951605
+      ],
+      "enhance_level_dist": {
+        "0": 60,
+        "1": 32,
+        "2": 34,
+        "3": 17,
+        "4": 16
+      }
+    },
+    "CA-base_known": {
+      "playback time": 636699.0972762648,
+      "average quality vmaf": 82.29369144654088,
+      "average oscillation vmaf": 5.371368677215188,
+      "average quality ssim": 0.971900496855346,
+      "average oscillation ssim": 0.010917892405063283,
+      "freeze time": 0,
+      "freeze event": 0,
+      "average bandwidth": [
+        1306.9408805031446
+      ],
+      "qoe": 76.92232276932569,
+      "cf_per_level_mean": [
+        1.0,
+        0.9094659441230762,
+        0.8866499301636055,
+        0.8956739073412846,
+        0.9078810209951605
+      ],
+      "enhance_level_dist": {
+        "0": 52,
+        "1": 32,
+        "2": 45,
+        "3": 11,
+        "4": 19
+      }
+    },
+    "CA-oracle": {
+      "playback time": 636699.097276265,
+      "average quality vmaf": 83.39449719496855,
+      "average oscillation vmaf": 4.662293702531645,
+      "average quality ssim": 0.9731211509433961,
+      "average oscillation ssim": 0.009657006329113926,
+      "freeze time": 3.637978807091713e-11,
+      "freeze event": 1,
+      "average bandwidth": [
+        1308.759358490566
+      ],
+      "qoe": 78.73220349243688,
+      "enhance_level_dist": {
+        "0": 61,
+        "1": 16,
+        "2": 50,
+        "3": 15,
+        "4": 17
+      }
+    }
+  },
+  "trace2_lowbw": {
+    "BONES": {
+      "playback time": 944635.9200486126,
+      "average quality vmaf": 70.97515487421383,
+      "average oscillation vmaf": 7.331447626582277,
+      "average quality ssim": 0.9600885220125787,
+      "average oscillation ssim": 0.01745148734177216,
+      "freeze time": 308054.7700486123,
+      "freeze event": 26,
+      "average bandwidth": [
+        852.9881006289309
+      ],
+      "qoe": -130.1014311477221
+    },
+    "CA-scalar": {
+      "playback time": 959652.1792363286,
+      "average quality vmaf": 73.00218879874214,
+      "average oscillation vmaf": 5.451724626582279,
+      "average quality ssim": 0.961496144654088,
+      "average oscillation ssim": 0.014849145569620253,
+      "freeze time": 323071.0292363284,
+      "freeze event": 21,
+      "average bandwidth": [
+        891.6835220125787
+      ],
+      "qoe": -135.6388623915687,
+      "cf_per_level_mean": [
+        1.0,
+        0.9094659441230762,
+        0.8866499301636055,
+        0.8956739073412846,
+        0.9078810209951605
+      ],
+      "enhance_level_dist": {
+        "0": 45,
+        "1": 25,
+        "2": 48,
+        "3": 34,
+        "4": 7
+      }
+    },
+    "CA-per_level": {
+      "playback time": 959652.1792363286,
+      "average quality vmaf": 73.00218879874214,
+      "average oscillation vmaf": 5.451724626582279,
+      "average quality ssim": 0.961496144654088,
+      "average oscillation ssim": 0.014849145569620253,
+      "freeze time": 323071.0292363284,
+      "freeze event": 21,
+      "average bandwidth": [
+        891.6835220125787
+      ],
+      "qoe": -135.6388623915687,
+      "cf_per_level_mean": [
+        1.0,
+        0.9094659441230762,
+        0.8866499301636055,
+        0.8956739073412846,
+        0.9078810209951605
+      ],
+      "enhance_level_dist": {
+        "0": 45,
+        "1": 25,
+        "2": 48,
+        "3": 34,
+        "4": 7
+      }
+    },
+    "CA-base_known": {
+      "playback time": 944651.5758157652,
+      "average quality vmaf": 71.95245456603774,
+      "average oscillation vmaf": 5.864361639240506,
+      "average quality ssim": 0.9613155660377358,
+      "average oscillation ssim": 0.014384702531645576,
+      "freeze time": 308070.42581576505,
+      "freeze event": 26,
+      "average bandwidth": [
+        859.3089182389938
+      ],
+      "qoe": -127.6668918629921,
+      "cf_per_level_mean": [
+        1.0,
+        0.9094659441230762,
+        0.8866499301636055,
+        0.8956739073412846,
+        0.9078810209951605
+      ],
+      "enhance_level_dist": {
+        "0": 44,
+        "1": 27,
+        "2": 57,
+        "3": 24,
+        "4": 7
+      }
+    },
+    "CA-oracle": {
+      "playback time": 948564.5856856587,
+      "average quality vmaf": 72.969410163522,
+      "average oscillation vmaf": 6.141583348101267,
+      "average quality ssim": 0.9615053396226414,
+      "average oscillation ssim": 0.01443801898734178,
+      "freeze time": 311983.4356856586,
+      "freeze event": 26,
+      "average bandwidth": [
+        871.5609685534591
+      ],
+      "qoe": -129.388170471157,
+      "enhance_level_dist": {
+        "0": 53,
+        "1": 12,
+        "2": 57,
+        "3": 28,
+        "4": 9
+      }
+    }
+  },
+  "trace3_highvar": {
+    "BONES": {
+      "playback time": 638537.8754385961,
+      "average quality vmaf": 77.79525074842768,
+      "average oscillation vmaf": 5.513093803797468,
+      "average quality ssim": 0.9685035283018868,
+      "average oscillation ssim": 0.01305917721518986,
+      "freeze time": 4.3655745685100555e-11,
+      "freeze event": 1,
+      "average bandwidth": [
+        1183.0719119496855
+      ],
+      "qoe": 72.28215694463017
+    },
+    "CA-scalar": {
+      "playback time": 653463.4294354706,
+      "average quality vmaf": 74.8234876163522,
+      "average oscillation vmaf": 8.050655082278487,
+      "average quality ssim": 0.9604822327044026,
+      "average oscillation ssim": 0.018026335443037972,
+      "freeze time": 14925.553996874187,
+      "freeze event": 5,
+      "average bandwidth": [
+        1214.4948805031445
+      ],
+      "qoe": 57.38569165553649,
+      "cf_per_level_mean": [
+        1.0,
+        0.9094659441230762,
+        0.8866499301636055,
+        0.8956739073412846,
+        0.9078810209951605
+      ],
+      "enhance_level_dist": {
+        "0": 69,
+        "1": 18,
+        "2": 31,
+        "3": 24,
+        "4": 17
+      }
+    },
+    "CA-per_level": {
+      "playback time": 653463.4294354706,
+      "average quality vmaf": 74.8234876163522,
+      "average oscillation vmaf": 8.050655082278487,
+      "average quality ssim": 0.9604822327044026,
+      "average oscillation ssim": 0.018026335443037972,
+      "freeze time": 14925.553996874187,
+      "freeze event": 5,
+      "average bandwidth": [
+        1214.4948805031445
+      ],
+      "qoe": 57.38569165553649,
+      "cf_per_level_mean": [
+        1.0,
+        0.9094659441230762,
+        0.8866499301636055,
+        0.8956739073412846,
+        0.9078810209951605
+      ],
+      "enhance_level_dist": {
+        "0": 69,
+        "1": 18,
+        "2": 31,
+        "3": 24,
+        "4": 17
+      }
+    },
+    "CA-base_known": {
+      "playback time": 638880.467813507,
+      "average quality vmaf": 74.96836349056603,
+      "average oscillation vmaf": 7.125984924050629,
+      "average quality ssim": 0.9616045283018867,
+      "average oscillation ssim": 0.016410284810126585,
+      "freeze time": 342.5923749108065,
+      "freeze event": 4,
+      "average bandwidth": [
+        1189.4647295597483
+      ],
+      "qoe": 67.62691166405578,
+      "cf_per_level_mean": [
+        1.0,
+        0.9094659441230762,
+        0.8866499301636055,
+        0.8956739073412846,
+        0.9078810209951605
+      ],
+      "enhance_level_dist": {
+        "0": 48,
+        "1": 32,
+        "2": 36,
+        "3": 29,
+        "4": 14
+      }
+    },
+    "CA-oracle": {
+      "playback time": 638537.8754385968,
+      "average quality vmaf": 77.8448693081761,
+      "average oscillation vmaf": 6.383686132911391,
+      "average quality ssim": 0.9685514591194969,
+      "average oscillation ssim": 0.013307088607594933,
+      "freeze time": 0,
+      "freeze event": 0,
+      "average bandwidth": [
+        1181.8158364779874
+      ],
+      "qoe": 71.46118317526471,
+      "enhance_level_dist": {
+        "0": 47,
+        "1": 14,
+        "2": 57,
+        "3": 24,
+        "4": 17
+      }
+    }
+  }
+}

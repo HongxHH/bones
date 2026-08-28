@@ -1,0 +1,113 @@
+{
+  "stable3g": {
+    "BONES": {
+      "qoe": 76.02433569815302,
+      "vmaf": 82.41217369182391,
+      "oscillation": 6.387837993670883,
+      "freeze_time": 0,
+      "freeze_event": 0
+    },
+    "CA-base_known": {
+      "qoe": 76.2722175561261,
+      "vmaf": 82.53581713207546,
+      "oscillation": 6.263599575949368,
+      "freeze_time": 0,
+      "freeze_event": 0
+    },
+    "CA-predicted": {
+      "qoe": 75.95378813434438,
+      "vmaf": 81.5714417735849,
+      "oscillation": 5.617653639240509,
+      "freeze_time": 3.637978807091713e-12,
+      "freeze_event": 1
+    },
+    "CA-joint": {
+      "qoe": 75.81404132437703,
+      "vmaf": 82.00953674842766,
+      "oscillation": 6.195495424050637,
+      "freeze_time": 7.275957614183426e-12,
+      "freeze_event": 1
+    },
+    "CA-oracle": {
+      "qoe": 77.35757425408008,
+      "vmaf": 82.6673288553459,
+      "oscillation": 5.309754601265822,
+      "freeze_time": 0,
+      "freeze_event": 0
+    }
+  },
+  "lowbw": {
+    "BONES": {
+      "qoe": -142.51879315125376,
+      "vmaf": 73.33033358490566,
+      "oscillation": 7.240051322784808,
+      "freeze_time": 331688.4299072656,
+      "freeze_event": 25
+    },
+    "CA-base_known": {
+      "qoe": -145.08512801599096,
+      "vmaf": 73.29910957232705,
+      "oscillation": 6.527234436708863,
+      "freeze_time": 336852.6350110586,
+      "freeze_event": 23
+    },
+    "CA-predicted": {
+      "qoe": -138.1495570359149,
+      "vmaf": 73.10160690566038,
+      "oscillation": 7.654607854430379,
+      "freeze_time": 323718.5241785604,
+      "freeze_event": 26
+    },
+    "CA-joint": {
+      "qoe": -138.06648053263837,
+      "vmaf": 72.47194845283019,
+      "oscillation": 7.251049196202532,
+      "freeze_time": 323226.933864933,
+      "freeze_event": 26
+    },
+    "CA-oracle": {
+      "qoe": -140.97952171514817,
+      "vmaf": 72.08533896855346,
+      "oscillation": 7.5075987215189866,
+      "freeze_time": 326836.0465198704,
+      "freeze_event": 24
+    }
+  },
+  "highvar": {
+    "BONES": {
+      "qoe": 56.39361903381916,
+      "vmaf": 76.30059913207548,
+      "oscillation": 7.777192474683547,
+      "freeze_time": 19286.362321480712,
+      "freeze_event": 6
+    },
+    "CA-base_known": {
+      "qoe": 52.0372163661083,
+      "vmaf": 75.79192693710692,
+      "oscillation": 8.042845930379752,
+      "freeze_time": 24981.864778584,
+      "freeze_event": 8
+    },
+    "CA-predicted": {
+      "qoe": 41.99296519860728,
+      "vmaf": 75.72428116352202,
+      "oscillation": 9.05202958860759,
+      "freeze_time": 39240.065338328364,
+      "freeze_event": 5
+    },
+    "CA-joint": {
+      "qoe": 39.9370449534515,
+      "vmaf": 77.34294059748429,
+      "oscillation": 8.150032588607596,
+      "freeze_time": 46516.82225812605,
+      "freeze_event": 9
+    },
+    "CA-oracle": {
+      "qoe": 48.163158280618106,
+      "vmaf": 74.53429178616352,
+      "oscillation": 8.084464968354432,
+      "freeze_time": 29075.802974133647,
+      "freeze_event": 6
+    }
+  }
+}

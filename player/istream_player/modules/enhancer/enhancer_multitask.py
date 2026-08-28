@@ -84,6 +84,8 @@ class MultiTaskEnhancer(IMDNEnhancer):
         self.abort_total = 0
         # fast_complete 标志（供 Analyzer 使用）
         self.use_fast_complete = False
+        # 仅去模糊的表示集合（scale=1，如1080p，不支持SR但支持去模糊）
+        self.deblur_only_set: Dict[int, tuple] = {}
 
     async def setup(self, config: PlayerConfig, model_downloader: DownloadManager,
                     download_buffer: DownloadBufferImpl, enhance_buffer: EnhanceBufferImpl,
@@ -130,6 +132,32 @@ class MultiTaskEnhancer(IMDNEnhancer):
     def _needs_sr(self, task_combo: int) -> bool:
         """判断任务组合是否需要超分"""
         return task_combo in (self.TASK_SR, self.TASK_SR_DEBLUR, self.TASK_SR_DEBLUR_FI)
+
+    def get_resolution_set(self, adaptation_sets):
+        """
+        覆盖父类方法：除了scale>1的表示外，还将scale=1的表示加入deblur_only_set
+        scale=1的表示（如1080p）不支持SR，但支持去模糊增强
+        """
+        resolution_set = {}
+        self.deblur_only_set = {}
+        for as_idx in adaptation_sets:
+            as_obj = adaptation_sets[as_idx]
+            if as_obj.content_type != "video":
+                continue
+            for repr_idx in as_obj.representations:
+                repr_obj = as_obj.representations[repr_idx]
+                scale = min(int(self.display_W / repr_obj.width), int(self.display_H / repr_obj.height))
+                if scale < 1:
+                    scale = 1
+                if scale != 1:
+                    resolution_set[repr_idx] = (repr_obj.width, repr_obj.height, scale)
+                elif self.enable_deblur:
+                    # scale=1的表示加入仅去模糊集合
+                    self.deblur_only_set[repr_idx] = (repr_obj.width, repr_obj.height, scale)
+            break
+        self.log.info(f"Resolution set (SR-capable): {len(resolution_set)} reprs")
+        self.log.info(f"Deblur-only set (scale=1): {len(self.deblur_only_set)} reprs")
+        return resolution_set
 
     async def enhance_one_frame(self, surf: nvc.Surface, model: Optional[torch.nn.Module],
                                  tensor_converter: TensorConverter, task_combo: int = TASK_SR) -> torch.Tensor:
@@ -210,8 +238,17 @@ class MultiTaskEnhancer(IMDNEnhancer):
                 if task_combo == self.TASK_NONE:
                     abort = True
                 repr_idx = segment.repr_id
-                # 最高分辨率不需要增强
-                if repr_idx not in self.resolution_set:
+                # 判断表示是否支持增强
+                if repr_idx in self.resolution_set:
+                    # 支持SR的表示：所有任务组合都允许
+                    pass
+                elif repr_idx in self.deblur_only_set:
+                    # scale=1的表示（如1080p）：仅允许去模糊（combo 3）
+                    if self._needs_sr(task_combo):
+                        self.log.debug(f"Seg {index}: repr {repr_idx} is deblur-only, abort SR task {task_combo}")
+                        abort = True
+                else:
+                    # 不支持任何增强
                     abort = True
                 if segment.url in self.played_urls:
                     abort = True
@@ -219,7 +256,11 @@ class MultiTaskEnhancer(IMDNEnhancer):
                     self.log.info(f"Abort seg {index}: task={task_combo}")
                     break
 
-                _, _, scale = self.resolution_set[repr_idx]
+                # 获取scale（从resolution_set或deblur_only_set）
+                if repr_idx in self.resolution_set:
+                    _, _, scale = self.resolution_set[repr_idx]
+                else:
+                    _, _, scale = self.deblur_only_set[repr_idx]  # scale=1
 
                 # 创建解码器
                 decoder = DecoderNvCodec(self.config, segment, resize=False)
@@ -319,5 +360,29 @@ class MultiTaskEnhancer(IMDNEnhancer):
 
                 self.log.info(f"  repr {repr_idx} ({w}x{h}): deblur={deblur_lat:.1f}ms, "
                               f"sr={sr_lat:.1f}ms, sr_deblur={deblur_lat+sr_lat:.1f}ms")
+
+            # 测量 deblur_only_set（scale=1，如1080p）的去模糊延迟
+            for repr_idx in self.deblur_only_set:
+                (w, h, scale) = self.deblur_only_set[repr_idx]
+                dummy = torch.randn(1, 3, h, w, device=self.device).half()
+                with torch.no_grad():
+                    for _ in range(self.warmup_epoch):
+                        _ = self.deblur_model(dummy)
+                    torch.cuda.synchronize()
+                    lats = []
+                    for _ in range(self.measure_epoch):
+                        torch.cuda.synchronize()
+                        t0 = time.perf_counter()
+                        _ = self.deblur_model(dummy)
+                        torch.cuda.synchronize()
+                        lats.append((time.perf_counter() - t0) * 1000)
+                deblur_lat = np.mean(lats)
+                # scale=1只支持deblur-only（combo 3），其他组合设为极大值防止控制器选择
+                INVALID_LAT = 1e6
+                latency_table[repr_idx, self.TASK_SR] = INVALID_LAT
+                latency_table[repr_idx, self.TASK_SR_DEBLUR] = INVALID_LAT
+                latency_table[repr_idx, self.TASK_SR_DEBLUR_FI] = INVALID_LAT
+                latency_table[repr_idx, self.TASK_DEBLUR] = deblur_lat
+                self.log.info(f"  repr {repr_idx} ({w}x{h}, deblur-only): deblur={deblur_lat:.1f}ms")
 
         return latency_table

@@ -1,0 +1,13 @@
+{
+  "total_enhance_time": 90.85348870081361,
+  "total_vmaf_gain": 1169.0769154213845,
+  "enhanced_segs": 124,
+  "median_cost_eff": 13.873827224097656,
+  "low_ce_count": 10,
+  "low_ce_saved_time": 6.640679400181398,
+  "low_ce_lost_gain": 40.20314992452832,
+  "bottom_30_saved_time": 33.49043520039413,
+  "bottom_30_lost_gain": 284.19863907547176,
+  "corr_texture_ce": -0.024280713891519642,
+  "corr_motion_ce": -0.04938693416528816
+}

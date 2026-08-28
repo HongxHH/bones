@@ -1,0 +1,19 @@
+BONES_new: bones_imdn_always_fast-True_video-bbb_trace-report.2010-09-13_1003CEST_20260828-093254.json
+CA-BONES_new: ca_bones_imdn_always_fast-True_video-bbb_trace-report.2010-09-13_1003CEST_20260828-094523.json
+
+Metric                     BONES_old  BONES_new     CA_old     CA_new
+----------------------------------------------------------------------
+avg_vmaf                       67.81      66.47      67.75      66.79
+QOE                            59.88      57.96      55.73      56.38
+num_stall                      10.00      16.00      20.00      22.00
+dur_stall                      19.20      22.22      69.08      90.05
+avg_freeze                      0.12       0.14       0.43       0.57
+num_quality_switches           53.00      56.00      87.00      85.00
+oscillation_vmaf                7.92       8.50      11.98      10.35
+enhancer_abort_total            9.00      13.00      12.00      12.00
+
+Enhance level distribution:
+  BONES_old: {'0': 22, '2': 88, '3': 36, '1': 13}
+  BONES_new: {'0': 21, '2': 89, '1': 41, '3': 8}
+  CA_old:    {'0': 20, '2': 58, '1': 10, '3': 71}
+  CA_new:    {'0': 19, '2': 45, '1': 81, '3': 14}

@@ -1,0 +1,248 @@
+{
+  "3G_stable": {
+    "bones": {
+      "playback time": 636699.0972762647,
+      "average quality vmaf": 83.07095927044024,
+      "average oscillation vmaf": 5.435432069620255,
+      "average quality ssim": 0.972745496855346,
+      "average oscillation ssim": 0.010719499999999995,
+      "freeze time": 0,
+      "freeze event": 0,
+      "average bandwidth": [
+        1307.913106918239
+      ],
+      "qoe": 77.63552720081998
+    },
+    "ca_n1": {
+      "playback time": 636699.0972762648,
+      "average quality vmaf": 82.29369144654088,
+      "average oscillation vmaf": 5.371368677215188,
+      "average quality ssim": 0.971900496855346,
+      "average oscillation ssim": 0.010917892405063283,
+      "freeze time": 0,
+      "freeze event": 0,
+      "average bandwidth": [
+        1306.9408805031446
+      ],
+      "qoe": 76.92232276932569
+    },
+    "ca_n2": {
+      "playback time": 636699.0972762643,
+      "average quality vmaf": 82.91760010062893,
+      "average oscillation vmaf": 4.348556816455695,
+      "average quality ssim": 0.9733126981132078,
+      "average oscillation ssim": 0.010262335443037984,
+      "freeze time": 3.637978807091713e-11,
+      "freeze event": 1,
+      "average bandwidth": [
+        1228.9750566037735
+      ],
+      "qoe": 78.5690432841732
+    }
+  },
+  "3G_var1": {
+    "bones": {
+      "playback time": 916583.1095627926,
+      "average quality vmaf": 70.54327262893081,
+      "average oscillation vmaf": 6.1946953797468405,
+      "average quality ssim": 0.9521165660377361,
+      "average oscillation ssim": 0.016104791139240498,
+      "freeze time": 280037.34233638865,
+      "freeze event": 20,
+      "average bandwidth": [
+        1028.7595849056604
+      ],
+      "qoe": -111.77553742779003
+    },
+    "ca_n1": {
+      "playback time": 964305.6949775475,
+      "average quality vmaf": 70.35016363522011,
+      "average oscillation vmaf": 5.759860854430379,
+      "average quality ssim": 0.9516688805031446,
+      "average oscillation ssim": 0.016257063291139236,
+      "freeze time": 327759.927751143,
+      "freeze event": 20,
+      "average bandwidth": [
+        1049.2783396226414
+      ],
+      "qoe": -141.5480165595518
+    },
+    "ca_n2": {
+      "playback time": 901244.3867218858,
+      "average quality vmaf": 72.17422985534591,
+      "average oscillation vmaf": 4.879999835443038,
+      "average quality ssim": 0.9534464402515724,
+      "average oscillation ssim": 0.014929575949367085,
+      "freeze time": 264698.61949548154,
+      "freeze event": 21,
+      "average bandwidth": [
+        1025.4013836477989
+      ],
+      "qoe": -99.18288915964527
+    }
+  },
+  "4G_bus": {
+    "bones": {
+      "playback time": 636041.3761315044,
+      "average quality vmaf": 97.21782701886792,
+      "average oscillation vmaf": 0.6513803481012657,
+      "average quality ssim": 0.9952526289308177,
+      "average oscillation ssim": 0.002402284810126582,
+      "freeze time": 7.275957614183426e-12,
+      "freeze event": 1,
+      "average bandwidth": [
+        4437.05334591195
+      ],
+      "qoe": 96.56644667076665
+    },
+    "ca_n1": {
+      "playback time": 636041.3761315044,
+      "average quality vmaf": 97.51218984276728,
+      "average oscillation vmaf": 0.5735828544303798,
+      "average quality ssim": 0.9958389119496857,
+      "average oscillation ssim": 0.0022078924050632914,
+      "freeze time": 0,
+      "freeze event": 0,
+      "average bandwidth": [
+        4459.649358490566
+      ],
+      "qoe": 96.9386069883369
+    },
+    "ca_n2": {
+      "playback time": 636041.3761315044,
+      "average quality vmaf": 97.5979312264151,
+      "average oscillation vmaf": 0.3657664493670886,
+      "average quality ssim": 0.9964329622641509,
+      "average oscillation ssim": 0.00139896835443038,
+      "freeze time": 0,
+      "freeze event": 0,
+      "average bandwidth": [
+        4461.792993710692
+      ],
+      "qoe": 97.23216477704801
+    }
+  },
+  "4G_car": {
+    "bones": {
+      "playback time": 636073.132721375,
+      "average quality vmaf": 97.1102418427673,
+      "average oscillation vmaf": 0.8679125379746835,
+      "average quality ssim": 0.9951189559748428,
+      "average oscillation ssim": 0.002671322784810126,
+      "freeze time": 3.637978807091713e-11,
+      "freeze event": 1,
+      "average bandwidth": [
+        4410.206226415094
+      ],
+      "qoe": 96.24232930479258
+    },
+    "ca_n1": {
+      "playback time": 636073.1327213747,
+      "average quality vmaf": 97.29069135849055,
+      "average oscillation vmaf": 0.9216147151898736,
+      "average quality ssim": 0.9953926540880502,
+      "average oscillation ssim": 0.0029360569620253173,
+      "freeze time": 1.4551915228366852e-11,
+      "freeze event": 1,
+      "average bandwidth": [
+        4415.625974842767
+      ],
+      "qoe": 96.36907664330066
+    },
+    "ca_n2": {
+      "playback time": 636073.1327213747,
+      "average quality vmaf": 96.02935283018867,
+      "average oscillation vmaf": 1.3686108164556958,
+      "average quality ssim": 0.993741358490566,
+      "average oscillation ssim": 0.0031757405063291165,
+      "freeze time": 0,
+      "freeze event": 0,
+      "average bandwidth": [
+        4091.1889685534593
+      ],
+      "qoe": 94.66074201373297
+    }
+  },
+  "4G_bicycle": {
+    "bones": {
+      "playback time": 636065.7611603164,
+      "average quality vmaf": 97.14412572955975,
+      "average oscillation vmaf": 0.6513803481012657,
+      "average quality ssim": 0.9951329056603774,
+      "average oscillation ssim": 0.002402284810126582,
+      "freeze time": 0,
+      "freeze event": 0,
+      "average bandwidth": [
+        4425.2310691823905
+      ],
+      "qoe": 96.49274538145848
+    },
+    "ca_n1": {
+      "playback time": 636065.7611603162,
+      "average quality vmaf": 97.51218984276728,
+      "average oscillation vmaf": 0.5735828544303798,
+      "average quality ssim": 0.9958389119496857,
+      "average oscillation ssim": 0.0022078924050632914,
+      "freeze time": 2.1827872842550278e-11,
+      "freeze event": 1,
+      "average bandwidth": [
+        4459.649358490566
+      ],
+      "qoe": 96.93860698833689
+    },
+    "ca_n2": {
+      "playback time": 636065.7611603162,
+      "average quality vmaf": 97.60551908805031,
+      "average oscillation vmaf": 0.4641028417721519,
+      "average quality ssim": 0.996473,
+      "average oscillation ssim": 0.0013925000000000012,
+      "freeze time": 2.1827872842550278e-11,
+      "freeze event": 1,
+      "average bandwidth": [
+        4457.490264150943
+      ],
+      "qoe": 97.14141624627815
+    }
+  },
+  "hd_fixed": {
+    "bones": {
+      "playback time": 636584.8129126928,
+      "average quality vmaf": 92.6323366981132,
+      "average oscillation vmaf": 2.673317094936708,
+      "average quality ssim": 0.9885976037735849,
+      "average oscillation ssim": 0.005918588607594936,
+      "freeze time": 4.3655745685100555e-11,
+      "freeze event": 1,
+      "average bandwidth": [
+        3589.882289308176
+      ],
+      "qoe": 89.95901960317647
+    },
+    "ca_n1": {
+      "playback time": 636584.8129126927,
+      "average quality vmaf": 92.48867662893083,
+      "average oscillation vmaf": 2.1362985759493665,
+      "average quality ssim": 0.9885593962264152,
+      "average oscillation ssim": 0.005326550632911393,
+      "freeze time": 2.1827872842550278e-11,
+      "freeze event": 1,
+      "average bandwidth": [
+        3594.9616981132076
+      ],
+      "qoe": 90.35237805298145
+    },
+    "ca_n2": {
+      "playback time": 636584.8129126927,
+      "average quality vmaf": 89.54230716981132,
+      "average oscillation vmaf": 3.37988643670886,
+      "average quality ssim": 0.9832406729559747,
+      "average oscillation ssim": 0.007930284810126585,
+      "freeze time": 4.3655745685100555e-11,
+      "freeze event": 1,
+      "average bandwidth": [
+        2773.830566037736
+      ],
+      "qoe": 86.16242073310244
+    }
+  }
+}

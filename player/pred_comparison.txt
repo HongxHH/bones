@@ -1,0 +1,21 @@
+BONES baseline: bones_imdn_always_fast-True_video-bbb_trace-report.2010-09-13_1003CEST_20260828-093254.json
+CA base_known(L1): ca_bones_imdn_always_fast-True_video-bbb_trace-report.2010-09-13_1003CEST_20260828-094523.json
+CA layer2: ca_bones_imdn_always_fast-True_video-bbb_trace-report.2010-09-13_1003CEST_20260828-100458.json
+CA predicted: ca_bones_imdn_always_fast-True_video-bbb_trace-report.2010-09-13_1003CEST_20260828-121954.json
+
+Metric                         BONES      CA_L1      CA_L2    CA_PRED     PRED-B
+--------------------------------------------------------------------------------
+avg_vmaf                       66.47      66.79      66.89      64.06      -2.41
+QOE                            57.96      56.38      55.15      51.04      -6.92
+num_stall                      16.00      22.00      19.00      16.00      +0.00
+dur_stall                      22.22      90.05      73.77      55.90     +33.68
+avg_freeze                      0.14       0.57       0.46       0.35      +0.21
+num_quality_switches           56.00      85.00      91.00      96.00     +40.00
+oscillation_vmaf                8.50      10.35      11.69      12.99      +4.49
+enhancer_abort_total           13.00      12.00      11.00       9.00      -4.00
+
+Enhance level distribution:
+  BONES:   {'0': 21, '2': 89, '1': 41, '3': 8}
+  CA_L1:   {'0': 19, '2': 45, '1': 81, '3': 14}
+  CA_L2:   {'0': 26, '2': 98, '1': 19, '3': 16}
+  CA_PRED: {'0': 32, '2': 55, '1': 42, '3': 30}
