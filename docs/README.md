@@ -23,4 +23,5 @@
 | `theory_analysis.md` | CARES+VMAF平滑的 Lyapunov 理论推导、等价变换、近最优保证 | 想了解理论基础 |
 | `lookahead_planning_theory.md` | 内容感知多段前瞻规划的理论框架、复杂度分析、可行性 | 想了解前瞻规划方向 |
 | `multitask_enhancement_roadmap.md` | 方向三：端侧资源感知多任务视频增强的规划、优先级、分阶段计划 | 想了解后续主攻方向 |
+| `enhancer_interface_design.md` | 增强管线架构梳理、多任务扩展接口设计、迁移路径、代码位置索引 | 要改增强器代码或做多任务扩展 |
 | `known_issues.md` | 已知 bug、环境坑、仿真器与真实播放器差异 | 遇到报错或异常行为 |
