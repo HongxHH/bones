@@ -1,0 +1,8 @@
+{
+  "ca_mode": "base_known",
+  "ca_c_min": 0.7,
+  "ca_c_max": 1.8,
+  "ca_enhance_file": "../data/bbb/imdn_bbb_3060ti.json",
+  "smooth_alpha": 0.3,
+  "use_content_latency": false
+}

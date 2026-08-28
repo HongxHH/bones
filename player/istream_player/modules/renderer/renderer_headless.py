@@ -29,6 +29,7 @@ class HeadlessRenderer(Module, Renderer, PlayerEventListener):
         super().__init__()
         self.task_start = None
         self.task_total = None
+        self.current_segment_index = 0
 
     async def setup(self, config: PlayerConfig, player: Player):
         player.add_listener(self)
@@ -36,6 +37,11 @@ class HeadlessRenderer(Module, Renderer, PlayerEventListener):
     async def on_segment_playback_start(self, segments: Dict[int, Segment]):
         for as_idx in segments:
             segment = segments[as_idx]
+            # 从 URL 解析段索引（与 opencv renderer 一致）
+            try:
+                self.current_segment_index = int(segment.url.split('segment_')[1].split('.')[0])
+            except (IndexError, ValueError):
+                pass
             self.task_start = time.time()
             self.task_total = segment.duration
             await asyncio.sleep(segment.duration)
@@ -44,4 +50,7 @@ class HeadlessRenderer(Module, Renderer, PlayerEventListener):
         if self.task_start is None:
             return 0
         return max(self.task_total - (time.time() - self.task_start), 0)
+
+    def get_current_render_segment_index(self):
+        return self.current_segment_index
 

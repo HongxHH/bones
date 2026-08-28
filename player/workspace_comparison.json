@@ -1,0 +1,62 @@
+{
+  "avg_vmaf": {
+    "BONES": 67.80904845844695,
+    "CA_aggressive": 68.39353229808954,
+    "CA_conservative": 66.78894151342912
+  },
+  "QOE": {
+    "BONES": 59.875284066635444,
+    "CA_aggressive": 56.562562058936315,
+    "CA_conservative": 56.37767208286438
+  },
+  "num_stall": {
+    "BONES": 10,
+    "CA_aggressive": 22,
+    "CA_conservative": 22
+  },
+  "dur_stall": {
+    "BONES": 19.200849056243896,
+    "CA_aggressive": 90.52266335487366,
+    "CA_conservative": 90.0462429523468
+  },
+  "avg_freeze": {
+    "BONES": 0.12076005695750879,
+    "CA_aggressive": 0.5693249267602117,
+    "CA_conservative": 0.5663285720273383
+  },
+  "num_quality_switches": {
+    "BONES": 53,
+    "CA_aggressive": 89,
+    "CA_conservative": 85
+  },
+  "oscillation_vmaf": {
+    "BONES": 7.921688386115754,
+    "CA_aggressive": 11.774037746477205,
+    "CA_conservative": 10.35463657336201
+  },
+  "enhancer_abort_total": {
+    "BONES": 9,
+    "CA_aggressive": 12,
+    "CA_conservative": 12
+  },
+  "enhance_level_count": {
+    "BONES": {
+      "0": 22,
+      "2": 88,
+      "3": 36,
+      "1": 13
+    },
+    "CA_aggressive": {
+      "0": 21,
+      "2": 66,
+      "1": 8,
+      "3": 64
+    },
+    "CA_conservative": {
+      "0": 19,
+      "2": 45,
+      "1": 81,
+      "3": 14
+    }
+  }
+}

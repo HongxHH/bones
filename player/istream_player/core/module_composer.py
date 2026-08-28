@@ -13,7 +13,11 @@ from istream_player.modules.nes import (BONESController,
                                         BufferGreedyController,
                                         ThroughputGreedyController,
                                         NASController,
-                                        AlwaysGreedyController)
+                                        AlwaysGreedyController,
+                                        ContentAwareBONESController,
+                                        ConservativeContentAwareBONESController,
+                                        CABONESController,
+                                        DRLNESController)
 
 from istream_player.modules.analyzer.analyzer import PlaybackAnalyzer
 from istream_player.modules.analyzer.event_logger import EventLogger
@@ -436,7 +440,7 @@ class PlayerComposer:
         # 注册网络感知调度器模块（支持多种算法）
         self.register_module(
             "nes",
-            [BONESController, DynamicGreedyController, BOLAGreedyController, BufferGreedyController, ThroughputGreedyController, NASController, AlwaysGreedyController],
+            [BONESController, DynamicGreedyController, BOLAGreedyController, BufferGreedyController, ThroughputGreedyController, NASController, AlwaysGreedyController, ContentAwareBONESController, ConservativeContentAwareBONESController, CABONESController, DRLNESController],
             single_initializer,
             "Neural-Enhanced Streaming Controller",
             False,

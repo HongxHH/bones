@@ -178,6 +178,20 @@ class PlayerConfig:
         # 使用通用DIV2K数据集训练的IMDN模型元数据
         enhance_metadata = "imdn_div2k_quality.json"
 
+    # ======================
+    # 内容感知与 DRL 配置
+    # ======================
+    # 预计算内容特征文件路径
+    content_feature_file: str = "data/content_features/bbb_features.json"
+    # 内容感知 BONES: 是否使用内容感知质量预测
+    use_content_quality: bool = True
+    # 内容感知 BONES: 是否使用内容感知延迟预测
+    use_content_latency: bool = True
+    # DRL 控制器: 是否使用内容特征作为状态输入
+    use_content_features: bool = True
+    # DRL 模型路径
+    drl_model_path: str = "models/drl_nes_qnet.pt"
+
 
     def validate(self) -> None:
         """

@@ -1,0 +1,1433 @@
+[
+  {
+    "segment_index": 0,
+    "texture_complexity": 0.014217427728387216,
+    "motion_intensity": 0.03800587185911807,
+    "scene_change_prob": 0.978271024901094,
+    "num_frames": 120,
+    "texture_std": 0.25696576576813973,
+    "motion_std": 9.080155372874344
+  },
+  {
+    "segment_index": 1,
+    "texture_complexity": 0.03651825002927846,
+    "motion_intensity": 0.034001729386706786,
+    "scene_change_prob": 0.9454898491097132,
+    "num_frames": 120,
+    "texture_std": 1.3078384178759819,
+    "motion_std": 1.267596952318089
+  },
+  {
+    "segment_index": 2,
+    "texture_complexity": 0.11716721415519715,
+    "motion_intensity": 0.1365202408210904,
+    "scene_change_prob": 0.05808912250078245,
+    "num_frames": 120,
+    "texture_std": 2.1537515209325386,
+    "motion_std": 1.553732382572743
+  },
+  {
+    "segment_index": 3,
+    "texture_complexity": 0.1790265092253685,
+    "motion_intensity": 0.11363183425254181,
+    "scene_change_prob": 0.052252682421525636,
+    "num_frames": 120,
+    "texture_std": 1.0480716211120225,
+    "motion_std": 2.457585042040818
+  },
+  {
+    "segment_index": 4,
+    "texture_complexity": 0.2054961367448171,
+    "motion_intensity": 0.040353124533422526,
+    "scene_change_prob": 0.34570587837809397,
+    "num_frames": 120,
+    "texture_std": 0.38516256452583547,
+    "motion_std": 6.4448573652735295
+  },
+  {
+    "segment_index": 5,
+    "texture_complexity": 0.05602970975140731,
+    "motion_intensity": 0.03212944398782834,
+    "scene_change_prob": 0.5492111551435482,
+    "num_frames": 120,
+    "texture_std": 2.708333565773816,
+    "motion_std": 6.718787298101447
+  },
+  {
+    "segment_index": 6,
+    "texture_complexity": 0.058611803675691285,
+    "motion_intensity": 0.04878668261676276,
+    "scene_change_prob": 0.9405989387602725,
+    "num_frames": 120,
+    "texture_std": 3.556462476925109,
+    "motion_std": 9.083454196870191
+  },
+  {
+    "segment_index": 7,
+    "texture_complexity": 0.1819121426343918,
+    "motion_intensity": 0.059423590274084184,
+    "scene_change_prob": 0.05187500816419266,
+    "num_frames": 120,
+    "texture_std": 0.37189960881513495,
+    "motion_std": 0.1556112943881757
+  },
+  {
+    "segment_index": 8,
+    "texture_complexity": 0.1839247707525889,
+    "motion_intensity": 0.06206476167470467,
+    "scene_change_prob": 0.05196075182205177,
+    "num_frames": 120,
+    "texture_std": 0.4510464953230476,
+    "motion_std": 0.19722680933674813
+  },
+  {
+    "segment_index": 9,
+    "texture_complexity": 0.18796734184026717,
+    "motion_intensity": 0.0774010800179981,
+    "scene_change_prob": 0.39397034025192096,
+    "num_frames": 120,
+    "texture_std": 0.9342601121316976,
+    "motion_std": 4.263921298526314
+  },
+  {
+    "segment_index": 10,
+    "texture_complexity": 0.135939905444781,
+    "motion_intensity": 0.05024940389878943,
+    "scene_change_prob": 0.05096909123584736,
+    "num_frames": 120,
+    "texture_std": 0.674240975410911,
+    "motion_std": 0.349606460599847
+  },
+  {
+    "segment_index": 11,
+    "texture_complexity": 0.11266802370548248,
+    "motion_intensity": 0.02673933892523875,
+    "scene_change_prob": 0.050822037852056565,
+    "num_frames": 120,
+    "texture_std": 0.3910030640901879,
+    "motion_std": 0.43735229691888283
+  },
+  {
+    "segment_index": 12,
+    "texture_complexity": 0.10639646063248316,
+    "motion_intensity": 0.033942647161437016,
+    "scene_change_prob": 0.053968903657291616,
+    "num_frames": 120,
+    "texture_std": 0.15266695577000883,
+    "motion_std": 0.8502522807895733
+  },
+  {
+    "segment_index": 13,
+    "texture_complexity": 0.14764947642882664,
+    "motion_intensity": 0.08025634595159055,
+    "scene_change_prob": 0.544641367450309,
+    "num_frames": 120,
+    "texture_std": 0.9097453920810541,
+    "motion_std": 6.3964860644319295
+  },
+  {
+    "segment_index": 14,
+    "texture_complexity": 0.14222509175539017,
+    "motion_intensity": 0.036848580219498536,
+    "scene_change_prob": 0.05085718866725448,
+    "num_frames": 120,
+    "texture_std": 0.7235114190479249,
+    "motion_std": 1.3541082662319504
+  },
+  {
+    "segment_index": 15,
+    "texture_complexity": 0.05300288043916226,
+    "motion_intensity": 0.03480026938234122,
+    "scene_change_prob": 0.9456641224521641,
+    "num_frames": 120,
+    "texture_std": 2.353320134367984,
+    "motion_std": 8.106328323802696
+  },
+  {
+    "segment_index": 16,
+    "texture_complexity": 0.05136227240165074,
+    "motion_intensity": 0.02895788921445024,
+    "scene_change_prob": 0.5114653054708671,
+    "num_frames": 120,
+    "texture_std": 0.33989947218953026,
+    "motion_std": 4.922624135159105
+  },
+  {
+    "segment_index": 17,
+    "texture_complexity": 0.09159242903192838,
+    "motion_intensity": 0.07405607553214585,
+    "scene_change_prob": 0.403077722200275,
+    "num_frames": 120,
+    "texture_std": 2.604124741675733,
+    "motion_std": 7.647174093784614
+  },
+  {
+    "segment_index": 18,
+    "texture_complexity": 0.06494663298130035,
+    "motion_intensity": 0.06434805082412912,
+    "scene_change_prob": 0.754043634088362,
+    "num_frames": 120,
+    "texture_std": 1.6175659550228958,
+    "motion_std": 10.643076276909973
+  },
+  {
+    "segment_index": 19,
+    "texture_complexity": 0.08657865181565286,
+    "motion_intensity": 0.051843782339547693,
+    "scene_change_prob": 0.3134268259743624,
+    "num_frames": 120,
+    "texture_std": 3.04739304300366,
+    "motion_std": 6.514524397332716
+  },
+  {
+    "segment_index": 20,
+    "texture_complexity": 0.09836330279707908,
+    "motion_intensity": 0.10803051651025018,
+    "scene_change_prob": 0.058549106852583736,
+    "num_frames": 120,
+    "texture_std": 0.8899105326703155,
+    "motion_std": 1.4062787317335825
+  },
+  {
+    "segment_index": 21,
+    "texture_complexity": 0.059364040717482566,
+    "motion_intensity": 0.0642250572349511,
+    "scene_change_prob": 0.7833833503912742,
+    "num_frames": 120,
+    "texture_std": 0.5793842485774036,
+    "motion_std": 7.597575964138181
+  },
+  {
+    "segment_index": 22,
+    "texture_complexity": 0.059581471184889476,
+    "motion_intensity": 0.010852132662895973,
+    "scene_change_prob": 0.05037313576236731,
+    "num_frames": 120,
+    "texture_std": 0.044797965697638054,
+    "motion_std": 0.6905317240436024
+  },
+  {
+    "segment_index": 23,
+    "texture_complexity": 0.07559329723318417,
+    "motion_intensity": 0.031029710008668863,
+    "scene_change_prob": 0.4715110891483348,
+    "num_frames": 120,
+    "texture_std": 1.4186537791077358,
+    "motion_std": 10.599245378060683
+  },
+  {
+    "segment_index": 24,
+    "texture_complexity": 0.06052415236830712,
+    "motion_intensity": 0.007679597539853315,
+    "scene_change_prob": 0.0491038787584476,
+    "num_frames": 120,
+    "texture_std": 0.021133764061860738,
+    "motion_std": 0.4543795013429435
+  },
+  {
+    "segment_index": 25,
+    "texture_complexity": 0.05941210279862086,
+    "motion_intensity": 0.01917094101800638,
+    "scene_change_prob": 0.04914403499695078,
+    "num_frames": 120,
+    "texture_std": 0.09822052824778939,
+    "motion_std": 0.8946046636158056
+  },
+  {
+    "segment_index": 26,
+    "texture_complexity": 0.16877687220772108,
+    "motion_intensity": 0.028048919969830523,
+    "scene_change_prob": 0.7532791941306672,
+    "num_frames": 120,
+    "texture_std": 3.402264792920419,
+    "motion_std": 8.833230515836632
+  },
+  {
+    "segment_index": 27,
+    "texture_complexity": 0.0479957527667284,
+    "motion_intensity": 0.054176471745517076,
+    "scene_change_prob": 0.8569941510924706,
+    "num_frames": 120,
+    "texture_std": 4.207859050059664,
+    "motion_std": 7.459981940349872
+  },
+  {
+    "segment_index": 28,
+    "texture_complexity": 0.033868597249190016,
+    "motion_intensity": 0.05011584302123521,
+    "scene_change_prob": 0.055401732941081756,
+    "num_frames": 120,
+    "texture_std": 0.10586943301296112,
+    "motion_std": 1.7151942402029399
+  },
+  {
+    "segment_index": 29,
+    "texture_complexity": 0.11712238756318887,
+    "motion_intensity": 0.06544784289531681,
+    "scene_change_prob": 0.4789265234701691,
+    "num_frames": 120,
+    "texture_std": 4.343277654203703,
+    "motion_std": 5.017762808157936
+  },
+  {
+    "segment_index": 30,
+    "texture_complexity": 0.1236620306968689,
+    "motion_intensity": 0.08162791143283665,
+    "scene_change_prob": 0.18451600781691682,
+    "num_frames": 120,
+    "texture_std": 1.412522391576857,
+    "motion_std": 6.252825103446694
+  },
+  {
+    "segment_index": 31,
+    "texture_complexity": 0.08865465407570203,
+    "motion_intensity": 0.07413344436197304,
+    "scene_change_prob": 0.26535349399156827,
+    "num_frames": 120,
+    "texture_std": 0.9075020759936113,
+    "motion_std": 7.46447922567665
+  },
+  {
+    "segment_index": 32,
+    "texture_complexity": 0.08363822629054388,
+    "motion_intensity": 0.023817512812484214,
+    "scene_change_prob": 0.3333290054797398,
+    "num_frames": 120,
+    "texture_std": 0.41214297452798654,
+    "motion_std": 4.8156164466271605
+  },
+  {
+    "segment_index": 33,
+    "texture_complexity": 0.09413983518878619,
+    "motion_intensity": 0.019319689657841744,
+    "scene_change_prob": 0.05276474357134209,
+    "num_frames": 120,
+    "texture_std": 0.07470853676624031,
+    "motion_std": 1.034656898032079
+  },
+  {
+    "segment_index": 34,
+    "texture_complexity": 0.09793089007337888,
+    "motion_intensity": 0.018699825578043106,
+    "scene_change_prob": 0.05373288990533805,
+    "num_frames": 120,
+    "texture_std": 0.17922284552178044,
+    "motion_std": 0.7863371020833989
+  },
+  {
+    "segment_index": 35,
+    "texture_complexity": 0.10182050819198289,
+    "motion_intensity": 0.022861183691425483,
+    "scene_change_prob": 0.052107195463255145,
+    "num_frames": 120,
+    "texture_std": 0.10737603610262926,
+    "motion_std": 0.711541776819501
+  },
+  {
+    "segment_index": 36,
+    "texture_complexity": 0.0962719572087129,
+    "motion_intensity": 0.049215300994760854,
+    "scene_change_prob": 0.053970610753906155,
+    "num_frames": 120,
+    "texture_std": 0.4658128829393284,
+    "motion_std": 2.5005172606721158
+  },
+  {
+    "segment_index": 37,
+    "texture_complexity": 0.12435433159271876,
+    "motion_intensity": 0.022841527036466854,
+    "scene_change_prob": 0.43014745541168237,
+    "num_frames": 120,
+    "texture_std": 3.5793441277815603,
+    "motion_std": 5.136578982661082
+  },
+  {
+    "segment_index": 38,
+    "texture_complexity": 0.13576405182480814,
+    "motion_intensity": 0.020818381497389585,
+    "scene_change_prob": 0.6336229667307841,
+    "num_frames": 120,
+    "texture_std": 3.6081793608445865,
+    "motion_std": 5.0627830692432765
+  },
+  {
+    "segment_index": 39,
+    "texture_complexity": 0.10471825470527014,
+    "motion_intensity": 0.03340975977271712,
+    "scene_change_prob": 0.05660509021837242,
+    "num_frames": 120,
+    "texture_std": 0.1458399342239969,
+    "motion_std": 1.5207439680533543
+  },
+  {
+    "segment_index": 40,
+    "texture_complexity": 0.11206542134284973,
+    "motion_intensity": 0.0144490137597786,
+    "scene_change_prob": 0.42714207607463145,
+    "num_frames": 120,
+    "texture_std": 0.1760095742534276,
+    "motion_std": 4.7662828542283435
+  },
+  {
+    "segment_index": 41,
+    "texture_complexity": 0.0892428935567538,
+    "motion_intensity": 0.05538370913880713,
+    "scene_change_prob": 0.8113450253489025,
+    "num_frames": 120,
+    "texture_std": 2.7426223795599336,
+    "motion_std": 10.278306230011493
+  },
+  {
+    "segment_index": 42,
+    "texture_complexity": 0.07959903970360756,
+    "motion_intensity": 0.0328306433585595,
+    "scene_change_prob": 0.823265696030145,
+    "num_frames": 120,
+    "texture_std": 2.5504812163561916,
+    "motion_std": 6.7513207608637815
+  },
+  {
+    "segment_index": 43,
+    "texture_complexity": 0.05569126377503077,
+    "motion_intensity": 0.04815208425716672,
+    "scene_change_prob": 0.8298522935019813,
+    "num_frames": 120,
+    "texture_std": 2.549667546718339,
+    "motion_std": 9.853873417460555
+  },
+  {
+    "segment_index": 44,
+    "texture_complexity": 0.03152772823969523,
+    "motion_intensity": 0.037769870892563624,
+    "scene_change_prob": 0.05625398656034586,
+    "num_frames": 120,
+    "texture_std": 0.0951101157340005,
+    "motion_std": 2.545979490248827
+  },
+  {
+    "segment_index": 45,
+    "texture_complexity": 0.07517449922859669,
+    "motion_intensity": 0.08193029535918676,
+    "scene_change_prob": 0.8006771204287344,
+    "num_frames": 120,
+    "texture_std": 1.713429471355902,
+    "motion_std": 8.54662352313188
+  },
+  {
+    "segment_index": 46,
+    "texture_complexity": 0.08848994135856628,
+    "motion_intensity": 0.07530535393569315,
+    "scene_change_prob": 0.6991241351879601,
+    "num_frames": 120,
+    "texture_std": 0.7703340126972493,
+    "motion_std": 5.238735730433884
+  },
+  {
+    "segment_index": 47,
+    "texture_complexity": 0.07290597413976987,
+    "motion_intensity": 0.10524228871943486,
+    "scene_change_prob": 0.9307914406563397,
+    "num_frames": 120,
+    "texture_std": 2.187810223073138,
+    "motion_std": 7.9772291997299725
+  },
+  {
+    "segment_index": 48,
+    "texture_complexity": 0.07079037788013617,
+    "motion_intensity": 0.04600957824825114,
+    "scene_change_prob": 0.4301501239866656,
+    "num_frames": 120,
+    "texture_std": 1.394430781752196,
+    "motion_std": 6.264047099835464
+  },
+  {
+    "segment_index": 49,
+    "texture_complexity": 0.05812348872423172,
+    "motion_intensity": 0.08929062113152811,
+    "scene_change_prob": 0.4286444385677006,
+    "num_frames": 120,
+    "texture_std": 1.4039525905062906,
+    "motion_std": 7.926483891496845
+  },
+  {
+    "segment_index": 50,
+    "texture_complexity": 0.038191443781057995,
+    "motion_intensity": 0.11800933355251614,
+    "scene_change_prob": 0.7035738550203122,
+    "num_frames": 120,
+    "texture_std": 0.7863025482410834,
+    "motion_std": 13.291116866521353
+  },
+  {
+    "segment_index": 51,
+    "texture_complexity": 0.0690954027324915,
+    "motion_intensity": 0.04352512015995024,
+    "scene_change_prob": 0.45999866784171795,
+    "num_frames": 120,
+    "texture_std": 0.919510157006857,
+    "motion_std": 6.810945924589996
+  },
+  {
+    "segment_index": 52,
+    "texture_complexity": 0.058819094523787495,
+    "motion_intensity": 0.05233344988746136,
+    "scene_change_prob": 0.542733276342743,
+    "num_frames": 120,
+    "texture_std": 1.2678525119565434,
+    "motion_std": 9.858767954534882
+  },
+  {
+    "segment_index": 53,
+    "texture_complexity": 0.05586949383219083,
+    "motion_intensity": 0.11829359074454514,
+    "scene_change_prob": 0.5353025054730428,
+    "num_frames": 120,
+    "texture_std": 0.8523472083418905,
+    "motion_std": 6.089205372849029
+  },
+  {
+    "segment_index": 54,
+    "texture_complexity": 0.06270888241628805,
+    "motion_intensity": 0.12925648587998473,
+    "scene_change_prob": 0.6828770148500464,
+    "num_frames": 120,
+    "texture_std": 0.7505910765998279,
+    "motion_std": 8.548948173441444
+  },
+  {
+    "segment_index": 55,
+    "texture_complexity": 0.06253881563742955,
+    "motion_intensity": 0.04241011037546046,
+    "scene_change_prob": 0.058275857095892496,
+    "num_frames": 120,
+    "texture_std": 0.5159807129845579,
+    "motion_std": 2.204078871019243
+  },
+  {
+    "segment_index": 56,
+    "texture_complexity": 0.07386614340047042,
+    "motion_intensity": 0.018724965327093245,
+    "scene_change_prob": 0.5495909389251261,
+    "num_frames": 120,
+    "texture_std": 1.5696796054931577,
+    "motion_std": 6.019199558750652
+  },
+  {
+    "segment_index": 57,
+    "texture_complexity": 0.15430132726828255,
+    "motion_intensity": 0.0693809414683862,
+    "scene_change_prob": 0.33530481291165787,
+    "num_frames": 120,
+    "texture_std": 5.902714868705165,
+    "motion_std": 9.444654694620581
+  },
+  {
+    "segment_index": 58,
+    "texture_complexity": 0.10065044696132341,
+    "motion_intensity": 0.0290785703877201,
+    "scene_change_prob": 0.34854033612567725,
+    "num_frames": 120,
+    "texture_std": 3.9265379317228133,
+    "motion_std": 5.909341315497311
+  },
+  {
+    "segment_index": 59,
+    "texture_complexity": 0.07831688495973746,
+    "motion_intensity": 0.03139969134958936,
+    "scene_change_prob": 0.3730282401221117,
+    "num_frames": 120,
+    "texture_std": 3.6947874669887653,
+    "motion_std": 5.831266364129535
+  },
+  {
+    "segment_index": 60,
+    "texture_complexity": 0.053910546551148096,
+    "motion_intensity": 0.007049901719812919,
+    "scene_change_prob": 0.04947175639123633,
+    "num_frames": 120,
+    "texture_std": 0.055214397800167514,
+    "motion_std": 0.33664295390749904
+  },
+  {
+    "segment_index": 61,
+    "texture_complexity": 0.12239563688635827,
+    "motion_intensity": 0.0642971370369196,
+    "scene_change_prob": 0.3756584084438658,
+    "num_frames": 120,
+    "texture_std": 6.929254893076043,
+    "motion_std": 9.022622514730418
+  },
+  {
+    "segment_index": 62,
+    "texture_complexity": 0.09581898575027784,
+    "motion_intensity": 0.06773165198100381,
+    "scene_change_prob": 0.06339672961572827,
+    "num_frames": 120,
+    "texture_std": 2.3822887157907737,
+    "motion_std": 3.062876868604677
+  },
+  {
+    "segment_index": 63,
+    "texture_complexity": 0.06811874407033126,
+    "motion_intensity": 0.066231178465568,
+    "scene_change_prob": 0.22254314630814115,
+    "num_frames": 120,
+    "texture_std": 1.3904574706335966,
+    "motion_std": 6.5773804825881665
+  },
+  {
+    "segment_index": 64,
+    "texture_complexity": 0.07436717497805755,
+    "motion_intensity": 0.08391655503513933,
+    "scene_change_prob": 0.3261662604838986,
+    "num_frames": 120,
+    "texture_std": 3.116586258116952,
+    "motion_std": 8.56544815077483
+  },
+  {
+    "segment_index": 65,
+    "texture_complexity": 0.06914384961128235,
+    "motion_intensity": 0.054815049717823666,
+    "scene_change_prob": 0.3731452433207001,
+    "num_frames": 120,
+    "texture_std": 2.7195628641643705,
+    "motion_std": 8.828785789372233
+  },
+  {
+    "segment_index": 66,
+    "texture_complexity": 0.09829184234142303,
+    "motion_intensity": 0.04609997511974403,
+    "scene_change_prob": 0.24974728450749062,
+    "num_frames": 120,
+    "texture_std": 5.224981610853553,
+    "motion_std": 6.1378166971098045
+  },
+  {
+    "segment_index": 67,
+    "texture_complexity": 0.06953325817982356,
+    "motion_intensity": 0.03950234104093967,
+    "scene_change_prob": 0.1588687973588019,
+    "num_frames": 120,
+    "texture_std": 0.7883675783256492,
+    "motion_std": 5.851484934289306
+  },
+  {
+    "segment_index": 68,
+    "texture_complexity": 0.088776892075936,
+    "motion_intensity": 0.046317167401689445,
+    "scene_change_prob": 0.2320569524068756,
+    "num_frames": 120,
+    "texture_std": 3.1996373278855668,
+    "motion_std": 5.441883638562708
+  },
+  {
+    "segment_index": 69,
+    "texture_complexity": 0.15287214517593384,
+    "motion_intensity": 0.06799063774697085,
+    "scene_change_prob": 0.057542266092665745,
+    "num_frames": 120,
+    "texture_std": 0.24644244421634026,
+    "motion_std": 3.173270728967172
+  },
+  {
+    "segment_index": 70,
+    "texture_complexity": 0.08322878102461498,
+    "motion_intensity": 0.09885634764355897,
+    "scene_change_prob": 0.2976221448336852,
+    "num_frames": 120,
+    "texture_std": 3.9780768627386536,
+    "motion_std": 8.7274939703342
+  },
+  {
+    "segment_index": 71,
+    "texture_complexity": 0.06910624071955682,
+    "motion_intensity": 0.057910183629082033,
+    "scene_change_prob": 0.48682674567487816,
+    "num_frames": 120,
+    "texture_std": 2.0129810508544637,
+    "motion_std": 8.118345463316343
+  },
+  {
+    "segment_index": 72,
+    "texture_complexity": 0.11960320179661114,
+    "motion_intensity": 0.029895377701933623,
+    "scene_change_prob": 0.3080863225160867,
+    "num_frames": 120,
+    "texture_std": 3.659636381184237,
+    "motion_std": 6.509322871957668
+  },
+  {
+    "segment_index": 73,
+    "texture_complexity": 0.1508705590168635,
+    "motion_intensity": 0.0060350520291081325,
+    "scene_change_prob": 0.04873821862595401,
+    "num_frames": 120,
+    "texture_std": 0.05461161953878994,
+    "motion_std": 0.25160272148073093
+  },
+  {
+    "segment_index": 74,
+    "texture_complexity": 0.06638186844686668,
+    "motion_intensity": 0.10053742704489098,
+    "scene_change_prob": 0.7679509732434688,
+    "num_frames": 120,
+    "texture_std": 3.1086440749593707,
+    "motion_std": 9.836263182552424
+  },
+  {
+    "segment_index": 75,
+    "texture_complexity": 0.0589925287105143,
+    "motion_intensity": 0.04930647122843259,
+    "scene_change_prob": 0.19338063149376908,
+    "num_frames": 120,
+    "texture_std": 1.8827840523740305,
+    "motion_std": 5.8126712642839955
+  },
+  {
+    "segment_index": 76,
+    "texture_complexity": 0.16998470706554752,
+    "motion_intensity": 0.032820229453532974,
+    "scene_change_prob": 0.8328457262765011,
+    "num_frames": 120,
+    "texture_std": 7.015910021971406,
+    "motion_std": 1.9018121777413899
+  },
+  {
+    "segment_index": 77,
+    "texture_complexity": 0.18319285223881404,
+    "motion_intensity": 0.03669333529530787,
+    "scene_change_prob": 0.41671398246049574,
+    "num_frames": 120,
+    "texture_std": 3.7953970364035126,
+    "motion_std": 7.7711985632952825
+  },
+  {
+    "segment_index": 78,
+    "texture_complexity": 0.12355375241488217,
+    "motion_intensity": 0.06162569337949699,
+    "scene_change_prob": 0.30301392319660003,
+    "num_frames": 120,
+    "texture_std": 1.682467929690785,
+    "motion_std": 6.558349646012411
+  },
+  {
+    "segment_index": 79,
+    "texture_complexity": 0.08509657812615236,
+    "motion_intensity": 0.08576718323788389,
+    "scene_change_prob": 0.43528768648194094,
+    "num_frames": 120,
+    "texture_std": 2.4942515026482397,
+    "motion_std": 6.892139730920067
+  },
+  {
+    "segment_index": 80,
+    "texture_complexity": 0.06940731440981229,
+    "motion_intensity": 0.077331151544046,
+    "scene_change_prob": 0.113835873838218,
+    "num_frames": 120,
+    "texture_std": 2.030787891352253,
+    "motion_std": 5.903285971325457
+  },
+  {
+    "segment_index": 81,
+    "texture_complexity": 0.05968226378162702,
+    "motion_intensity": 0.10771608719242219,
+    "scene_change_prob": 0.5743334038993936,
+    "num_frames": 120,
+    "texture_std": 0.5019655085392157,
+    "motion_std": 8.18270570367793
+  },
+  {
+    "segment_index": 82,
+    "texture_complexity": 0.09296009262402852,
+    "motion_intensity": 0.07497806766954791,
+    "scene_change_prob": 0.559308360652811,
+    "num_frames": 120,
+    "texture_std": 0.596925912309715,
+    "motion_std": 5.17749946975226
+  },
+  {
+    "segment_index": 83,
+    "texture_complexity": 0.08104856342077256,
+    "motion_intensity": 0.12616498924854422,
+    "scene_change_prob": 0.32887662268586726,
+    "num_frames": 120,
+    "texture_std": 0.7407124981556988,
+    "motion_std": 7.779334049361737
+  },
+  {
+    "segment_index": 84,
+    "texture_complexity": 0.07312763360639413,
+    "motion_intensity": 0.05372139114458688,
+    "scene_change_prob": 0.6120592024813643,
+    "num_frames": 120,
+    "texture_std": 1.315694344717196,
+    "motion_std": 8.113600861728628
+  },
+  {
+    "segment_index": 85,
+    "texture_complexity": 0.04783271005377173,
+    "motion_intensity": 0.06221769438418677,
+    "scene_change_prob": 0.801156276822832,
+    "num_frames": 120,
+    "texture_std": 1.0019669998133247,
+    "motion_std": 11.577661016041635
+  },
+  {
+    "segment_index": 86,
+    "texture_complexity": 0.1206280059615771,
+    "motion_intensity": 0.042574027355226904,
+    "scene_change_prob": 0.6648605350263581,
+    "num_frames": 120,
+    "texture_std": 1.1602495997514268,
+    "motion_std": 8.40541282427403
+  },
+  {
+    "segment_index": 87,
+    "texture_complexity": 0.11150843193133672,
+    "motion_intensity": 0.17552999755581553,
+    "scene_change_prob": 0.12146303297318775,
+    "num_frames": 120,
+    "texture_std": 1.430155916117322,
+    "motion_std": 2.137787672589663
+  },
+  {
+    "segment_index": 88,
+    "texture_complexity": 0.10914064834515254,
+    "motion_intensity": 0.16713216017608215,
+    "scene_change_prob": 0.09435631876867323,
+    "num_frames": 120,
+    "texture_std": 1.0194608162078007,
+    "motion_std": 1.4772951826873841
+  },
+  {
+    "segment_index": 89,
+    "texture_complexity": 0.1048443228006363,
+    "motion_intensity": 0.08542114793941252,
+    "scene_change_prob": 0.06453154409352314,
+    "num_frames": 120,
+    "texture_std": 0.4276266643855925,
+    "motion_std": 6.7125129028089265
+  },
+  {
+    "segment_index": 90,
+    "texture_complexity": 0.13007831444342932,
+    "motion_intensity": 0.16342336010782657,
+    "scene_change_prob": 0.05573396324329403,
+    "num_frames": 120,
+    "texture_std": 0.3058039464398193,
+    "motion_std": 6.487048376744166
+  },
+  {
+    "segment_index": 91,
+    "texture_complexity": 0.13830597579479217,
+    "motion_intensity": 0.11404215643438054,
+    "scene_change_prob": 0.05083365972540058,
+    "num_frames": 120,
+    "texture_std": 0.4245892291614268,
+    "motion_std": 8.154349932400905
+  },
+  {
+    "segment_index": 92,
+    "texture_complexity": 0.1377120840549469,
+    "motion_intensity": 0.09633629955664404,
+    "scene_change_prob": 0.051155392175084656,
+    "num_frames": 120,
+    "texture_std": 0.24999076931327266,
+    "motion_std": 3.0506045578918
+  },
+  {
+    "segment_index": 93,
+    "texture_complexity": 0.13464229891697566,
+    "motion_intensity": 0.07814092230448286,
+    "scene_change_prob": 0.06246269023500261,
+    "num_frames": 120,
+    "texture_std": 0.5937820622726108,
+    "motion_std": 6.84523227280525
+  },
+  {
+    "segment_index": 94,
+    "texture_complexity": 0.1047578396399816,
+    "motion_intensity": 0.03660061548096167,
+    "scene_change_prob": 0.9158465874422876,
+    "num_frames": 120,
+    "texture_std": 0.4958011486767992,
+    "motion_std": 13.708047514103944
+  },
+  {
+    "segment_index": 95,
+    "texture_complexity": 0.11024077355861664,
+    "motion_intensity": 0.016417426425514935,
+    "scene_change_prob": 0.14870935699470333,
+    "num_frames": 120,
+    "texture_std": 0.5338067982018848,
+    "motion_std": 3.95012103312771
+  },
+  {
+    "segment_index": 96,
+    "texture_complexity": 0.08283834069967269,
+    "motion_intensity": 0.03022869607089322,
+    "scene_change_prob": 0.5866771728701942,
+    "num_frames": 120,
+    "texture_std": 1.3317127015249022,
+    "motion_std": 7.250647990943788
+  },
+  {
+    "segment_index": 97,
+    "texture_complexity": 0.06989479089776675,
+    "motion_intensity": 0.008726304135329667,
+    "scene_change_prob": 0.06343044669108718,
+    "num_frames": 120,
+    "texture_std": 0.1945513108112844,
+    "motion_std": 1.3300826244446837
+  },
+  {
+    "segment_index": 98,
+    "texture_complexity": 0.06263454914093017,
+    "motion_intensity": 0.038900037683515236,
+    "scene_change_prob": 0.502087027247319,
+    "num_frames": 120,
+    "texture_std": 0.7596485997746362,
+    "motion_std": 5.931278669059499
+  },
+  {
+    "segment_index": 99,
+    "texture_complexity": 0.13480287795265516,
+    "motion_intensity": 0.03914706045709529,
+    "scene_change_prob": 0.9479444965042254,
+    "num_frames": 120,
+    "texture_std": 7.068186200280514,
+    "motion_std": 14.503672808291123
+  },
+  {
+    "segment_index": 100,
+    "texture_complexity": 0.055499508356054626,
+    "motion_intensity": 0.06605507225236472,
+    "scene_change_prob": 0.9532171618067017,
+    "num_frames": 120,
+    "texture_std": 1.7275553414766878,
+    "motion_std": 14.067243216682735
+  },
+  {
+    "segment_index": 101,
+    "texture_complexity": 0.023198500865449508,
+    "motion_intensity": 0.043326723608984,
+    "scene_change_prob": 0.7115948873353246,
+    "num_frames": 120,
+    "texture_std": 0.5265429362698743,
+    "motion_std": 3.643551600001577
+  },
+  {
+    "segment_index": 102,
+    "texture_complexity": 0.12075494129753983,
+    "motion_intensity": 0.08182812055642529,
+    "scene_change_prob": 0.9647530600107583,
+    "num_frames": 120,
+    "texture_std": 6.161855754196072,
+    "motion_std": 9.076580800816158
+  },
+  {
+    "segment_index": 103,
+    "texture_complexity": 0.058876900710165506,
+    "motion_intensity": 0.09282263387568525,
+    "scene_change_prob": 0.8073483821905624,
+    "num_frames": 120,
+    "texture_std": 4.383910294390913,
+    "motion_std": 10.86691160665288
+  },
+  {
+    "segment_index": 104,
+    "texture_complexity": 0.07267848240832488,
+    "motion_intensity": 0.03236422975774573,
+    "scene_change_prob": 0.7735886122367024,
+    "num_frames": 120,
+    "texture_std": 1.0452061538887467,
+    "motion_std": 7.631033229510188
+  },
+  {
+    "segment_index": 105,
+    "texture_complexity": 0.07509489780912797,
+    "motion_intensity": 0.06336428751739874,
+    "scene_change_prob": 0.8775977949556806,
+    "num_frames": 120,
+    "texture_std": 1.8368400523429553,
+    "motion_std": 9.707280152195214
+  },
+  {
+    "segment_index": 106,
+    "texture_complexity": 0.14295486842592559,
+    "motion_intensity": 0.16414204638879173,
+    "scene_change_prob": 0.8847094309750356,
+    "num_frames": 120,
+    "texture_std": 5.432589130872238,
+    "motion_std": 12.364847432944012
+  },
+  {
+    "segment_index": 107,
+    "texture_complexity": 0.12017232667654754,
+    "motion_intensity": 0.1510025332808359,
+    "scene_change_prob": 0.9805423888983807,
+    "num_frames": 120,
+    "texture_std": 8.073342979193812,
+    "motion_std": 14.457210669181075
+  },
+  {
+    "segment_index": 108,
+    "texture_complexity": 0.07001052426795165,
+    "motion_intensity": 0.1365637218083988,
+    "scene_change_prob": 0.9713762839029563,
+    "num_frames": 120,
+    "texture_std": 3.074308106387729,
+    "motion_std": 12.922231474485798
+  },
+  {
+    "segment_index": 109,
+    "texture_complexity": 0.07422395429263512,
+    "motion_intensity": 0.17183646113932632,
+    "scene_change_prob": 0.9242376995212311,
+    "num_frames": 120,
+    "texture_std": 3.7429618002563347,
+    "motion_std": 9.90465471387848
+  },
+  {
+    "segment_index": 110,
+    "texture_complexity": 0.057461915786067644,
+    "motion_intensity": 0.11774505838642225,
+    "scene_change_prob": 0.7124956187025069,
+    "num_frames": 120,
+    "texture_std": 2.55792678616662,
+    "motion_std": 9.747506231334686
+  },
+  {
+    "segment_index": 111,
+    "texture_complexity": 0.07774895160148541,
+    "motion_intensity": 0.2352392826073461,
+    "scene_change_prob": 0.9504304433307968,
+    "num_frames": 120,
+    "texture_std": 6.250844045397802,
+    "motion_std": 22.258608285997862
+  },
+  {
+    "segment_index": 112,
+    "texture_complexity": 0.10280099427948394,
+    "motion_intensity": 0.1442380737158514,
+    "scene_change_prob": 0.23767850474171698,
+    "num_frames": 120,
+    "texture_std": 3.4866967055423634,
+    "motion_std": 11.441278248068484
+  },
+  {
+    "segment_index": 113,
+    "texture_complexity": 0.1358622427781423,
+    "motion_intensity": 0.014588920571723906,
+    "scene_change_prob": 0.04829023127174166,
+    "num_frames": 120,
+    "texture_std": 0.04121048999367696,
+    "motion_std": 0.5825470921295817
+  },
+  {
+    "segment_index": 114,
+    "texture_complexity": 0.09694668352603912,
+    "motion_intensity": 0.12405047159275452,
+    "scene_change_prob": 0.11055565476825291,
+    "num_frames": 120,
+    "texture_std": 0.8231660777359094,
+    "motion_std": 12.792193586050828
+  },
+  {
+    "segment_index": 115,
+    "texture_complexity": 0.07640006065368651,
+    "motion_intensity": 0.044806590286560914,
+    "scene_change_prob": 0.16166904755073191,
+    "num_frames": 120,
+    "texture_std": 1.3394096179654116,
+    "motion_std": 5.009456103328153
+  },
+  {
+    "segment_index": 116,
+    "texture_complexity": 0.07556087905629891,
+    "motion_intensity": 0.08180396838855589,
+    "scene_change_prob": 0.6583374361113329,
+    "num_frames": 120,
+    "texture_std": 4.97124101769099,
+    "motion_std": 3.8489750790352497
+  },
+  {
+    "segment_index": 117,
+    "texture_complexity": 0.14719329516092935,
+    "motion_intensity": 0.21117759084835105,
+    "scene_change_prob": 0.3134143957928988,
+    "num_frames": 120,
+    "texture_std": 2.372166797442756,
+    "motion_std": 5.460668688882412
+  },
+  {
+    "segment_index": 118,
+    "texture_complexity": 0.09593294320007165,
+    "motion_intensity": 0.12536385268405345,
+    "scene_change_prob": 0.5684110760804284,
+    "num_frames": 120,
+    "texture_std": 1.0600128483033324,
+    "motion_std": 6.493872351467577
+  },
+  {
+    "segment_index": 119,
+    "texture_complexity": 0.0890149770428737,
+    "motion_intensity": 0.031905096024861794,
+    "scene_change_prob": 0.28188708137379287,
+    "num_frames": 120,
+    "texture_std": 2.6664268289645516,
+    "motion_std": 5.328869660819273
+  },
+  {
+    "segment_index": 120,
+    "texture_complexity": 0.11239953170220056,
+    "motion_intensity": 0.06470109679389234,
+    "scene_change_prob": 0.05703708846895449,
+    "num_frames": 120,
+    "texture_std": 0.0970673921080906,
+    "motion_std": 2.7190715465265796
+  },
+  {
+    "segment_index": 121,
+    "texture_complexity": 0.04320777714252472,
+    "motion_intensity": 0.03445623139368177,
+    "scene_change_prob": 0.9740602211867869,
+    "num_frames": 120,
+    "texture_std": 2.733381367406589,
+    "motion_std": 9.225578690029218
+  },
+  {
+    "segment_index": 122,
+    "texture_complexity": 0.07565595402071873,
+    "motion_intensity": 0.022203947258532745,
+    "scene_change_prob": 0.8915419181360599,
+    "num_frames": 120,
+    "texture_std": 2.158707287155498,
+    "motion_std": 7.3685608520378105
+  },
+  {
+    "segment_index": 123,
+    "texture_complexity": 0.06275196062070487,
+    "motion_intensity": 0.05412757024331341,
+    "scene_change_prob": 0.47011474688808313,
+    "num_frames": 120,
+    "texture_std": 3.599533508363786,
+    "motion_std": 7.914713620917443
+  },
+  {
+    "segment_index": 124,
+    "texture_complexity": 0.07775714546442032,
+    "motion_intensity": 0.006358123266044222,
+    "scene_change_prob": 0.06491429353950709,
+    "num_frames": 120,
+    "texture_std": 2.8552569080811447,
+    "motion_std": 0.4423337225387496
+  },
+  {
+    "segment_index": 125,
+    "texture_complexity": 0.029482411220669746,
+    "motion_intensity": 0.024353737743044435,
+    "scene_change_prob": 0.05537333758533233,
+    "num_frames": 120,
+    "texture_std": 0.7624885605207513,
+    "motion_std": 0.8673448066325631
+  },
+  {
+    "segment_index": 126,
+    "texture_complexity": 0.07049993857741356,
+    "motion_intensity": 0.07606536220101749,
+    "scene_change_prob": 0.05076494881568994,
+    "num_frames": 120,
+    "texture_std": 1.1431778573172622,
+    "motion_std": 0.8640168340928518
+  },
+  {
+    "segment_index": 127,
+    "texture_complexity": 0.10179994607965151,
+    "motion_intensity": 0.10224720730501063,
+    "scene_change_prob": 0.05062726902104327,
+    "num_frames": 120,
+    "texture_std": 0.18695645068169234,
+    "motion_std": 0.14888097617570697
+  },
+  {
+    "segment_index": 128,
+    "texture_complexity": 0.10529955188433329,
+    "motion_intensity": 0.10864758244415625,
+    "scene_change_prob": 0.05320050674005106,
+    "num_frames": 120,
+    "texture_std": 0.24941032274146435,
+    "motion_std": 0.550395042424676
+  },
+  {
+    "segment_index": 129,
+    "texture_complexity": 0.09548281495769818,
+    "motion_intensity": 0.10149730400544922,
+    "scene_change_prob": 0.051870566336487144,
+    "num_frames": 120,
+    "texture_std": 0.2704228212096063,
+    "motion_std": 0.6006241011554915
+  },
+  {
+    "segment_index": 130,
+    "texture_complexity": 0.09096551006038983,
+    "motion_intensity": 0.10413796621210435,
+    "scene_change_prob": 0.05304919222996051,
+    "num_frames": 120,
+    "texture_std": 0.4219573191402152,
+    "motion_std": 0.8706128600920721
+  },
+  {
+    "segment_index": 131,
+    "texture_complexity": 0.10190442025661468,
+    "motion_intensity": 0.10939625832213072,
+    "scene_change_prob": 0.05164962173472972,
+    "num_frames": 120,
+    "texture_std": 0.31023578578652644,
+    "motion_std": 0.6709702600617604
+  },
+  {
+    "segment_index": 132,
+    "texture_complexity": 0.09118835210800172,
+    "motion_intensity": 0.10081658944362351,
+    "scene_change_prob": 0.05240770780448541,
+    "num_frames": 120,
+    "texture_std": 0.4809122489242741,
+    "motion_std": 0.6279062601275099
+  },
+  {
+    "segment_index": 133,
+    "texture_complexity": 0.07872206687927245,
+    "motion_intensity": 0.08506651632592124,
+    "scene_change_prob": 0.05559502019566873,
+    "num_frames": 120,
+    "texture_std": 0.48345836281205773,
+    "motion_std": 0.21885989787944515
+  },
+  {
+    "segment_index": 134,
+    "texture_complexity": 0.14485625490546225,
+    "motion_intensity": 0.16673428992263412,
+    "scene_change_prob": 0.05599276858731064,
+    "num_frames": 120,
+    "texture_std": 4.320911802018062,
+    "motion_std": 3.187388341399799
+  },
+  {
+    "segment_index": 135,
+    "texture_complexity": 0.35578764259815215,
+    "motion_intensity": 0.3567970274543228,
+    "scene_change_prob": 0.05621320535370253,
+    "num_frames": 120,
+    "texture_std": 5.321672400853249,
+    "motion_std": 3.561064351119451
+  },
+  {
+    "segment_index": 136,
+    "texture_complexity": 0.43356627066930137,
+    "motion_intensity": 0.42010955944114703,
+    "scene_change_prob": 0.050412175168321374,
+    "num_frames": 120,
+    "texture_std": 0.9060858151177299,
+    "motion_std": 0.7159781410709001
+  },
+  {
+    "segment_index": 137,
+    "texture_complexity": 0.4364141952991486,
+    "motion_intensity": 0.41630113051385104,
+    "scene_change_prob": 0.05037281670989553,
+    "num_frames": 120,
+    "texture_std": 0.7278981872388022,
+    "motion_std": 0.4148972711142922
+  },
+  {
+    "segment_index": 138,
+    "texture_complexity": 0.4634616593519847,
+    "motion_intensity": 0.4407331586885853,
+    "scene_change_prob": 0.050494346430631935,
+    "num_frames": 120,
+    "texture_std": 2.0682779405486973,
+    "motion_std": 1.427901549874487
+  },
+  {
+    "segment_index": 139,
+    "texture_complexity": 0.42916492561499275,
+    "motion_intensity": 0.46178331642257736,
+    "scene_change_prob": 0.06418139513340371,
+    "num_frames": 120,
+    "texture_std": 1.1141697734211822,
+    "motion_std": 1.3020919008855942
+  },
+  {
+    "segment_index": 140,
+    "texture_complexity": 0.404184277455012,
+    "motion_intensity": 0.41690182886203797,
+    "scene_change_prob": 0.06218128208365148,
+    "num_frames": 120,
+    "texture_std": 0.7079314355499949,
+    "motion_std": 1.6410053825734263
+  },
+  {
+    "segment_index": 141,
+    "texture_complexity": 0.3000189578533173,
+    "motion_intensity": 0.2965886197504209,
+    "scene_change_prob": 0.05625229568320483,
+    "num_frames": 120,
+    "texture_std": 4.196429728784985,
+    "motion_std": 3.043777677726692
+  },
+  {
+    "segment_index": 142,
+    "texture_complexity": 0.12777722090482713,
+    "motion_intensity": 0.13218824048670066,
+    "scene_change_prob": 0.053415274499179384,
+    "num_frames": 120,
+    "texture_std": 3.2573829371783063,
+    "motion_std": 2.382213846347619
+  },
+  {
+    "segment_index": 143,
+    "texture_complexity": 0.05501985634366672,
+    "motion_intensity": 0.06176987853036875,
+    "scene_change_prob": 0.050801139495448615,
+    "num_frames": 120,
+    "texture_std": 0.5192037332994559,
+    "motion_std": 0.6644580925574114
+  },
+  {
+    "segment_index": 144,
+    "texture_complexity": 0.09864286382993062,
+    "motion_intensity": 0.13458169161104688,
+    "scene_change_prob": 0.053045337780661284,
+    "num_frames": 120,
+    "texture_std": 1.6606358806149548,
+    "motion_std": 1.440562755538516
+  },
+  {
+    "segment_index": 145,
+    "texture_complexity": 0.22517852296431856,
+    "motion_intensity": 0.2563080951947124,
+    "scene_change_prob": 0.050565105011324135,
+    "num_frames": 120,
+    "texture_std": 3.7405059158222906,
+    "motion_std": 2.3162377528407903
+  },
+  {
+    "segment_index": 146,
+    "texture_complexity": 0.33623865405718484,
+    "motion_intensity": 0.32716807971815437,
+    "scene_change_prob": 0.051247673366372384,
+    "num_frames": 120,
+    "texture_std": 2.2962866563701847,
+    "motion_std": 1.2345399849880783
+  },
+  {
+    "segment_index": 147,
+    "texture_complexity": 0.3762975645065308,
+    "motion_intensity": 0.35565934408278693,
+    "scene_change_prob": 0.05432832739218477,
+    "num_frames": 120,
+    "texture_std": 1.3586322895298635,
+    "motion_std": 0.8712580071663202
+  },
+  {
+    "segment_index": 148,
+    "texture_complexity": 0.44163434108098343,
+    "motion_intensity": 0.41597086802250194,
+    "scene_change_prob": 0.05667447626582856,
+    "num_frames": 120,
+    "texture_std": 1.4286376697485328,
+    "motion_std": 1.0105594242835352
+  },
+  {
+    "segment_index": 149,
+    "texture_complexity": 0.4561948565642039,
+    "motion_intensity": 0.43637379451292235,
+    "scene_change_prob": 0.07024263741507492,
+    "num_frames": 120,
+    "texture_std": 1.0826514174743036,
+    "motion_std": 0.8517478509411511
+  },
+  {
+    "segment_index": 150,
+    "texture_complexity": 0.4379872900247574,
+    "motion_intensity": 0.4241634937895446,
+    "scene_change_prob": 0.05053469272585675,
+    "num_frames": 120,
+    "texture_std": 2.3496702561525313,
+    "motion_std": 1.6155580405658507
+  },
+  {
+    "segment_index": 151,
+    "texture_complexity": 0.21693190882603325,
+    "motion_intensity": 0.2113910168826747,
+    "scene_change_prob": 0.049516825313970135,
+    "num_frames": 120,
+    "texture_std": 6.9320297169291045,
+    "motion_std": 5.038247592941237
+  },
+  {
+    "segment_index": 152,
+    "texture_complexity": 0.05812684203187625,
+    "motion_intensity": 0.024827304700977874,
+    "scene_change_prob": 0.05320195345874971,
+    "num_frames": 120,
+    "texture_std": 0.918542018037122,
+    "motion_std": 1.7442742218073135
+  },
+  {
+    "segment_index": 153,
+    "texture_complexity": 0.0699074042836825,
+    "motion_intensity": 0.00041120470925640754,
+    "scene_change_prob": 0.04930667795999261,
+    "num_frames": 120,
+    "texture_std": 0.6963946798728287,
+    "motion_std": 0.02824927589152995
+  },
+  {
+    "segment_index": 154,
+    "texture_complexity": 0.03674289162270725,
+    "motion_intensity": 0.031970478700329256,
+    "scene_change_prob": 0.9977462263850754,
+    "num_frames": 120,
+    "texture_std": 2.7813443702194593,
+    "motion_std": 17.98320394814973
+  },
+  {
+    "segment_index": 155,
+    "texture_complexity": 0.018500813667972883,
+    "motion_intensity": 0.031938848160311624,
+    "scene_change_prob": 0.05329874383512722,
+    "num_frames": 120,
+    "texture_std": 0.18917001615730444,
+    "motion_std": 0.9252169578427514
+  },
+  {
+    "segment_index": 156,
+    "texture_complexity": 0.017048290520906447,
+    "motion_intensity": 0.019802703816934126,
+    "scene_change_prob": 0.05239166871569954,
+    "num_frames": 120,
+    "texture_std": 0.2981184976109638,
+    "motion_std": 0.9668681342176881
+  },
+  {
+    "segment_index": 157,
+    "texture_complexity": 0.023178005355099836,
+    "motion_intensity": 0.027982383131646978,
+    "scene_change_prob": 0.05405426231885685,
+    "num_frames": 120,
+    "texture_std": 0.0749818166003155,
+    "motion_std": 0.4321108756997283
+  },
+  {
+    "segment_index": 158,
+    "texture_complexity": 0.01975159839361529,
+    "motion_intensity": 0.07306963924923514,
+    "scene_change_prob": 0.9975412572717433,
+    "num_frames": 79,
+    "texture_std": 0.6058968771904946,
+    "motion_std": 21.36262867995261
+  }
+]

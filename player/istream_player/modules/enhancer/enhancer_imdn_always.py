@@ -173,6 +173,23 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
         #  避免因为 copy 未回写导致 Analyzer 读不到 abort 信息。
         self.segment_stats: Dict[str, Dict[str, Any]] = {}
 
+        # ======实测延迟反馈 (EWMA)==========
+        # EWMA 平滑系数：0.3 表示新观测占30%权重，历史占70%
+        self._latency_ewma_alpha = 0.3
+        # 记录哪些 (download_action, enhance_action) 组合被实际增强过
+        self._latency_visited = np.zeros((5, 5), dtype=bool)
+        # 启动时测量的静态延迟表（用于未访问组合的比例推算基准）
+        self._static_latency_table = None
+
+        # ======层面2: 内容感知 per-segment 延迟预测==========
+        # 内容特征存储（预计算的纹理/运动特征）
+        self._content_feature_store = None
+        # 历史记录：(segment_index, 特征向量, 延迟缩放因子)
+        self._latency_factor_history = []
+        # KNN 预测的邻居数
+        self._latency_knn_k = 5
+        # 是否启用内容感知延迟预测（在 __init__ 中从 config 读取）
+
 
     # 设置方法 - 初始化IMDN增强器的配置参数和依赖组件
     async def setup(self,
@@ -229,6 +246,9 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
         
         self.use_fast_complete = config.use_fast_complete
 
+        # 内容感知延迟预测开关（默认开启，可通过 config 关闭）
+        self._use_content_latency = getattr(config, 'use_content_latency', True)
+
     # 启动增强器的方法 - 初始化模型池和性能测量
     async def start(self, adaptation_sets):
         # 使用异步条件变量确保线程安全
@@ -243,6 +263,21 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
 
             # 测量模型延迟，构建延迟表
             self.latency_table = await self.measure_latency(self.resolution_set, self.model_pool)
+            # 保存静态延迟表副本（用于未访问组合的比例推算基准）
+            self._static_latency_table = self.latency_table.copy()
+
+            # 加载内容特征（用于 per-segment 延迟预测）
+            if self._use_content_latency:
+                try:
+                    from istream_player.utils.content_features import ContentFeatureStore
+                    feature_file = getattr(self.config, 'content_feature_file', 'data/content_features/bbb_features.json')
+                    if os.path.exists(feature_file):
+                        self._content_feature_store = ContentFeatureStore(feature_file)
+                        self.log.info(f"Content features loaded for latency prediction: {len(self._content_feature_store.features)} segments")
+                    else:
+                        self.log.warning(f"Content feature file not found: {feature_file}, using global latency")
+                except Exception as e:
+                    self.log.warning(f"Failed to load content features: {e}, using global latency")
 
             # self.log.info("Latency table: {}".format(self.latency_table))
 
@@ -500,6 +535,11 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                         f"enhance action: {segment.enhance_action}, reason: {abort_reason}, "
                         f"wasted_enhanced_cnt: {self._enhanced_frames}"
                     )
+                    # EWMA 更新延迟表（abort时也更新，用已增强部分推算）
+                    abort_elapsed = time.perf_counter() - start_time
+                    self._update_latency_ewma(segment.download_action, segment.enhance_action,
+                                                abort_elapsed, self.cnt,
+                                                segment_index=self._current_enhancing_index)
                     # 重置增强状态（abort情况下不重置计数器）
                     self._reset_enhancement_state(reset_counters=False)
                     # 更新安全因子（发生abort，需要增加安全因子）
@@ -543,9 +583,12 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                 }
                 # 用增强后的段替换原始段
                 await self.download_buffer.replace(self._current_enhancing_index, {as_idx: segment}) 
-                # 更新延迟表，计算实际增强时间因子
-                if not fast_complete:
-                    self.latency_table[segment.download_action, segment.enhance_action] = (end_time - start_time) / (self.seg_time * self.frame_rate)
+                # EWMA 更新延迟表（正常完成和 fast_complete 都更新）
+                # fast_complete 时用已处理帧数 self.cnt 推算每帧延迟
+                complete_elapsed = end_time - start_time
+                self._update_latency_ewma(segment.download_action, segment.enhance_action,
+                                            complete_elapsed, self.cnt,
+                                            segment_index=self._current_enhancing_index)
                 # 记录增强完成信息
                 self.log.info(f"Complete enhancing segment index: {self._current_enhancing_index},"
                             f"download action: {segment.download_action}, "
@@ -892,11 +935,112 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
         self.log.info("Latency measurement completed")
         return latency_table
 
+    # EWMA 平滑更新延迟表（abort/fast_complete/正常完成都调用）
+    def _update_latency_ewma(self, download_action: int, enhance_action: int,
+                               elapsed_time: float, processed_frames: int,
+                               segment_index: int = -1):
+        """
+        用实际增强耗时 EWMA 更新延迟表，并记录内容感知延迟缩放因子。
+
+        Args:
+            download_action: 下载动作（码率索引）
+            enhance_action: 增强动作（级别索引）
+            elapsed_time: 实际增强耗时（秒）
+            processed_frames: 已处理的帧数（用于推算每帧延迟）
+            segment_index: 段索引（用于内容特征匹配）
+        """
+        if processed_frames <= 0 or elapsed_time <= 0:
+            return
+        # 每帧延迟（秒）
+        actual_per_frame = elapsed_time / processed_frames
+        r, e = download_action, enhance_action
+        if r >= self.latency_table.shape[0] or e >= self.latency_table.shape[1]:
+            return
+        old_val = self.latency_table[r, e]
+        alpha = self._latency_ewma_alpha
+        self.latency_table[r, e] = alpha * actual_per_frame + (1 - alpha) * old_val
+        self._latency_visited[r, e] = True
+
+        # 记录内容感知延迟缩放因子（层面2）
+        if self._use_content_latency and segment_index >= 0 and self._content_feature_store is not None:
+            feat_vec = self._content_feature_store.get_feature_vector(segment_index)
+            if old_val > 1e-8:
+                scale_factor = actual_per_frame / old_val
+                self._latency_factor_history.append((segment_index, feat_vec, scale_factor))
+
+    def predict_latency_factor(self, segment_index: int) -> float:
+        """
+        基于内容特征的 KNN 预测该段的延迟缩放因子。
+
+        冷启动策略：历史记录不足 10 条时返回 1.0（用全局 EWMA 延迟），
+        避免初期预测不准导致 stall。
+
+        如果历史记录不足，返回 1.0（用全局延迟）。
+        """
+        if not self._use_content_latency or self._content_feature_store is None:
+            return 1.0
+        # 冷启动：历史记录不足时用全局延迟
+        if len(self._latency_factor_history) < 10:
+            return 1.0
+
+        target_feat = self._content_feature_store.get_feature_vector(segment_index)
+
+        # 计算与所有历史记录的欧氏距离
+        distances = []
+        for hist_idx, hist_feat, hist_factor in self._latency_factor_history:
+            if hist_idx == segment_index:
+                continue  # 排除自身
+            dist = np.sqrt(np.sum((target_feat - hist_feat) ** 2))
+            distances.append((dist, hist_factor))
+
+        if len(distances) == 0:
+            return 1.0
+
+        # 取最近的 K 个邻居，用距离倒数加权平均
+        distances.sort(key=lambda x: x[0])
+        k = min(self._latency_knn_k, len(distances))
+        neighbors = distances[:k]
+
+        total_weight = 0.0
+        weighted_sum = 0.0
+        for dist, factor in neighbors:
+            weight = 1.0 / (dist + 1e-6)
+            weighted_sum += weight * factor
+            total_weight += weight
+
+        if total_weight > 0:
+            return float(weighted_sum / total_weight)
+        return 1.0
+
     # 获取延迟表的方法
-    def get_latency_table(self):
+    def get_latency_table(self, segment_index: int = None):
+        """
+        获取延迟表。
+
+        Args:
+            segment_index: 如果传入段索引，返回该段的内容感知延迟预测（层面2）；
+                          否则返回全局 EWMA 延迟表（层面1）。
+        """
         try:
-            # 返回调整后的延迟表（考虑时间因子、段时间和帧率）
-            return self.latency_table * self.time_factor * self.seg_time * self.frame_rate * self.safe_factor
+            base = self.latency_table * self.time_factor * self.seg_time * self.frame_rate * self.safe_factor
+            # 对未访问过的组合，用已访问组合的平均缩放因子推算
+            if self._static_latency_table is not None and np.any(self._latency_visited):
+                visited = self._latency_visited
+                static_visited = self._static_latency_table[visited]
+                actual_visited = self.latency_table[visited]
+                valid = static_visited > 1e-8
+                if np.any(valid):
+                    avg_scale = np.mean(actual_visited[valid] / static_visited[valid])
+                    unvisited = ~visited
+                    self.latency_table[unvisited] = self._static_latency_table[unvisited] * avg_scale
+                    base = self.latency_table * self.time_factor * self.seg_time * self.frame_rate * self.safe_factor
+
+            # 层面2：内容感知 per-segment 延迟预测
+            if segment_index is not None and self._use_content_latency:
+                scale_factor = self.predict_latency_factor(segment_index)
+                base = base * scale_factor
+
+            return base
         except:
             return None
 

@@ -1,11 +1,14 @@
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, fields as dc_fields
+import copy
 import datetime
 import io
 import json
 import logging
 import os
 from pathlib import Path
+import subprocess
 import sys
+import time
 from os.path import join
 import traceback
 from typing import Any, Dict, List, Optional, TextIO, Tuple
@@ -27,6 +30,7 @@ from istream_player.core.enhancer import Enhancer
 
 from istream_player.modules.download_buffer import DownloadBufferImpl
 from istream_player.modules.enhance_buffer import EnhanceBufferImpl
+from istream_player.utils.gpu_monitor import GPUMonitor
 
 # 分析器段数据类 - 存储单个视频段的详细分析信息
 @dataclass
@@ -79,6 +83,12 @@ class AnalyzerSegment:
     wasted_enhanced_cnt: Optional[int] = None            # 若被中止，浪费的增强帧数
     enhance_start_to_play_time: Optional[float] = None   #  增强开始到播放开始的时间 (渲染器剩余时长 + 中间隔得段数*段时长)
     enhance_end_to_play_time: Optional[float] = None      # 若执行完成了增强动作，增强完成后该增强段距离播放开始的时间 (渲染器剩余时长 + 中间隔得段数*段时长)
+
+    # ===== fast_complete 质量退化量化字段（任务2.1）=====
+    quality_switches_within_segment: Optional[int] = None  # 段内增强/未增强切换次数（质量突变次数）
+    enhanced_frame_vmaf: Optional[float] = None             # 增强帧的 VMAF（= enhance_vmaf）
+    non_enhanced_frame_vmaf: Optional[float] = None          # 未增强帧的 VMAF（= base_vmaf）
+    quality_drop_due_to_fast: Optional[float] = None        # fast_complete 导致的质量下降 (enhance_vmaf - real_vmaf)
 
     @property 
     def stop_ratio(self) -> Optional[float]:
@@ -155,6 +165,8 @@ class PlaybackAnalyzer(
         """
         # 记录分析开始时间
         self._start_time = datetime.datetime.now().timestamp()
+        # 记录 perf_counter 基准值（用于与增强器的 perf_counter 时间戳换算）
+        self._start_perf = time.perf_counter()
         # 缓冲水位时间序列数据
         self._buffer_levels: List[BufferLevel] = []
         # 吞吐量时间序列数据 (时间, 吞吐量)
@@ -182,6 +194,37 @@ class PlaybackAnalyzer(
         self._enhance_buffer: Optional[EnhanceBufferImpl] = None
         self._enhancer: Optional[Enhancer] = None
         self.quality_table = None
+
+        # ===== 实验环境元数据 =====
+        self.env_info: Dict[str, Any] = {
+            "timestamp_start": None,
+            "timestamp_end": None,
+            "duration_seconds": None,
+            "python_version": None,
+            "torch_version": None,
+            "cuda_version": None,
+            "gpu_name": None,
+            "gpu_count": None,
+            "git_commit": None,
+            "git_branch": None,
+            "config_snapshot": None,
+        }
+        # GPU 指标（显存峰值等）
+        self.gpu_metrics: Dict[str, Any] = {
+            "peak_memory_mb": None,
+            "model_pool_memory_mb": None,
+        }
+        # GPU 功耗监控器（可选，pynvml 可用时自动启用）
+        self._gpu_monitor: Optional[GPUMonitor] = None
+        # 启动延迟指标
+        self.startup_metrics: Dict[str, Any] = {
+            "time_to_first_download": None,
+            "time_to_first_enhance": None,
+            "time_to_first_play": None,
+        }
+        self._first_download_done = False
+        self._first_enhance_done = False
+        self._first_play_done = False
 
         # 注释掉的实验记录器（可能在未来版本中使用）
         # if self.config.recorder:
@@ -229,11 +272,111 @@ class PlaybackAnalyzer(
         download_buffer.add_listener(self)      # 下载缓冲区监听器
         enhance_buffer.add_listener(self)       # 增强缓冲区监听器
 
+        # ===== 采集实验环境元数据 =====
+        self._collect_env_info(config)
+
+        # ===== 启动 GPU 功耗监控（可选，pynvml 可用时自动启用）=====
+        try:
+            self._gpu_monitor = GPUMonitor(device_index=0, sample_interval=0.5)
+            if self._gpu_monitor.is_available:
+                self._gpu_monitor.start()
+                self.log.info("GPU power monitor started")
+        except Exception as e:
+            self.log.debug(f"Failed to start GPU monitor: {e}")
+
+    def _collect_env_info(self, config: PlayerConfig):
+        """采集实验环境信息：Python/PyTorch/CUDA/GPU/git/config快照"""
+        self.env_info["timestamp_start"] = datetime.datetime.now().isoformat()
+        self.env_info["python_version"] = sys.version
+        try:
+            import torch
+            self.env_info["torch_version"] = torch.__version__
+            self.env_info["cuda_version"] = torch.version.cuda
+            if torch.cuda.is_available():
+                self.env_info["gpu_name"] = torch.cuda.get_device_name(0)
+                self.env_info["gpu_count"] = torch.cuda.device_count()
+                # 重置显存峰值统计，以便在实验结束时获取准确的峰值
+                torch.cuda.reset_peak_memory_stats()
+        except Exception as e:
+            self.log.warning(f"Failed to collect torch/cuda info: {e}")
+
+        # 采集 git 信息（try-except，非 git 环境不报错）
+        try:
+            repo_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+            result = subprocess.run(
+                ["git", "rev-parse", "HEAD"],
+                cwd=repo_root, capture_output=True, text=True, timeout=5
+            )
+            if result.returncode == 0:
+                self.env_info["git_commit"] = result.stdout.strip()
+            result = subprocess.run(
+                ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+                cwd=repo_root, capture_output=True, text=True, timeout=5
+            )
+            if result.returncode == 0:
+                self.env_info["git_branch"] = result.stdout.strip()
+        except Exception as e:
+            self.log.debug(f"Git info not available: {e}")
+
+        # 保存配置快照（将 dataclass 转为字典，排除不可序列化的 static 类引用）
+        try:
+            config_dict = {}
+            for f in dc_fields(config):
+                val = getattr(config, f.name)
+                # 跳过不可 JSON 序列化的对象（如 StaticConfig 类引用、函数等）
+                if isinstance(val, (str, int, float, bool, list, dict, type(None))):
+                    config_dict[f.name] = val
+                elif isinstance(val, tuple):
+                    config_dict[f.name] = list(val)
+                else:
+                    config_dict[f.name] = str(val)
+            # 手动补充非 dataclass 字段（类属性）
+            for extra_field in ["use_fast_complete", "enhance_frame_interval", "enhancer_device", "renderer_device",
+                                 "display_width", "display_height", "display_fps", "content_aware", "enhance_metadata"]:
+                if hasattr(config, extra_field):
+                    config_dict[extra_field] = getattr(config, extra_field)
+            self.env_info["config_snapshot"] = config_dict
+        except Exception as e:
+            self.log.warning(f"Failed to snapshot config: {e}")
+
     async def cleanup(self) -> None:
         """
         清理分析器 - 保存分析结果
         """
         try:
+            # 记录实验结束时间和总时长
+            self.env_info["timestamp_end"] = datetime.datetime.now().isoformat()
+            if self.env_info["timestamp_start"] is not None:
+                start = datetime.datetime.fromisoformat(self.env_info["timestamp_start"])
+                end = datetime.datetime.fromisoformat(self.env_info["timestamp_end"])
+                self.env_info["duration_seconds"] = (end - start).total_seconds()
+
+            # 采集 GPU 峰值显存
+            try:
+                import torch
+                if torch.cuda.is_available():
+                    self.gpu_metrics["peak_memory_mb"] = round(
+                        torch.cuda.max_memory_allocated(0) / 1024 / 1024, 2
+                    )
+                    # 估算模型池显存占用
+                    if self._enhancer is not None and hasattr(self._enhancer, "model_pool") and self._enhancer.model_pool:
+                        model_mem = 0
+                        for model in self._enhancer.model_pool.values():
+                            if hasattr(model, "parameters"):
+                                model_mem += sum(p.numel() * p.element_size() for p in model.parameters())
+                        self.gpu_metrics["model_pool_memory_mb"] = round(model_mem / 1024 / 1024, 2)
+            except Exception as e:
+                self.log.debug(f"Failed to collect GPU metrics: {e}")
+
+            # 停止 GPU 功耗监控并记录结果
+            try:
+                if self._gpu_monitor is not None and self._gpu_monitor.is_available:
+                    power_stats = self._gpu_monitor.stop()
+                    if power_stats:
+                        self.gpu_metrics.update(power_stats)
+            except Exception as e:
+                self.log.debug(f"Failed to stop GPU monitor: {e}")
+
             # 保存分析结果到标准输出
             self.save(sys.stdout)
         except Exception as e:
@@ -320,6 +463,13 @@ class PlaybackAnalyzer(
             segments: 段字典
             stats: 下载统计信息字典
         """
+        # 记录第一个段下载完成时间（启动延迟指标）
+        if not self._first_download_done:
+            self.startup_metrics["time_to_first_download"] = round(
+                self._seconds_since(self._start_time), 4
+            )
+            self._first_download_done = True
+
         # 更新每个段的下载统计信息
         for segment, stat in zip(segments.values(), stats.values()):
             # 确保统计信息完整
@@ -348,6 +498,13 @@ class PlaybackAnalyzer(
         Args:
             segments: 段字典
         """
+        # 记录第一个段开始播放时间（启动延迟指标）
+        if not self._first_play_done:
+            self.startup_metrics["time_to_first_play"] = round(
+                self._seconds_since(self._start_time), 4
+            )
+            self._first_play_done = True
+
         # 更新每个段的动作与增强信息
         for segment in segments.values():
             analyzer_segment = self._segments_by_url.get(segment.url)
@@ -446,8 +603,21 @@ class PlaybackAnalyzer(
                 analyzer_segment.fast_complete = stats.get("fast_complete_triggered")
                 analyzer_segment.enhance_start_to_play_time = stats.get("enhance_start_to_play_time")
                 analyzer_segment.enhance_end_to_play_time = stats.get("enhance_end_to_play_time")
-            
-            # 基于质量表推算该段增强后的离线 VMAF
+
+        # ===== 任务3.1：计算首段增强完成时间（启动延迟）=====
+        if not self._first_enhance_done:
+            # 找到第一个实际完成增强的段（enhance_end_time 不为 None）
+            for seg in sorted(self._segments_by_url.values(), key=lambda s: s.index):
+                if seg.enhance_end_time is not None:
+                    # enhance_end_time 是 time.perf_counter() 值，换算为相对于实验开始的秒数
+                    self.startup_metrics["time_to_first_enhance"] = round(
+                        seg.enhance_end_time - self._start_perf, 4
+                    )
+                    self._first_enhance_done = True
+                    break
+
+        # ===== 基于质量表推算所有段增强后的离线 VMAF =====
+        for analyzer_segment in self._segments_by_url.values():
             if analyzer_segment.quality is not None:
                 q_idx = int(analyzer_segment.quality)
                 analyzer_segment.base_vmaf = self.quality_table[q_idx, 0]
@@ -456,13 +626,25 @@ class PlaybackAnalyzer(
                     e_idx = int(analyzer_segment.enhance_action)
                     # 这里我们需要更加精细化的QOE,因为即使该段进行了增强，但是也可能触发了Fast模式，仅增强了部分，因此还要扣除没有增强的部分
                     if analyzer_segment.fast_complete:
-                        if analyzer_segment.enhanced_cnt == 0:
-                            ratio = 0
-                        else:
-                            ratio = analyzer_segment.enhanced_cnt / (analyzer_segment.enhanced_cnt + analyzer_segment.interpolated_cnt)
+                        # 安全处理 enhanced_cnt / interpolated_cnt 为 None 的情况
+                        _enhanced = int(analyzer_segment.enhanced_cnt) if analyzer_segment.enhanced_cnt is not None else 0
+                        _interpolated = int(analyzer_segment.interpolated_cnt) if analyzer_segment.interpolated_cnt is not None else 0
+                        _total = _enhanced + _interpolated
+                        ratio = _enhanced / _total if _total > 0 else 0.0
                         analyzer_segment.enhance_vmaf = self.quality_table[q_idx, e_idx]
                         analyzer_segment.enhance_ratio = ratio
                         analyzer_segment.real_vmaf = analyzer_segment.base_vmaf * (1 - ratio) + analyzer_segment.enhance_vmaf * ratio
+                        # ===== 任务2.1：fast_complete 质量退化量化 =====
+                        analyzer_segment.enhanced_frame_vmaf = analyzer_segment.enhance_vmaf
+                        analyzer_segment.non_enhanced_frame_vmaf = analyzer_segment.base_vmaf
+                        analyzer_segment.quality_drop_due_to_fast = analyzer_segment.enhance_vmaf - analyzer_segment.real_vmaf
+                        # 段内质量切换次数：fast_complete 截断型（前半增强后半未增强）= 1 次切换；
+                        # 间隔增强型（增强/未增强交替）≈ 2 * enhanced_cnt 次
+                        _interval = int(analyzer_segment.enhance_frame_interval) if analyzer_segment.enhance_frame_interval is not None else 0
+                        if _interval > 0:
+                            analyzer_segment.quality_switches_within_segment = 2 * _enhanced
+                        else:
+                            analyzer_segment.quality_switches_within_segment = 1 if 0 < ratio < 1 else 0
                     else:
                         analyzer_segment.real_vmaf = float(self.quality_table[q_idx, e_idx])
                 else:
@@ -527,6 +709,52 @@ class PlaybackAnalyzer(
                 lvl = int(seg.enhance_action)
                 fast_complete_saved_frames_by_level[lvl] = fast_complete_saved_frames_by_level.get(lvl, 0) + saved_frames
 
+        # ===== 任务2.1：fast_complete 质量退化聚合统计 =====
+        fast_complete_segments_count = 0
+        fast_complete_quality_drop_total = 0.0
+        fast_complete_quality_switches_total = 0
+        for seg in self._segments_by_url.values():
+            if seg.fast_complete and seg.is_enhance:
+                fast_complete_segments_count += 1
+                if seg.quality_drop_due_to_fast is not None:
+                    fast_complete_quality_drop_total += float(seg.quality_drop_due_to_fast)
+                if seg.quality_switches_within_segment is not None:
+                    fast_complete_quality_switches_total += int(seg.quality_switches_within_segment)
+        fast_complete_quality_drop_avg = (
+            fast_complete_quality_drop_total / fast_complete_segments_count
+            if fast_complete_segments_count > 0 else None
+        )
+
+        # ===== 任务2.2：增强级别使用分布与完成率统计 =====
+        enhance_level_stats: Dict[str, Dict[str, Any]] = {}
+        for seg in self._segments_by_url.values():
+            if seg.enhance_action is None:
+                continue
+            lvl_key = str(int(seg.enhance_action))
+            if lvl_key not in enhance_level_stats:
+                enhance_level_stats[lvl_key] = {
+                    "count": 0, "completed": 0, "completion_rate": None,
+                    "avg_latency": None, "avg_fps": None,
+                    "_latency_sum": 0.0, "_latency_cnt": 0,
+                    "_fps_sum": 0.0, "_fps_cnt": 0,
+                }
+            stats = enhance_level_stats[lvl_key]
+            stats["count"] += 1
+            if seg.is_enhance:
+                stats["completed"] += 1
+                if seg.enhance_latency is not None:
+                    stats["_latency_sum"] += float(seg.enhance_latency)
+                    stats["_latency_cnt"] += 1
+                if seg.enhance_fps is not None:
+                    stats["_fps_sum"] += float(seg.enhance_fps)
+                    stats["_fps_cnt"] += 1
+        # 计算完成率和平均值，清理内部字段
+        for lvl_key, stats in enhance_level_stats.items():
+            stats["completion_rate"] = round(stats["completed"] / stats["count"], 4) if stats["count"] > 0 else None
+            stats["avg_latency"] = round(stats["_latency_sum"] / stats["_latency_cnt"], 4) if stats["_latency_cnt"] > 0 else None
+            stats["avg_fps"] = round(stats["_fps_sum"] / stats["_fps_cnt"], 2) if stats["_fps_cnt"] > 0 else None
+            del stats["_latency_sum"], stats["_latency_cnt"], stats["_fps_sum"], stats["_fps_cnt"]
+
         # 从增强器读取全局统计
         abort_total = self._enhancer.abort_total
         use_fast_complete = self._enhancer.use_fast_complete
@@ -534,7 +762,7 @@ class PlaybackAnalyzer(
         # ===== 质量与 QoE 相关指标计算 =====
         # 1) 计算整体评价 VMAF（对所有有 vmaf 的段取简单平均）
         sorted_segments = sorted(self._segments_by_url.values(), key=lambda s: s.index)
-        vmafs = [seg.real_vmaf for seg in sorted_segments]
+        vmafs = [seg.real_vmaf for seg in sorted_segments if seg.real_vmaf is not None]
         avg_vmaf = float(sum(vmafs) / len(vmafs)) if len(vmafs) > 0 else None
 
         # 2) 计算平均 VMAF 振荡（相邻分段 VMAF 绝对差的平均值）
@@ -549,8 +777,10 @@ class PlaybackAnalyzer(
         num_seg = len(sorted_segments)
         avg_freeze = float(total_stall_duration / num_seg) if num_seg > 0 else 0.0
 
-        # 4) 计算 QoE
-        qoe = float(avg_vmaf - oscillation_vmaf - avg_freeze / 10.0)
+        # 4) 计算 QoE（安全处理 None 值）
+        _avg = avg_vmaf if avg_vmaf is not None else 0.0
+        _osc = oscillation_vmaf if oscillation_vmaf is not None else 0.0
+        qoe = float(_avg - _osc - avg_freeze / 10.0)
 
         # ===== 构建结果数据字典 =====
         data = {
@@ -568,10 +798,20 @@ class PlaybackAnalyzer(
             "abort_wasted_frames_by_level": abort_wasted_frames_by_level,  # 浪费的增强帧数按等级统计
             "fast_complete_saved_frames_total": fast_complete_saved_frames_total,  # fast_complete 节省的模型增强帧数总数
             "fast_complete_saved_frames_by_level": fast_complete_saved_frames_by_level,  # fast_complete 节省的帧数按等级统计
+            # ===== 任务2.1：fast_complete 质量退化统计 =====
+            "fast_complete_segments_count": fast_complete_segments_count,  # 触发 fast_complete 的段数
+            "fast_complete_quality_drop_total": round(fast_complete_quality_drop_total, 4),  # fast_complete 导致的质量下降总和
+            "fast_complete_quality_drop_avg": round(fast_complete_quality_drop_avg, 4) if fast_complete_quality_drop_avg is not None else None,  # 平均每次 fast_complete 的质量下降
+            "fast_complete_quality_switches_total": fast_complete_quality_switches_total,  # fast_complete 段内质量切换总次数
+            # ===== 任务2.2：增强级别分布与完成率统计 =====
+            "enhance_level_stats": enhance_level_stats,  # 各增强级别的使用次数、完成率、平均延迟、平均FPS
             "avg_vmaf": avg_vmaf,
             "oscillation_vmaf": oscillation_vmaf, # VMAF振荡
             "avg_freeze": avg_freeze, # 平均卡顿时长
             "QOE": qoe,
+            "environment": self.env_info,           # 实验环境元数据
+            "gpu_metrics": self.gpu_metrics,        # GPU 指标（显存峰值等）
+            "startup_metrics": self.startup_metrics, # 启动延迟指标
             "segments": list(map(asdict, self._segments_by_url.values())),  # 段数据
             "stalls": list(map(asdict, self._stalls)),         # 卡顿数据
             "states": [{"time": time, "state": str(state), "position": pos} for time, state, pos in self._states],  # 状态数据
@@ -597,9 +837,16 @@ class PlaybackAnalyzer(
         # 确保路径是目录
         os.makedirs(path, exist_ok=True)
         
-        # 生成文件名：{mod_nes}_{mod_enhancer}_fast-{use_fast_complete}_{timestamp}.json
+        # 生成文件名：{nes}_{enhancer}_fast-{fast}_video-{video}_trace-{trace}_{timestamp}.json
         timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-        base_filename = f"{config.mod_nes}_{config.mod_enhancer}_fast-{config.use_fast_complete}_{timestamp}"
+        # 从 input 路径提取视频名（不含扩展名）
+        video_name = os.path.splitext(os.path.basename(config.input))[0] if config.input else "unknown"
+        # 从 trace 路径提取 trace 名（不含扩展名）
+        trace_name = os.path.splitext(os.path.basename(config.trace))[0] if config.trace else "unknown"
+        base_filename = (
+            f"{config.mod_nes}_{config.mod_enhancer}_fast-{config.use_fast_complete}"
+            f"_video-{video_name}_trace-{trace_name}_{timestamp}"
+        )
         file_path = os.path.join(path, f"{base_filename}.json")
         
         # 处理文件名冲突，自动添加数字后缀

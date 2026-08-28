@@ -1,0 +1,36 @@
+{
+  "video": "data/video_mp4box/bbb.mpd",
+  "traces": [
+    "data/3Glogs/report.2010-09-13_1003CEST.json"
+  ],
+  "algorithms": [
+    {
+      "mod_nes": "bones",
+      "mod_enhancer": "imdn_always",
+      "use_fast_complete": true
+    },
+    {
+      "mod_nes": "bones",
+      "mod_enhancer": "imdn_always",
+      "use_fast_complete": false
+    },
+    {
+      "mod_nes": "buffer_greedy",
+      "mod_enhancer": "imdn_always",
+      "use_fast_complete": true
+    },
+    {
+      "mod_nes": "bola_greedy",
+      "mod_enhancer": "imdn_always",
+      "use_fast_complete": true
+    }
+  ],
+  "common_args": {
+    "mod_renderer": "opengl",
+    "mod_analyzer": "data_collector"
+  },
+  "conda_env": "SR",
+  "output_dir": "output/data/batch_example",
+  "retry": 2,
+  "timeout": 1800
+}

@@ -261,86 +261,70 @@ class OpenGLRenderer(Module, Renderer, PlayerEventListener):
         return self.current_segment_index
 
     # 段播放开始事件处理器 - 渲染器的核心方法
+    # [无头模式] 已注释掉实际窗口创建/解码/OpenGL渲染代码，仅保留播放计时与段索引逻辑
     async def on_segment_playback_start(self, segments: Dict[int, Segment]):
-        """当片段开始播放时调用"""
-        # 首次渲染时的初始化
-        if self.last_render_time is None:
-            # 设置显示窗口
-            self.setup_display(self.width, self.height)
-            # 设置OpenGL环境
-            self.setup_opengl()
-            # 创建纹理对象
-            self.create_textures()
-            # 注释掉的CUDA-GL握手，在需要时调用
-            # self.cuda_gl_handshake()
+        """当片段开始播放时调用（无头模式：不渲染画面，仅模拟播放时长）"""
+        # ===== 以下为实际渲染画面的初始化代码，无头模式下已注释 =====
+        # if self.last_render_time is None:
+        #     self.setup_display(self.width, self.height)
+        #     self.setup_opengl()
+        #     self.create_textures()
+        # ============================================================
 
         # 处理每个自适应集的段
         for as_idx in segments:
             segment = segments[as_idx]
-            # 重置帧率节拍参考，避免跨片段累计导致加速或减速
+            # 设置当前段索引（供增强器等模块查询，headless 模式缺失此字段）
             self.current_segment_index = (int)(segment.url.split('segment_')[1].split('.')[0])
 
+            # [修复] 设置任务开始时间与总时长，供 remain_task() 使用
+            # 原代码遗漏此赋值，导致 remain_task() 始终返回 0
+            self.task_start = time.perf_counter()
+            self.task_total = segment.duration
+
             self.last_render_time = None
-            # 记录渲染开始信息
-            self.log.info(f"Rendering segment {segment.url}")
+            # 记录播放开始信息
+            self.log.info(f"Playing segment {segment.url} (headless render)")
 
-            # 检查段是否有预解码数据
-            if segment.decode_data is None:
-                # 如果没有预解码数据，创建解码器进行实时解码
-                decoder = DecoderNvCodec(self.config, segment, resize=True)
-                # 执行CUDA-GL握手，建立GPU内存共享
-                self.cuda_gl_handshake()
+            # ===== 以下为实际解码+逐帧渲染代码，无头模式下已注释 =====
+            # if segment.decode_data is None:
+            #     decoder = DecoderNvCodec(self.config, segment, resize=True)
+            #     self.cuda_gl_handshake()
+            #     frame_count = 0
+            #     while True:
+            #         if frame_count % 10 == 0:
+            #             glutMainLoopEvent()
+            #         surf = decoder.decode_one_frame()
+            #         if surf is None:
+            #             break
+            #         if self.last_render_time is None:
+            #             self.last_render_time = time.perf_counter()
+            #         await self._render_one_frame(surf)
+            #         next_render_time = self.last_render_time + 1 / self.fps
+            #         sleep_time = max(next_render_time - time.perf_counter(), 0)
+            #         await asyncio.sleep(sleep_time)
+            #         self.last_render_time = next_render_time
+            #         frame_count += 1
+            # else:
+            #     frame_count = 0
+            #     for surf in segment.decode_data:
+            #         if frame_count % 10 == 0:
+            #             glutMainLoopEvent()
+            #         if self.last_render_time is None:
+            #             self.last_render_time = time.perf_counter()
+            #         await self._render_one_frame(surf)
+            #         next_render_time = self.last_render_time + 1 / self.fps
+            #         sleep_time = max(next_render_time - time.perf_counter(), 0)
+            #         await asyncio.sleep(sleep_time)
+            #         self.last_render_time = next_render_time
+            #         frame_count += 1
+            # ============================================================
 
-                # 逐帧解码和渲染循环
-                frame_count = 0
-                while True:
-                    # 定期处理GLUT事件（每10帧处理一次），防止窗口无响应
-                    if frame_count % 10 == 0:
-                        glutMainLoopEvent()
+            # 无头模式：直接睡眠模拟整段播放时长
+            await asyncio.sleep(segment.duration)
 
-                    # 解码一帧
-                    surf = decoder.decode_one_frame()
-
-                    # 检查是否解码完成
-                    if surf is None:
-                        break
-
-                    # 如果是首次渲染，记录开始时间
-                    if self.last_render_time is None:
-                        self.last_render_time = time.perf_counter()
-
-                    # 渲染帧
-                    await self._render_one_frame(surf)
-
-                    # 控制帧率
-                    next_render_time = self.last_render_time + 1 / self.fps
-                    sleep_time = max(next_render_time - time.perf_counter(), 0)
-                    await asyncio.sleep(sleep_time)
-                    self.last_render_time = next_render_time
-                    frame_count += 1
-            else:
-                # 如果有预解码数据，直接渲染增强后的帧
-                frame_count = 0
-                for surf in segment.decode_data:
-                    # 定期处理GLUT事件（每10帧处理一次），防止窗口无响应
-                    if frame_count % 10 == 0:
-                        glutMainLoopEvent()
-
-                    # 如果是首次渲染，记录开始时间
-                    if self.last_render_time is None:
-                        self.last_render_time = time.perf_counter()
-
-                    # 渲染帧
-                    await self._render_one_frame(surf)
-
-                    # 控制帧率
-                    next_render_time = self.last_render_time + 1 / self.fps
-                    sleep_time = max(next_render_time - time.perf_counter(), 0)
-                    await asyncio.sleep(sleep_time)
-                    self.last_render_time = next_render_time
-                    frame_count += 1
-
-                # 播放完成后释放内存
+            # 播放完成后释放预解码数据内存（原逻辑保留）
+            if segment.decode_data is not None:
                 segment.decode_data = None
 
     # 设置显示窗口的方法 - 创建可见窗口但避免事件循环阻塞

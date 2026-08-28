@@ -1,0 +1,7 @@
+{
+  "ca_mode": "predicted",
+  "ca_predictor_path": "../workspace/vmaf_gain_predictor.pkl",
+  "ca_feature_path": "data/content_features/bbb_features.json",
+  "ca_c_min": 0.7,
+  "ca_c_max": 1.8
+}

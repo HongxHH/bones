@@ -1,0 +1,7 @@
+{
+  "ca_mode": "cares",
+  "cares_lambda_min": 0.0,
+  "cares_lambda_max": 0.003,
+  "ca_feature_path": "data/content_features/bbb_features.json",
+  "use_content_latency": false
+}

@@ -5,3 +5,7 @@ from .buffer_greedy import BufferGreedyController
 from .tput_greedy import ThroughputGreedyController
 from .nas import NASController
 from .always_greedy import AlwaysGreedyController
+from .content_aware_bones import ContentAwareBONESController
+from .conservative_content_aware_bones import ConservativeContentAwareBONESController
+from .ca_bones import CABONESController
+from .drl_nes import DRLNESController
