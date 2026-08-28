@@ -17,6 +17,7 @@ from istream_player.modules.nes import (BONESController,
                                         ContentAwareBONESController,
                                         ConservativeContentAwareBONESController,
                                         CABONESController,
+                                        MTBONESController,
                                         DRLNESController)
 
 from istream_player.modules.analyzer.analyzer import PlaybackAnalyzer
@@ -37,7 +38,7 @@ from istream_player.modules.player.player_dash import DASHPlayer
 from istream_player.modules.scheduler.scheduler import SchedulerImpl
 
 from istream_player.modules.renderer import OpenGLRenderer, HeadlessRenderer, OpenCVRenderer
-from istream_player.modules.enhancer import IMDNEnhancer,IMDNEnhancerAlways
+from istream_player.modules.enhancer import IMDNEnhancer, IMDNEnhancerAlways, MultiTaskEnhancer
 
 # 模块初始化函数类型定义 - 用于创建模块实例的函数签名
 ModInitFnType = Callable[[str, Any, Any], Dict[str, Module]]
@@ -440,7 +441,7 @@ class PlayerComposer:
         # 注册网络感知调度器模块（支持多种算法）
         self.register_module(
             "nes",
-            [BONESController, DynamicGreedyController, BOLAGreedyController, BufferGreedyController, ThroughputGreedyController, NASController, AlwaysGreedyController, ContentAwareBONESController, ConservativeContentAwareBONESController, CABONESController, DRLNESController],
+            [BONESController, DynamicGreedyController, BOLAGreedyController, BufferGreedyController, ThroughputGreedyController, NASController, AlwaysGreedyController, ContentAwareBONESController, ConservativeContentAwareBONESController, CABONESController, MTBONESController, DRLNESController],
             single_initializer,
             "Neural-Enhanced Streaming Controller",
             False,
@@ -459,7 +460,7 @@ class PlayerComposer:
 
         # 注册视频增强器模块
         self.register_module("enhancer",
-                             [IMDNEnhancer,IMDNEnhancerAlways],
+                             [IMDNEnhancer, IMDNEnhancerAlways, MultiTaskEnhancer],
                              single_initializer,
                              "Enhancer",
                              False,

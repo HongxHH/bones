@@ -8,4 +8,5 @@ from .always_greedy import AlwaysGreedyController
 from .content_aware_bones import ContentAwareBONESController
 from .conservative_content_aware_bones import ConservativeContentAwareBONESController
 from .ca_bones import CABONESController
+from .mt_bones import MTBONESController
 from .drl_nes import DRLNESController
