@@ -1,0 +1,242 @@
+{
+  "trace0000": {
+    "ca": {
+      "avg_vmaf": 92.48867662893083,
+      "freeze_time": 2.1827872842550278e-11,
+      "freeze_events": 1,
+      "qoe": 90.35237805298145,
+      "avg_bandwidth": 3594.9616981132076
+    },
+    "mt": {
+      "avg_vmaf": 96.90942968980833,
+      "freeze_time": 3.637978807091713e-11,
+      "freeze_events": 1,
+      "qoe": 94.00009626506582,
+      "avg_bandwidth": 2721.069698113208,
+      "task_combos": {
+        "none": 101,
+        "sr": 0,
+        "sr_deblur": 0,
+        "deblur": 17,
+        "sr_deblur_fi": 40
+      },
+      "avg_gpu_util": 0.06576475089039055
+    }
+  },
+  "trace0001": {
+    "ca": {
+      "avg_vmaf": 91.67852758490567,
+      "freeze_time": 4.3655745685100555e-11,
+      "freeze_events": 1,
+      "qoe": 89.24277514819677,
+      "avg_bandwidth": 3481.7706792452827
+    },
+    "mt": {
+      "avg_vmaf": 96.53911698396684,
+      "freeze_time": 4.3655745685100555e-11,
+      "freeze_events": 1,
+      "qoe": 93.63748513758756,
+      "avg_bandwidth": 2612.936289308176,
+      "task_combos": {
+        "none": 95,
+        "sr": 0,
+        "sr_deblur": 0,
+        "deblur": 27,
+        "sr_deblur_fi": 36
+      },
+      "avg_gpu_util": 0.3507646694164611
+    }
+  },
+  "trace0002": {
+    "ca": {
+      "avg_vmaf": 91.55102075471699,
+      "freeze_time": 0.0,
+      "freeze_events": 0,
+      "qoe": 88.92433819775496,
+      "avg_bandwidth": 3476.923031446541
+    },
+    "mt": {
+      "avg_vmaf": 96.49424575779713,
+      "freeze_time": 0.0,
+      "freeze_events": 0,
+      "qoe": 93.48849233628563,
+      "avg_bandwidth": 2594.540855345912,
+      "task_combos": {
+        "none": 94,
+        "sr": 0,
+        "sr_deblur": 0,
+        "deblur": 28,
+        "sr_deblur_fi": 36
+      },
+      "avg_gpu_util": 0.2652646694164639
+    }
+  },
+  "trace0003": {
+    "ca": {
+      "avg_vmaf": 91.936467,
+      "freeze_time": 0.0,
+      "freeze_events": 0,
+      "qoe": 89.71521931012657,
+      "avg_bandwidth": 3511.8723144654086
+    },
+    "mt": {
+      "avg_vmaf": 96.4285824244093,
+      "freeze_time": 1.4551915228366852e-11,
+      "freeze_events": 1,
+      "qoe": 93.41713964337161,
+      "avg_bandwidth": 2614.955823899371,
+      "task_combos": {
+        "none": 97,
+        "sr": 0,
+        "sr_deblur": 0,
+        "deblur": 22,
+        "sr_deblur_fi": 39
+      },
+      "avg_gpu_util": 0.3507647576532024
+    }
+  },
+  "trace0004": {
+    "ca": {
+      "avg_vmaf": 93.27116666666667,
+      "freeze_time": 2.9103830456733704e-11,
+      "freeze_events": 1,
+      "qoe": 91.09796044514768,
+      "avg_bandwidth": 3677.976779874214
+    },
+    "mt": {
+      "avg_vmaf": 97.02064423753116,
+      "freeze_time": 0.0,
+      "freeze_events": 0,
+      "qoe": 94.0116538485116,
+      "avg_bandwidth": 2761.046603773585,
+      "task_combos": {
+        "none": 102,
+        "sr": 0,
+        "sr_deblur": 0,
+        "deblur": 17,
+        "sr_deblur_fi": 39
+      },
+      "avg_gpu_util": 0.06576472083936587
+    }
+  },
+  "trace0005": {
+    "ca": {
+      "avg_vmaf": 93.60172871069183,
+      "freeze_time": 0.0,
+      "freeze_events": 0,
+      "qoe": 91.35693190689436,
+      "avg_bandwidth": 3692.891849056604
+    },
+    "mt": {
+      "avg_vmaf": 97.61294355577016,
+      "freeze_time": 3.637978807091713e-11,
+      "freeze_events": 1,
+      "qoe": 94.97717593890248,
+      "avg_bandwidth": 2778.955496855346,
+      "task_combos": {
+        "none": 104,
+        "sr": 0,
+        "sr_deblur": 0,
+        "deblur": 16,
+        "sr_deblur_fi": 38
+      },
+      "avg_gpu_util": 0.0657647298279271
+    }
+  },
+  "trace0006": {
+    "ca": {
+      "avg_vmaf": 92.27127751572327,
+      "freeze_time": 353.61758660236865,
+      "freeze_events": 2,
+      "qoe": 89.69062877735382,
+      "avg_bandwidth": 3595.1870943396225
+    },
+    "mt": {
+      "avg_vmaf": 96.77571677134829,
+      "freeze_time": 353.61758660233227,
+      "freeze_events": 1,
+      "qoe": 93.84242937278107,
+      "avg_bandwidth": 2677.514427672956,
+      "task_combos": {
+        "none": 100,
+        "sr": 0,
+        "sr_deblur": 0,
+        "deblur": 21,
+        "sr_deblur_fi": 37
+      },
+      "avg_gpu_util": 0.06576469248198007
+    }
+  },
+  "trace0007": {
+    "ca": {
+      "avg_vmaf": 90.49468817610064,
+      "freeze_time": 1.4551915228366852e-11,
+      "freeze_events": 1,
+      "qoe": 87.2691610748348,
+      "avg_bandwidth": 3449.795006289308
+    },
+    "mt": {
+      "avg_vmaf": 96.34533419138454,
+      "freeze_time": 1.4551915228366852e-11,
+      "freeze_events": 1,
+      "qoe": 93.36838217757895,
+      "avg_bandwidth": 2607.839396226415,
+      "task_combos": {
+        "none": 95,
+        "sr": 0,
+        "sr_deblur": 0,
+        "deblur": 28,
+        "sr_deblur_fi": 35
+      },
+      "avg_gpu_util": 0.26526475357564266
+    }
+  },
+  "trace0008": {
+    "ca": {
+      "avg_vmaf": 90.91524623899372,
+      "freeze_time": 0.0,
+      "freeze_events": 0,
+      "qoe": 87.96567972000638,
+      "avg_bandwidth": 3452.2397358490566
+    },
+    "mt": {
+      "avg_vmaf": 96.31947629004162,
+      "freeze_time": 0.0,
+      "freeze_events": 0,
+      "qoe": 93.42244342188388,
+      "avg_bandwidth": 2582.406289308176,
+      "task_combos": {
+        "none": 93,
+        "sr": 0,
+        "sr_deblur": 0,
+        "deblur": 30,
+        "sr_deblur_fi": 35
+      },
+      "avg_gpu_util": 0.2652647556462154
+    }
+  },
+  "trace0009": {
+    "ca": {
+      "avg_vmaf": 91.58457598742139,
+      "freeze_time": 0.0,
+      "freeze_events": 0,
+      "qoe": 88.98227974058595,
+      "avg_bandwidth": 3529.4190440251573
+    },
+    "mt": {
+      "avg_vmaf": 96.4556178805625,
+      "freeze_time": 0.0,
+      "freeze_events": 0,
+      "qoe": 93.51500414364985,
+      "avg_bandwidth": 2702.2414716981134,
+      "task_combos": {
+        "none": 98,
+        "sr": 0,
+        "sr_deblur": 0,
+        "deblur": 23,
+        "sr_deblur_fi": 37
+      },
+      "avg_gpu_util": 0.3507645654641887
+    }
+  }
+}
