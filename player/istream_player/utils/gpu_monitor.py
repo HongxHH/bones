@@ -29,6 +29,8 @@ class GPUMonitor:
         # 采样数据
         self._power_samples: list = []
         self._temp_samples: list = []
+        self._util_samples: list = []
+        self._mem_samples: list = []
         self._start_time: Optional[float] = None
         self._end_time: Optional[float] = None
 
@@ -60,6 +62,8 @@ class GPUMonitor:
         self._start_time = time.perf_counter()
         self._power_samples = []
         self._temp_samples = []
+        self._util_samples = []
+        self._mem_samples = []
         self._thread = threading.Thread(target=self._sample_loop, daemon=True)
         self._thread.start()
         log.info("GPUMonitor started")
@@ -83,12 +87,23 @@ class GPUMonitor:
             import pynvml
             while not self._stop_event.is_set():
                 try:
+                    import pynvml
                     # 功耗（毫瓦）
                     power_mw = pynvml.nvmlDeviceGetPowerUsage(self._handle)
                     self._power_samples.append(power_mw / 1000.0)  # 转换为瓦
                     # 温度（摄氏度）
                     temp = pynvml.nvmlDeviceGetTemperature(self._handle, pynvml.NVML_TEMPERATURE_GPU)
                     self._temp_samples.append(float(temp))
+                    # 利用率（GPU核心 %）
+                    util = pynvml.nvmlDeviceGetUtilizationRates(self._handle)
+                    self._util_samples.append(float(util.gpu))
+                    # 显存（字节 -> MB）
+                    mem = pynvml.nvmlDeviceGetMemoryInfo(self._handle)
+                    self._mem_samples.append({
+                        'used_mb': mem.used / 1024 / 1024,
+                        'total_mb': mem.total / 1024 / 1024,
+                        'free_mb': mem.free / 1024 / 1024,
+                    })
                 except Exception as e:
                     log.debug(f"GPU sample error: {e}")
                 self._stop_event.wait(self.sample_interval)
@@ -109,15 +124,52 @@ class GPUMonitor:
         avg_temp = sum(self._temp_samples) / len(self._temp_samples) if self._temp_samples else None
         peak_temp = max(self._temp_samples) if self._temp_samples else None
 
+        avg_util = sum(self._util_samples) / len(self._util_samples) if self._util_samples else None
+        peak_util = max(self._util_samples) if self._util_samples else None
+
+        if self._mem_samples:
+            avg_mem_used = sum(s['used_mb'] for s in self._mem_samples) / len(self._mem_samples)
+            peak_mem_used = max(s['used_mb'] for s in self._mem_samples)
+            total_mem = self._mem_samples[0]['total_mb']
+        else:
+            avg_mem_used = peak_mem_used = total_mem = None
+
         return {
             "avg_power_w": round(avg_power, 2),
             "peak_power_w": round(peak_power, 2),
             "total_energy_kj": round(total_energy_kj, 4),
             "avg_temp_c": round(avg_temp, 2) if avg_temp is not None else None,
             "peak_temp_c": round(peak_temp, 2) if peak_temp is not None else None,
+            "avg_util_pct": round(avg_util, 1) if avg_util is not None else None,
+            "peak_util_pct": round(peak_util, 1) if peak_util is not None else None,
+            "avg_mem_used_mb": round(avg_mem_used, 1) if avg_mem_used is not None else None,
+            "peak_mem_used_mb": round(peak_mem_used, 1) if peak_mem_used is not None else None,
+            "total_mem_mb": round(total_mem, 1) if total_mem is not None else None,
             "sample_count": len(self._power_samples),
             "duration_seconds": round(duration, 2),
         }
+
+    def get_state(self) -> Optional[Dict[str, Any]]:
+        """实时查询当前 GPU 状态（单次采样，不依赖后台线程）"""
+        if not self._nvml_available:
+            return None
+        try:
+            import pynvml
+            power_mw = pynvml.nvmlDeviceGetPowerUsage(self._handle)
+            temp = pynvml.nvmlDeviceGetTemperature(self._handle, pynvml.NVML_TEMPERATURE_GPU)
+            util = pynvml.nvmlDeviceGetUtilizationRates(self._handle)
+            mem = pynvml.nvmlDeviceGetMemoryInfo(self._handle)
+            return {
+                "power_w": round(power_mw / 1000.0, 2),
+                "temp_c": float(temp),
+                "util_pct": float(util.gpu),
+                "mem_used_mb": round(mem.used / 1024 / 1024, 1),
+                "mem_total_mb": round(mem.total / 1024 / 1024, 1),
+                "mem_free_mb": round(mem.free / 1024 / 1024, 1),
+            }
+        except Exception as e:
+            log.debug(f"get_state error: {e}")
+            return None
 
     @property
     def is_available(self) -> bool:
