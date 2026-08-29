@@ -45,16 +45,16 @@ class MTBONESController(CABONESController):
 
     log = logging.getLogger("MTBONESController")
 
-    # 任务组合资源开销（归一化）
+    # 任务组合资源开销（USM锐化无需模型显存，比NAFNet轻量）
     TASK_RESOURCES = {
         0: {'utilization': 0.0, 'memory': 0},
         1: {'utilization': 0.65, 'memory': 3},
-        2: {'utilization': 0.85, 'memory': 12},
-        3: {'utilization': 0.55, 'memory': 10},
-        4: {'utilization': 0.95, 'memory': 25},
+        2: {'utilization': 0.70, 'memory': 3},   # sr+usm: USM增加极少显存
+        3: {'utilization': 0.10, 'memory': 0},   # usm only: 无模型，纯GPU计算
+        4: {'utilization': 0.75, 'memory': 3},   # sr+usm+fi (FI暂未实现)
     }
 
-    TASK_NAMES = {0: 'none', 1: 'sr', 2: 'sr_deblur', 3: 'deblur', 4: 'sr_deblur_fi'}
+    TASK_NAMES = {0: 'none', 1: 'sr', 2: 'sr_sharpen', 3: 'sharpen', 4: 'sr_sharpen_fi'}
 
     def __init__(self):
         super().__init__()
@@ -76,6 +76,13 @@ class MTBONESController(CABONESController):
 
         # 任务组合统计
         self.task_combo_counts = np.zeros(5, dtype=int)
+
+        # 内容感知（阶段1：内容特征加载与因子调制）
+        self.content_features = None       # 每段的内容特征列表
+        self.content_aware = True          # 是否启用内容感知
+        self.motion_max = 40.0             # 运动强度归一化上限
+        self.texture_max = 8000.0          # 纹理复杂度归一化上限
+        self.content_factor_strength = 1.0 # 内容因子调制强度（0=禁用，1=完全启用）
 
     async def setup(self, config: PlayerConfig, download_buffer: DownloadBufferImpl,
                     enhance_buffer: EnhanceBufferImpl, enhancer: Enhancer,
@@ -101,8 +108,19 @@ class MTBONESController(CABONESController):
             self.log.warning(f"GPU monitor not available: {e}, using virtual GPU state")
             self.gpu_monitor = None
 
+        # 内容感知配置
+        self.content_aware = getattr(config, 'mt_content_aware', True)
+        self.content_factor_strength = getattr(config, 'mt_content_factor_strength', 1.0)
+
+        # 加载内容特征文件（阶段1）
+        if self.content_aware:
+            content_file = getattr(config, 'mt_content_features_file', '../data/bbb/content_features_bbb.json')
+            self._load_content_features(content_file)
+
         self.log.info(f"MT-BONES setup: resource_aware={self.resource_aware}, "
-                      f"penalty={self.gpu_util_penalty}, max_util={self.max_allowed_util}")
+                      f"penalty={self.gpu_util_penalty}, max_util={self.max_allowed_util}, "
+                      f"content_aware={self.content_aware}, "
+                      f"content_features={'loaded' if self.content_features else 'none'}")
 
     def _get_current_gpu_util(self) -> float:
         """获取当前GPU利用率（真实监控或虚拟状态）"""
@@ -113,6 +131,107 @@ class MTBONESController(CABONESController):
             except Exception:
                 pass
         return self.gpu_utilization
+
+    def _load_content_features(self, content_file: str):
+        """加载内容特征文件（阶段1）"""
+        try:
+            with open(content_file, 'r') as f:
+                data = json.load(f)
+            self.content_features = data.get('features', [])
+            self.motion_max = data.get('motion_median', self.motion_max) * 2.5
+            self.texture_max = data.get('texture_median', self.texture_max) * 2.5
+            self.log.info(f"Content features loaded: {len(self.content_features)} segments, "
+                          f"motion_max={self.motion_max:.1f}, texture_max={self.texture_max:.1f}")
+        except (FileNotFoundError, json.JSONDecodeError) as e:
+            self.log.warning(f"Cannot load content features from {content_file}: {e}")
+            self.content_features = None
+
+    def _compute_content_factors(self, seg_idx: int) -> np.ndarray:
+        """
+        根据内容特征计算各任务组合的增益因子（v2：多级别SR + USM-only）
+
+        新combo结构：
+          0: none
+          1: sr_light (IMDN_low, 级别1)
+          2: sr_medium (IMDN_medium, 级别2)
+          3: sr_heavy (IMDN_high, 级别3)
+          4: usm_only (仅USM锐化)
+
+        基于imdn_bbb_3060ti.json逐段VMAF数据的实证分析：
+        - 纹理复杂度与SR增益强相关（360p r=0.83, 480p r=0.85）
+        - 高纹理段SR增益是低纹理段的1.5-2.8倍
+        - 场景切换段SR增益降低40-55%（360p/480p）
+        - SR级别越高，纹理敏感度越大（重模型能恢复更多细节）
+
+        Returns:
+            shape=(5,) 的内容因子数组，factors[0]=1.0（无增强不受影响）
+        """
+        factors = np.ones(5)
+        if not self.content_aware or self.content_features is None:
+            return factors
+        if seg_idx >= len(self.content_features):
+            return factors
+
+        feat = self.content_features[seg_idx]
+        motion = min(feat.get('motion_intensity', 0) / self.motion_max, 1.0)
+        texture = min(feat.get('texture_complexity', 0) / self.texture_max, 1.0)
+        scene_change = feat.get('scene_change', False)
+
+        # 纹理因子：高纹理→增益高（实证：高纹理SR增益是低纹理的1.5-2.8倍）
+        # 基础纹理因子0.5~1.5，SR级别越高敏感度越大
+        texture_base = 0.5 + 1.0 * texture       # 0.5 ~ 1.5
+        # 级别缩放：L1=0.8x, L2=1.0x, L3=1.2x（重模型纹理敏感度更高）
+        level_scaling = [0.0, 0.8, 1.0, 1.2]
+
+        # 场景切换惩罚：实证360p/480p场景切换段增益降低40-55%
+        scene_penalty_sr = 0.55 if scene_change else 1.0
+        scene_penalty_usm = 0.70 if scene_change else 1.0
+
+        s = self.content_factor_strength
+        # 从1.0向目标因子插值，s=0时全为1.0（禁用内容感知）
+        def lerp(target):
+            return 1.0 + s * (target - 1.0)
+
+        # combo 1-3: SR_light/medium/heavy — 纹理主导 + 场景惩罚 + 级别缩放
+        for level in [1, 2, 3]:
+            sr_target = texture_base * level_scaling[level] * scene_penalty_sr
+            # 限制因子范围，避免过度调制
+            sr_target = max(0.3, min(2.0, sr_target))
+            factors[level] = lerp(sr_target)
+
+        # combo 4: USM-only — 内容中性（实测USM增益方差大，当前不具竞争力，暂不调制）
+        # 实测数据: 360p mean=+5.20(std=6.47), 480p mean=+1.68(std=6.76)
+        # USM在低纹理段增益更高，但与SR质量差异大会增加振荡，暂不启用内容调制
+        factors[4] = 1.0
+
+        return factors
+
+    def _apply_content_awareness(self, vmaf_enh_avg: np.ndarray, seg_idx: int) -> np.ndarray:
+        """
+        将内容因子应用到VMAF增益表（调制增益部分，不修改base）
+
+        Args:
+            vmaf_enh_avg: shape=(num_bitrate, 5) 的VMAF表
+            seg_idx: 当前段索引
+
+        Returns:
+            调制后的VMAF表
+        """
+        if not self.content_aware or self.content_features is None:
+            return vmaf_enh_avg
+
+        factors = self._compute_content_factors(seg_idx)
+        base_col = vmaf_enh_avg[:, 0:1]  # (num_br, 1)
+        gains = vmaf_enh_avg - base_col   # (num_br, 5)
+
+        # 调制增益（只调制增强列1-4，列0保持0）
+        for e in range(1, 5):
+            gains[:, e] *= factors[e]
+
+        result = base_col + gains
+        # 保持-inf掩码（无效增强位置）
+        result[~np.isfinite(vmaf_enh_avg)] = -np.inf
+        return result
 
     def _compute_resource_penalty(self, task_combo: int, seg_idx: int) -> float:
         """
@@ -139,7 +258,7 @@ class MTBONESController(CABONESController):
         if res['memory'] > self.gpu_mem_limit_mb:
             penalty += 100.0
 
-        # 3. 内容感知：静态内容惩罚去模糊组合
+        # 3. 内容感知：静态内容惩罚锐化组合
         if self.content_aware_task and task_combo in (2, 3, 4):
             motion = self._estimate_motion_level(seg_idx)
             if motion < self.motion_threshold:
@@ -166,6 +285,10 @@ class MTBONESController(CABONESController):
         父类计算 obj = (obj_drift - V * obj_reward) / seg_size
         此处加入资源惩罚后再选最优
         """
+        # === MT-BONES 扩展：内容感知增益调制（阶段1）===
+        seg_idx = self.current_segment_index
+        self.vmaf_enh_avg = self._apply_content_awareness(self.vmaf_enh_avg, seg_idx)
+
         # 先调用父类计算基础 obj
         V = (self.buffer_size - self.seg_time) * self.seg_time / (np.max(self.vmaf_enh_avg) + self.gamma_p)
         V = V * self.V_multiplier

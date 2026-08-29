@@ -701,6 +701,8 @@ class PlaybackAnalyzer(
                 seg.fast_complete
                 and seg.is_enhance
                 and seg.enhanced_cnt is not None
+                and seg.enhance_end_to_play_time is not None
+                and seg.fast_complete_threshold is not None
                 and seg.enhance_end_to_play_time < seg.fast_complete_threshold
             ):
                 

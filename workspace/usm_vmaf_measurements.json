@@ -1,0 +1,382 @@
+[
+  {
+    "seg_idx": 13,
+    "category": "high_texture_high_motion",
+    "motion": 22.295,
+    "texture": 1316.32,
+    "scene_change": true,
+    "usm_gains": {
+      "360p": {
+        "base_vmaf": 77.194408,
+        "usm_vmaf": 81.902486,
+        "gain": 4.708078
+      },
+      "480p": {
+        "base_vmaf": 87.876325,
+        "usm_vmaf": 90.903662,
+        "gain": 3.027337000000003
+      }
+    }
+  },
+  {
+    "seg_idx": 82,
+    "category": "high_texture_high_motion",
+    "motion": 19.6223,
+    "texture": 1248.24,
+    "scene_change": false,
+    "usm_gains": {
+      "360p": {
+        "base_vmaf": 83.317819,
+        "usm_vmaf": 82.852199,
+        "gain": -0.46562000000000126
+      },
+      "480p": {
+        "base_vmaf": 92.16043,
+        "usm_vmaf": 91.256964,
+        "gain": -0.9034660000000088
+      }
+    }
+  },
+  {
+    "seg_idx": 106,
+    "category": "high_texture_high_motion",
+    "motion": 37.404,
+    "texture": 1740.79,
+    "scene_change": false,
+    "usm_gains": {
+      "360p": {
+        "base_vmaf": 81.527877,
+        "usm_vmaf": 80.502636,
+        "gain": -1.0252410000000083
+      },
+      "480p": {
+        "base_vmaf": 89.169527,
+        "usm_vmaf": 88.487031,
+        "gain": -0.6824960000000004
+      }
+    }
+  },
+  {
+    "seg_idx": 138,
+    "category": "high_texture_high_motion",
+    "motion": 29.7416,
+    "texture": 8077.74,
+    "scene_change": false,
+    "usm_gains": {
+      "360p": {
+        "base_vmaf": 46.653809,
+        "usm_vmaf": 64.576986,
+        "gain": 17.923177000000003
+      },
+      "480p": {
+        "base_vmaf": 70.011325,
+        "usm_vmaf": 78.280049,
+        "gain": 8.268724000000006
+      }
+    }
+  },
+  {
+    "seg_idx": 154,
+    "category": "high_texture_high_motion",
+    "motion": 23.1301,
+    "texture": 2204.45,
+    "scene_change": true,
+    "usm_gains": {
+      "360p": {
+        "base_vmaf": 71.100578,
+        "usm_vmaf": 78.667721,
+        "gain": 7.5671430000000015
+      },
+      "480p": {
+        "base_vmaf": 81.47346,
+        "usm_vmaf": 83.78493,
+        "gain": 2.31147
+      }
+    }
+  },
+  {
+    "seg_idx": 2,
+    "category": "high_texture_low_motion",
+    "motion": 13.2161,
+    "texture": 1096.07,
+    "scene_change": false,
+    "usm_gains": {
+      "360p": {
+        "base_vmaf": 69.948958,
+        "usm_vmaf": 64.104001,
+        "gain": -5.844957000000008
+      },
+      "480p": {
+        "base_vmaf": 84.181326,
+        "usm_vmaf": 72.590425,
+        "gain": -11.590901000000002
+      }
+    }
+  },
+  {
+    "seg_idx": 14,
+    "category": "high_texture_low_motion",
+    "motion": 10.7392,
+    "texture": 1266.13,
+    "scene_change": false,
+    "usm_gains": {
+      "360p": {
+        "base_vmaf": 75.553619,
+        "usm_vmaf": 81.035348,
+        "gain": 5.481729000000001
+      },
+      "480p": {
+        "base_vmaf": 87.897727,
+        "usm_vmaf": 89.101278,
+        "gain": 1.2035509999999903
+      }
+    }
+  },
+  {
+    "seg_idx": 86,
+    "category": "high_texture_low_motion",
+    "motion": 14.9287,
+    "texture": 1072.67,
+    "scene_change": true,
+    "usm_gains": {
+      "360p": {
+        "base_vmaf": 71.266709,
+        "usm_vmaf": 80.879226,
+        "gain": 9.612516999999997
+      },
+      "480p": {
+        "base_vmaf": 82.222111,
+        "usm_vmaf": 88.164205,
+        "gain": 5.942093999999997
+      }
+    }
+  },
+  {
+    "seg_idx": 129,
+    "category": "high_texture_low_motion",
+    "motion": 6.1595,
+    "texture": 970.5,
+    "scene_change": false,
+    "usm_gains": {
+      "360p": {
+        "base_vmaf": 40.588316,
+        "usm_vmaf": 42.246698,
+        "gain": 1.6583820000000031
+      },
+      "480p": {
+        "base_vmaf": 64.379379,
+        "usm_vmaf": 52.366225,
+        "gain": -12.013154
+      }
+    }
+  },
+  {
+    "seg_idx": 153,
+    "category": "high_texture_low_motion",
+    "motion": 0.3173,
+    "texture": 4545.12,
+    "scene_change": false,
+    "usm_gains": {
+      "360p": {
+        "base_vmaf": 54.946413,
+        "usm_vmaf": 52.744677,
+        "gain": -2.201735999999997
+      },
+      "480p": {
+        "base_vmaf": 69.849992,
+        "usm_vmaf": 63.426945,
+        "gain": -6.423046999999997
+      }
+    }
+  },
+  {
+    "seg_idx": 0,
+    "category": "low_texture_high_motion",
+    "motion": 29.4576,
+    "texture": 425.06,
+    "scene_change": true,
+    "usm_gains": {
+      "360p": {
+        "base_vmaf": 79.032988,
+        "usm_vmaf": 87.948591,
+        "gain": 8.91560299999999
+      },
+      "480p": {
+        "base_vmaf": 85.921085,
+        "usm_vmaf": 93.146392,
+        "gain": 7.225307000000001
+      }
+    }
+  },
+  {
+    "seg_idx": 43,
+    "category": "low_texture_high_motion",
+    "motion": 20.5502,
+    "texture": 359.27,
+    "scene_change": true,
+    "usm_gains": {
+      "360p": {
+        "base_vmaf": 80.857491,
+        "usm_vmaf": 86.444711,
+        "gain": 5.587220000000002
+      },
+      "480p": {
+        "base_vmaf": 88.602431,
+        "usm_vmaf": 93.478609,
+        "gain": 4.87617800000001
+      }
+    }
+  },
+  {
+    "seg_idx": 64,
+    "category": "low_texture_high_motion",
+    "motion": 27.1339,
+    "texture": 776.23,
+    "scene_change": false,
+    "usm_gains": {
+      "360p": {
+        "base_vmaf": 94.511422,
+        "usm_vmaf": 95.587329,
+        "gain": 1.0759070000000008
+      },
+      "480p": {
+        "base_vmaf": 96.521893,
+        "usm_vmaf": 96.78456,
+        "gain": 0.2626669999999933
+      }
+    }
+  },
+  {
+    "seg_idx": 81,
+    "category": "low_texture_high_motion",
+    "motion": 28.1355,
+    "texture": 777.17,
+    "scene_change": false,
+    "usm_gains": {
+      "360p": {
+        "base_vmaf": 81.674706,
+        "usm_vmaf": 81.497631,
+        "gain": -0.1770750000000021
+      },
+      "480p": {
+        "base_vmaf": 89.332027,
+        "usm_vmaf": 88.034166,
+        "gain": -1.2978609999999975
+      }
+    }
+  },
+  {
+    "seg_idx": 121,
+    "category": "low_texture_high_motion",
+    "motion": 17.9037,
+    "texture": 429.21,
+    "scene_change": true,
+    "usm_gains": {
+      "360p": {
+        "base_vmaf": 71.256068,
+        "usm_vmaf": 88.44568,
+        "gain": 17.189611999999997
+      },
+      "480p": {
+        "base_vmaf": 79.635803,
+        "usm_vmaf": 90.56706,
+        "gain": 10.931257000000002
+      }
+    }
+  },
+  {
+    "seg_idx": 1,
+    "category": "low_texture_low_motion",
+    "motion": 8.4101,
+    "texture": 320.54,
+    "scene_change": true,
+    "usm_gains": {
+      "360p": {
+        "base_vmaf": 72.641718,
+        "usm_vmaf": 71.198273,
+        "gain": -1.443444999999997
+      },
+      "480p": {
+        "base_vmaf": 83.15873,
+        "usm_vmaf": 77.006431,
+        "gain": -6.152298999999999
+      }
+    }
+  },
+  {
+    "seg_idx": 37,
+    "category": "low_texture_low_motion",
+    "motion": 8.949,
+    "texture": 859.34,
+    "scene_change": true,
+    "usm_gains": {
+      "360p": {
+        "base_vmaf": 73.19342,
+        "usm_vmaf": 84.026717,
+        "gain": 10.833297000000002
+      },
+      "480p": {
+        "base_vmaf": 81.954714,
+        "usm_vmaf": 88.226546,
+        "gain": 6.271832000000003
+      }
+    }
+  },
+  {
+    "seg_idx": 60,
+    "category": "low_texture_low_motion",
+    "motion": 2.3668,
+    "texture": 444.06,
+    "scene_change": false,
+    "usm_gains": {
+      "360p": {
+        "base_vmaf": 78.254374,
+        "usm_vmaf": 79.640118,
+        "gain": 1.3857440000000025
+      },
+      "480p": {
+        "base_vmaf": 86.445949,
+        "usm_vmaf": 89.106815,
+        "gain": 2.6608659999999986
+      }
+    }
+  },
+  {
+    "seg_idx": 101,
+    "category": "low_texture_low_motion",
+    "motion": 12.8682,
+    "texture": 250.03,
+    "scene_change": false,
+    "usm_gains": {
+      "360p": {
+        "base_vmaf": 85.850889,
+        "usm_vmaf": 94.893802,
+        "gain": 9.042912999999999
+      },
+      "480p": {
+        "base_vmaf": 92.246427,
+        "usm_vmaf": 96.913662,
+        "gain": 4.667235000000005
+      }
+    }
+  },
+  {
+    "seg_idx": 158,
+    "category": "low_texture_low_motion",
+    "motion": 5.1183,
+    "texture": 287.06,
+    "scene_change": false,
+    "usm_gains": {
+      "360p": {
+        "base_vmaf": 72.398575,
+        "usm_vmaf": 86.580168,
+        "gain": 14.181593000000007
+      },
+      "480p": {
+        "base_vmaf": 81.645013,
+        "usm_vmaf": 96.705947,
+        "gain": 15.060933999999989
+      }
+    }
+  }
+]

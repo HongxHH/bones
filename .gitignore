@@ -61,3 +61,18 @@ desktop.ini
 *.tar.gz
 *.rar
 *.7z
+
+# workspace 临时文件（实验输出、测试脚本、进度文件）
+workspace/*_output.txt
+workspace/*output_v*.txt
+workspace/test_*.py
+workspace/check_*.py
+workspace/verify_*.py
+workspace/validate_*.py
+workspace/measure_progress.txt
+workspace/scheduling_eval_output.txt
+workspace/C
+workspace/E
+workspace/deblur_vmaf_test/
+workspace/sim_logs*/
+workspace/*.log

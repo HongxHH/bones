@@ -25,28 +25,26 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 # 实验配置
 EXPERIMENT_CONFIGS = {
     "bones": {
-        "name": "BONES (SR-only baseline)",
+        "name": "BONES (SR-only baseline, no fast)",
         "mod_nes": "bones",
         "mod_enhancer": "imdn_always",
-        "description": "原始 BONES + IMDN 超分（单任务）",
+        "description": "原始 BONES + IMDN 超分（单任务，关闭fast）",
+        "config_file": "config_bones_no_fast.json",
     },
     "ca_bones": {
-        "name": "CA-BONES (content-aware SR)",
+        "name": "CA-BONES (content-aware SR, no fast)",
         "mod_nes": "ca_bones",
         "mod_enhancer": "imdn_always",
-        "description": "内容感知 BONES + IMDN 超分",
+        "description": "内容感知 BONES + IMDN 超分（关闭fast）",
         "extra_args": ["--content_aware", "True", "--ca_mode", "base_known"],
+        "config_file": "config_bones_no_fast.json",
     },
     "mt_bones": {
-        "name": "MT-BONES (multi-task enhancement)",
+        "name": "MT-BONES (SR+USM, fast enabled)",
         "mod_nes": "mt_bones",
         "mod_enhancer": "multitask",
-        "description": "多任务 BONES + MultiTaskEnhancer (SR+Deblur)",
-        "extra_args": [
-            "--content_aware", "True", "--ca_mode", "base_known",
-            "--mt_resource_aware", "True",
-            "--mt_enable_deblur", "True",
-        ],
+        "description": "多任务 BONES + MultiTaskEnhancer (SR+USM锐化，开启fast)",
+        "config_file": "config_mt_bones.json",
     },
 }
 
@@ -69,6 +67,9 @@ def run_experiment(method: str, config: dict, args) -> Dict:
         "--trace", args.trace,
         "--run_dir", f"output/mt_run_{method}_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
     ]
+
+    if "config_file" in config:
+        cmd.extend(["--config", config["config_file"]])
 
     if "extra_args" in config:
         cmd.extend(config["extra_args"])

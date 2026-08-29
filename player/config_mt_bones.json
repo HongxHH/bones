@@ -1,0 +1,7 @@
+{
+  "use_fast_complete": true,
+  "content_aware": true,
+  "ca_mode": "base_known",
+  "mt_resource_aware": true,
+  "mt_enable_sharpen": true
+}

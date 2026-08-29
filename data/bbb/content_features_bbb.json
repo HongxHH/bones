@@ -1,0 +1,1449 @@
+{
+  "video": "E:\\dev\\Code\\Python\\bones\\data\\video_mp4box\\output_1080p.mp4",
+  "segment_duration_s": 4.0,
+  "fps": 30.0,
+  "frames_per_segment": 120,
+  "samples_per_segment": 10,
+  "downscale_resolution": [
+    320,
+    180
+  ],
+  "num_segments": 159,
+  "motion_median": 16.0959,
+  "texture_median": 960.92,
+  "extraction_time_s": 104.12,
+  "avg_extraction_ms_per_seg": 654.8,
+  "features": [
+    {
+      "segment_index": 0,
+      "motion_intensity": 29.4576,
+      "texture_complexity": 425.06,
+      "scene_change": true,
+      "scene_change_score": 2.6463,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_low_texture"
+    },
+    {
+      "segment_index": 1,
+      "motion_intensity": 8.4101,
+      "texture_complexity": 320.54,
+      "scene_change": true,
+      "scene_change_score": 1.0124,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_low_texture"
+    },
+    {
+      "segment_index": 2,
+      "motion_intensity": 13.2161,
+      "texture_complexity": 1096.07,
+      "scene_change": false,
+      "scene_change_score": 0.3955,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_high_texture"
+    },
+    {
+      "segment_index": 3,
+      "motion_intensity": 14.2365,
+      "texture_complexity": 1530.17,
+      "scene_change": false,
+      "scene_change_score": 0.3739,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_high_texture"
+    },
+    {
+      "segment_index": 4,
+      "motion_intensity": 14.9064,
+      "texture_complexity": 2363.16,
+      "scene_change": true,
+      "scene_change_score": 1.5374,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_high_texture"
+    },
+    {
+      "segment_index": 5,
+      "motion_intensity": 12.3971,
+      "texture_complexity": 731.16,
+      "scene_change": true,
+      "scene_change_score": 1.8699,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_low_texture"
+    },
+    {
+      "segment_index": 6,
+      "motion_intensity": 16.7124,
+      "texture_complexity": 636.26,
+      "scene_change": true,
+      "scene_change_score": 1.7256,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_low_texture"
+    },
+    {
+      "segment_index": 7,
+      "motion_intensity": 9.6111,
+      "texture_complexity": 1411.76,
+      "scene_change": false,
+      "scene_change_score": 0.3465,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_high_texture"
+    },
+    {
+      "segment_index": 8,
+      "motion_intensity": 9.8463,
+      "texture_complexity": 1368.96,
+      "scene_change": false,
+      "scene_change_score": 0.3489,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_high_texture"
+    },
+    {
+      "segment_index": 9,
+      "motion_intensity": 15.4992,
+      "texture_complexity": 1385.29,
+      "scene_change": true,
+      "scene_change_score": 1.2209,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_high_texture"
+    },
+    {
+      "segment_index": 10,
+      "motion_intensity": 10.1754,
+      "texture_complexity": 1227.58,
+      "scene_change": false,
+      "scene_change_score": 0.3591,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_high_texture"
+    },
+    {
+      "segment_index": 11,
+      "motion_intensity": 6.8319,
+      "texture_complexity": 1042.69,
+      "scene_change": false,
+      "scene_change_score": 0.3399,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_high_texture"
+    },
+    {
+      "segment_index": 12,
+      "motion_intensity": 9.3605,
+      "texture_complexity": 1006.56,
+      "scene_change": false,
+      "scene_change_score": 0.4304,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_high_texture"
+    },
+    {
+      "segment_index": 13,
+      "motion_intensity": 22.295,
+      "texture_complexity": 1316.32,
+      "scene_change": true,
+      "scene_change_score": 1.0834,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_high_texture"
+    },
+    {
+      "segment_index": 14,
+      "motion_intensity": 10.7392,
+      "texture_complexity": 1266.13,
+      "scene_change": false,
+      "scene_change_score": 0.7049,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_high_texture"
+    },
+    {
+      "segment_index": 15,
+      "motion_intensity": 14.5115,
+      "texture_complexity": 792.74,
+      "scene_change": true,
+      "scene_change_score": 1.7965,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_low_texture"
+    },
+    {
+      "segment_index": 16,
+      "motion_intensity": 12.1261,
+      "texture_complexity": 884.51,
+      "scene_change": true,
+      "scene_change_score": 1.5315,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_low_texture"
+    },
+    {
+      "segment_index": 17,
+      "motion_intensity": 21.9161,
+      "texture_complexity": 1161.89,
+      "scene_change": true,
+      "scene_change_score": 1.1797,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_high_texture"
+    },
+    {
+      "segment_index": 18,
+      "motion_intensity": 30.6526,
+      "texture_complexity": 493.06,
+      "scene_change": false,
+      "scene_change_score": 0.9696,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_low_texture"
+    },
+    {
+      "segment_index": 19,
+      "motion_intensity": 19.747,
+      "texture_complexity": 751.68,
+      "scene_change": true,
+      "scene_change_score": 1.14,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_low_texture"
+    },
+    {
+      "segment_index": 20,
+      "motion_intensity": 19.9853,
+      "texture_complexity": 641.08,
+      "scene_change": false,
+      "scene_change_score": 0.4606,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_low_texture"
+    },
+    {
+      "segment_index": 21,
+      "motion_intensity": 16.9421,
+      "texture_complexity": 590.88,
+      "scene_change": true,
+      "scene_change_score": 1.4486,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_low_texture"
+    },
+    {
+      "segment_index": 22,
+      "motion_intensity": 2.5594,
+      "texture_complexity": 624.07,
+      "scene_change": false,
+      "scene_change_score": 0.2527,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_low_texture"
+    },
+    {
+      "segment_index": 23,
+      "motion_intensity": 18.9756,
+      "texture_complexity": 977.54,
+      "scene_change": true,
+      "scene_change_score": 1.3405,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_high_texture"
+    },
+    {
+      "segment_index": 24,
+      "motion_intensity": 2.2602,
+      "texture_complexity": 615.55,
+      "scene_change": false,
+      "scene_change_score": 0.1789,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_low_texture"
+    },
+    {
+      "segment_index": 25,
+      "motion_intensity": 3.4434,
+      "texture_complexity": 592.84,
+      "scene_change": false,
+      "scene_change_score": 0.3078,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_low_texture"
+    },
+    {
+      "segment_index": 26,
+      "motion_intensity": 16.4761,
+      "texture_complexity": 1166.9,
+      "scene_change": true,
+      "scene_change_score": 1.8595,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_high_texture"
+    },
+    {
+      "segment_index": 27,
+      "motion_intensity": 17.6308,
+      "texture_complexity": 349.89,
+      "scene_change": true,
+      "scene_change_score": 1.4209,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_low_texture"
+    },
+    {
+      "segment_index": 28,
+      "motion_intensity": 8.7007,
+      "texture_complexity": 251.24,
+      "scene_change": false,
+      "scene_change_score": 0.5605,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_low_texture"
+    },
+    {
+      "segment_index": 29,
+      "motion_intensity": 13.1733,
+      "texture_complexity": 833.25,
+      "scene_change": false,
+      "scene_change_score": 0.9584,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_low_texture"
+    },
+    {
+      "segment_index": 30,
+      "motion_intensity": 22.784,
+      "texture_complexity": 1122.59,
+      "scene_change": false,
+      "scene_change_score": 0.9566,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_high_texture"
+    },
+    {
+      "segment_index": 31,
+      "motion_intensity": 23.5018,
+      "texture_complexity": 916.2,
+      "scene_change": false,
+      "scene_change_score": 0.9324,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_low_texture"
+    },
+    {
+      "segment_index": 32,
+      "motion_intensity": 10.2779,
+      "texture_complexity": 678.93,
+      "scene_change": true,
+      "scene_change_score": 1.7211,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_low_texture"
+    },
+    {
+      "segment_index": 33,
+      "motion_intensity": 4.7965,
+      "texture_complexity": 979.45,
+      "scene_change": false,
+      "scene_change_score": 0.4104,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_high_texture"
+    },
+    {
+      "segment_index": 34,
+      "motion_intensity": 6.1983,
+      "texture_complexity": 1007.42,
+      "scene_change": false,
+      "scene_change_score": 0.4335,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_high_texture"
+    },
+    {
+      "segment_index": 35,
+      "motion_intensity": 5.622,
+      "texture_complexity": 1093.73,
+      "scene_change": false,
+      "scene_change_score": 0.3498,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_high_texture"
+    },
+    {
+      "segment_index": 36,
+      "motion_intensity": 9.1389,
+      "texture_complexity": 1003.62,
+      "scene_change": false,
+      "scene_change_score": 0.7907,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_high_texture"
+    },
+    {
+      "segment_index": 37,
+      "motion_intensity": 8.949,
+      "texture_complexity": 859.34,
+      "scene_change": true,
+      "scene_change_score": 1.8963,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_low_texture"
+    },
+    {
+      "segment_index": 38,
+      "motion_intensity": 8.0774,
+      "texture_complexity": 923.78,
+      "scene_change": true,
+      "scene_change_score": 2.1159,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_low_texture"
+    },
+    {
+      "segment_index": 39,
+      "motion_intensity": 8.1381,
+      "texture_complexity": 1040.58,
+      "scene_change": false,
+      "scene_change_score": 0.5565,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_high_texture"
+    },
+    {
+      "segment_index": 40,
+      "motion_intensity": 7.8959,
+      "texture_complexity": 835.42,
+      "scene_change": true,
+      "scene_change_score": 2.1287,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_low_texture"
+    },
+    {
+      "segment_index": 41,
+      "motion_intensity": 25.7115,
+      "texture_complexity": 790.32,
+      "scene_change": false,
+      "scene_change_score": 0.9034,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_low_texture"
+    },
+    {
+      "segment_index": 42,
+      "motion_intensity": 12.4879,
+      "texture_complexity": 714.82,
+      "scene_change": true,
+      "scene_change_score": 1.8726,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_low_texture"
+    },
+    {
+      "segment_index": 43,
+      "motion_intensity": 20.5502,
+      "texture_complexity": 359.27,
+      "scene_change": true,
+      "scene_change_score": 1.1919,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_low_texture"
+    },
+    {
+      "segment_index": 44,
+      "motion_intensity": 7.3952,
+      "texture_complexity": 170.74,
+      "scene_change": false,
+      "scene_change_score": 0.7201,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_low_texture"
+    },
+    {
+      "segment_index": 45,
+      "motion_intensity": 20.0008,
+      "texture_complexity": 459.51,
+      "scene_change": true,
+      "scene_change_score": 1.1596,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_low_texture"
+    },
+    {
+      "segment_index": 46,
+      "motion_intensity": 12.7223,
+      "texture_complexity": 682.73,
+      "scene_change": true,
+      "scene_change_score": 1.5355,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_low_texture"
+    },
+    {
+      "segment_index": 47,
+      "motion_intensity": 20.865,
+      "texture_complexity": 743.08,
+      "scene_change": false,
+      "scene_change_score": 0.9679,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_low_texture"
+    },
+    {
+      "segment_index": 48,
+      "motion_intensity": 15.5782,
+      "texture_complexity": 619.87,
+      "scene_change": true,
+      "scene_change_score": 1.2594,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_low_texture"
+    },
+    {
+      "segment_index": 49,
+      "motion_intensity": 25.0641,
+      "texture_complexity": 597.25,
+      "scene_change": false,
+      "scene_change_score": 0.7825,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_low_texture"
+    },
+    {
+      "segment_index": 50,
+      "motion_intensity": 28.8166,
+      "texture_complexity": 254.36,
+      "scene_change": false,
+      "scene_change_score": 0.862,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_low_texture"
+    },
+    {
+      "segment_index": 51,
+      "motion_intensity": 16.9036,
+      "texture_complexity": 624.67,
+      "scene_change": true,
+      "scene_change_score": 1.3651,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_low_texture"
+    },
+    {
+      "segment_index": 52,
+      "motion_intensity": 25.3784,
+      "texture_complexity": 522.07,
+      "scene_change": false,
+      "scene_change_score": 0.9412,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_low_texture"
+    },
+    {
+      "segment_index": 53,
+      "motion_intensity": 21.7137,
+      "texture_complexity": 467.52,
+      "scene_change": true,
+      "scene_change_score": 1.0022,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_low_texture"
+    },
+    {
+      "segment_index": 54,
+      "motion_intensity": 29.1122,
+      "texture_complexity": 518.2,
+      "scene_change": false,
+      "scene_change_score": 0.6647,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_low_texture"
+    },
+    {
+      "segment_index": 55,
+      "motion_intensity": 9.9391,
+      "texture_complexity": 558.88,
+      "scene_change": false,
+      "scene_change_score": 0.5677,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_low_texture"
+    },
+    {
+      "segment_index": 56,
+      "motion_intensity": 11.2788,
+      "texture_complexity": 514.44,
+      "scene_change": true,
+      "scene_change_score": 1.8966,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_low_texture"
+    },
+    {
+      "segment_index": 57,
+      "motion_intensity": 22.3928,
+      "texture_complexity": 1236.51,
+      "scene_change": true,
+      "scene_change_score": 1.0675,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_high_texture"
+    },
+    {
+      "segment_index": 58,
+      "motion_intensity": 11.8713,
+      "texture_complexity": 627.7,
+      "scene_change": true,
+      "scene_change_score": 1.7592,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_low_texture"
+    },
+    {
+      "segment_index": 59,
+      "motion_intensity": 11.4206,
+      "texture_complexity": 532.76,
+      "scene_change": true,
+      "scene_change_score": 1.7693,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_low_texture"
+    },
+    {
+      "segment_index": 60,
+      "motion_intensity": 2.3668,
+      "texture_complexity": 444.06,
+      "scene_change": false,
+      "scene_change_score": 0.256,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_low_texture"
+    },
+    {
+      "segment_index": 61,
+      "motion_intensity": 22.121,
+      "texture_complexity": 1314.69,
+      "scene_change": true,
+      "scene_change_score": 1.1292,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_high_texture"
+    },
+    {
+      "segment_index": 62,
+      "motion_intensity": 16.8755,
+      "texture_complexity": 1461.93,
+      "scene_change": false,
+      "scene_change_score": 0.4919,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_high_texture"
+    },
+    {
+      "segment_index": 63,
+      "motion_intensity": 18.631,
+      "texture_complexity": 964.6,
+      "scene_change": false,
+      "scene_change_score": 0.9429,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_high_texture"
+    },
+    {
+      "segment_index": 64,
+      "motion_intensity": 27.1339,
+      "texture_complexity": 776.23,
+      "scene_change": false,
+      "scene_change_score": 0.7713,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_low_texture"
+    },
+    {
+      "segment_index": 65,
+      "motion_intensity": 21.9465,
+      "texture_complexity": 782.16,
+      "scene_change": false,
+      "scene_change_score": 0.9334,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_low_texture"
+    },
+    {
+      "segment_index": 66,
+      "motion_intensity": 19.0174,
+      "texture_complexity": 905.01,
+      "scene_change": false,
+      "scene_change_score": 0.9476,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_low_texture"
+    },
+    {
+      "segment_index": 67,
+      "motion_intensity": 16.0002,
+      "texture_complexity": 613.45,
+      "scene_change": true,
+      "scene_change_score": 1.0515,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_low_texture"
+    },
+    {
+      "segment_index": 68,
+      "motion_intensity": 10.576,
+      "texture_complexity": 902.89,
+      "scene_change": true,
+      "scene_change_score": 1.6945,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_low_texture"
+    },
+    {
+      "segment_index": 69,
+      "motion_intensity": 9.6546,
+      "texture_complexity": 1609.05,
+      "scene_change": false,
+      "scene_change_score": 0.5074,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_high_texture"
+    },
+    {
+      "segment_index": 70,
+      "motion_intensity": 25.0317,
+      "texture_complexity": 739.65,
+      "scene_change": false,
+      "scene_change_score": 0.6038,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_low_texture"
+    },
+    {
+      "segment_index": 71,
+      "motion_intensity": 26.0209,
+      "texture_complexity": 533.11,
+      "scene_change": false,
+      "scene_change_score": 0.8598,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_low_texture"
+    },
+    {
+      "segment_index": 72,
+      "motion_intensity": 11.9873,
+      "texture_complexity": 557.32,
+      "scene_change": true,
+      "scene_change_score": 1.8521,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_low_texture"
+    },
+    {
+      "segment_index": 73,
+      "motion_intensity": 1.2315,
+      "texture_complexity": 753.37,
+      "scene_change": false,
+      "scene_change_score": 0.0858,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_low_texture"
+    },
+    {
+      "segment_index": 74,
+      "motion_intensity": 27.6921,
+      "texture_complexity": 489.13,
+      "scene_change": true,
+      "scene_change_score": 1.0706,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_low_texture"
+    },
+    {
+      "segment_index": 75,
+      "motion_intensity": 23.0226,
+      "texture_complexity": 552.38,
+      "scene_change": false,
+      "scene_change_score": 0.8851,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_low_texture"
+    },
+    {
+      "segment_index": 76,
+      "motion_intensity": 20.8143,
+      "texture_complexity": 2094.22,
+      "scene_change": true,
+      "scene_change_score": 1.0441,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_high_texture"
+    },
+    {
+      "segment_index": 77,
+      "motion_intensity": 14.909,
+      "texture_complexity": 2068.03,
+      "scene_change": true,
+      "scene_change_score": 2.0965,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_high_texture"
+    },
+    {
+      "segment_index": 78,
+      "motion_intensity": 13.4743,
+      "texture_complexity": 1034.23,
+      "scene_change": true,
+      "scene_change_score": 1.658,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_high_texture"
+    },
+    {
+      "segment_index": 79,
+      "motion_intensity": 27.1145,
+      "texture_complexity": 918.56,
+      "scene_change": false,
+      "scene_change_score": 0.7071,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_low_texture"
+    },
+    {
+      "segment_index": 80,
+      "motion_intensity": 27.9986,
+      "texture_complexity": 703.78,
+      "scene_change": false,
+      "scene_change_score": 0.6119,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_low_texture"
+    },
+    {
+      "segment_index": 81,
+      "motion_intensity": 28.1355,
+      "texture_complexity": 777.17,
+      "scene_change": false,
+      "scene_change_score": 0.7795,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_low_texture"
+    },
+    {
+      "segment_index": 82,
+      "motion_intensity": 19.6223,
+      "texture_complexity": 1248.24,
+      "scene_change": false,
+      "scene_change_score": 0.9076,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_high_texture"
+    },
+    {
+      "segment_index": 83,
+      "motion_intensity": 23.8471,
+      "texture_complexity": 1353.68,
+      "scene_change": false,
+      "scene_change_score": 0.7854,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_high_texture"
+    },
+    {
+      "segment_index": 84,
+      "motion_intensity": 21.9701,
+      "texture_complexity": 1274.34,
+      "scene_change": true,
+      "scene_change_score": 1.3449,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_high_texture"
+    },
+    {
+      "segment_index": 85,
+      "motion_intensity": 13.2551,
+      "texture_complexity": 648.24,
+      "scene_change": true,
+      "scene_change_score": 1.9492,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_low_texture"
+    },
+    {
+      "segment_index": 86,
+      "motion_intensity": 14.9287,
+      "texture_complexity": 1072.67,
+      "scene_change": true,
+      "scene_change_score": 1.9469,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_high_texture"
+    },
+    {
+      "segment_index": 87,
+      "motion_intensity": 22.8404,
+      "texture_complexity": 957.23,
+      "scene_change": false,
+      "scene_change_score": 0.446,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_low_texture"
+    },
+    {
+      "segment_index": 88,
+      "motion_intensity": 21.9264,
+      "texture_complexity": 878.29,
+      "scene_change": false,
+      "scene_change_score": 0.4421,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_low_texture"
+    },
+    {
+      "segment_index": 89,
+      "motion_intensity": 14.1214,
+      "texture_complexity": 890.47,
+      "scene_change": false,
+      "scene_change_score": 0.9804,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_low_texture"
+    },
+    {
+      "segment_index": 90,
+      "motion_intensity": 24.5728,
+      "texture_complexity": 1286.68,
+      "scene_change": false,
+      "scene_change_score": 0.5235,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_high_texture"
+    },
+    {
+      "segment_index": 91,
+      "motion_intensity": 19.1607,
+      "texture_complexity": 1320.35,
+      "scene_change": false,
+      "scene_change_score": 0.78,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_high_texture"
+    },
+    {
+      "segment_index": 92,
+      "motion_intensity": 17.9999,
+      "texture_complexity": 1343.06,
+      "scene_change": false,
+      "scene_change_score": 0.4542,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_high_texture"
+    },
+    {
+      "segment_index": 93,
+      "motion_intensity": 15.5494,
+      "texture_complexity": 1285.57,
+      "scene_change": true,
+      "scene_change_score": 1.0813,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_high_texture"
+    },
+    {
+      "segment_index": 94,
+      "motion_intensity": 23.1175,
+      "texture_complexity": 1391.69,
+      "scene_change": true,
+      "scene_change_score": 1.4414,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_high_texture"
+    },
+    {
+      "segment_index": 95,
+      "motion_intensity": 6.9977,
+      "texture_complexity": 1013.07,
+      "scene_change": true,
+      "scene_change_score": 1.6844,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_high_texture"
+    },
+    {
+      "segment_index": 96,
+      "motion_intensity": 12.1637,
+      "texture_complexity": 787.35,
+      "scene_change": true,
+      "scene_change_score": 2.047,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_low_texture"
+    },
+    {
+      "segment_index": 97,
+      "motion_intensity": 2.0395,
+      "texture_complexity": 638.16,
+      "scene_change": false,
+      "scene_change_score": 0.3929,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_low_texture"
+    },
+    {
+      "segment_index": 98,
+      "motion_intensity": 11.9225,
+      "texture_complexity": 586.28,
+      "scene_change": true,
+      "scene_change_score": 1.5121,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_low_texture"
+    },
+    {
+      "segment_index": 99,
+      "motion_intensity": 26.3112,
+      "texture_complexity": 1649.92,
+      "scene_change": true,
+      "scene_change_score": 1.4504,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_high_texture"
+    },
+    {
+      "segment_index": 100,
+      "motion_intensity": 32.7031,
+      "texture_complexity": 752.9,
+      "scene_change": true,
+      "scene_change_score": 1.0698,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_low_texture"
+    },
+    {
+      "segment_index": 101,
+      "motion_intensity": 12.8682,
+      "texture_complexity": 250.03,
+      "scene_change": false,
+      "scene_change_score": 0.9293,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_low_texture"
+    },
+    {
+      "segment_index": 102,
+      "motion_intensity": 22.3748,
+      "texture_complexity": 1906.33,
+      "scene_change": true,
+      "scene_change_score": 1.1957,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_high_texture"
+    },
+    {
+      "segment_index": 103,
+      "motion_intensity": 30.0773,
+      "texture_complexity": 1065.79,
+      "scene_change": true,
+      "scene_change_score": 1.0022,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_high_texture"
+    },
+    {
+      "segment_index": 104,
+      "motion_intensity": 12.7996,
+      "texture_complexity": 797.23,
+      "scene_change": true,
+      "scene_change_score": 2.0849,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_low_texture"
+    },
+    {
+      "segment_index": 105,
+      "motion_intensity": 22.8254,
+      "texture_complexity": 731.18,
+      "scene_change": true,
+      "scene_change_score": 1.1843,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_low_texture"
+    },
+    {
+      "segment_index": 106,
+      "motion_intensity": 37.404,
+      "texture_complexity": 1740.79,
+      "scene_change": false,
+      "scene_change_score": 0.8685,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_high_texture"
+    },
+    {
+      "segment_index": 107,
+      "motion_intensity": 36.0896,
+      "texture_complexity": 1442.75,
+      "scene_change": false,
+      "scene_change_score": 0.9913,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_high_texture"
+    },
+    {
+      "segment_index": 108,
+      "motion_intensity": 32.4335,
+      "texture_complexity": 869.38,
+      "scene_change": false,
+      "scene_change_score": 0.9276,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_low_texture"
+    },
+    {
+      "segment_index": 109,
+      "motion_intensity": 27.6621,
+      "texture_complexity": 982.99,
+      "scene_change": true,
+      "scene_change_score": 1.1617,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_high_texture"
+    },
+    {
+      "segment_index": 110,
+      "motion_intensity": 16.0959,
+      "texture_complexity": 933.53,
+      "scene_change": true,
+      "scene_change_score": 1.02,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_low_texture"
+    },
+    {
+      "segment_index": 111,
+      "motion_intensity": 42.4853,
+      "texture_complexity": 960.92,
+      "scene_change": false,
+      "scene_change_score": 0.6596,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_low_texture"
+    },
+    {
+      "segment_index": 112,
+      "motion_intensity": 31.6844,
+      "texture_complexity": 1718.24,
+      "scene_change": false,
+      "scene_change_score": 0.9831,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_high_texture"
+    },
+    {
+      "segment_index": 113,
+      "motion_intensity": 3.4483,
+      "texture_complexity": 2484.7,
+      "scene_change": false,
+      "scene_change_score": 0.2166,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_high_texture"
+    },
+    {
+      "segment_index": 114,
+      "motion_intensity": 21.8778,
+      "texture_complexity": 1619.23,
+      "scene_change": false,
+      "scene_change_score": 0.9125,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_high_texture"
+    },
+    {
+      "segment_index": 115,
+      "motion_intensity": 15.4965,
+      "texture_complexity": 1127.7,
+      "scene_change": true,
+      "scene_change_score": 1.1237,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_high_texture"
+    },
+    {
+      "segment_index": 116,
+      "motion_intensity": 29.9785,
+      "texture_complexity": 615.95,
+      "scene_change": true,
+      "scene_change_score": 1.1777,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_low_texture"
+    },
+    {
+      "segment_index": 117,
+      "motion_intensity": 28.558,
+      "texture_complexity": 1217.45,
+      "scene_change": false,
+      "scene_change_score": 0.8492,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_high_texture"
+    },
+    {
+      "segment_index": 118,
+      "motion_intensity": 30.8198,
+      "texture_complexity": 649.74,
+      "scene_change": false,
+      "scene_change_score": 0.6769,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_low_texture"
+    },
+    {
+      "segment_index": 119,
+      "motion_intensity": 9.809,
+      "texture_complexity": 900.24,
+      "scene_change": true,
+      "scene_change_score": 1.8551,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_low_texture"
+    },
+    {
+      "segment_index": 120,
+      "motion_intensity": 11.2701,
+      "texture_complexity": 1400.65,
+      "scene_change": false,
+      "scene_change_score": 0.6375,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_high_texture"
+    },
+    {
+      "segment_index": 121,
+      "motion_intensity": 17.9037,
+      "texture_complexity": 429.21,
+      "scene_change": true,
+      "scene_change_score": 1.5319,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_low_texture"
+    },
+    {
+      "segment_index": 122,
+      "motion_intensity": 13.4046,
+      "texture_complexity": 719.71,
+      "scene_change": true,
+      "scene_change_score": 1.4216,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_low_texture"
+    },
+    {
+      "segment_index": 123,
+      "motion_intensity": 25.1124,
+      "texture_complexity": 2355.93,
+      "scene_change": true,
+      "scene_change_score": 1.4948,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_high_texture"
+    },
+    {
+      "segment_index": 124,
+      "motion_intensity": 3.9483,
+      "texture_complexity": 4608.03,
+      "scene_change": false,
+      "scene_change_score": 0.4621,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_high_texture"
+    },
+    {
+      "segment_index": 125,
+      "motion_intensity": 3.1534,
+      "texture_complexity": 675.62,
+      "scene_change": false,
+      "scene_change_score": 0.1795,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_low_texture"
+    },
+    {
+      "segment_index": 126,
+      "motion_intensity": 6.0849,
+      "texture_complexity": 743.26,
+      "scene_change": false,
+      "scene_change_score": 0.279,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_low_texture"
+    },
+    {
+      "segment_index": 127,
+      "motion_intensity": 6.4781,
+      "texture_complexity": 1080.82,
+      "scene_change": false,
+      "scene_change_score": 0.2915,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_high_texture"
+    },
+    {
+      "segment_index": 128,
+      "motion_intensity": 7.9133,
+      "texture_complexity": 1080.13,
+      "scene_change": false,
+      "scene_change_score": 0.4088,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_high_texture"
+    },
+    {
+      "segment_index": 129,
+      "motion_intensity": 6.1595,
+      "texture_complexity": 970.5,
+      "scene_change": false,
+      "scene_change_score": 0.2779,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_high_texture"
+    },
+    {
+      "segment_index": 130,
+      "motion_intensity": 6.5727,
+      "texture_complexity": 936.75,
+      "scene_change": false,
+      "scene_change_score": 0.3145,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_low_texture"
+    },
+    {
+      "segment_index": 131,
+      "motion_intensity": 6.6076,
+      "texture_complexity": 1118.96,
+      "scene_change": false,
+      "scene_change_score": 0.3393,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_high_texture"
+    },
+    {
+      "segment_index": 132,
+      "motion_intensity": 8.2281,
+      "texture_complexity": 999.16,
+      "scene_change": false,
+      "scene_change_score": 0.3795,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_high_texture"
+    },
+    {
+      "segment_index": 133,
+      "motion_intensity": 8.208,
+      "texture_complexity": 1098.55,
+      "scene_change": false,
+      "scene_change_score": 0.4236,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_high_texture"
+    },
+    {
+      "segment_index": 134,
+      "motion_intensity": 14.6303,
+      "texture_complexity": 2789.64,
+      "scene_change": false,
+      "scene_change_score": 0.4931,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_high_texture"
+    },
+    {
+      "segment_index": 135,
+      "motion_intensity": 26.1826,
+      "texture_complexity": 6264.95,
+      "scene_change": false,
+      "scene_change_score": 0.4399,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_high_texture"
+    },
+    {
+      "segment_index": 136,
+      "motion_intensity": 30.1045,
+      "texture_complexity": 7559.72,
+      "scene_change": false,
+      "scene_change_score": 0.3783,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_high_texture"
+    },
+    {
+      "segment_index": 137,
+      "motion_intensity": 29.498,
+      "texture_complexity": 7519.82,
+      "scene_change": false,
+      "scene_change_score": 0.3848,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_high_texture"
+    },
+    {
+      "segment_index": 138,
+      "motion_intensity": 29.7416,
+      "texture_complexity": 8077.74,
+      "scene_change": false,
+      "scene_change_score": 0.405,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_high_texture"
+    },
+    {
+      "segment_index": 139,
+      "motion_intensity": 31.3565,
+      "texture_complexity": 7261.57,
+      "scene_change": false,
+      "scene_change_score": 0.3877,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_high_texture"
+    },
+    {
+      "segment_index": 140,
+      "motion_intensity": 28.4479,
+      "texture_complexity": 6183.83,
+      "scene_change": false,
+      "scene_change_score": 0.3868,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_high_texture"
+    },
+    {
+      "segment_index": 141,
+      "motion_intensity": 20.1691,
+      "texture_complexity": 4176.55,
+      "scene_change": false,
+      "scene_change_score": 0.3866,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_high_texture"
+    },
+    {
+      "segment_index": 142,
+      "motion_intensity": 11.4161,
+      "texture_complexity": 2610.1,
+      "scene_change": false,
+      "scene_change_score": 0.4421,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_high_texture"
+    },
+    {
+      "segment_index": 143,
+      "motion_intensity": 7.5324,
+      "texture_complexity": 2103.63,
+      "scene_change": false,
+      "scene_change_score": 0.3627,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_high_texture"
+    },
+    {
+      "segment_index": 144,
+      "motion_intensity": 13.8456,
+      "texture_complexity": 4992.03,
+      "scene_change": false,
+      "scene_change_score": 0.3776,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_high_texture"
+    },
+    {
+      "segment_index": 145,
+      "motion_intensity": 20.767,
+      "texture_complexity": 6607.86,
+      "scene_change": false,
+      "scene_change_score": 0.3556,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_high_texture"
+    },
+    {
+      "segment_index": 146,
+      "motion_intensity": 24.6746,
+      "texture_complexity": 4738.94,
+      "scene_change": false,
+      "scene_change_score": 0.364,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_high_texture"
+    },
+    {
+      "segment_index": 147,
+      "motion_intensity": 28.6148,
+      "texture_complexity": 5160.86,
+      "scene_change": false,
+      "scene_change_score": 0.3576,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_high_texture"
+    },
+    {
+      "segment_index": 148,
+      "motion_intensity": 33.1877,
+      "texture_complexity": 7131.47,
+      "scene_change": false,
+      "scene_change_score": 0.3618,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_high_texture"
+    },
+    {
+      "segment_index": 149,
+      "motion_intensity": 34.7524,
+      "texture_complexity": 8011.58,
+      "scene_change": false,
+      "scene_change_score": 0.3512,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_high_texture"
+    },
+    {
+      "segment_index": 150,
+      "motion_intensity": 33.32,
+      "texture_complexity": 7832.0,
+      "scene_change": false,
+      "scene_change_score": 0.3579,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_high_texture"
+    },
+    {
+      "segment_index": 151,
+      "motion_intensity": 17.009,
+      "texture_complexity": 4030.41,
+      "scene_change": false,
+      "scene_change_score": 0.5205,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_high_texture"
+    },
+    {
+      "segment_index": 152,
+      "motion_intensity": 2.6129,
+      "texture_complexity": 2587.76,
+      "scene_change": false,
+      "scene_change_score": 0.2567,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_high_texture"
+    },
+    {
+      "segment_index": 153,
+      "motion_intensity": 0.3173,
+      "texture_complexity": 4545.12,
+      "scene_change": false,
+      "scene_change_score": 0.0453,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_high_texture"
+    },
+    {
+      "segment_index": 154,
+      "motion_intensity": 23.1301,
+      "texture_complexity": 2204.45,
+      "scene_change": true,
+      "scene_change_score": 2.7703,
+      "num_sampled_frames": 10,
+      "content_class": "high_motion_high_texture"
+    },
+    {
+      "segment_index": 155,
+      "motion_intensity": 7.4218,
+      "texture_complexity": 199.15,
+      "scene_change": false,
+      "scene_change_score": 0.4539,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_low_texture"
+    },
+    {
+      "segment_index": 156,
+      "motion_intensity": 4.5663,
+      "texture_complexity": 183.7,
+      "scene_change": false,
+      "scene_change_score": 0.4271,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_low_texture"
+    },
+    {
+      "segment_index": 157,
+      "motion_intensity": 4.1103,
+      "texture_complexity": 274.73,
+      "scene_change": false,
+      "scene_change_score": 0.2046,
+      "num_sampled_frames": 10,
+      "content_class": "low_motion_low_texture"
+    },
+    {
+      "segment_index": 158,
+      "motion_intensity": 5.1183,
+      "texture_complexity": 287.06,
+      "scene_change": false,
+      "scene_change_score": 0.2419,
+      "num_sampled_frames": 6,
+      "content_class": "low_motion_low_texture"
+    }
+  ]
+}
