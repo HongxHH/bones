@@ -1,0 +1,30 @@
+{
+  "features": [
+    "res_idx",
+    "motion_mean",
+    "motion_std",
+    "motion_max",
+    "motion_q90",
+    "texture_mean",
+    "texture_std",
+    "texture_max",
+    "base_mean",
+    "base_std",
+    "scene_change_count",
+    "high_motion_ratio"
+  ],
+  "levels": [
+    "sr_low",
+    "sr_medium",
+    "sr_high"
+  ],
+  "res_idx_map": {
+    "240": 0,
+    "360": 1,
+    "480": 2,
+    "720": 3,
+    "1080": 4
+  },
+  "train_n": 474,
+  "note": "段级增益预测器, 输入LR侧内容特征, 输出该段SR后VMAF增益"
+}

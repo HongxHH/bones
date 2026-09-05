@@ -44,6 +44,9 @@
 | `lookahead_planning_theory.md` | 内容感知多段前瞻规划的理论框架、复杂度分析、可行性 | 想了解前瞻规划方向 |
 | `frame_level_content_aware_scheduling.md` | 帧级内容感知调度设计：理论框架、DP算法、实现要点 | 想了解帧级调度设计 |
 | `incremental_transmission_progressive_enhancement.md` | 增量传输+渐进增强设计：数据分层、状态机、与帧级调度协同 | 想了解增量传输设计 |
+| `server_side_vbr_coding.md` | 服务端内容感知VBR编码：各分辨率VMAF提升、三种集成方式对比、纯净验证结果、连续码率分配优化结论 | 想了解VBR编码方向 |
+| `selective_enhancement_gain_predictor.md` | 核心方向：增益预测驱动的选择性增强，四阶段规划、阶段一离线验证（GBDT预测SR增益、预算-收益曲线、Go判定） | 想了解选择性增强/增益预测器 |
+| `custom_qoe_metrics.md` | 自定义评价指标设计：BONES QoE公式局限性分析、多维度MD-QoE指标设计 | 想了解评价指标设计 |
 
 ### 多任务增强
 
