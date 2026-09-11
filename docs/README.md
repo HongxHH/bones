@@ -17,7 +17,7 @@
 |---|---|---|
 | `project_overview.md` | 项目全景总结：12个阶段总览、当前最优方案、失败教训、下一步方向 | 想快速了解项目全貌 |
 | `current_state.md` | 最新结果对比表、当前在做什么、下一步计划 | 想知道进展到哪了 |
-| `exploration_log.md` | 所有试过的方法、参数、结果、失败原因（16个阶段详细记录） | 想知道做过什么、踩过什么坑 |
+| `exploration_log.md` | 所有试过的方法、参数、结果、失败原因（17个阶段详细记录） | 想知道做过什么、踩过什么坑 |
 
 ### 快速上手
 
@@ -46,6 +46,7 @@
 | `incremental_transmission_progressive_enhancement.md` | 增量传输+渐进增强设计：数据分层、状态机、与帧级调度协同 | 想了解增量传输设计 |
 | `server_side_vbr_coding.md` | 服务端内容感知VBR编码：各分辨率VMAF提升、三种集成方式对比、纯净验证结果、连续码率分配优化结论 | 想了解VBR编码方向 |
 | `selective_enhancement_gain_predictor.md` | 增益预测驱动选择性增强：四阶段规划、阶段一离线Go、阶段1.5接入仿真器端到端证伪与根因、转向帧级 | 想了解选择性增强/增益预测器 |
+| `enhancer_operator_survey.md` | 阶段17增强算子离线普查：同口径方法、NAFNet/STDF/NanoVSR 现成算子证伪、退化不匹配根因、对症训练下一步 | 想了解增强地基/替代增强算子对比 |
 | `custom_qoe_metrics.md` | 自定义评价指标设计：BONES QoE公式局限性分析、多维度MD-QoE指标设计 | 想了解评价指标设计 |
 
 ### 多任务增强

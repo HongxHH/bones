@@ -1,6 +1,23 @@
 # 当前状态
 
-## 最新阶段：服务端引导协同证伪（2026-09-06，阶段16）
+## 最新阶段：增强算子离线增益普查（2026-09-11，阶段17）
+
+回到增强地基，离线同口径普查替代增强算子能否比 IMDN 增益更大、是否内容非单调。脚本 `workspace/enhancer_survey/step1_operator_gain_survey.py`，240p 全片均匀 16 段、逐帧 libvmaf，口径自检 base diff=0、IMDN diff≈0。详见 `enhancer_operator_survey.md`。
+
+| 方案（16 段均值 VMAF） | 均值 | 对比 |
+|---|---|---|
+| base bicubic | 40.27 | — |
+| NanoVSR-644k（ECCV'26 泛化 VSR） | 51.94 | vs IMDN-DIV2K −3.05（1赢15输）、vs IMDN-BBB −9.16（全输） |
+| IMDN-high-DIV2K（泛化 ISR） | 54.99 | — |
+| IMDN-high-BBB（目标视频微调） | 61.10 | 主场红利 +6.11 |
+
+NAFNet 去模糊、STDF 去压缩块（单独）、STDF→IMDN 级联在小样本全部为负。**结论：现成预训练算子（去模糊/去压缩块/通用 VSR）都无法抬升地基，也不构成跨算子非单调选择空间；根因是退化不匹配（训练于运动模糊/HEVC/bicubic，真实是 H.264 压缩流），高运动段时序对齐失效最重。** 另发现 BONES 用目标视频微调过的 IMDN-BBB 当质量表，存在与真实零样本部署脱节的高估（+6.11）。
+
+**下一步（主推荐，待确认）**：对症训练证伪——用 BBB 1080p 当 GT、ffmpeg 压出 H.264 LR 构造训练对，leave-segments-out 微调轻量 ISR/VSR，测跨段泛化增益能否超 IMDN-DIV2K、逼近 IMDN-BBB。
+
+---
+
+## 上一阶段：服务端引导协同证伪（2026-09-06，阶段16）
 
 针对阶段14/15暴露的"客户端只看压缩 LR 猜增益"信息不对称，检验"服务端用原始无损帧算近 Oracle 增益图谱下发、客户端码率层冻结、增强层独立非阻塞执行"能否兑现收益。纯仿真 130 轨迹 × 4 档 GPU 倍率，脚本 `step22_server_guided.py`、图 `figures/s9_server_guided_falsify.png`。**结论：该协同分支证伪**，详见 `exploration_log.md` 阶段16、`server_side_joint_optimization_simulation.md` 第10节。
 
