@@ -153,6 +153,29 @@ class Cascade:
         return self.imdn(clean, scale)
 
 
+class IMDNLeaveOut:
+    """leave-segments-out 对症微调得到的 IMDN（仅 x4），用于跨段泛化判决。"""
+    def __init__(self, weight):
+        sys.path.insert(0, os.path.join(ROOT, "player"))
+        from istream_player.modules.enhancer.imdn_model import IMDN
+        m = IMDN(upscale=4, nf=32)
+        m.load_state_dict(torch.load(weight, map_location="cpu"))
+        self.net = m.eval().to(DEVICE)
+
+    def __call__(self, frames, scale):
+        assert scale == 4, "leave-out 只训了 x4"
+        out = []
+        for f in frames:
+            rgb = cv2.cvtColor(f, cv2.COLOR_BGR2RGB)
+            t = torch.from_numpy(rgb).permute(2, 0, 1).float().div(255).unsqueeze(0).to(DEVICE)
+            with torch.no_grad():
+                o = torch.nn.functional.interpolate(self.net(t), size=(1080, 1920), mode="bicubic",
+                                                    align_corners=False)
+            o = o.squeeze(0).permute(1, 2, 0).clamp(0, 1).cpu().numpy()
+            out.append(cv2.cvtColor((o * 255).round().astype(np.uint8), cv2.COLOR_RGB2BGR))
+        return out
+
+
 class NanoVSREnhancer:
     """NanoVSR-644k（ECCV'26 轻量双向循环 VSR，固定 4x），分窗推理后对齐 1080。"""
     T = 15
@@ -229,6 +252,7 @@ def main():
     ap.add_argument("--ops", nargs="+", default=["base", "yuv_up", "stdf"])
     ap.add_argument("--stdf_weight", default="MFQEv2_R3_enlarge300x/ckp_290000.pt")
     ap.add_argument("--out", default=OUT)
+    ap.add_argument("--lo_weight", default=os.path.join(ROOT, "workspace/enhancer_survey/weights/IMDN_high_bbbLO_x4_best.pth"))
     args = ap.parse_args()
 
     pfq = json.load(open(PFQ, encoding="utf-8"))["results"]
@@ -241,6 +265,8 @@ def main():
         print("loading IMDN-high-bbb..."); runners["imdn"] = IMDNSR("bbb")
     if "imdn_div" in args.ops:
         print("loading IMDN-high-DIV2K..."); runners["imdn_div"] = IMDNSR("DIV2K")
+    if "imdn_lo" in args.ops:
+        print("loading IMDN leave-out..."); runners["imdn_lo"] = IMDNLeaveOut(args.lo_weight)
     if "nano" in args.ops:
         print("loading NanoVSR-644k..."); runners["nano"] = NanoVSREnhancer()
     if "cascade" in args.ops:
@@ -280,7 +306,7 @@ def main():
                 row["base_selfcheck_diff"] = round(row["base"] - jb, 3)
             if row.get("imdn") is not None and row.get("json_sr_high") is not None:
                 row["imdn_selfcheck_diff"] = round(row["imdn"] - row["json_sr_high"], 3)
-            for opn in ("nafnet", "stdf", "yuv_up", "imdn", "imdn_div", "cascade", "nano"):
+            for opn in ("nafnet", "stdf", "yuv_up", "imdn", "imdn_div", "imdn_lo", "cascade", "nano"):
                 if jb is not None and row.get(opn) is not None:
                     row[f"{opn}_gain"] = round(row[opn] - jb, 3)
             if row.get("nano") is not None and row.get("imdn") is not None:
