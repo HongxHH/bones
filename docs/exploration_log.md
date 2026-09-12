@@ -468,6 +468,18 @@ BONES"段级静态表+Lyapunov 联合 argmin+双缓冲+avg-VMAF"结构内，预�
 
 ---
 
+## 阶段18：PAC-Net 可渐进增强网络 阶段0最小证伪（2026-09-12，新主线）
+
+目标：用 1–2 天纯离线实验敲碎承重墙——多出口网络"保命档不掉、越深越单调、困难段深算有效"。脚本 `workspace/pacnet/`（selftest/train/eval/analyze/forward_equiv_check），数据管线复用阶段17（4.5× 对齐、uniform 16 段留出、DIV2K warm、30ep）。设计与完整数值见 `pacnet_progressive_enhancer.md`，此处只记过程与失败。
+
+**第一版误判 NO-GO → 定位为 warm 迁移 bug（失败是过程性的，记录防再犯）**：首版三出口整体只比 bicubic 高约 0.15dB、e3 比对症单模型低 1.36dB、困难段 e3 甚至低于 e1。逐层做了三组判别：① 只训 e3（关浅出口梯度）仍 24.3 → 排除"多出口梯度均化拖累深出口"；② 关 CondEncoder、修 fuse 激活仍 24.2 → 排除条件模块与激活；③ `forward_equiv_check.py` 同权重对比发现 PAC e3 与标准 IMDN 从 block1 起就不同。根因：IMDN 的 `conv_layer` 返回裸 Conv2d（键 `fea_conv.weight`）、`conv_block` 返回 Sequential（融合层键 `c.0.weight`），warm 映射误写成带 `.conv`，导致入口 fea_conv 和最深出口重建头共 8 项漏迁、保持随机初始化，只迁了 6 个 block 的 84 项（84 这一数字恰好造成"warm 成功"的假象）。修正键名后 92 项全迁、前向逐元素 diff=0。另修：ExitHead 融合层须用带 LeakyReLU 的 conv_block 对齐 IMDN 的 c；CondEncoder 不能用 batch 维标准化（单帧推理 batch=1 会使条件恒 0、机制静默失效），改固定尺度。
+
+**修复后判决 GO（主版出口权重 0.3/0.6/1.0）**：16 段 64 帧均值 base28.407/e1 28.546/e2 28.664/e3 29.630/plain2 29.311/imdn_div 28.365/imdn_lo 29.917。H1c 链单调 98.4%、e3≥e1 100%；H2 困难段 e3−e1 +2.51dB（seg140 +3.17、seg150 +3.47），简单段仅 +0.76；H1b e3 仅逊对症单模型 0.29、反超通用 1.27；H4 时延 14/26/39ms 单调。
+
+**遗留：浅出口弹性税（阶段1解）**：e1 比同算力独立 plain2 低 0.77dB。对照实验：出口损失改等权（1/1/1）后 e1 仅 +0.05、e3 反降 0.12（eval_eq.json），证明弹性税来自共享骨干要同时服务深出口的结构本质、非权重可解；e1 仍优于 bicubic 与通用 6-block。计划用自蒸馏/深度课程收敛，必要时改残差精修级联。
+
+---
+
 ## 失败方法汇总
 
 | 方法 | 结果 | 失败原因 |

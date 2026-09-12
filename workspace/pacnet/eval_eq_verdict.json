@@ -1,0 +1,38 @@
+{
+  "H1a_e1_minus_plain2_dB": -0.715,
+  "H1a_elastic_tax_within_1dB": true,
+  "H1b_e3_minus_imdnLO_dB": -0.404,
+  "H1b_pass(>=-0.5)": true,
+  "H1b_e3_minus_imdnDIV_dB": 1.148,
+  "H1c_mono_chain_ratio": 1.0,
+  "H1c_pass(>=0.95)": true,
+  "H1c_e3>=e1_ratio": 1.0,
+  "H2_hard_gain_dB": 2.268,
+  "H2_pass(>=0.5)": true,
+  "H2_easy_gain_dB": 0.605,
+  "H2_per_hard": {
+    "130": {
+      "e1": 23.753,
+      "e3": 24.296,
+      "gain": 0.542
+    },
+    "140": {
+      "e1": 16.378,
+      "e3": 19.352,
+      "gain": 2.973
+    },
+    "150": {
+      "e1": 15.028,
+      "e3": 18.316,
+      "gain": 3.287
+    }
+  },
+  "H4_latency_ms": {
+    "e1": 14.0,
+    "e2": 26.44,
+    "e3": 39.0,
+    "plain2": 13.0,
+    "imdn6": 39.06
+  },
+  "H4_shallow_within_33ms": true
+}

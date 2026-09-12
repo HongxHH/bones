@@ -47,6 +47,7 @@
 | `server_side_vbr_coding.md` | 服务端内容感知VBR编码：各分辨率VMAF提升、三种集成方式对比、纯净验证结果、连续码率分配优化结论 | 想了解VBR编码方向 |
 | `selective_enhancement_gain_predictor.md` | 增益预测驱动选择性增强：四阶段规划、阶段一离线Go、阶段1.5接入仿真器端到端证伪与根因、转向帧级 | 想了解选择性增强/增益预测器 |
 | `enhancer_operator_survey.md` | 阶段17增强算子普查与对症微调闭环：同口径方法、NAFNet/STDF/NanoVSR 现成算子证伪、leave-out 证明对症训练可跨块泛化（困难段 +7~14）但增益只在高运动塌陷段、4.5× 训练对齐教训 | 想了解增强地基/替代算子对比/对症训练泛化 |
+| `pacnet_progressive_enhancer.md` | **当前主线** PAC-Net 可渐进（anytime/可中断）+退化条件化神经增强网络：结构、阶段0最小证伪（warm键名坑、四条生死线GO结果）、后续五阶段路线 | 想了解当前新主线/可渐进增强/阶段0结论 |
 | `custom_qoe_metrics.md` | 自定义评价指标设计：BONES QoE公式局限性分析、多维度MD-QoE指标设计 | 想了解评价指标设计 |
 
 ### 多任务增强
