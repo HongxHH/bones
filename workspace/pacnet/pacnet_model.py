@@ -138,6 +138,99 @@ class PACNet(nn.Module):
         return len(moved)
 
 
+class CascadePACNet(nn.Module):
+    """残差精修级联版（阶段1 Step3，结构性消除浅出口弹性税）。
+
+    与 PACNet 共用骨干，但出口关系改为增量级联：
+        s1 = head1(f2)                       # 完整基础重建，浅层只被 s1 训练 => 专精
+        s2 = s1.detach() + head2(f4)         # 中档只学相对浅档的残差增量
+        s3 = s2.detach() + head3(f6)         # 深档同理
+    detach 阻断深档梯度回浅层：block1/2/head1 只收 e1 的监督，不再被深出口拉扯；
+    block3/4 服务 e2/e3，block5/6 服务 e3。增量头最终卷积零初始化 => 开局 s1=s2=s3，
+    从三档相等起步学增量，结构上更易保持单调。推理接口与 PACNet 一致（一次前向、可只跑到指定出口）。
+    """
+
+    def __init__(self, nf=32, upscale=4, exits=(2, 4, 6), cond=False, protect_e1=False):
+        super().__init__()
+        self.exits = tuple(exits)
+        # protect_e1=True：只在 block3 前切一刀，让保命档段(block1/2)只被 e1 训练，
+        # 而 e2/e3 仍完整共享 block3..6 协同（区别于三段全隔离）。
+        self.protect_e1 = protect_e1
+        self._cuts = {exits[0]} if protect_e1 else set(self.exits)
+        self.fea_conv = B.conv_layer(3, nf, kernel_size=3)
+        self.blocks = nn.ModuleList([B.IMDModule(in_channels=nf) for _ in range(6)])
+        self.heads = nn.ModuleList([ExitHead(k, nf, upscale) for k in self.exits])
+        self.cond = CondEncoder(nf) if cond else None
+
+    def forward(self, x, exit_idx=None):
+        fea = self.fea_conv(x)
+        if self.cond is not None:
+            fea = self.cond(x, fea)
+        bis, outs, prev = [], [], None
+        cur = fea
+        for i, blk in enumerate(self.blocks):
+            # 段边界截断跨段梯度：进入下一段首个 block（i==2/4）前 detach，
+            # 使三段分别只被 e1/e2/e3 训练，共享浅层不再被深出口拉扯（推理 no_grad 下无影响）。
+            if i in self._cuts:
+                cur = cur.detach()
+            cur = blk(cur)
+            bis.append(cur)
+            if (i + 1) in self.exits:
+                ei = self.exits.index(i + 1)
+                # 出口只对本段 block 保留梯度，更早的 bis 与底层 fea 全部 detach，
+                # 阻断经 ExitHead 拼接路径回灌历史段（配合主干段边界 detach 实现分段专精）
+                lo = 0 if ei == 0 else (self.exits[0] if self.protect_e1 else self.exits[ei - 1])
+                seg_feats = [b.detach() if bi < lo else b for bi, b in enumerate(bis)]
+                fea_in = fea if ei == 0 else fea.detach()
+                h = self.heads[ei](seg_feats, fea_in)
+                s = h if ei == 0 else prev.detach() + h
+                if exit_idx is not None:
+                    if ei == exit_idx:
+                        return s
+                else:
+                    outs.append(s)
+                prev = s
+        return outs
+
+    @torch.no_grad()
+    def load_imdn_warm(self, imdn_sd, verbose=False):
+        own = self.state_dict()
+        moved = []
+
+        def cp(dst, src):
+            if src in imdn_sd and tuple(imdn_sd[src].shape) == tuple(own[dst].shape):
+                own[dst] = imdn_sd[src].clone(); moved.append(dst)
+
+        cp("fea_conv.weight", "fea_conv.weight")
+        cp("fea_conv.bias", "fea_conv.bias")
+        for i in range(6):
+            for key in imdn_sd:
+                if key.startswith(f"IMDB{i+1}."):
+                    dst = f"blocks.{i}." + key[len(f"IMDB{i+1}."):]
+                    cp(dst, key)
+        # 每个 head 的 lr_conv / upsampler.0 维度与 block 数无关，均可 warm
+        for ei in range(len(self.exits)):
+            hp = f"heads.{ei}."
+            cp(hp + "lr_conv.weight", "LR_conv.weight")
+            cp(hp + "lr_conv.bias", "LR_conv.bias")
+            cp(hp + "upsampler.0.weight", "upsampler.0.weight")
+            cp(hp + "upsampler.0.bias", "upsampler.0.bias")
+        # 仅最深 head(k=6) 的融合层与 IMDN 的 c 同形，可 warm
+        cp(f"heads.{len(self.exits)-1}.fuse.0.weight", "c.0.weight")
+        cp(f"heads.{len(self.exits)-1}.fuse.0.bias", "c.0.bias")
+        self.load_state_dict(own)
+        # 增量头（e2/e3）最终卷积小尺度初始化（而非清零：清零会让该分支雅可比为0、
+        # 梯度无法回传骨干而死锁）。weight×0.01、bias=0 => 初始增量≈0 且梯度可流通。
+        for ei in range(1, len(self.exits)):
+            last = self.heads[ei].upsampler[0]
+            with torch.no_grad():
+                last.weight.mul_(0.01)
+                nn.init.zeros_(last.bias)
+        if verbose:
+            print(f"warm-moved {len(moved)} tensors; delta heads zero-init")
+        return len(moved)
+
+
 class PlainIMDN(nn.Module):
     """任意 block 数的标准 IMDN（播放器实现把 6 个 block 写死，这里参数化以便造 2-block 浅对照）。"""
 

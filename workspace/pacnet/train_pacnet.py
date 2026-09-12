@@ -24,7 +24,7 @@ PACDIR = os.path.join(ROOT, "workspace/pacnet")
 sys.path.insert(0, SURVEY)
 sys.path.insert(0, PACDIR)
 from train_leaveout import build_cache, PairDataset, DEV  # noqa: E402
-from pacnet_model import PACNet, PlainIMDN  # noqa: E402
+from pacnet_model import PACNet, CascadePACNet, PlainIMDN  # noqa: E402
 
 WARM = os.path.join(ROOT, "player/istream_player/modules/enhancer/imdn_weight/IMDN_high_DIV2K_x4.pth")
 WDIR = os.path.join(PACDIR, "weights")
@@ -73,33 +73,49 @@ def monotonic_margin(outs, g):
     return loss
 
 
-def train_pac(dl, val_pairs, epochs, lr, mono_w, out, weights=(0.3, 0.6, 1.0), use_cond=True):
-    model = PACNet(nf=32, upscale=4, exits=(2, 4, 6), cond=use_cond).to(DEV)
+def train_pac(dl, val_pairs, epochs, lr, mono_w, out, weights=(0.3, 0.6, 1.0), use_cond=True,
+              dist_w=0.0, curriculum_ep=0, freeze_shallow=False, cascade=False, protect_e1=False):
+    """dist_w: 像素自蒸馏权重，浅出口向 stop-grad 的最深出口 e3 对齐；
+    curriculum_ep: 前 N 个 epoch 只训 e1（先让共享浅层专精），之后全开；
+    freeze_shallow: 课程结束后冻结 fea_conv+前2 block，令共享浅层保持为 e1 专精。"""
+    cls = CascadePACNet if cascade else PACNet
+    extra = dict(protect_e1=protect_e1) if cascade else {}
+    model = cls(nf=32, upscale=4, exits=(2, 4, 6), cond=use_cond, **extra).to(DEV)
     n = model.load_imdn_warm(torch.load(WARM, map_location="cpu"), verbose=True)
     assert n > 20, "warm 迁移过少，检查键名"
     opt = torch.optim.Adam(model.parameters(), lr=lr)
     sched = torch.optim.lr_scheduler.StepLR(opt, step_size=15, gamma=0.5)
     l1 = torch.nn.L1Loss()
     w = weights
-    print("exit loss weights:", w, "mono_w", mono_w, flush=True)
+    print("exit loss weights:", w, "mono_w", mono_w, "dist_w", dist_w,
+          "curriculum_ep", curriculum_ep, flush=True)
     log, best = [], -1
     for ep in range(1, epochs + 1):
-        t0 = time.time(); tot = 0.; nb = 0; mtot = 0.
+        t0 = time.time(); tot = 0.; nb = 0; mtot = 0.; dtot = 0.
+        cur_w = (1.0, 0.0, 0.0) if ep <= curriculum_ep else w
+        cur_dist = 0.0 if ep <= curriculum_ep else dist_w
+        if freeze_shallow and ep == curriculum_ep + 1:
+            for mod in (model.fea_conv, model.blocks[0], model.blocks[1]):
+                for pp in mod.parameters():
+                    pp.requires_grad_(False)
+            print("freeze fea_conv+block1/2 after curriculum", flush=True)
         model.train()
         for lr_t, hr_t in dl:
             lr_t, hr_t = lr_t.to(DEV), hr_t.to(DEV)
             opt.zero_grad()
             outs = model(lr_t)
-            main = sum(wi * l1(o, hr_t) for wi, o in zip(w, outs))
+            main = sum(wi * l1(o, hr_t) for wi, o in zip(cur_w, outs))
             mono = monotonic_margin(outs, hr_t)
-            loss = main + mono_w * mono
+            teacher = outs[-1].detach()  # e3 当老师，stop-grad
+            dist = sum(l1(outs[i], teacher) for i in range(len(outs) - 1))
+            loss = main + mono_w * mono + cur_dist * dist
             loss.backward(); opt.step()
-            tot += main.item(); mtot += mono.item(); nb += 1
+            tot += main.item(); mtot += mono.item(); dtot += dist.item(); nb += 1
         sched.step()
         v1, v2, v3 = val_pac(model, val_pairs)
         row = dict(epoch=ep, main_l1=round(tot / nb, 5), mono=round(mtot / nb, 5),
-                   val_e1=round(v1, 3), val_e2=round(v2, 3), val_e3=round(v3, 3),
-                   sec=round(time.time() - t0, 1))
+                   dist=round(dtot / nb, 5), val_e1=round(v1, 3), val_e2=round(v2, 3),
+                   val_e3=round(v3, 3), sec=round(time.time() - t0, 1))
         log.append(row); print("PAC", row, flush=True)
         if v3 > best:
             best = v3; torch.save(model.state_dict(), out.replace(".pth", "_best.pth"))
@@ -146,9 +162,14 @@ def main():
     ap.add_argument("--w3", type=float, default=1.0)
     ap.add_argument("--pac_out", default=os.path.join(WDIR, "pacnet_x4.pth"))
     ap.add_argument("--use_cond", type=int, default=1, help="是否启用退化条件 FiLM")
+    ap.add_argument("--dist_w", type=float, default=0.0, help="像素自蒸馏权重，浅出口向e3对齐")
+    ap.add_argument("--curriculum_ep", type=int, default=0, help="前N轮只训e1的深度课程")
+    ap.add_argument("--seed", type=int, default=1)
+    ap.add_argument("--cascade", type=int, default=0, help="1=残差精修级联CascadePACNet")
+    ap.add_argument("--protect_e1", type=int, default=0, help="级联下只保护保命档，e2/e3仍共享block3-6")
     ap.add_argument("--which", choices=["pac", "plain", "both"], default="both")
     args = ap.parse_args()
-    random.seed(1); torch.manual_seed(1)
+    random.seed(args.seed); torch.manual_seed(args.seed)
     os.makedirs(WDIR, exist_ok=True)
 
     # uniform 留出：训练排除 16 测试段，验证段与闭环一致
@@ -165,7 +186,9 @@ def main():
 
     if args.which in ("pac", "both"):
         train_pac(dl, val_pairs, args.epochs, args.lr, args.mono_w, args.pac_out,
-                  weights=(args.w1, args.w2, args.w3), use_cond=bool(args.use_cond))
+                  weights=(args.w1, args.w2, args.w3), use_cond=bool(args.use_cond),
+                  dist_w=args.dist_w, curriculum_ep=args.curriculum_ep,
+                  cascade=bool(args.cascade), protect_e1=bool(args.protect_e1))
     if args.which in ("plain", "both"):
         train_plain(dl, val_pairs, args.epochs, args.lr,
                     os.path.join(WDIR, "plain2_x4.pth"))
