@@ -1,3 +1,4 @@
 from .enhancer_imdn import IMDNEnhancer
 from .enhancer_imdn_always import IMDNEnhancerAlways
 from .enhancer_multitask import MultiTaskEnhancer
+from .pacnet_enhancer import PACNetEnhancer

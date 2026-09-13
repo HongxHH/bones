@@ -38,7 +38,7 @@ from istream_player.modules.player.player_dash import DASHPlayer
 from istream_player.modules.scheduler.scheduler import SchedulerImpl
 
 from istream_player.modules.renderer import OpenGLRenderer, HeadlessRenderer, OpenCVRenderer
-from istream_player.modules.enhancer import IMDNEnhancer, IMDNEnhancerAlways, MultiTaskEnhancer
+from istream_player.modules.enhancer import IMDNEnhancer, IMDNEnhancerAlways, MultiTaskEnhancer, PACNetEnhancer
 
 # 模块初始化函数类型定义 - 用于创建模块实例的函数签名
 ModInitFnType = Callable[[str, Any, Any], Dict[str, Module]]
@@ -460,7 +460,7 @@ class PlayerComposer:
 
         # 注册视频增强器模块
         self.register_module("enhancer",
-                             [IMDNEnhancer, IMDNEnhancerAlways, MultiTaskEnhancer],
+                             [IMDNEnhancer, IMDNEnhancerAlways, MultiTaskEnhancer, PACNetEnhancer],
                              single_initializer,
                              "Enhancer",
                              False,
