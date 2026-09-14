@@ -89,6 +89,70 @@ e1 保命档趋势一致（B≥C≥A，720p e1 C 36.677 与 B 36.656 噪声内�
 
 1. ~~结构定型~~（阶段1已完成）：弹性税为 anytime 共享结构固有代价，定型原始 PACNet。
 2. ~~退化条件化~~（阶段2已完成）：多退化混合训练已足够跨分辨率泛化；在线统计条件化负消融，定型不挂 CondEncoder。
-3. **halt 控制器 + 接播放器**：随机时间预算下在线决定停在哪个出口，是与纯 CV 超分拉开差距的关键（anytime 调度，论文 C3 胜负手）。
-4. 时域一致性（插帧/抗闪烁，第二曲线）。
-5. 系统对照与多轨迹、跨视频验证（第二视频需手动提供）。
+3. ~~halt 控制器 + 接播放器~~（阶段3已完成）：离线仿真验证低预算内容感知+0.49有效质量；真实播放器单trace QoE+2.46(+4.2%)，fast_complete降为0。
+4. **多轨迹验证 + halt阈值调优**（进行中）：3G/4G各3-5条轨迹验证增益稳定性，safe_factor/gain_thresh网格搜索。
+5. 时域一致性（插帧/抗闪烁，第二曲线）。
+6. 系统对照与跨视频验证（第二视频需手动提供）。
+
+## 阶段3：halt控制器离线仿真 + 播放器集成（2026-09-13~14，方向成立+首次正向）
+
+### 3.1 离线halt调度仿真
+
+**目标**：在接播放器前，用真实增强时延+全段内容难度快速验证"帧级halt调度在随机时间预算下能否比固定出口/greedy更优"。
+
+**数据**：先生成全159段per-seg e1/e2/e3 PSNR（`workspace/pacnet/per_seg_psnr.json`，每段j=75帧）。深算增益gain=e3-e1：mean=1.166 std=1.004 min=0.150 max=4.702 p25=0.546 p75=1.127，内容差异显著（困难段深算增益是简单段的5-10倍）。
+
+**仿真**（`run_stage3_halt_sim.py`）：1590帧（10周期），3预算水平（low=20ms/帧、mid=28ms、high=36ms），对比fixed_e1/e2/e3、greedy（能e3就e3否则e2否则e1）、内容感知多阈值（CA_t1.0/1.5/2.0、激进CAv2_t1.5/2.0）、自适应（ADA/ADAv2）。时延模型e1=14/e2=26/e3=39ms（阶段0实测）加±15%噪声；账户模型每帧+=预算，选出口后-=时延，账户<−50ms掉帧（有效质量=PSNR×(1−drop_rate)）。
+
+**结果**（`stage3_halt_sim.json`）：
+
+| 预算 | 最优策略 | 有效质量 | vs greedy | vs fixed_e3 | 掉帧率 |
+|---|---|---|---|---|---|
+| low 20ms | CAv2_t2.0 | 29.321 | +0.494 | +7.601 | 1.89% |
+| mid 28ms | CA_t1.0 | 30.132 | +0.134 | +5.712 | 0.13% |
+| high 36ms | greedy（全e3） | 30.518 | — | +0.005 | 0% |
+
+**结论**：方向成立。预算紧张时内容感知halt调度有明确收益（低预算+0.49有效质量、掉帧减半）；预算充足时全深算即可（内容感知没必要，自适应退化为greedy）。这验证了"anytime网络+内容感知halt"的核心价值——不是在所有情况下都更好，而是在资源紧张时避免fixed_e3的大量掉帧、同时比greedy更聪明地分配深算预算。
+
+### 3.2 播放器集成与首次对比
+
+**集成**：新增`player/istream_player/modules/enhancer/pacnet_enhancer.py`（注册模块名`pacnet`），继承IMDNEnhancerAlways。核心重写：
+- `load_model`：单PACNet模型（多退化混合权重stage2_mix_nocond_x4_best.pth），替代原来三个独立IMDN模型
+- `measure_latency`：遍历所有分辨率测e1/e2/e3延迟，返回5×5表（缓存pacnet_latency.json）
+- `enhance_one_frame`：支持exit_idx参数，model(tensor, exit_idx=k)只跑到指定出口省算力
+- `run`：帧级halt控制器——根据剩余时间预算+per-seg内容难度gain决定出口。策略：预算充足全e3；够e3但不充足时困难段e3/简单段e2；够e2时困难段e2/简单段e1；极少保命e1。阈值safe_factor=1.5、gain_thresh=1.5
+- `get_quality_table`：返回pacnet_quality.json（三出口校准VMAF表，用原IMDN no_enh作基准+测量增益校准）
+- headless模式下不存完整CPU tensor（result.append(None)），解决内存积压从23GB降到1.3GB
+
+**工程踩坑**：
+1. 首次运行因task_total未设置（父类run里设置但重写版漏了）导致remain_task()报TypeError
+2. 首次覆盖get_latency_table/get_quality_table返回全e2延迟/全30质量，导致BONES全选最低码率(avg_bitrate=0)、VMAF=-Inf、QoE=NaN——删除覆盖方法复用父类实现后修复，后改为返回正确的PAC-Net表
+3. headless模式下每段增强结果(120帧×24MB≈2.9GB CPU tensor)积压导致内存23GB进程被OOM杀掉，改为不存完整tensor后内存1.3GB
+4. VMAF测量绝对值比原IMDN表高30分（ffmpeg libvmaf默认模型版本差异），用原表no_enh列作基准+测量增益校准
+
+**VMAF精确测量**（`workspace/pacnet/measure_pacnet_vmaf.py`，16段均匀采样，ffmpeg libvmaf）：
+
+| 码率档 | no_enh(原表) | e1 | e2 | e3 | 原IMDN level2 | 原IMDN level3 |
+|---|---|---|---|---|---|---|
+| 240p | 39.30 | 45.94 | 48.91 | 54.42 | 54.0 | 60.8 |
+| 360p | 64.02 | 68.32 | 70.63 | 73.05 | 75.9 | 79.9 |
+| 480p | 76.80 | 79.31 | 79.87 | 80.25 | 85.2 | 87.2 |
+
+PAC-Net e3（6-block nf=32）与原IMDN level2（同结构）VMAF接近，符合预期；e1/e2提供渐进的质量-算力折衷。
+
+**首次对比**（3G trace report.2010-09-13_1003CEST，BBB视频，headless，BONES码率选择）：
+
+| 指标 | 基线 imdn_always | PACNet | 差值 |
+|---|---|---|---|
+| QoE | 58.50 | **60.96** | **+2.46 (+4.2%)** |
+| avg_vmaf | 66.82 | **68.72** | **+1.91** |
+| oscillation | 8.30 | 7.75 | -0.55（更稳） |
+| dur_stall | 19.7s | 18.7s | -1.0s |
+| num_switches | 55 | 48 | -7 |
+| fast_complete段 | 3 | **0** | halt控制器让增强跟上播放 |
+
+出口使用e3=74%、e1=9%（段最后一帧统计），平均增强FPS=101远超实时30。GPU功耗76.6W vs 47.9W（e3使用更多）。
+
+**直观解释**：原来的IMDN增强器在时间紧张时触发fast_complete（剩余帧直接不增强，质量跳崖），而PAC-Net的halt控制器主动降级到e1/e2省时间——既保证不卡顿，又没有完全放弃增强，所以质量更高、波动更小、fast_complete降为0。这正是anytime网络的核心价值。
+
+**注意事项**：①单条trace结果，需多轨迹验证；②halt控制器阈值未调优；③VMAF用校准后的PAC-Net表，BONES决策更准确。

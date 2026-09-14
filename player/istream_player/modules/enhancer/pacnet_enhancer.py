@@ -90,8 +90,9 @@ class PACNetEnhancer(IMDNEnhancerAlways):
             saved = json.load(open(file_name))
             if isinstance(saved, dict) and "table" in saved:
                 self.pacnet_latency = saved.get("per_exit", [0.014, 0.026, 0.039])
+                self.latency_table = np.array(saved["table"])
                 self.log.info(f"PACNet latency loaded from cache")
-                return np.array(saved["table"])
+                return self.latency_table
         self.log.info("Measuring PACNet three-exit latency per resolution...")
         self.pacnet = model_pool
         latency_set = {}
@@ -127,6 +128,7 @@ class PACNetEnhancer(IMDNEnhancerAlways):
         json.dump({"table": latency_table.tolist(), "per_exit": self.pacnet_latency},
                   open(file_name, "w"), indent=2)
         self.log.info("PACNet latency measurement completed")
+        self.latency_table = latency_table
         return latency_table
 
     def _halt_decide(self, remaining_time, remaining_frames, segment_index):
@@ -307,9 +309,18 @@ class PACNetEnhancer(IMDNEnhancerAlways):
         from istream_player.modules.decoder import DecoderNvCodec
         return DecoderNvCodec(self.config, segment, resize=False)
 
-    # 注：get_latency_table / get_quality_table 复用父类实现。
-    # 父类用 IMDN 的质量/延迟表供 BONES 做段级决策（码率+增强级别），
-    # PACNet 增强器在实际增强时用 halt 控制器帧级决定出口，两者解耦。
+    def get_quality_table(self):
+        """返回 PAC-Net 三出口校准后的 VMAF 质量表（5x5）。
+        用原 IMDN 表 no_enh 列作基准 + PAC-Net e1/e2/e3 相对增益校准。"""
+        qpath = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))), "pacnet_quality.json")
+        if os.path.exists(qpath):
+            table = np.array(json.load(open(qpath)))
+            self.log.info(f"PACNet quality table loaded from {qpath}")
+            return table
+        self.log.warning("pacnet_quality.json not found, falling back to IMDN table")
+        return super().get_quality_table()
+
+    # 注：get_latency_table 复用父类实现（self.latency_table 已在 measure_latency 中设置为 PAC-Net 5x5 表）。
 
 
 def asyncio_sleep():

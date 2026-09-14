@@ -529,3 +529,61 @@ BONES"段级静态表+Lyapunov 联合 argmin+双缓冲+avg-VMAF"结构内，预�
 - 删除 `player/output/istream_run_dir/`：临时文件，93.8MB
 - 清理 `workspace/` 版本化脚本：保留最新v4，删除v1-v3及旧JSON结果
 - 更新 `docs/current_state.md`：从前瞻规划阶段更新到多任务增强阶段
+
+---
+
+## 阶段21：PAC-Net halt控制器离线仿真（2026-09-13，方向成立）
+
+**背景**：PAC-Net阶段0-2完成网络结构定型后，阶段3验证"anytime网络+帧级halt调度"在随机时间预算下能否比固定出口/greedy更优。接播放器前先用离线仿真快速看收益曲线。
+
+**方法**：
+1. 生成全159段per-seg e1/e2/e3 PSNR（`per_seg_psnr.json`，每段j=75帧）。深算增益gain=e3-e1：mean=1.166 std=1.004 min=0.150 max=4.702，内容差异显著。
+2. 离线halt调度仿真（`run_stage3_halt_sim.py`）：1590帧（10周期），3预算水平（20/28/36ms/帧），对比fixed_e1/e2/e3、greedy、内容感知多阈值（CA/CAv2）、自适应（ADA/ADAv2）。时延模型e1=14/e2=26/e3=39ms（阶段0实测）加±15%噪声；账户模型每帧+=预算，选出口后-=时延，账户<−50ms掉帧。
+
+**结果**：
+- 低预算(20ms)：CAv2_t2.0有效质量29.32 vs greedy 28.83(+0.49) vs fixed_e3 21.72(+7.60)，掉帧1.89%vs3.52%
+- 中预算(28ms)：CA_t1.0 30.13 vs greedy 29.998(+0.13)
+- 高预算(36ms)：greedy全e3最优30.518（内容感知没必要，自适应退化为greedy）
+
+**结论**：方向成立。预算紧张时内容感知halt调度有明确收益（低预算+0.49有效质量、掉帧减半）；预算充足时全深算即可。核心价值不是"所有情况下都更好"，而是"资源紧张时避免fixed_e3大量掉帧、同时比greedy更聪明分配深算预算"。commit `d9ab1c1`。
+
+---
+
+## 阶段22：PAC-Net播放器集成与首次对比（2026-09-14，QoE+2.46/+4.2%）
+
+**背景**：阶段3.1离线仿真验证方向成立后，将PAC-Net三出口+halt控制器集成进iStreamPlayer真实播放器，做端到端对比。
+
+**集成内容**（commit `020d2f2`）：
+- 新增`pacnet_enhancer.py`（注册模块名`pacnet`），继承IMDNEnhancerAlways
+- 重写load_model（单PACNet模型，多退化混合权重）、measure_latency（遍历分辨率测e1/e2/e3延迟返回5×5表）、enhance_one_frame（支持exit_idx只跑到指定出口）、run（帧级halt控制器）
+- get_quality_table返回pacnet_quality.json（三出口校准VMAF表）
+- headless模式下不存完整CPU tensor（内存从23GB降到1.3GB）
+
+**工程踩坑**：
+1. task_total未设置→remain_task() TypeError（父类run里设置但重写版漏了）
+2. 覆盖get_latency_table/get_quality_table返回全e2延迟/全30质量→BONES全选最低码率、VMAF=-Inf、QoE=NaN→改为返回正确的PAC-Net表
+3. headless模式下每段增强结果(120帧×24MB)积压→内存23GB OOM→改为不存完整tensor
+4. VMAF测量绝对值比原IMDN表高30分（ffmpeg libvmaf模型版本差异）→用原表no_enh作基准+测量增益校准
+
+**VMAF精确测量**（`measure_pacnet_vmaf.py`，16段均匀采样，ffmpeg libvmaf）：
+- 240p: e1=45.94 e2=48.91 e3=54.42（原IMDN level2=54.0 level3=60.8）
+- 360p: e1=68.32 e2=70.63 e3=73.05（原level2=75.9 level3=79.9）
+- 480p: e1=79.31 e2=79.87 e3=80.25（原level2=85.2 level3=87.2）
+- PAC-Net e3（6-block nf=32）与原IMDN level2（同结构）VMAF接近，符合预期
+
+**首次对比**（3G trace，BBB视频，headless，BONES码率选择）：
+
+| 指标 | 基线 imdn_always | PACNet | 差值 |
+|---|---|---|---|
+| QoE | 58.50 | **60.96** | **+2.46 (+4.2%)** |
+| avg_vmaf | 66.82 | **68.72** | **+1.91** |
+| oscillation | 8.30 | 7.75 | -0.55 |
+| dur_stall | 19.7s | 18.7s | -1.0s |
+| num_switches | 55 | 48 | -7 |
+| fast_complete段 | 3 | **0** | halt控制器跟上播放 |
+
+出口使用e3=74%、e1=9%，平均增强FPS=101远超实时30。
+
+**直观结论**：原来的IMDN增强器在时间紧张时触发fast_complete（剩余帧直接不增强，质量跳崖），而PAC-Net的halt控制器主动降级到e1/e2省时间——既保证不卡顿，又没有完全放弃增强，所以质量更高、波动更小、fast_complete降为0。这正是anytime网络的核心价值。
+
+**待办**：多轨迹验证（3G/4G各3-5条）、halt阈值调优（safe_factor/gain_thresh网格搜索）、跨视频零样本验证（需第二视频素材）。
