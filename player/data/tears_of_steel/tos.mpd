@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MPD xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="urn:mpeg:dash:schema:mpd:2011"
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+	xsi:schemaLocation="urn:mpeg:DASH:schema:MPD:2011 http://standards.iso.org/ittf/PubliclyAvailableStandards/MPEG-DASH_schema_files/DASH-MPD.xsd"
+	profiles="urn:mpeg:dash:profile:isoff-live:2011"
+	type="static"
+	mediaPresentationDuration="PT12M14.1S"
+	maxSegmentDuration="PT4.0S"
+	minBufferTime="PT8.0S">
+	<ProgramInformation>
+	</ProgramInformation>
+	<ServiceDescription id="0">
+	</ServiceDescription>
+	<Period id="0" start="PT0.0S">
+		<AdaptationSet id="0" contentType="video" startWithSAP="1" segmentAlignment="true" bitstreamSwitching="true" frameRate="24/1" maxWidth="1920" maxHeight="800" par="12:5">
+			<Representation id="0" mimeType="video/mp4" codecs="avc1.64000d" bandwidth="400000" width="426" height="176" sar="352:355">
+				<SegmentTemplate timescale="1000000" duration="4000000" initialization="stream$RepresentationID$/segment_.mp4" media="stream$RepresentationID$/segment_$Number$.m4s" startNumber="1">
+				</SegmentTemplate>
+			</Representation>
+			<Representation id="1" mimeType="video/mp4" codecs="avc1.640015" bandwidth="800000" width="640" height="268" sar="201:200">
+				<SegmentTemplate timescale="1000000" duration="4000000" initialization="stream$RepresentationID$/segment_.mp4" media="stream$RepresentationID$/segment_$Number$.m4s" startNumber="1">
+				</SegmentTemplate>
+			</Representation>
+			<Representation id="2" mimeType="video/mp4" codecs="avc1.64001e" bandwidth="1200000" width="854" height="356" sar="2136:2135">
+				<SegmentTemplate timescale="1000000" duration="4000000" initialization="stream$RepresentationID$/segment_.mp4" media="stream$RepresentationID$/segment_$Number$.m4s" startNumber="1">
+				</SegmentTemplate>
+			</Representation>
+			<Representation id="3" mimeType="video/mp4" codecs="avc1.64001f" bandwidth="2400000" width="1280" height="532" sar="399:400">
+				<SegmentTemplate timescale="1000000" duration="4000000" initialization="stream$RepresentationID$/segment_.mp4" media="stream$RepresentationID$/segment_$Number$.m4s" startNumber="1">
+				</SegmentTemplate>
+			</Representation>
+			<Representation id="4" mimeType="video/mp4" codecs="avc1.640028" bandwidth="4800000" width="1920" height="800" sar="1:1">
+				<SegmentTemplate timescale="1000000" duration="4000000" initialization="stream$RepresentationID$/segment_.mp4" media="stream$RepresentationID$/segment_$Number$.m4s" startNumber="1">
+				</SegmentTemplate>
+			</Representation>
+		</AdaptationSet>
+	</Period>
+</MPD>

@@ -1,0 +1,24 @@
+# Tears of Steel 跨视频验证配置（24fps, 1920x800, 184 段）
+# 用法：python play.py --config tos.yaml --mod_enhancer pacnet --trace data/3Glogs/<trace>.json
+input: data/tears_of_steel/tos.mpd
+video_dataset: tos
+
+# 显示/增强目标分辨率（TOS 为 2.40:1，1920x800）
+display_width: 1920
+display_height: 800
+display_fps: 24
+
+# 模块
+mod_nes: bones
+mod_renderer: headless
+mod_analyzer:
+  - data_collector
+
+# 设备
+enhancer_device: cuda
+renderer_device: cuda
+
+# 增强/快速完成
+use_fast_complete: true
+content_aware: false
+enhance_frame_interval: 0

@@ -1,6 +1,29 @@
 # 当前状态
 
-## 最新阶段：PAC-Net 阶段3.2 播放器集成与首次对比（2026-09-14，QoE+2.46/+4.2%）
+## 最新阶段：PAC-Net 跨视频验证（2026-09-17，Tears of Steel，3G 三轨迹 3/3 胜，QoE+1.63）
+
+用未参与训练的开源真人电影 Tears of Steel（Blender，1920×800，24fps，184 段×4s）验证跨视频泛化。工程上为播放器加多数据集支持：`PlayerConfig` 新增 `video_dataset` 字段（默认 bbb），enhancer 据此切换质量表、延迟缓存、per-seg gain；修复 DASH 分数帧率解析（MPD frameRate 为 `24/1`，原 `astype(float)` 崩溃）；数据按 `player/data/<dataset>/` 约定放置，编码源 mp4 留在项目根 `data/<dataset>/`。新增 `player/tos.yaml`、`pacnet_tos_quality.json`、`imdn_tos_quality.json` 两套 5×5 VMAF 表，补丁脚本 `workspace/pacnet/patch_tos_support.py`、`patch_framerate.py`。
+
+离线 VMAF 关键发现：TOS 上 PAC e3 与通用 IMDN l3 基本打平（240p 90.22 vs 89.64、360p 99.02 vs 98.11、480p 均 99.84），而 BBB 上 PAC e3 曾领先 l3 达 8 分——BBB 的大差距主要来自 PAC 在 BBB 数据上训练过的数据偏置，TOS 才是公平的泛化对比；浅出口弹性税跨视频仍在（240p e1=86.18 < l1=87.02、e2=87.12 < l2=88.70）。TOS 三出口间差异小（e1→e2 仅 0.94，BBB 为 2.97），halt 内容感知的选择空间更小。
+
+播放器 3G 三轨迹（headless，BONES 码率选择，fast_complete 开）：
+
+| trace | PAC QoE | IMDN QoE | ΔQoE | ΔVMAF | Δ卡顿(s) |
+|---|---|---|---|---|---|
+| 09-13 | 91.49 | 90.19 | +1.30 | +0.41 | +13.1 |
+| 09-14 | 90.98 | 88.99 | +1.98 | +1.35 | −1.3 |
+| 09-21 | 88.68 | 87.06 | +1.61 | +1.64 | −9.9 |
+| 平均 | 90.38 | 88.75 | **+1.63** | +1.13 | +0.6（打平） |
+
+3/3 胜，平均 VMAF +1.13、质量切换 48 vs 69。PAC 几乎全程 e3（172/177/183 段），基线主要 l2（108/135/156 段），PAC fast_complete 全 0（基线 1/4/3 次）。
+
+**关键边界**：TOS 24fps、目标 1920×800（像素比 1080p 少约 26%），240p e3 端到端约 3.8s/段 < 4s 段时长，算力相对充足，halt 几乎不降档——anytime 算力伸缩的核心价值在 TOS 未被激发，PAC 退化为“一个更深的固定模型”靠 e3 质量 > l2 取胜。要展示 halt 卖点需算力紧张场景（更高帧率、真 1080p 及以上、弱 GPU、紧算力预算）。09-13 单条曾见卡顿反增（14.1s vs 1.0s），多轨迹平均卡顿打平，属 trace 个例而非系统性退化。
+
+工程踩坑：①命令行 `--input/--trace` 有硬编码默认值（bbb.mpd / 09-13），加载 YAML 后仍会被默认值覆盖，必须显式传参；②播放器工作目录是 `player/`，数据须放 `player/data/` 下，放项目根 `data/` 会 FileNotFound；③`measure_latency` 只测 model forward，360p（宽 640 为 32 倍数）因 cuDNN 对齐优化延迟异常低（e3=5.6ms vs 240p 33.8ms），实际播放 fps≈126 印证为真实硬件特性，非测量错误；④TOS 无 per-seg gain 文件，halt 退化为纯预算驱动（gain=1.0）。汇总脚本 `workspace/pacnet/summarize_tos.py`，批量脚本 `run_tos_batch.ps1`。
+
+---
+
+## 上一阶段：PAC-Net 阶段3.2 播放器集成与首次对比（2026-09-14，QoE+2.46/+4.2%）
 
 阶段3.1离线仿真验证方向成立后，阶段3.2将PAC-Net三出口+halt控制器集成进iStreamPlayer真实播放器。新增`player/istream_player/modules/enhancer/pacnet_enhancer.py`（注册模块名`pacnet`），继承IMDNEnhancerAlways，重写load_model（单PACNet模型，多退化混合权重stage2_mix_nocond）、measure_latency（遍历分辨率测e1/e2/e3延迟返回5×5表）、enhance_one_frame（支持exit_idx只跑到指定出口省算力）、run（帧级halt控制器：根据剩余时间预算+per-seg内容难度gain决定出口，预算充足全e3、紧张时内容感知、极少保命e1）。headless模式下不存完整CPU tensor（解决内存积压从23GB降到1.3GB）。module_composer.py注册PACNetEnhancer。commit `020d2f2`。
 

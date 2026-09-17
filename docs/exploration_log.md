@@ -587,3 +587,17 @@ BONES"段级静态表+Lyapunov 联合 argmin+双缓冲+avg-VMAF"结构内，预�
 **直观结论**：原来的IMDN增强器在时间紧张时触发fast_complete（剩余帧直接不增强，质量跳崖），而PAC-Net的halt控制器主动降级到e1/e2省时间——既保证不卡顿，又没有完全放弃增强，所以质量更高、波动更小、fast_complete降为0。这正是anytime网络的核心价值。
 
 **待办**：多轨迹验证（3G/4G各3-5条）、halt阈值调优（safe_factor/gain_thresh网格搜索）、跨视频零样本验证（需第二视频素材）。
+
+## 阶段23：PAC-Net跨视频验证 Tears of Steel（2026-09-17，3G三轨迹3/3胜，QoE+1.63）
+
+**背景**：阶段22只在训练视频 BBB 上验证，存在“在自己训练数据上跑分”的数据偏置风险。用未参与训练的开源真人电影 Tears of Steel（Blender，1920×800，24fps，184段×4s）做零样本跨视频检验。
+
+**工程**：ffmpeg dash muxer 对5档分辨率一步编码+分段（filter_complex split=5，强制GOP96）；播放器加多数据集支持（`video_dataset` 字段切换质量表/延迟缓存/per-seg gain，修复分数帧率 `24/1` 解析）；两套 TOS VMAF 表 `pacnet_tos_quality.json`/`imdn_tos_quality.json`；配置 `tos.yaml`。踩坑：①命令行 `--input/--trace` 硬编码默认值覆盖 YAML，必须显式传；②数据须放 `player/data/<dataset>/` 而非项目根 `data/`；③第一次错误运行（BBB分辨率+TOS表）生成了脏延迟缓存 `pacnet_latency_tos.json`，删除重测。
+
+**离线VMAF发现**：TOS 上 PAC e3 与通用 IMDN l3 打平（240p 90.22 vs 89.64、360p 99.02 vs 98.11），BBB 上 PAC e3 领先 l3 达8分——BBB优势主要是数据偏置，TOS才是公平泛化；弹性税跨视频仍在（e1/e2 弱于对应独立模型）。
+
+**播放器结果（3G 09-13/09-14/09-21，headless，BONES）**：QoE 91.49/90.98/88.68 vs 基线 90.19/88.99/87.06，3/3胜、平均+1.63、VMAF+1.13、切换48 vs 69、fast_complete 全0；卡顿时长平均打平（29.6 vs 29.0s），09-13 PAC卡顿反增13s但09-14/09-21更少，属trace个例。PAC几乎全程e3（172/177/183段），基线主要l2。
+
+**关键认识（负向边界）**：TOS 24fps、目标像素比1080p少26%，240p e3端到端约3.8s/段<4s段时长，算力充足，halt几乎不降档——anytime算力伸缩价值未被激发，PAC退化为“更深的固定模型”靠e3质量取胜。要验证halt核心卖点需算力紧张场景（高帧率/真1080p以上/弱GPU/紧预算）。另发现测量一致性问题：`measure_latency`只测model forward（360p宽640对齐cuDNN快速路径e3=5.6ms、240p 33.8ms），未含解码/resize/H2D-D2H/调度开销，在e3延迟逼近帧间隔的临界场景会让halt/BONES偏乐观，是后续可改点。TOS当前无per-seg gain，halt为纯预算驱动。
+
+**待办**：构造算力紧张场景验证halt降档价值；halt/BONES延迟改用端到端帧处理时间（含系统开销或加系数）；为TOS生成per-seg gain恢复内容感知；更多视频素材（运动/风景类）与4G对照。

@@ -66,6 +66,8 @@ class PlayerConfig:
     input: str = ""
     # 网络追踪文件 - 用于网络模拟的追踪数据文件路径
     trace: str = ""
+    # 视频数据集标识（bbb/tos），据此切换质量表、per-seg 内容难度与延迟缓存
+    video_dataset: str = "bbb"
     # 运行目录 - 程序运行时的工作目录
     run_dir: str = "output/istream_run_dir"
     # 日志文件路径 - 记录播放器运行日志的文件位置

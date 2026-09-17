@@ -156,3 +156,33 @@ PAC-Net e3（6-block nf=32）与原IMDN level2（同结构）VMAF接近，符合
 **直观解释**：原来的IMDN增强器在时间紧张时触发fast_complete（剩余帧直接不增强，质量跳崖），而PAC-Net的halt控制器主动降级到e1/e2省时间——既保证不卡顿，又没有完全放弃增强，所以质量更高、波动更小、fast_complete降为0。这正是anytime网络的核心价值。
 
 **注意事项**：①单条trace结果，需多轨迹验证；②halt控制器阈值未调优；③VMAF用校准后的PAC-Net表，BONES决策更准确。
+
+### 3.3 跨视频验证：Tears of Steel（2026-09-17）
+
+用未参与训练的开源真人电影 Tears of Steel（Blender，1920×800，24fps，184 段×4s，2.40:1）检验泛化，与 BBB 完全独立。源视频 `E:\dev\Data\tears_of_steel_1080p.mp4`，5 档分辨率（426×176/640×268/854×356/1280×532/1920×800）用 ffmpeg dash muxer 一步编码+分段（`-g 96 -keyint_min 96 -sc_threshold 0`，96 帧/段），脚本 `workspace/pacnet/encode_tos_dash.bat`；DASH 产物在 `player/data/tears_of_steel/`，编码源 mp4 在项目根 `data/tears_of_steel/`。
+
+**多数据集支持（播放器改造）**：`PlayerConfig` 新增 `video_dataset`（默认 bbb）；基类 `setup/get_quality_table/measure_latency` 与 PACNetEnhancer 的 `get_quality_table/measure_latency/load_model`（per-seg gain）均按该字段切换文件，TOS 对应 `imdn_tos_quality.json`、`pacnet_tos_quality.json`、`*_latency_tos.json`；修复 `get_frame_rate` 不支持分数帧率（`24/1`）的崩溃。运行必须显式传 `--input data/tears_of_steel/tos.mpd`（命令行默认值会覆盖 YAML）。
+
+**离线 VMAF（TARGET 1920×800，16 帧均匀采样，libvmaf）**：
+
+| 码率档 | bicubic | PAC e1 | PAC e2 | PAC e3 | IMDN l1 | l2 | l3 |
+|---|---|---|---|---|---|---|---|
+| 240p | 80.43 | 86.18 | 87.12 | **90.22** | 87.02 | 88.70 | 89.64 |
+| 360p | 94.26 | 96.51 | 97.62 | **99.02** | 96.43 | 97.26 | 98.11 |
+| 480p | 97.92 | 99.70 | 99.80 | 99.84 | 99.53 | 99.84 | 99.84 |
+
+两个关键判断：①TOS 上 PAC e3 与通用 IMDN l3 打平（240p 仅 +0.58），而 BBB 上 PAC e3 领先 l3 达 8 分——BBB 的大差距主要是 PAC 在 BBB 数据训练过的数据偏置，TOS 才是公平泛化对比；②浅出口弹性税跨视频仍在（e1<l1、e2<l2），三出口间差异小（e1→e2 仅 0.94，BBB 为 2.97），halt 内容感知选择空间更小。
+
+**播放器 3G 三轨迹对比（headless，BONES，fast_complete 开；汇总 `summarize_tos.py`）**：
+
+| trace | PAC QoE | IMDN QoE | ΔQoE | ΔVMAF | Δ卡顿(s) |
+|---|---|---|---|---|---|
+| 09-13 | 91.49 | 90.19 | +1.30 | +0.41 | +13.1 |
+| 09-14 | 90.98 | 88.99 | +1.98 | +1.35 | −1.3 |
+| 09-21 | 88.68 | 87.06 | +1.61 | +1.64 | −9.9 |
+| 平均 | 90.38 | 88.75 | **+1.63** | +1.13 | +0.6（打平） |
+
+3/3 胜，质量切换 48 vs 69，PAC fast_complete 全 0。PAC 几乎全程 e3（172/177/183 段），基线主要 l2（108/135/156 段）。
+
+**结论与边界**：跨视频泛化成立（新视频、未训练仍稳定占优），但 TOS 上 halt 的 anytime 算力伸缩未被激发——24fps 帧间隔 41.7ms > 240p e3 端到端约 3.8s/段（<4s 段时长），算力相对充足，halt 几乎不降档，PAC 退化为“更深的固定模型”靠 e3>l2 质量取胜。要验证 halt 的核心卖点（时间紧张时主动降档避免卡顿/质量跳崖），需算力紧张场景：更高帧率（30/60fps）、真 1080p 及以上目标、弱 GPU 或紧算力预算。另：`measure_latency` 仅测 model forward，360p（宽 640 对齐）cuDNN 走快速路径 e3=5.6ms，远快于 240p 33.8ms，实际播放 fps≈126 印证为真实硬件特性；halt/BONES 用的延迟未含解码、resize、H2D/D2H 与调度开销，在“e3 延迟逼近帧间隔”的临界场景偏乐观，是后续可改的测量一致性问题。
+

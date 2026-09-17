@@ -1,0 +1,17 @@
+{
+  "video": "Tears of Steel (\u771f\u4eba\u7535\u5f71, 1920x800, 24fps)",
+  "total_frames": 17620,
+  "n_samples": 16,
+  "vmaf": {
+    "bicubic": 80.429501,
+    "e1": 86.182606,
+    "e2": 87.116553,
+    "e3": 90.216866
+  },
+  "bbb_comparison": {
+    "bicubic": 39.3,
+    "e1": 45.94,
+    "e2": 48.91,
+    "e3": 54.42
+  }
+}

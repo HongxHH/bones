@@ -66,9 +66,10 @@ class PACNetEnhancer(IMDNEnhancerAlways):
         self.log.info(f"PACNet loaded, params={sum(p.numel() for p in model.parameters())/1e6:.2f}M")
 
         # 加载 per-seg gain
+        gain_file = "per_seg_psnr_tos.json" if getattr(self, "video_dataset", "bbb") == "tos" else "per_seg_psnr.json"
         gain_candidates = [
             os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "..",
-                           "workspace", "pacnet", "per_seg_psnr.json"),
+                           "workspace", "pacnet", gain_file),
         ]
         for p in gain_candidates:
             if os.path.exists(p):
@@ -86,6 +87,8 @@ class PACNetEnhancer(IMDNEnhancerAlways):
     async def measure_latency(self, resolution_set, model_pool, file_name="pacnet_latency.json"):
         """测量 PACNet 三个出口在各分辨率下的延迟，返回 BONES 用的 5×5 表。
         latency_table[4-repr_idx, level] = 每帧延迟(秒)，level 1/2/3 对应 e1/e2/e3。"""
+        if getattr(self, "video_dataset", "bbb") == "tos":
+            file_name = "pacnet_latency_tos.json"
         if os.path.exists(file_name):
             saved = json.load(open(file_name))
             if isinstance(saved, dict) and "table" in saved:
@@ -312,7 +315,9 @@ class PACNetEnhancer(IMDNEnhancerAlways):
     def get_quality_table(self):
         """返回 PAC-Net 三出口校准后的 VMAF 质量表（5x5）。
         用原 IMDN 表 no_enh 列作基准 + PAC-Net e1/e2/e3 相对增益校准。"""
-        qpath = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))), "pacnet_quality.json")
+        _player_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+        _qname = "pacnet_tos_quality.json" if getattr(self, "video_dataset", "bbb") == "tos" else "pacnet_quality.json"
+        qpath = os.path.join(_player_dir, _qname)
         if os.path.exists(qpath):
             table = np.array(json.load(open(qpath)))
             self.log.info(f"PACNet quality table loaded from {qpath}")

@@ -212,6 +212,8 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
         self.device = config.enhancer_device
         # 从配置中获取内容感知标志，决定是否使用内容感知增强
         self.content_aware = config.content_aware
+        # 视频数据集标识（bbb/tos），切换质量表等数据集相关资源
+        self.video_dataset = getattr(config, "video_dataset", "bbb")
         # 从配置中获取运行目录，用于临时文件存储
         self.run_dir = config.run_dir
         # 获取超分间隔配置，默认0表示全帧超分
@@ -306,9 +308,12 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
             # 跳过非视频内容
             if as_obj.content_type != "video":
                 continue
-            # 提取帧率并转换为浮点数
-            frame_rate = np.array(as_obj.frame_rate).astype(float)
-            return frame_rate
+            # 提取帧率并转换为浮点数（DASH 帧率支持 "24/1" 分数格式）
+            fr = str(as_obj.frame_rate)
+            if "/" in fr:
+                _num, _den = fr.split("/")
+                return float(_num) / float(_den) if float(_den) != 0 else float(_num)
+            return float(fr)
 
     # 检查增强器是否就绪的方法
     def is_ready(self):
@@ -875,6 +880,8 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
         """
         预热增强模型并测量其延迟
         """
+        if getattr(self, "video_dataset", "bbb") == "tos":
+            file_name = "imdn_latency_tos.json"
         # 如果延迟文件已存在，直接加载
         if os.path.exists(file_name):
             latency_table = json.load(open(file_name))
@@ -1049,6 +1056,8 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
         # 根据内容感知标志选择不同的质量表文件
         if self.content_aware:
             file_name = "imdn_bbb_quality.json"
+        elif getattr(self, "video_dataset", "bbb") == "tos":
+            file_name = "imdn_tos_quality.json"
         else:
             file_name = "imdn_div2k_quality.json"
 
