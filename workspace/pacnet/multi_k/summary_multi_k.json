@@ -1,0 +1,178 @@
+{
+  "runs": {
+    "0913_halt": {
+      "file": "bones_pacnet_fast-True_video-tos_trace-report.2010-09-13_1003CEST_20260918-113913.json",
+      "vmaf": 93.87403878996844,
+      "qoe": 91.10767751429258,
+      "num_stall": 2,
+      "dur_stall": 9.044877052307129,
+      "fc": 1,
+      "level_count": {
+        "0": 12,
+        "3": 172
+      },
+      "exit_pct": [
+        1.0,
+        11.1,
+        87.9
+      ],
+      "exit_frames": [
+        170,
+        1812,
+        14413
+      ]
+    },
+    "0913_force_e3": {
+      "file": "bones_pacnet_fast-True_video-tos_trace-report.2010-09-13_1003CEST_20260918-115153.json",
+      "vmaf": 93.62299219225557,
+      "qoe": 90.76945773071849,
+      "num_stall": 3,
+      "dur_stall": 14.988430976867676,
+      "fc": 41,
+      "level_count": {
+        "0": 12,
+        "3": 172
+      },
+      "exit_pct": [
+        0.0,
+        0.0,
+        100.0
+      ],
+      "exit_frames": [
+        0,
+        0,
+        15609
+      ]
+    },
+    "0913_imdn": {
+      "file": "bones_imdn_always_fast-True_video-tos_trace-report.2010-09-13_1003CEST_20260918-120420.json",
+      "vmaf": 93.26068977717387,
+      "qoe": 90.05486955936958,
+      "num_stall": 1,
+      "dur_stall": 0.08931398391723633,
+      "fc": 1,
+      "level_count": {
+        "0": 55,
+        "3": 49,
+        "2": 69,
+        "1": 11
+      }
+    },
+    "0914_halt": {
+      "file": "bones_pacnet_fast-True_video-tos_trace-report.2010-09-14_1038CEST_20260918-103522.json",
+      "vmaf": 92.60918802791002,
+      "qoe": 90.50374900940068,
+      "num_stall": 2,
+      "dur_stall": 2.457780122756958,
+      "fc": 1,
+      "level_count": {
+        "0": 7,
+        "3": 177
+      },
+      "exit_pct": [
+        2.1,
+        13.2,
+        84.6
+      ],
+      "exit_frames": [
+        363,
+        2233,
+        14294
+      ]
+    },
+    "0914_force_e3": {
+      "file": "bones_pacnet_fast-True_video-tos_trace-report.2010-09-14_1038CEST_20260918-104856.json",
+      "vmaf": 91.04985675067938,
+      "qoe": 88.31813099212442,
+      "num_stall": 6,
+      "dur_stall": 8.67092776298523,
+      "fc": 77,
+      "level_count": {
+        "0": 9,
+        "3": 175
+      },
+      "exit_pct": [
+        0.0,
+        0.0,
+        100.0
+      ],
+      "exit_frames": [
+        0,
+        0,
+        14547
+      ]
+    },
+    "0914_imdn": {
+      "file": "bones_imdn_always_fast-True_video-tos_trace-report.2010-09-14_1038CEST_20260918-110254.json",
+      "vmaf": 92.1233787989131,
+      "qoe": 89.12489848490148,
+      "num_stall": 1,
+      "dur_stall": 0.060040950775146484,
+      "fc": 4,
+      "level_count": {
+        "0": 28,
+        "3": 28,
+        "2": 114,
+        "1": 14
+      }
+    },
+    "0921_halt": {
+      "file": "bones_pacnet_fast-True_video-tos_trace-report.2010-09-21_1001CEST_20260918-121806.json",
+      "vmaf": 89.12563276086973,
+      "qoe": 86.90375951598115,
+      "num_stall": 23,
+      "dur_stall": 84.51287579536438,
+      "fc": 15,
+      "level_count": {
+        "0": 1,
+        "3": 183
+      },
+      "exit_pct": [
+        12.5,
+        18.4,
+        69.2
+      ],
+      "exit_frames": [
+        1798,
+        2650,
+        9988
+      ]
+    },
+    "0921_force_e3": {
+      "file": "bones_pacnet_fast-True_video-tos_trace-report.2010-09-21_1001CEST_20260918-123213.json",
+      "vmaf": 88.05952680570661,
+      "qoe": 85.80364110472304,
+      "num_stall": 31,
+      "dur_stall": 102.04570150375366,
+      "fc": 89,
+      "level_count": {
+        "0": 2,
+        "3": 182
+      },
+      "exit_pct": [
+        0.0,
+        0.0,
+        100.0
+      ],
+      "exit_frames": [
+        0,
+        0,
+        12486
+      ]
+    },
+    "0921_imdn": {
+      "file": "bones_imdn_always_fast-True_video-tos_trace-report.2010-09-21_1001CEST_20260918-124549.json",
+      "vmaf": 89.26971678260882,
+      "qoe": 87.21147990403202,
+      "num_stall": 16,
+      "dur_stall": 68.96352958679199,
+      "fc": 5,
+      "level_count": {
+        "0": 13,
+        "3": 9,
+        "2": 150,
+        "1": 12
+      }
+    }
+  }
+}
