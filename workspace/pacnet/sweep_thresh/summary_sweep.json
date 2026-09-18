@@ -1,0 +1,208 @@
+{
+  "runs": {
+    "0921_s10": {
+      "file": "bones_pacnet_fast-True_video-tos_trace-report.2010-09-21_1001CEST_20260918-121806.json",
+      "vmaf": 89.12563276086973,
+      "qoe": 86.90375951598115,
+      "num_stall": 23,
+      "dur_stall": 84.51287579536438,
+      "fc": 15,
+      "level_count": {
+        "0": 1,
+        "3": 183
+      },
+      "exit_pct": [
+        12.5,
+        18.4,
+        69.2
+      ],
+      "exit_frames": [
+        1798,
+        2650,
+        9988
+      ]
+    },
+    "0921_s11": {
+      "file": "bones_pacnet_fast-True_video-tos_trace-report.2010-09-21_1001CEST_20260918-144402.json",
+      "vmaf": 88.93473561294172,
+      "qoe": 86.75463922566419,
+      "num_stall": 23,
+      "dur_stall": 81.1723701953888,
+      "fc": 20,
+      "level_count": {
+        "0": 1,
+        "3": 183
+      },
+      "exit_pct": [
+        17.6,
+        15.6,
+        66.8
+      ],
+      "exit_frames": [
+        2509,
+        2227,
+        9541
+      ]
+    },
+    "0921_s12": {
+      "file": "bones_pacnet_fast-True_video-tos_trace-report.2010-09-21_1001CEST_20260918-145754.json",
+      "vmaf": 89.64590332252055,
+      "qoe": 87.46476143568326,
+      "num_stall": 17,
+      "dur_stall": 81.92778134346008,
+      "fc": 4,
+      "level_count": {
+        "0": 1,
+        "3": 183
+      },
+      "exit_pct": [
+        11.2,
+        16.8,
+        72.0
+      ],
+      "exit_frames": [
+        1705,
+        2563,
+        10963
+      ]
+    },
+    "0921_s13": {
+      "file": "bones_pacnet_fast-True_video-tos_trace-report.2010-09-21_1001CEST_20260918-151143.json",
+      "vmaf": 88.87848382359617,
+      "qoe": 86.61332489142094,
+      "num_stall": 22,
+      "dur_stall": 83.89536666870117,
+      "fc": 20,
+      "level_count": {
+        "0": 1,
+        "3": 183
+      },
+      "exit_pct": [
+        19.9,
+        15.0,
+        65.0
+      ],
+      "exit_frames": [
+        2868,
+        2164,
+        9356
+      ]
+    },
+    "0921_imdn": {
+      "file": "bones_imdn_always_fast-True_video-tos_trace-report.2010-09-21_1001CEST_20260918-124549.json",
+      "vmaf": 89.26971678260882,
+      "qoe": 87.21147990403202,
+      "num_stall": 16,
+      "dur_stall": 68.96352958679199,
+      "fc": 5,
+      "level_count": {
+        "0": 13,
+        "3": 9,
+        "2": 150,
+        "1": 12
+      }
+    },
+    "0914_s10": {
+      "file": "bones_pacnet_fast-True_video-tos_trace-report.2010-09-14_1038CEST_20260918-103522.json",
+      "vmaf": 92.60918802791002,
+      "qoe": 90.50374900940068,
+      "num_stall": 2,
+      "dur_stall": 2.457780122756958,
+      "fc": 1,
+      "level_count": {
+        "0": 7,
+        "3": 177
+      },
+      "exit_pct": [
+        2.1,
+        13.2,
+        84.6
+      ],
+      "exit_frames": [
+        363,
+        2233,
+        14294
+      ]
+    },
+    "0914_s11": {
+      "file": "bones_pacnet_fast-True_video-tos_trace-report.2010-09-14_1038CEST_20260918-152411.json",
+      "vmaf": 92.84756932976697,
+      "qoe": 90.48814960146119,
+      "num_stall": 2,
+      "dur_stall": 2.381481885910034,
+      "fc": 1,
+      "level_count": {
+        "0": 8,
+        "3": 176
+      },
+      "exit_pct": [
+        1.5,
+        5.2,
+        93.3
+      ],
+      "exit_frames": [
+        257,
+        871,
+        15666
+      ]
+    },
+    "0914_s12": {
+      "file": "bones_pacnet_fast-True_video-tos_trace-report.2010-09-14_1038CEST_20260918-153644.json",
+      "vmaf": 93.09455939385214,
+      "qoe": 90.63983238366058,
+      "num_stall": 3,
+      "dur_stall": 8.470296621322632,
+      "fc": 2,
+      "level_count": {
+        "0": 9,
+        "3": 175
+      },
+      "exit_pct": [
+        3.1,
+        6.0,
+        90.9
+      ],
+      "exit_frames": [
+        514,
+        991,
+        15091
+      ]
+    },
+    "0914_s13": {
+      "file": "bones_pacnet_fast-True_video-tos_trace-report.2010-09-14_1038CEST_20260918-154912.json",
+      "vmaf": 92.76216028962881,
+      "qoe": 90.47450762197992,
+      "num_stall": 3,
+      "dur_stall": 3.155993938446045,
+      "fc": 1,
+      "level_count": {
+        "0": 8,
+        "3": 176
+      },
+      "exit_pct": [
+        3.0,
+        12.2,
+        84.8
+      ],
+      "exit_frames": [
+        502,
+        2048,
+        14244
+      ]
+    },
+    "0914_imdn": {
+      "file": "bones_imdn_always_fast-True_video-tos_trace-report.2010-09-14_1038CEST_20260918-110254.json",
+      "vmaf": 92.1233787989131,
+      "qoe": 89.12489848490148,
+      "num_stall": 1,
+      "dur_stall": 0.060040950775146484,
+      "fc": 4,
+      "level_count": {
+        "0": 28,
+        "3": 28,
+        "2": 114,
+        "1": 14
+      }
+    }
+  }
+}
