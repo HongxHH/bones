@@ -186,3 +186,18 @@ PAC-Net e3（6-block nf=32）与原IMDN level2（同结构）VMAF接近，符合
 
 **结论与边界**：跨视频泛化成立（新视频、未训练仍稳定占优），但 TOS 上 halt 的 anytime 算力伸缩未被激发——24fps 帧间隔 41.7ms > 240p e3 端到端约 3.8s/段（<4s 段时长），算力相对充足，halt 几乎不降档，PAC 退化为“更深的固定模型”靠 e3>l2 质量取胜。要验证 halt 的核心卖点（时间紧张时主动降档避免卡顿/质量跳崖），需算力紧张场景：更高帧率（30/60fps）、真 1080p 及以上目标、弱 GPU 或紧算力预算。另：`measure_latency` 仅测 model forward，360p（宽 640 对齐）cuDNN 走快速路径 e3=5.6ms，远快于 240p 33.8ms，实际播放 fps≈126 印证为真实硬件特性；halt/BONES 用的延迟未含解码、resize、H2D/D2H 与调度开销，在“e3 延迟逼近帧间隔”的临界场景偏乐观，是后续可改的测量一致性问题。
 
+### 3.4 阶段二：算力紧张下的 halt 验证（2026-09-18，gpuburn + 可调度性前瞻 + 两个埋点 bug 修复）
+
+TOS 满血时 halt 不降档，阶段二用每帧 dummy matmul 抢占 GPU 人为制造算力紧张，检验 halt 能否“既流畅又比固定档高清”。最新三组数据见 `current_state.md`，本节只沉淀机制与判据。
+
+**算力负载注入（`_gpuburn.py`）必须用乘法系数，不能用固定加法。** 环境变量 `PACNET_BURN_K=1.5` 时，enhance_one_frame 用 cuda 同步实测该帧模型前向 `fwd_ms`，`burn(fwd_ms)` 额外烧 `fwd_ms×(K−1)` 的 2048² matmul，端到端≈×K。出口越深、前向越久烧得越多，三出口延迟比值保持 1.397 不变。旧的 `PACNET_EXTRA_MS` 对每帧固定加 N ms，会把延迟比压到 1.177，使 halt 阈值 l3×1.2 反低于 l2×1.6、e2 档永远选不到（e2 死档），且与离线 `sim_tos_halt.py` 的乘 k 口径不一致。乘法对 PAC/IMDN 同公式天然公平；halt 用的静态延迟表在 `measure_latency` 缓存分支同步 ×K。
+
+**帧级 VMAF 埋点（否则 halt 降档画质代价完全不可见）。** PACNet 重写 run 后段统计必须回传 `exit_frame_counts=[e1,e2,e3]`（段内三出口实际增强帧数）与 `fast_complete_triggered`；`analyzer.py` 按帧占比算段 VMAF：`real_vmaf = (Σ cnt[i]·q[i+1]·n_enh + base·n_non)/(n_enh+n_non)`，截断未增强帧按 base 计。否则 analyzer 用 BONES 下发动作（恒 3）查表，降 e1 的帧也按 e3 打分，VMAF 虚高约 4 分/段，“0 卡顿+画质反超全 e3”是假象。
+
+**halt 判据三版迭代（`pacnet_enhancer.py:_halt_decide`），前两版均失败：**
+1. 段内平均预算：`budget=(S−elapsed)/剩余帧`，要求剩余帧全程跑某档才选它。开局 S≈3.94s 均分 96 帧仅 41ms < e3 门槛 60.8ms，过度保守，87% 帧误降 e1（实测 dist 84/4/8）。
+2. 库存水位（对齐离线 sim）：只比全局库存 lead 与单帧门槛（≈0.06s）。但真实播放器有独立的 fast_complete，其动态阈值（≈0.8s）远高于 halt 降档门槛，lead 下降时 fast_complete 先触发、整段截断（只做 60/96 帧），halt 的 e2/e1 根本来不及执行——离线 sim 没有 fast_complete 这层，不能照搬其库存判据。
+3. **可调度性前瞻（采用，EDF 式）**：逐级做可行性检查，选满足 `lead ≥ l_exit × 剩余帧 × 安全系数` 的最高出口，安全系数默认 1.0（`PACNET_E3_THRESH/E2_THRESH` 可覆盖），fast_complete 退为“连 e1 都不可行”时的最终兜底。开局判全程 e3 来不及（4.87s>S）但全程 e2 来得及（3.49s），于是 e1/e2 混合且 96 帧全增强不截断；中段库存厚（lead≈21s）全程 e3。
+
+**K=1.5 / trace 09-14 单轨迹结论**：halt 前瞻 QoE 90.50、VMAF 92.61、卡顿 2.46s，显著优于强制全 e3（QoE 88.32、卡顿 8.67s、77 段截断），也略优于 IMDN 基线（QoE 89.12、VMAF 92.12、卡顿 0.06s）。anytime 降档保命价值相对全 e3 明确；相对 IMDN 仅 +0.49 VMAF 且多 2.4s 卡顿，优势薄，需多轨迹定胜负。残留卡顿与安全系数扫描、多轨迹胜率是下一步。
+

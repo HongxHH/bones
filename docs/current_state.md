@@ -1,6 +1,36 @@
 # 当前状态
 
-## 最新阶段：PAC-Net 跨视频验证（2026-09-17，Tears of Steel，3G 三轨迹 3/3 胜，QoE+1.63）
+## 最新阶段：PAC-Net 阶段二 算力紧张下 halt 验证（2026-09-18，TOS + gpuburn K=1.5，修复两个埋点/口径 bug，halt 改可调度性前瞻）
+
+跨视频阶段发现 TOS 算力充足时 halt 几乎不降档、退化为固定深模型。阶段二人为制造算力紧张（`_gpuburn.py` 每帧 dummy matmul 抢占 GPU），验证 anytime 降档能否在算力受限时“既流畅又比固定档高清”。实验中先修复两个会让结论失真的 bug，再把 halt 控制器从过保守的平均预算改为可调度性前瞻。
+
+**bug 1：VMAF 埋点虚高（致命）**。`analyzer.py` 原按 BONES 下发动作 `segment.enhance_action`（PACNet 模式恒为 3）查质量表，且 PACNet 的 `segment_stats` 不回传 `fast_complete_triggered` 与实际出口，导致 halt 降到 e1/e2 的帧、fast_complete 未增强的帧全部按 e3 打分（如真实 dist=84e1/4e2/8e3 的段被记成 90.22，实际 86.56）。修复：`pacnet_enhancer.py` 段内统计 `_exit_frame_cnt=[e1,e2,e3]` 实际增强帧数并在 stats 回传 `exit_frame_counts`、`fast_complete_triggered`；`analyzer.py` 新增 `AnalyzerSegment.exit_frame_counts`，real_vmaf 按帧占比加权 `Σ cnt[i]·q[i+1] / 总增强帧`，未增强帧（截断部分）按 base_vmaf 计。补丁 `workspace/pacnet/patch_vmaf_accounting.py`。
+
+**bug 2：gpuburn 加法口径导致 e2 死档、且与离线仿真不一致**。原 `PACNET_EXTRA_MS` 对每帧固定加 N ms，把三出口延迟比从 1.397 压到 1.177，阈值 l3×1.2 反低于 l2×1.6，e2 永远选不到（三出口退化成 e1/e3）；离线 `sim_tos_halt.py` 用的是整体乘 k。改为 `PACNET_BURN_K` 乘法：enhance_one_frame 实测模型前向 `fwd_ms`，`burn(fwd_ms)` 额外烧 `fwd_ms×(K-1)`，端到端≈×K，出口越深烧越多、延迟比值不变、阈值不倒挂，PAC/IMDN 同口径公平。halt 用的静态延迟表同步 ×K（`measure_latency` 缓存分支）。`PACNET_EXTRA_MS` 加法保留兼容。IMDN 侧补丁 `patch_imdn_burn.py`。
+
+**halt 控制器三次迭代**（`pacnet_enhancer.py:_halt_decide`）：
+1. 平均预算（旧，阈值 1.2/1.6）：`budget=(S−elapsed)/剩余帧`，要求剩余帧全程跑该档才选。开局 S=3.94s 均分 96 帧仅 41ms<e3 门槛 60.8ms，过度保守，87% 帧误降 e1。
+2. 库存水位（对齐 sim）：只比较全局库存 lead 与单帧门槛（~0.06s）。但 fast_complete 动态阈值（~0.8s）远高于该门槛，lead 下降时 fast_complete 抢先整段截断，死磕 e3 到只做 60/96 帧，跳过 e2/e1。
+3. **可调度性前瞻（采用，阈值默认 1.0/1.0）**：逐级检查 `lead ≥ l_exit×剩余帧×安全系数`，选满足的最高出口，fast_complete 作彻底来不及的兜底。开局段判全程 e3 来不及（需 4.87s>S 3.94s）但全程 e2 来得及（3.49s），于是 e1/e2 混合、96 帧全增强不截断；中段库存厚（lead~21s）全程 e3。
+
+**K=1.5 三组对照（trace 09-14，headless，单轨迹，乘法 burn）**：
+
+| 策略 | avg_vmaf | QoE | 卡顿(s/次) | fast_complete 段 | 出口分布 |
+|---|---|---|---|---|---|
+| **PAC halt 前瞻（本方案）** | **92.61** | **90.50** | 2.46 / 2 | 1 | e1/e2/e3 = 2/13/85% |
+| PAC 强制 e3（FORCE_EXIT=2） | 91.05 | 88.32 | 8.67 / 6 | 77 | 100% e3 |
+| IMDN 基线（imdn_always，BONES 选档） | 92.12 | 89.12 | 0.06 / 1 | 4 | l2 为主（114 段） |
+| （对照）halt 旧平均预算 1.2/1.6 | 92.30 | 89.70 | 0.48 / 2 | 1 | 11/4/85% |
+
+halt 前瞻 vs 强制 e3：VMAF +1.56、QoE +2.18、卡顿少 6.2s、截断段 1 vs 77——anytime 降档保命价值明确（死磕最深档在算力紧张时频繁截断+卡顿，截断段后半按 base 80.43 反而拉低画质）。halt 前瞻 vs IMDN：VMAF +0.49、QoE +1.38，但卡顿多 2.4s（IMDN l2 仅 ~7.7ms 几乎不费力）。结果文件时间戳 103522（halt 前瞻）、104856（force e3）、110254（IMDN），均在 `player/output/data/`。
+
+**结论与边界**：单轨迹下 halt 前瞻是三组中 QoE/VMAF 最高者，方向成立；但相对 IMDN 优势小（+0.49 VMAF）且仍有 2.4s 卡顿，单次结果受机器波动影响，需多轨迹看中位/胜率。TOS 上 PAC e3(90.22) 与 IMDN l3(89.64) 差距本就小，halt 主要靠 85% 帧上 e3 赢 l2，安全余量薄。
+
+**下一步（主推荐）**：① 在 09-13 / 09-21 两条 3G 轨迹重复三组，统计胜率与中位 ΔQoE/ΔVMAF/卡顿；② 排查 halt 前瞻残留的 2.4s 卡顿（开局/网络低谷降档是否仍不够及时，对比 fast_complete 触发点）；③ 视结果决定是否扫前瞻安全系数（当前 1.0）。
+
+---
+
+## 上一阶段：PAC-Net 跨视频验证（2026-09-17，Tears of Steel，3G 三轨迹 3/3 胜，QoE+1.63）
 
 用未参与训练的开源真人电影 Tears of Steel（Blender，1920×800，24fps，184 段×4s）验证跨视频泛化。工程上为播放器加多数据集支持：`PlayerConfig` 新增 `video_dataset` 字段（默认 bbb），enhancer 据此切换质量表、延迟缓存、per-seg gain；修复 DASH 分数帧率解析（MPD frameRate 为 `24/1`，原 `astype(float)` 崩溃）；数据按 `player/data/<dataset>/` 约定放置，编码源 mp4 留在项目根 `data/<dataset>/`。新增 `player/tos.yaml`、`pacnet_tos_quality.json`、`imdn_tos_quality.json` 两套 5×5 VMAF 表，补丁脚本 `workspace/pacnet/patch_tos_support.py`、`patch_framerate.py`。
 

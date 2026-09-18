@@ -83,6 +83,7 @@ class AnalyzerSegment:
     wasted_enhanced_cnt: Optional[int] = None            # 若被中止，浪费的增强帧数
     enhance_start_to_play_time: Optional[float] = None   #  增强开始到播放开始的时间 (渲染器剩余时长 + 中间隔得段数*段时长)
     enhance_end_to_play_time: Optional[float] = None      # 若执行完成了增强动作，增强完成后该增强段距离播放开始的时间 (渲染器剩余时长 + 中间隔得段数*段时长)
+    exit_frame_counts: Optional[list] = None              # PACNet 段内 [e1,e2,e3] 各出口实际增强帧数（帧级 halt 结果）
 
     # ===== fast_complete 质量退化量化字段（任务2.1）=====
     quality_switches_within_segment: Optional[int] = None  # 段内增强/未增强切换次数（质量突变次数）
@@ -601,6 +602,7 @@ class PlaybackAnalyzer(
                 analyzer_segment.enhance_frame_interval = stats.get("enhance_frame_interval")
                 analyzer_segment.fast_complete_threshold = stats.get("fast_complete_threshold")
                 analyzer_segment.fast_complete = stats.get("fast_complete_triggered")
+                analyzer_segment.exit_frame_counts = stats.get("exit_frame_counts")
                 analyzer_segment.enhance_start_to_play_time = stats.get("enhance_start_to_play_time")
                 analyzer_segment.enhance_end_to_play_time = stats.get("enhance_end_to_play_time")
 
@@ -624,8 +626,27 @@ class PlaybackAnalyzer(
                 # 如果该段没有执行增强，则增强索引为0
                 if analyzer_segment.is_enhance:
                     e_idx = int(analyzer_segment.enhance_action)
+                    # PACNet 帧级 halt：按段内 [e1,e2,e3] 实际增强帧数精确计算 VMAF，
+                    # 未增强帧（fast-complete 截断部分）按 base_vmaf 计，避免用下发动作 e_idx 虚高打分。
+                    _efc = analyzer_segment.exit_frame_counts
+                    if _efc is not None and sum(int(c) for c in _efc) > 0:
+                        _cnts = [int(c) for c in _efc]
+                        _n_enh = sum(_cnts)
+                        _n_non = int(analyzer_segment.interpolated_cnt) if analyzer_segment.interpolated_cnt else 0
+                        _vmaf_enh = sum(_cnts[i] * float(self.quality_table[q_idx, i + 1])
+                                        for i in range(3)) / _n_enh
+                        _tot = _n_enh + _n_non
+                        analyzer_segment.enhance_vmaf = _vmaf_enh
+                        analyzer_segment.enhance_ratio = _n_enh / _tot if _tot > 0 else 1.0
+                        analyzer_segment.real_vmaf = (
+                            (_vmaf_enh * _n_enh + analyzer_segment.base_vmaf * _n_non) / _tot
+                            if _tot > 0 else _vmaf_enh)
+                        analyzer_segment.enhanced_frame_vmaf = _vmaf_enh
+                        analyzer_segment.non_enhanced_frame_vmaf = analyzer_segment.base_vmaf
+                        analyzer_segment.quality_drop_due_to_fast = _vmaf_enh - analyzer_segment.real_vmaf
+                        analyzer_segment.quality_switches_within_segment = 1 if _n_non > 0 else 0
                     # 这里我们需要更加精细化的QOE,因为即使该段进行了增强，但是也可能触发了Fast模式，仅增强了部分，因此还要扣除没有增强的部分
-                    if analyzer_segment.fast_complete:
+                    elif analyzer_segment.fast_complete:
                         # 安全处理 enhanced_cnt / interpolated_cnt 为 None 的情况
                         _enhanced = int(analyzer_segment.enhanced_cnt) if analyzer_segment.enhanced_cnt is not None else 0
                         _interpolated = int(analyzer_segment.interpolated_cnt) if analyzer_segment.interpolated_cnt is not None else 0

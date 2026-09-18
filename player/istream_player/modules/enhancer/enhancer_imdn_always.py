@@ -624,13 +624,19 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
         # 使用模型进行推理（不计算梯度）
         with torch.no_grad():
             # 模型前向传播
+            import time as _time
+            torch.cuda.synchronize()
+            _t0 = _time.perf_counter()
             tensor = model(tensor)
+            torch.cuda.synchronize()
+            fwd_ms = (_time.perf_counter() - _t0) * 1000.0
             # 让出控制权给其他任务
             await asyncio.sleep(0)
             # 使用双三次插值调整到目标分辨率
             tensor = torch.nn.functional.interpolate(tensor, size=(self.display_H, self.display_W), mode='bicubic', align_corners=False)
             # 让出控制权给其他任务
             await asyncio.sleep(0)
+            from ._gpuburn import burn as _burn; _burn(fwd_ms)
         # 将张量移回CPU以节省GPU内存
         tensor = tensor.cpu()  # save on CPU to save GPU memory
         # 让出控制权给其他任务

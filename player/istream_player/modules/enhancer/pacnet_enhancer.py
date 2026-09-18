@@ -42,6 +42,10 @@ class PACNetEnhancer(IMDNEnhancerAlways):
         self._current_exit_idx = 2  # 默认最深
         self._halt_safe_factor = 1.5  # 预算充足判定安全因子（更保守，避免e2/e3积压）
         self._halt_gain_thresh = 1.5  # 内容难度阈值（gain>此值视为困难段）
+        # 阶段二实验开关：环境变量控制，跑完不留痕
+        self._force_exit = int(os.environ.get("PACNET_FORCE_EXIT", "-1"))  # -1=正常halt, 0/1/2=强制出口
+        self._halt_e3_thresh = float(os.environ.get("PACNET_E3_THRESH", "1.0"))
+        self._halt_e2_thresh = float(os.environ.get("PACNET_E2_THRESH", "1.0"))
 
     async def load_model(self):
         """只加载一个 PACNet 模型（多退化混合训练权重，cond=False，nf=32）。"""
@@ -94,6 +98,18 @@ class PACNetEnhancer(IMDNEnhancerAlways):
             if isinstance(saved, dict) and "table" in saved:
                 self.pacnet_latency = saved.get("per_exit", [0.014, 0.026, 0.039])
                 self.latency_table = np.array(saved["table"])
+                # 阶段二：把 gpuburn 额外耗时计入 halt 用的端到端延迟，保证预算判断准确
+                # 乘法模式 K：整体放大 k 倍（保持出口延迟比，阈值不倒挂）；加法模式 EXTRA_MS：固定加毫秒
+                _burn_k = float(os.environ.get("PACNET_BURN_K", "0") or 0)
+                _extra = float(os.environ.get("PACNET_EXTRA_MS", "0")) / 1000
+                if _burn_k > 1.0:
+                    self.pacnet_latency = [l * _burn_k for l in self.pacnet_latency]
+                    self.log.info(f"halt latency adjusted x{_burn_k:.2f}(gpuburn MULT): "
+                                  f"{[f'{l*1000:.1f}ms' for l in self.pacnet_latency]}")
+                elif _extra > 0:
+                    self.pacnet_latency = [l + _extra for l in self.pacnet_latency]
+                    self.log.info(f"halt latency adjusted +{_extra*1000:.1f}ms(gpuburn ADD): "
+                                  f"{[f'{l*1000:.1f}ms' for l in self.pacnet_latency]}")
                 self.log.info(f"PACNet latency loaded from cache")
                 return self.latency_table
         self.log.info("Measuring PACNet three-exit latency per resolution...")
@@ -134,29 +150,23 @@ class PACNetEnhancer(IMDNEnhancerAlways):
         self.latency_table = latency_table
         return latency_table
 
-    def _halt_decide(self, remaining_time, remaining_frames, segment_index):
-        """帧级 halt 控制器：根据剩余时间预算 + 段内容难度决定出口。
-        返回 exit_idx (0=e1, 1=e2, 2=e3)。
-        策略：预算充足全 e3；预算紧张时内容感知（困难段深算、简单段浅算）；预算极少保命 e1。
-        """
-        if remaining_frames <= 0:
-            return 0
-        budget_per_frame = remaining_time / remaining_frames
+    def _halt_decide(self, lead_time, remaining_frames, segment_index):
+        """帧级 halt（可调度性前瞻，EDF 式可行性检查）：
+        lead_time = 增强器当前领先播放的全局库存（秒）；remaining_frames = 本段剩余待增强帧。
+        逐级检查"剩余帧若全程跑该档，能否在本段被播放前做完"（need = l_exit × 剩余帧数），
+        选满足 lead_time >= need × 安全系数 的最高出口；都不满足则 e1 保命，
+        更外层的 fast_complete 负责在彻底来不及时放弃剩余帧。
+        阈值 1.0 = 恰好可行；>1 更保守（预留余量）。
+        PACNET_FORCE_EXIT>=0 时强制该出口（全 e3 对照用）。"""
+        if self._force_exit >= 0:
+            return self._force_exit
+        rf = max(int(remaining_frames), 1)
         l1, l2, l3 = self.pacnet_latency
-        gain = self.per_seg_gain.get(segment_index, 1.0)
-        is_hard = gain >= self._halt_gain_thresh
-
-        # 预算充足：全 e3（和 greedy 一样）
-        if budget_per_frame >= l3 * self._halt_safe_factor:
-            return 2
-        # 预算够 e3 但不充足：困难段 e3，简单段 e2
-        if budget_per_frame >= l3 * 1.2:
-            return 2 if is_hard else 1
-        # 预算够 e2（带安全因子）：困难段 e2，简单段 e1
-        if budget_per_frame >= l2 * 1.3:
-            return 1 if is_hard else 0
-        # 预算极少：保命 e1
-        return 0
+        if lead_time >= l3 * rf * self._halt_e3_thresh:
+            return 2   # e3
+        if lead_time >= l2 * rf * self._halt_e2_thresh:
+            return 1   # e2
+        return 0       # e1 保命
 
     async def enhance_one_frame(self, surf, model, tensor_converter, exit_idx=None):
         """重写：用 PACNet 指定出口增强。exit_idx 由 run 循环里的 halt 控制器设置。"""
@@ -166,11 +176,17 @@ class PACNetEnhancer(IMDNEnhancerAlways):
         tensor = tensor.to(self.device)
         await asyncio_sleep()
         with torch.no_grad():
+            import time as _time
+            torch.cuda.synchronize()
+            _t0 = _time.perf_counter()
             tensor = model(tensor, exit_idx=exit_idx)
+            torch.cuda.synchronize()
+            fwd_ms = (_time.perf_counter() - _t0) * 1000.0
             await asyncio_sleep()
             tensor = F.interpolate(tensor, size=(self.display_H, self.display_W),
                                    mode="bicubic", align_corners=False)
             await asyncio_sleep()
+            from ._gpuburn import burn as _burn; _burn(fwd_ms)
         tensor = tensor.cpu()
         await asyncio_sleep()
         return tensor
@@ -235,6 +251,8 @@ class PACNetEnhancer(IMDNEnhancerAlways):
                 result = []
                 self.cnt = 0
                 self._enhanced_frames = 0
+                # 段内三出口实际增强帧计数 [e1,e2,e3]，供 analyzer 按帧占比算真实 VMAF
+                self._exit_frame_cnt = [0, 0, 0]
                 fast_complete = False
                 model = self.model_pool  # PACNet 单模型
 
@@ -256,14 +274,22 @@ class PACNetEnhancer(IMDNEnhancerAlways):
                     if surf is None:
                         break
 
-                    # halt 控制器：根据剩余时间预算 + 段内容难度决定出口
-                    elapsed = time.perf_counter() - start_time
-                    remaining_time = enhance_start_to_play_time - elapsed
+                    # halt 控制器（可调度性前瞻）：实时读取增强器领先播放的全局库存，
+                    # 逐级判断"剩余帧全程跑该档能否按时做完"，选最高可行出口
+                    try:
+                        lead_time = (self.renderer.remain_task() +
+                            (self._current_enhancing_index -
+                             self.download_buffer.get_next_render_segment_index()) * self.seg_time)
+                    except Exception:
+                        lead_time = enhance_start_to_play_time - (time.perf_counter() - start_time)
                     remaining_frames = max(self._num_frames - self.cnt, 1)
-                    self._current_exit_idx = self._halt_decide(remaining_time, remaining_frames, index)
+                    self._current_exit_idx = self._halt_decide(lead_time, remaining_frames, index)
 
                     surf_enh = await self.enhance_one_frame(surf, model, tensor_converter)
                     self._enhanced_frames += 1
+                    # 记录该帧实际使用的出口（halt 帧级决策结果）
+                    _ei = self._current_exit_idx if self._current_exit_idx in (0, 1, 2) else 2
+                    self._exit_frame_cnt[_ei] += 1
                     # headless模式下不存完整CPU tensor（渲染器不用，analyzer用离线VMAF），避免内存积压
                     result.append(None)
                     self.cnt += 1
@@ -298,12 +324,16 @@ class PACNetEnhancer(IMDNEnhancerAlways):
                     "interpolated_cnt": interpolated_cnt,
                     "enhance_fps": enhance_fps,
                     "exit_used": self._current_exit_idx,
+                    "exit_frame_counts": list(self._exit_frame_cnt),
+                    "fast_complete_triggered": bool(fast_complete),
                     "is_enhance": True,
                 }
                 await self.download_buffer.replace(self._current_enhancing_index, {as_idx: segment})
+                _dist = "/".join(str(c) for c in self._exit_frame_cnt)
                 self.log.info(f"PACNet enhance seg {index}: lat={enhance_latency:.2f}s, "
                               f"enhanced={self._enhanced_frames}, fps={enhance_fps:.1f}, "
-                              f"last_exit=e{self._current_exit_idx+1}, "
+                              f"last_exit=e{self._current_exit_idx+1}, dist(e1/e2/e3)={_dist}, "
+                              f"fast_complete={fast_complete}, "
                               f"start_to_play={enhance_start_to_play_time:.2f}s")
                 self._enhanced_frames = 0
                 self._reset_enhancement_state(reset_counters=True)
