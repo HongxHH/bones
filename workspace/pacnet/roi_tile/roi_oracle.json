@@ -1,0 +1,3556 @@
+{
+  "config": {
+    "frames": 32,
+    "tile": 160,
+    "n_tiles": 60,
+    "native_crfs": [
+      26,
+      30,
+      34
+    ],
+    "fracs": [
+      0.0,
+      0.05,
+      0.1,
+      0.2,
+      0.4
+    ],
+    "lpips_impl": "lpips_pkg_v0.1_squeeze",
+    "frame_idx": [
+      0,
+      568,
+      1136,
+      1704,
+      2272,
+      2840,
+      3408,
+      3976,
+      4544,
+      5112,
+      5680,
+      6248,
+      6816,
+      7384,
+      7952,
+      8520,
+      9089,
+      9657,
+      10225,
+      10793,
+      11361,
+      11929,
+      12497,
+      13065,
+      13633,
+      14201,
+      14769,
+      15337,
+      15905,
+      16473,
+      17041,
+      17610
+    ]
+  },
+  "uniform_frontier": [
+    {
+      "tag": "426_crf26",
+      "bits_per_frame": 8412.38320090806,
+      "vmaf": 78.25086115625001,
+      "lpips": 0.23640457226429135
+    },
+    {
+      "tag": "426_crf34",
+      "bits_per_frame": 3179.8397275822927,
+      "vmaf": 56.33086803125,
+      "lpips": 0.3040061650099233
+    },
+    {
+      "tag": "426_crf42",
+      "bits_per_frame": 1318.4585698070375,
+      "vmaf": 38.358940625,
+      "lpips": 0.3673363128909841
+    },
+    {
+      "tag": "320_crf26",
+      "bits_per_frame": 5700.191146424518,
+      "vmaf": 63.24764350000001,
+      "lpips": 0.31962207797914743
+    },
+    {
+      "tag": "320_crf34",
+      "bits_per_frame": 2027.4438138479002,
+      "vmaf": 44.291947125,
+      "lpips": 0.3828254430554807
+    },
+    {
+      "tag": "320_crf42",
+      "bits_per_frame": 825.5409761634506,
+      "vmaf": 31.61873096875,
+      "lpips": 0.4367027541156858
+    },
+    {
+      "tag": "640_crf34",
+      "bits_per_frame": 6817.6948921679905,
+      "vmaf": 74.94710940625001,
+      "lpips": 0.20310003974009305
+    },
+    {
+      "tag": "640_crf30",
+      "bits_per_frame": 10817.587741203179,
+      "vmaf": 85.84351659375001,
+      "lpips": 0.16812566493172199
+    },
+    {
+      "tag": "640_crf26",
+      "bits_per_frame": 17566.938024971623,
+      "vmaf": 94.99583446874999,
+      "lpips": 0.1391531409462914
+    },
+    {
+      "tag": "640_crf22",
+      "bits_per_frame": 28948.834052213395,
+      "vmaf": 98.999588375,
+      "lpips": 0.1156863629585132
+    },
+    {
+      "tag": "854_crf34",
+      "bits_per_frame": 11008.335073779795,
+      "vmaf": 85.5243186875,
+      "lpips": 0.1566613205941394
+    },
+    {
+      "tag": "854_crf30",
+      "bits_per_frame": 17242.782746878547,
+      "vmaf": 95.83843715625,
+      "lpips": 0.1243989736540243
+    },
+    {
+      "tag": "854_crf26",
+      "bits_per_frame": 27772.22247446084,
+      "vmaf": 99.74770253125,
+      "lpips": 0.09858099650591612
+    }
+  ],
+  "tiers": {
+    "426_crf26": {
+      "lw": 426,
+      "lh": 178,
+      "B_low": 8412.38320090806,
+      "bicubic_vmaf": 68.7575216875,
+      "baseline_l2": {
+        "vmaf": 78.25086115625001,
+        "lpips": 0.23640457226429135
+      },
+      "arms": {
+        "crf26_perframe": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 8412.38320090806,
+            "vmaf": 78.25086115625001,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.23640457226429135,
+            "uniform_lpips_equalbits": 0.23640457226429135,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 15630.321332529324,
+            "vmaf": 85.57533846875,
+            "dvmaf_vs_l2": 7.3244773125,
+            "dvmaf_vs_uniform_equalbits": -7.595481774834525,
+            "lpips": 0.22342805680818856,
+            "uniform_lpips_equalbits": 0.13274322358682172,
+            "dlpips_vs_uniform_equalbits": -0.09068483322136683,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 22609.03550581725,
+            "vmaf": 89.51252784375001,
+            "dvmaf_vs_l2": 11.2616666875,
+            "dvmaf_vs_uniform_equalbits": -7.831049317114875,
+            "lpips": 0.21105908416211605,
+            "uniform_lpips_equalbits": 0.1191077705023975,
+            "dlpips_vs_uniform_equalbits": -0.09195131365971855,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 36839.19301905978,
+            "vmaf": 94.60717646875,
+            "dvmaf_vs_l2": 16.3563153125,
+            "dvmaf_vs_uniform_equalbits": -4.392411906250004,
+            "lpips": 0.1888045419473201,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.0731181789888069,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 63422.9715872115,
+            "vmaf": 98.75838590625,
+            "dvmaf_vs_l2": 20.507524749999998,
+            "dvmaf_vs_uniform_equalbits": -0.24120246875000362,
+            "lpips": 0.1491589043289423,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.0334725413704291,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ],
+        "crf26_fixed": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 8412.38320090806,
+            "vmaf": 78.25086115625001,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.23640457226429135,
+            "uniform_lpips_equalbits": 0.23640457226429135,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 16654.09737419599,
+            "vmaf": 81.71484453125001,
+            "dvmaf_vs_l2": 3.463983374999999,
+            "dvmaf_vs_uniform_equalbits": -13.14968587446819,
+            "lpips": 0.22646539972629398,
+            "uniform_lpips_equalbits": 0.1274453336088935,
+            "dlpips_vs_uniform_equalbits": -0.09902006611740047,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 25298.06154748392,
+            "vmaf": 84.57486709375002,
+            "dvmaf_vs_l2": 6.3240059375,
+            "dvmaf_vs_uniform_equalbits": -14.020796378855664,
+            "lpips": 0.2166414624080062,
+            "uniform_lpips_equalbits": 0.1084172744651321,
+            "dlpips_vs_uniform_equalbits": -0.1082241879428741,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 41577.90656072644,
+            "vmaf": 89.53944312499999,
+            "dvmaf_vs_l2": 11.288581968749998,
+            "dvmaf_vs_uniform_equalbits": -9.46014525000001,
+            "lpips": 0.197538185515441,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.0818518225569278,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 77462.09658721149,
+            "vmaf": 97.414350125,
+            "dvmaf_vs_l2": 19.163488968750002,
+            "dvmaf_vs_uniform_equalbits": -1.5852382500000033,
+            "lpips": 0.16056965407915413,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.044883291120640934,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ],
+        "crf26_center": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 8412.38320090806,
+            "vmaf": 78.25086115625001,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.23640457226429135,
+            "uniform_lpips_equalbits": 0.23640457226429135,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 19783.59737419599,
+            "vmaf": 81.90377071875,
+            "dvmaf_vs_l2": 3.6529095625000005,
+            "dvmaf_vs_uniform_equalbits": -14.124202816691906,
+            "lpips": 0.22621234459802508,
+            "uniform_lpips_equalbits": 0.13034058665278117,
+            "dlpips_vs_uniform_equalbits": -0.09587175794524391,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 28751.31154748392,
+            "vmaf": 84.90336575,
+            "dvmaf_vs_l2": 6.652504593749999,
+            "dvmaf_vs_uniform_equalbits": -14.22181154895766,
+            "lpips": 0.2161270232172683,
+            "uniform_lpips_equalbits": 0.11281481648564394,
+            "dlpips_vs_uniform_equalbits": -0.10331220673162435,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 45117.40656072644,
+            "vmaf": 90.12126503125,
+            "dvmaf_vs_l2": 11.870403875000001,
+            "dvmaf_vs_uniform_equalbits": -8.878323343749997,
+            "lpips": 0.1967444334877655,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.08105807052925229,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 77458.3465872115,
+            "vmaf": 96.92389815625,
+            "dvmaf_vs_l2": 18.673037,
+            "dvmaf_vs_uniform_equalbits": -2.0756902187499975,
+            "lpips": 0.1608099153963849,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.045123552437871695,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ],
+        "crf30_perframe": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 8412.38320090806,
+            "vmaf": 78.25086115625001,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.23640457226429135,
+            "uniform_lpips_equalbits": 0.23640457226429135,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 13228.28487419599,
+            "vmaf": 84.1518055,
+            "dvmaf_vs_l2": 5.900944343749999,
+            "dvmaf_vs_uniform_equalbits": -5.045144098329345,
+            "lpips": 0.22514614067040384,
+            "uniform_lpips_equalbits": 0.1451734078862173,
+            "dlpips_vs_uniform_equalbits": -0.07997273278418654,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 17860.689151650586,
+            "vmaf": 87.32579221875,
+            "dvmaf_vs_l2": 9.0749310625,
+            "dvmaf_vs_uniform_equalbits": -7.806821053579455,
+            "lpips": 0.21457645669579506,
+            "uniform_lpips_equalbits": 0.13798530351852245,
+            "dlpips_vs_uniform_equalbits": -0.07659115317727261,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 27331.53937322645,
+            "vmaf": 91.51400162499999,
+            "dvmaf_vs_l2": 13.263140468749999,
+            "dvmaf_vs_uniform_equalbits": -8.028506434228802,
+            "lpips": 0.1958951388951391,
+            "uniform_lpips_equalbits": 0.10033297691608578,
+            "dlpips_vs_uniform_equalbits": -0.09556216197905332,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 44958.54450387816,
+            "vmaf": 96.27208653125,
+            "dvmaf_vs_l2": 18.021225375,
+            "dvmaf_vs_uniform_equalbits": -2.727501843750005,
+            "lpips": 0.1630841502919793,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.04739778733346611,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ],
+        "crf30_fixed": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 8412.38320090806,
+            "vmaf": 78.25086115625001,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.23640457226429135,
+            "uniform_lpips_equalbits": 0.23640457226429135,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 13904.59737419599,
+            "vmaf": 81.005812375,
+            "dvmaf_vs_l2": 2.7549512187499996,
+            "dvmaf_vs_uniform_equalbits": -9.310012160237633,
+            "lpips": 0.22808629681821913,
+            "uniform_lpips_equalbits": 0.14167359047511188,
+            "dlpips_vs_uniform_equalbits": -0.08641270634310724,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 19649.478214150586,
+            "vmaf": 83.2671831875,
+            "dvmaf_vs_l2": 5.016322031250001,
+            "dvmaf_vs_uniform_equalbits": -12.698340687048727,
+            "lpips": 0.21987624699249864,
+            "uniform_lpips_equalbits": 0.1308737909902513,
+            "dlpips_vs_uniform_equalbits": -0.08900245600224735,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 30499.239894059785,
+            "vmaf": 87.12891693750001,
+            "dvmaf_vs_l2": 8.87805578125,
+            "dvmaf_vs_uniform_equalbits": -11.870671437499993,
+            "lpips": 0.2041588731808588,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.08847251022234559,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 54302.0965872115,
+            "vmaf": 93.71828890625,
+            "dvmaf_vs_l2": 15.467427749999999,
+            "dvmaf_vs_uniform_equalbits": -5.2812994687500066,
+            "lpips": 0.17408786294981837,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.05840149999130517,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ],
+        "crf30_center": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 8412.38320090806,
+            "vmaf": 78.25086115625001,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.23640457226429135,
+            "uniform_lpips_equalbits": 0.23640457226429135,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 15928.680707529322,
+            "vmaf": 81.157121875,
+            "dvmaf_vs_l2": 2.90626071875,
+            "dvmaf_vs_uniform_equalbits": -12.507296855791438,
+            "lpips": 0.22792711341753602,
+            "uniform_lpips_equalbits": 0.1311992578381604,
+            "dlpips_vs_uniform_equalbits": -0.09672785557937563,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 21827.56154748392,
+            "vmaf": 83.52634771875,
+            "dvmaf_vs_l2": 5.2754865625,
+            "dvmaf_vs_uniform_equalbits": -13.45335314227637,
+            "lpips": 0.21958324371371418,
+            "uniform_lpips_equalbits": 0.1222145995644212,
+            "dlpips_vs_uniform_equalbits": -0.09736864414929298,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 32571.073227393113,
+            "vmaf": 87.62206406249999,
+            "dvmaf_vs_l2": 9.37120290625,
+            "dvmaf_vs_uniform_equalbits": -11.377524312500015,
+            "lpips": 0.20368387980852276,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.08799751685000956,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 53928.09658721149,
+            "vmaf": 93.19811537499999,
+            "dvmaf_vs_l2": 14.94725421875,
+            "dvmaf_vs_uniform_equalbits": -5.801473000000016,
+            "lpips": 0.1743383378488943,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.0586519748903811,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ],
+        "crf34_perframe": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 8412.38320090806,
+            "vmaf": 78.25086115625001,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.23640457226429135,
+            "uniform_lpips_equalbits": 0.23640457226429135,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 11758.987999195992,
+            "vmaf": 82.12750575,
+            "dvmaf_vs_l2": 3.876644593749999,
+            "dvmaf_vs_uniform_equalbits": -4.638674864590044,
+            "lpips": 0.22755229123868048,
+            "uniform_lpips_equalbits": 0.1527768024489494,
+            "dlpips_vs_uniform_equalbits": -0.07477548878973109,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 14961.410505817254,
+            "vmaf": 84.112399875,
+            "dvmaf_vs_l2": 5.861538718749999,
+            "dvmaf_vs_uniform_equalbits": -7.951790579789048,
+            "lpips": 0.21941176429390907,
+            "uniform_lpips_equalbits": 0.13620473843063108,
+            "dlpips_vs_uniform_equalbits": -0.083207025863278,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 21494.885727393117,
+            "vmaf": 86.5715991875,
+            "dvmaf_vs_l2": 8.320738031249999,
+            "dvmaf_vs_uniform_equalbits": -10.253198435651939,
+            "lpips": 0.20538936252705753,
+            "uniform_lpips_equalbits": 0.12353718606275442,
+            "dlpips_vs_uniform_equalbits": -0.08185217646430311,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 33687.776274711505,
+            "vmaf": 89.581269625,
+            "dvmaf_vs_l2": 11.330408468749997,
+            "dvmaf_vs_uniform_equalbits": -9.418318749999997,
+            "lpips": 0.1813907187897712,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.065704355831258,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ],
+        "crf34_fixed": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 8412.38320090806,
+            "vmaf": 78.25086115625001,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.23640457226429135,
+            "uniform_lpips_equalbits": 0.23640457226429135,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 12175.09737419599,
+            "vmaf": 80.03289925,
+            "dvmaf_vs_l2": 1.7820380937499998,
+            "dvmaf_vs_uniform_equalbits": -7.421682585475466,
+            "lpips": 0.23028265486937016,
+            "uniform_lpips_equalbits": 0.15062349782194756,
+            "dlpips_vs_uniform_equalbits": -0.0796591570474226,
+            "vmaf_sign_p": 2.5560148060321808e-06
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 16116.728214150588,
+            "vmaf": 81.425371875,
+            "dvmaf_vs_l2": 3.1745107187500006,
+            "dvmaf_vs_uniform_equalbits": -12.550148073211844,
+            "lpips": 0.2243321230635047,
+            "uniform_lpips_equalbits": 0.13022613973404717,
+            "dlpips_vs_uniform_equalbits": -0.09410598332945752,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 23599.65656072645,
+            "vmaf": 83.74831965625,
+            "dvmaf_vs_l2": 5.497458500000001,
+            "dvmaf_vs_uniform_equalbits": -14.056518587161065,
+            "lpips": 0.2129957409342751,
+            "uniform_lpips_equalbits": 0.11516945592386905,
+            "dlpips_vs_uniform_equalbits": -0.09782628501040604,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 39999.76325387817,
+            "vmaf": 87.57492546875,
+            "dvmaf_vs_l2": 9.324064312499997,
+            "dvmaf_vs_uniform_equalbits": -11.424662906250006,
+            "lpips": 0.1915806122124195,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.07589424925390631,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ],
+        "crf34_center": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 8412.38320090806,
+            "vmaf": 78.25086115625001,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.23640457226429135,
+            "uniform_lpips_equalbits": 0.23640457226429135,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 13460.59737419599,
+            "vmaf": 80.15641209374999,
+            "dvmaf_vs_l2": 1.9055509375000006,
+            "dvmaf_vs_uniform_equalbits": -9.424869649527892,
+            "lpips": 0.23018919210880995,
+            "uniform_lpips_equalbits": 0.14397122497178436,
+            "dlpips_vs_uniform_equalbits": -0.08621796713702559,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 17481.728214150586,
+            "vmaf": 81.5789936875,
+            "dvmaf_vs_l2": 3.3281325312499996,
+            "dvmaf_vs_uniform_equalbits": -13.638333443721947,
+            "lpips": 0.2240804178873077,
+            "uniform_lpips_equalbits": 0.13527475336861008,
+            "dlpips_vs_uniform_equalbits": -0.08880566451869762,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 24823.323227393113,
+            "vmaf": 83.959917125,
+            "dvmaf_vs_l2": 5.709055968749999,
+            "dvmaf_vs_uniform_equalbits": -14.414694805882377,
+            "lpips": 0.21294977806974202,
+            "uniform_lpips_equalbits": 0.11030464485538803,
+            "dlpips_vs_uniform_equalbits": -0.10264513321435399,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 39633.8465872115,
+            "vmaf": 87.17459759375001,
+            "dvmaf_vs_l2": 8.923736437499999,
+            "dvmaf_vs_uniform_equalbits": -11.824990781249994,
+            "lpips": 0.19211763993371278,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.07643127697519958,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ]
+      }
+    },
+    "426_crf34": {
+      "lw": 426,
+      "lh": 178,
+      "B_low": 3179.8397275822927,
+      "bicubic_vmaf": 51.254544875,
+      "baseline_l2": {
+        "vmaf": 56.33086803125,
+        "lpips": 0.3040061650099233
+      },
+      "arms": {
+        "crf26_perframe": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 3179.8397275822927,
+            "vmaf": 56.33086803125,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.3040061650099233,
+            "uniform_lpips_equalbits": 0.3040061650099233,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 10437.761803703179,
+            "vmaf": 66.4085259375,
+            "dvmaf_vs_l2": 10.07765790625,
+            "dvmaf_vs_uniform_equalbits": -18.23597102139223,
+            "lpips": 0.2863304566126317,
+            "uniform_lpips_equalbits": 0.17890815746181118,
+            "dlpips_vs_uniform_equalbits": -0.1074222991508205,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 18229.67606732406,
+            "vmaf": 72.51119003125001,
+            "dvmaf_vs_l2": 16.180322,
+            "dvmaf_vs_uniform_equalbits": -22.793233948438697,
+            "lpips": 0.26964966021478176,
+            "uniform_lpips_equalbits": 0.13651835857314543,
+            "dlpips_vs_uniform_equalbits": -0.13313130164163633,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 33543.02542789916,
+            "vmaf": 81.1056406875,
+            "dvmaf_vs_l2": 24.77477265625,
+            "dvmaf_vs_uniform_equalbits": -17.893947687500003,
+            "lpips": 0.23834699322469532,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.12266063026618212,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 60045.385607382705,
+            "vmaf": 92.73688446874999,
+            "dvmaf_vs_l2": 36.4060164375,
+            "dvmaf_vs_uniform_equalbits": -6.26270390625001,
+            "lpips": 0.1822917170356959,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.06660535407718271,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ],
+        "crf26_fixed": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 3179.8397275822927,
+            "vmaf": 56.33086803125,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.3040061650099233,
+            "uniform_lpips_equalbits": 0.3040061650099233,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 12416.264407869843,
+            "vmaf": 61.41224696875,
+            "dvmaf_vs_l2": 5.0813789375,
+            "dvmaf_vs_uniform_equalbits": -26.441315736643134,
+            "lpips": 0.290518133318983,
+            "uniform_lpips_equalbits": 0.14937549400206193,
+            "dlpips_vs_uniform_equalbits": -0.1411426393169211,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 20588.77242149073,
+            "vmaf": 65.38180162500001,
+            "dvmaf_vs_l2": 9.05093359375,
+            "dvmaf_vs_uniform_equalbits": -31.021084105285553,
+            "lpips": 0.27691495697945356,
+            "uniform_lpips_equalbits": 0.12713953150529206,
+            "dlpips_vs_uniform_equalbits": -0.1497754254741615,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 36815.45511539916,
+            "vmaf": 72.97110484375,
+            "dvmaf_vs_l2": 16.6402368125,
+            "dvmaf_vs_uniform_equalbits": -26.028483531250004,
+            "lpips": 0.24998896289616823,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.13430259993765503,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 74322.57050321605,
+            "vmaf": 87.02015893750001,
+            "dvmaf_vs_l2": 30.689290906249997,
+            "dvmaf_vs_uniform_equalbits": -11.979429437499988,
+            "lpips": 0.19867654447443783,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.08299018151592463,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ],
+        "crf26_center": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 3179.8397275822927,
+            "vmaf": 56.33086803125,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.3040061650099233,
+            "uniform_lpips_equalbits": 0.3040061650099233,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 14812.681074536511,
+            "vmaf": 61.6219908125,
+            "dvmaf_vs_l2": 5.291122781250001,
+            "dvmaf_vs_uniform_equalbits": -30.1961452916144,
+            "lpips": 0.29037840059027076,
+            "uniform_lpips_equalbits": 0.1369743912954534,
+            "dlpips_vs_uniform_equalbits": -0.15340400929481735,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 24042.02242149073,
+            "vmaf": 66.04213784375,
+            "dvmaf_vs_l2": 9.7112698125,
+            "dvmaf_vs_uniform_equalbits": -31.968678411945803,
+            "lpips": 0.2764049229444936,
+            "uniform_lpips_equalbits": 0.11341078553234288,
+            "dlpips_vs_uniform_equalbits": -0.1629941374121507,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 40931.371782065835,
+            "vmaf": 74.23994681250001,
+            "dvmaf_vs_l2": 17.909078781250003,
+            "dvmaf_vs_uniform_equalbits": -24.759641562499993,
+            "lpips": 0.24902571563143283,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.13333935267291963,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 74318.82050321603,
+            "vmaf": 86.2536290625,
+            "dvmaf_vs_l2": 29.92276103125,
+            "dvmaf_vs_uniform_equalbits": -12.745959312500005,
+            "lpips": 0.1986185881542042,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.08293222519569099,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ],
+        "crf30_perframe": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 3179.8397275822927,
+            "vmaf": 56.33086803125,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.3040061650099233,
+            "uniform_lpips_equalbits": 0.3040061650099233,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 8112.102949536511,
+            "vmaf": 65.1221649375,
+            "dvmaf_vs_l2": 8.79129690625,
+            "dvmaf_vs_uniform_equalbits": -12.506598846792102,
+            "lpips": 0.28803806263022125,
+            "uniform_lpips_equalbits": 0.2301333195415072,
+            "dlpips_vs_uniform_equalbits": -0.057904743088714045,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 13367.150025657396,
+            "vmaf": 70.48540206249999,
+            "dvmaf_vs_l2": 14.154534031250002,
+            "dvmaf_vs_uniform_equalbits": -18.941282662091467,
+            "lpips": 0.2730236775241792,
+            "uniform_lpips_equalbits": 0.14445480121418267,
+            "dlpips_vs_uniform_equalbits": -0.12856887630999655,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 23708.81449039917,
+            "vmaf": 77.9494105,
+            "dvmaf_vs_l2": 21.61854246875,
+            "dvmaf_vs_uniform_equalbits": -19.906254751942555,
+            "lpips": 0.24532218533568084,
+            "uniform_lpips_equalbits": 0.1147354874919832,
+            "dlpips_vs_uniform_equalbits": -0.13058669784369764,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 41668.138211549376,
+            "vmaf": 88.33560146875,
+            "dvmaf_vs_l2": 32.0047334375,
+            "dvmaf_vs_uniform_equalbits": -10.663986906250003,
+            "lpips": 0.1960334717296064,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.08034710877109319,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ],
+        "crf30_fixed": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 3179.8397275822927,
+            "vmaf": 56.33086803125,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.3040061650099233,
+            "uniform_lpips_equalbits": 0.3040061650099233,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 9441.514407869843,
+            "vmaf": 60.731792625,
+            "dvmaf_vs_l2": 4.40092459375,
+            "dvmaf_vs_uniform_equalbits": -20.767789595729866,
+            "lpips": 0.2921181860147044,
+            "uniform_lpips_equalbits": 0.2071896123155724,
+            "dlpips_vs_uniform_equalbits": -0.08492857369913201,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 14940.189088157396,
+            "vmaf": 64.20348853125,
+            "dvmaf_vs_l2": 7.872620500000002,
+            "dvmaf_vs_uniform_equalbits": -27.825593726743506,
+            "lpips": 0.2800914589315653,
+            "uniform_lpips_equalbits": 0.13631455613622473,
+            "dlpips_vs_uniform_equalbits": -0.14377690279534056,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 25951.205115399167,
+            "vmaf": 70.80521215625001,
+            "dvmaf_vs_l2": 14.474344125000002,
+            "dvmaf_vs_uniform_equalbits": -28.094573369588502,
+            "lpips": 0.2564763156697154,
+            "uniform_lpips_equalbits": 0.10582063589920895,
+            "dlpips_vs_uniform_equalbits": -0.15065567977050645,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 51162.57050321605,
+            "vmaf": 82.91938196875,
+            "dvmaf_vs_l2": 26.5885139375,
+            "dvmaf_vs_uniform_equalbits": -16.08020640625,
+            "lpips": 0.2121282466687262,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.096441883710213,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ],
+        "crf30_center": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 3179.8397275822927,
+            "vmaf": 56.33086803125,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.3040061650099233,
+            "uniform_lpips_equalbits": 0.3040061650099233,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 10957.764407869843,
+            "vmaf": 60.95212359375,
+            "dvmaf_vs_l2": 4.621255562500001,
+            "dvmaf_vs_uniform_equalbits": -24.656820396018077,
+            "lpips": 0.2920493707060814,
+            "uniform_lpips_equalbits": 0.1597007315234622,
+            "dlpips_vs_uniform_equalbits": -0.1323486391826192,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 17118.27242149073,
+            "vmaf": 64.7850754375,
+            "dvmaf_vs_l2": 8.454207406250001,
+            "dvmaf_vs_uniform_equalbits": -30.847374867312638,
+            "lpips": 0.27984083828050643,
+            "uniform_lpips_equalbits": 0.12504329621889584,
+            "dlpips_vs_uniform_equalbits": -0.1547975420616106,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 28385.0384487325,
+            "vmaf": 71.8765635625,
+            "dvmaf_vs_l2": 15.54569553125,
+            "dvmaf_vs_uniform_equalbits": -27.481497804072305,
+            "lpips": 0.25594508193898946,
+            "uniform_lpips_equalbits": 0.10749000437743864,
+            "dlpips_vs_uniform_equalbits": -0.14845507756155082,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 50788.57050321604,
+            "vmaf": 82.3383135,
+            "dvmaf_vs_l2": 26.00744546875,
+            "dvmaf_vs_uniform_equalbits": -16.661274875000004,
+            "lpips": 0.21210509177763015,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.09641872881911695,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ],
+        "crf34_perframe": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 3179.8397275822927,
+            "vmaf": 56.33086803125,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.3040061650099233,
+            "uniform_lpips_equalbits": 0.3040061650099233,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 6677.764407869845,
+            "vmaf": 63.2636299375,
+            "dvmaf_vs_l2": 6.932761906250001,
+            "dvmaf_vs_uniform_equalbits": -10.218507260355267,
+            "lpips": 0.2903703188057989,
+            "uniform_lpips_equalbits": 0.21769058165487673,
+            "dlpips_vs_uniform_equalbits": -0.07267973715092216,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 10384.939088157396,
+            "vmaf": 67.51578771875,
+            "dvmaf_vs_l2": 11.1849196875,
+            "dvmaf_vs_uniform_equalbits": -16.96196056172714,
+            "lpips": 0.27766408398747444,
+            "uniform_lpips_equalbits": 0.18040768785075792,
+            "dlpips_vs_uniform_equalbits": -0.09725639613671652,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 17662.22074039917,
+            "vmaf": 73.2818171875,
+            "dvmaf_vs_l2": 16.95094915625,
+            "dvmaf_vs_uniform_equalbits": -21.75838359897385,
+            "lpips": 0.2545805543195456,
+            "uniform_lpips_equalbits": 0.13877433483734544,
+            "dlpips_vs_uniform_equalbits": -0.11580621948220018,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 30446.536649049376,
+            "vmaf": 81.4556289375,
+            "dvmaf_vs_l2": 25.124760906249996,
+            "dvmaf_vs_uniform_equalbits": -17.543959437500007,
+            "lpips": 0.21419713459908962,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.09851077164057642,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ],
+        "crf34_fixed": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 3179.8397275822927,
+            "vmaf": 56.33086803125,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.3040061650099233,
+            "uniform_lpips_equalbits": 0.3040061650099233,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 7519.514407869844,
+            "vmaf": 59.78547025,
+            "dvmaf_vs_l2": 3.4546022187500007,
+            "dvmaf_vs_uniform_equalbits": -16.615614482008837,
+            "lpips": 0.29426062607672065,
+            "uniform_lpips_equalbits": 0.21775730583949565,
+            "dlpips_vs_uniform_equalbits": -0.076503320237225,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 11407.439088157396,
+            "vmaf": 62.53735159375,
+            "dvmaf_vs_l2": 6.2064835625,
+            "dvmaf_vs_uniform_equalbits": -23.647235059973582,
+            "lpips": 0.2843973049893975,
+            "uniform_lpips_equalbits": 0.15459601619955732,
+            "dlpips_vs_uniform_equalbits": -0.1298012887898402,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 19181.871782065835,
+            "vmaf": 67.7359304375,
+            "dvmaf_vs_l2": 11.40506240625,
+            "dvmaf_vs_uniform_equalbits": -28.011862703384125,
+            "lpips": 0.2651545098051429,
+            "uniform_lpips_equalbits": 0.1327328078356603,
+            "dlpips_vs_uniform_equalbits": -0.13242170196948258,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 36860.23716988271,
+            "vmaf": 77.0274063125,
+            "dvmaf_vs_l2": 20.69653828125,
+            "dvmaf_vs_uniform_equalbits": -21.972182062499996,
+            "lpips": 0.22948280069977045,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.11379643774125725,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ],
+        "crf34_center": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 3179.8397275822927,
+            "vmaf": 56.33086803125,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.3040061650099233,
+            "uniform_lpips_equalbits": 0.3040061650099233,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 8489.681074536511,
+            "vmaf": 59.971196687500004,
+            "dvmaf_vs_l2": 3.640328656250002,
+            "dvmaf_vs_uniform_equalbits": -18.523675367066467,
+            "lpips": 0.29423623345792294,
+            "uniform_lpips_equalbits": 0.2342102414861555,
+            "dlpips_vs_uniform_equalbits": -0.060025991971767445,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 12772.439088157396,
+            "vmaf": 62.9955063125,
+            "dvmaf_vs_l2": 6.664638281250001,
+            "dvmaf_vs_uniform_equalbits": -25.44730311380259,
+            "lpips": 0.2842506031738594,
+            "uniform_lpips_equalbits": 0.14753234257803047,
+            "dlpips_vs_uniform_equalbits": -0.13671826059582895,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 20637.288448732503,
+            "vmaf": 68.50814331250001,
+            "dvmaf_vs_l2": 12.177275281250001,
+            "dvmaf_vs_uniform_equalbits": -27.917332847431155,
+            "lpips": 0.2651042352663353,
+            "uniform_lpips_equalbits": 0.12694665111330797,
+            "dlpips_vs_uniform_equalbits": -0.13815758415302734,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 36494.32050321605,
+            "vmaf": 76.55907793749999,
+            "dvmaf_vs_l2": 20.22820990625,
+            "dvmaf_vs_uniform_equalbits": -22.44051043750001,
+            "lpips": 0.22980150359217077,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.11411514063365757,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ]
+      }
+    },
+    "426_crf42": {
+      "lw": 426,
+      "lh": 178,
+      "B_low": 1318.4585698070375,
+      "bicubic_vmaf": 36.076124375,
+      "baseline_l2": {
+        "vmaf": 38.358940625,
+        "lpips": 0.3673363128909841
+      },
+      "arms": {
+        "crf26_perframe": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 1318.4585698070375,
+            "vmaf": 38.358940625,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.3673363128909841,
+            "uniform_lpips_equalbits": 0.3673363128909841,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 8723.564287150019,
+            "vmaf": 51.0931875,
+            "dvmaf_vs_l2": 12.734246875,
+            "dvmaf_vs_uniform_equalbits": -28.139997914715053,
+            "lpips": 0.3454033669549972,
+            "uniform_lpips_equalbits": 0.22757076865416015,
+            "dlpips_vs_uniform_equalbits": -0.11783259830083703,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 16559.326254493,
+            "vmaf": 58.247891906250004,
+            "dvmaf_vs_l2": 19.888951281249998,
+            "dvmaf_vs_uniform_equalbits": -36.45985146599119,
+            "lpips": 0.32446120493113995,
+            "uniform_lpips_equalbits": 0.1279357601717716,
+            "dlpips_vs_uniform_equalbits": -0.19652544475936834,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 31136.272064178964,
+            "vmaf": 68.83244709375,
+            "dvmaf_vs_l2": 30.473506468749996,
+            "dvmaf_vs_uniform_equalbits": -30.167141281249997,
+            "lpips": 0.2854972349014133,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.16981087194290012,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 59169.46055855089,
+            "vmaf": 84.64118975,
+            "dvmaf_vs_l2": 46.282249125,
+            "dvmaf_vs_uniform_equalbits": -14.358398625000007,
+            "lpips": 0.21544452058151364,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.09975815762300044,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ],
+        "crf26_fixed": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 1318.4585698070375,
+            "vmaf": 38.358940625,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.3673363128909841,
+            "uniform_lpips_equalbits": 0.3673363128909841,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 9917.952307983353,
+            "vmaf": 44.932416843750005,
+            "dvmaf_vs_l2": 6.57347621875,
+            "dvmaf_vs_uniform_equalbits": -38.07116586938041,
+            "lpips": 0.3491567907622084,
+            "uniform_lpips_equalbits": 0.19366450096367768,
+            "dlpips_vs_uniform_equalbits": -0.15549228979853072,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 18913.529379493,
+            "vmaf": 49.569997406249996,
+            "dvmaf_vs_l2": 11.21105678125,
+            "dvmaf_vs_uniform_equalbits": -46.05284794911071,
+            "lpips": 0.3323135687969625,
+            "uniform_lpips_equalbits": 0.133799630301075,
+            "dlpips_vs_uniform_equalbits": -0.1985139384958875,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 33996.51685584563,
+            "vmaf": 60.24935034375,
+            "dvmaf_vs_l2": 21.89040971875,
+            "dvmaf_vs_uniform_equalbits": -38.75023803125,
+            "lpips": 0.29714857100043446,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.18146220804192126,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 72249.2418085509,
+            "vmaf": 77.19259115624999,
+            "dvmaf_vs_l2": 38.83365053125,
+            "dvmaf_vs_uniform_equalbits": -21.806997218750013,
+            "lpips": 0.23131498112343252,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.11562861816491932,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ],
+        "crf26_center": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 1318.4585698070375,
+            "vmaf": 38.358940625,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.3673363128909841,
+            "uniform_lpips_equalbits": 0.3673363128909841,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 13044.368974650017,
+            "vmaf": 45.0310810625,
+            "dvmaf_vs_l2": 6.6721404374999995,
+            "dvmaf_vs_uniform_equalbits": -43.86160254858094,
+            "lpips": 0.34936255868524313,
+            "uniform_lpips_equalbits": 0.14612514553325193,
+            "dlpips_vs_uniform_equalbits": -0.2032374131519912,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 22366.779379492997,
+            "vmaf": 50.312502406250005,
+            "dvmaf_vs_l2": 11.95356178125,
+            "dvmaf_vs_uniform_equalbits": -46.918273474520944,
+            "lpips": 0.33153422188479453,
+            "uniform_lpips_equalbits": 0.12007088432812582,
+            "dlpips_vs_uniform_equalbits": -0.2114633375566687,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 39442.26685584563,
+            "vmaf": 60.17814053125,
+            "dvmaf_vs_l2": 21.81919990625,
+            "dvmaf_vs_uniform_equalbits": -38.82144784375,
+            "lpips": 0.2967444403329864,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.18105807737447321,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 73201.99180855088,
+            "vmaf": 75.48926225,
+            "dvmaf_vs_l2": 37.130321625,
+            "dvmaf_vs_uniform_equalbits": -23.510326125000006,
+            "lpips": 0.23228002816904336,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.11659366521053016,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ],
+        "crf30_perframe": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 1318.4585698070375,
+            "vmaf": 38.358940625,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.3673363128909841,
+            "uniform_lpips_equalbits": 0.3673363128909841,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 6375.7335579833525,
+            "vmaf": 50.01990525,
+            "dvmaf_vs_l2": 11.660964624999998,
+            "dvmaf_vs_uniform_equalbits": -20.300184711466066,
+            "lpips": 0.34696693648584187,
+            "uniform_lpips_equalbits": 0.2491833174724502,
+            "dlpips_vs_uniform_equalbits": -0.09778361901339166,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 11698.742921159666,
+            "vmaf": 56.572504124999995,
+            "dvmaf_vs_l2": 18.2135635,
+            "dvmaf_vs_uniform_equalbits": -30.09400849899852,
+            "lpips": 0.32769679883494973,
+            "uniform_lpips_equalbits": 0.15308856183983,
+            "dlpips_vs_uniform_equalbits": -0.17460823699511974,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 21632.52466834563,
+            "vmaf": 66.1560091875,
+            "dvmaf_vs_l2": 27.7970685625,
+            "dvmaf_vs_uniform_equalbits": -30.732877005735972,
+            "lpips": 0.29209904349409044,
+            "uniform_lpips_equalbits": 0.12298998847893546,
+            "dlpips_vs_uniform_equalbits": -0.169109055015155,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 40732.6168085509,
+            "vmaf": 80.402071,
+            "dvmaf_vs_l2": 42.043130375000004,
+            "dvmaf_vs_uniform_equalbits": -18.597517374999995,
+            "lpips": 0.2286319420672953,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.11294557910878211,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ],
+        "crf30_fixed": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 1318.4585698070375,
+            "vmaf": 38.358940625,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.3673363128909841,
+            "uniform_lpips_equalbits": 0.3673363128909841,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 7167.202307983353,
+            "vmaf": 44.27471803125,
+            "dvmaf_vs_l2": 5.915777406249999,
+            "dvmaf_vs_uniform_equalbits": -31.396473774243447,
+            "lpips": 0.35073678044136614,
+            "uniform_lpips_equalbits": 0.2103993853449203,
+            "dlpips_vs_uniform_equalbits": -0.14033739509644583,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 13264.946046159666,
+            "vmaf": 48.58937075,
+            "dvmaf_vs_l2": 10.230430125000002,
+            "dvmaf_vs_uniform_equalbits": -40.668230198803926,
+            "lpips": 0.33543739560991526,
+            "uniform_lpips_equalbits": 0.1449836917299286,
+            "dlpips_vs_uniform_equalbits": -0.19045370387998667,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 23613.766855845628,
+            "vmaf": 58.28888671875,
+            "dvmaf_vs_l2": 19.929946093749997,
+            "dvmaf_vs_uniform_equalbits": -39.52252167574908,
+            "lpips": 0.3034713590750471,
+            "uniform_lpips_equalbits": 0.1151133590130475,
+            "dlpips_vs_uniform_equalbits": -0.18835800006199957,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 49295.158475217555,
+            "vmaf": 73.4550270625,
+            "dvmaf_vs_l2": 35.0960864375,
+            "dvmaf_vs_uniform_equalbits": -25.544561312500008,
+            "lpips": 0.24474081094376743,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.12905444798525423,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ],
+        "crf30_center": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 1318.4585698070375,
+            "vmaf": 38.358940625,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.3673363128909841,
+            "uniform_lpips_equalbits": 0.3673363128909841,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 9189.452307983353,
+            "vmaf": 44.403441468749996,
+            "dvmaf_vs_l2": 6.044500843749999,
+            "dvmaf_vs_uniform_equalbits": -36.300440992883274,
+            "lpips": 0.3510115169920027,
+            "uniform_lpips_equalbits": 0.21434514710351638,
+            "dlpips_vs_uniform_equalbits": -0.13666636988848635,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 15443.029379492998,
+            "vmaf": 49.22774278125,
+            "dvmaf_vs_l2": 10.868802156249998,
+            "dvmaf_vs_uniform_equalbits": -43.63322621437305,
+            "lpips": 0.3348932374501601,
+            "uniform_lpips_equalbits": 0.1337124318125997,
+            "dlpips_vs_uniform_equalbits": -0.20118080563756038,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 26895.933522512292,
+            "vmaf": 58.1865613125,
+            "dvmaf_vs_l2": 19.8276206875,
+            "dvmaf_vs_uniform_equalbits": -41.15311638564558,
+            "lpips": 0.3035316859604791,
+            "uniform_lpips_equalbits": 0.10206477220133447,
+            "dlpips_vs_uniform_equalbits": -0.2014669137591446,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 49671.74180855089,
+            "vmaf": 71.85886375000001,
+            "dvmaf_vs_l2": 33.499923124999995,
+            "dvmaf_vs_uniform_equalbits": -27.14072462499999,
+            "lpips": 0.24568832444492728,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.13000196148641407,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ],
+        "crf34_perframe": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 1318.4585698070375,
+            "vmaf": 38.358940625,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.3673363128909841,
+            "uniform_lpips_equalbits": 0.3673363128909841,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 4924.7179329833525,
+            "vmaf": 48.34312028125,
+            "dvmaf_vs_l2": 9.98417965625,
+            "dvmaf_vs_uniform_equalbits": -12.776338212761218,
+            "lpips": 0.34922535833902657,
+            "uniform_lpips_equalbits": 0.3148173026924437,
+            "dlpips_vs_uniform_equalbits": -0.03440805564658289,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 8711.430421159666,
+            "vmaf": 54.04442378125,
+            "dvmaf_vs_l2": 15.68548315625,
+            "dvmaf_vs_uniform_equalbits": -25.1504579208094,
+            "lpips": 0.33211479894816875,
+            "uniform_lpips_equalbits": 0.2279152246443519,
+            "dlpips_vs_uniform_equalbits": -0.10419957430381685,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 15797.785085012296,
+            "vmaf": 62.20056559375,
+            "dvmaf_vs_l2": 23.841624968749997,
+            "dvmaf_vs_uniform_equalbits": -31.247302605467198,
+            "lpips": 0.30098020914010704,
+            "uniform_lpips_equalbits": 0.13187662337365258,
+            "dlpips_vs_uniform_equalbits": -0.16910358576645446,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 29457.575141884223,
+            "vmaf": 74.07543528125001,
+            "dvmaf_vs_l2": 35.71649465625,
+            "dvmaf_vs_uniform_equalbits": -24.924153093749993,
+            "lpips": 0.24622445739805698,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.13053809443954378,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ],
+        "crf34_fixed": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 1318.4585698070375,
+            "vmaf": 38.358940625,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.3673363128909841,
+            "uniform_lpips_equalbits": 0.3673363128909841,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 5438.4523079833525,
+            "vmaf": 43.38208228125,
+            "dvmaf_vs_l2": 5.02314165625,
+            "dvmaf_vs_uniform_equalbits": -19.147253143370342,
+            "lpips": 0.3528082965640351,
+            "uniform_lpips_equalbits": 0.31800036328840775,
+            "dlpips_vs_uniform_equalbits": -0.03480793327562737,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 9732.196046159666,
+            "vmaf": 47.17226946875,
+            "dvmaf_vs_l2": 8.81332884375,
+            "dvmaf_vs_uniform_equalbits": -35.244925156483234,
+            "lpips": 0.33962858375161886,
+            "uniform_lpips_equalbits": 0.1989377467001703,
+            "dlpips_vs_uniform_equalbits": -0.14069083705144855,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 17139.60018917896,
+            "vmaf": 55.4911626875,
+            "dvmaf_vs_l2": 17.1322220625,
+            "dvmaf_vs_uniform_equalbits": -40.17657175700629,
+            "lpips": 0.3121268633985892,
+            "uniform_lpips_equalbits": 0.12493292816759519,
+            "dlpips_vs_uniform_equalbits": -0.187193935230994,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 35195.57514188422,
+            "vmaf": 68.1114705625,
+            "dvmaf_vs_l2": 29.752529937500004,
+            "dvmaf_vs_uniform_equalbits": -30.8881178125,
+            "lpips": 0.26222108234651387,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.14653471938800067,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ],
+        "crf34_center": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 1318.4585698070375,
+            "vmaf": 38.358940625,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.3673363128909841,
+            "uniform_lpips_equalbits": 0.3673363128909841,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 6721.3689746500195,
+            "vmaf": 43.54761971875,
+            "dvmaf_vs_l2": 5.1886790937499985,
+            "dvmaf_vs_uniform_equalbits": -30.391026143478527,
+            "lpips": 0.3531137276440859,
+            "uniform_lpips_equalbits": 0.2131439364940799,
+            "dlpips_vs_uniform_equalbits": -0.139969791150006,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 11097.196046159666,
+            "vmaf": 47.711229625,
+            "dvmaf_vs_l2": 9.352288999999999,
+            "dvmaf_vs_uniform_equalbits": -37.96009849211299,
+            "lpips": 0.3392287363531068,
+            "uniform_lpips_equalbits": 0.15620147817173433,
+            "dlpips_vs_uniform_equalbits": -0.18302725818137247,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 19148.183522512296,
+            "vmaf": 55.341665625,
+            "dvmaf_vs_l2": 16.982725000000002,
+            "dvmaf_vs_uniform_equalbits": -40.39044131277574,
+            "lpips": 0.31257067678961903,
+            "uniform_lpips_equalbits": 0.13286673893178172,
+            "dlpips_vs_uniform_equalbits": -0.1797039378578373,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 35377.49180855089,
+            "vmaf": 66.70972446875,
+            "dvmaf_vs_l2": 28.350783843749998,
+            "dvmaf_vs_uniform_equalbits": -32.289863906250005,
+            "lpips": 0.26330439664889127,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.14761803369037807,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ]
+      }
+    },
+    "320_crf26": {
+      "lw": 320,
+      "lh": 134,
+      "B_low": 5700.191146424518,
+      "bicubic_vmaf": 51.383820562500006,
+      "baseline_l2": {
+        "vmaf": 63.24764350000001,
+        "lpips": 0.31962207797914743
+      },
+      "arms": {
+        "crf26_perframe": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 5700.191146424518,
+            "vmaf": 63.24764350000001,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.31962207797914743,
+            "uniform_lpips_equalbits": 0.31962207797914743,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 13264.225859936625,
+            "vmaf": 74.0021910625,
+            "dvmaf_vs_l2": 10.754547562499999,
+            "dvmaf_vs_uniform_equalbits": -15.254218427747603,
+            "lpips": 0.2999369694152847,
+            "uniform_lpips_equalbits": 0.14498741858738373,
+            "dlpips_vs_uniform_equalbits": -0.15494955082790096,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 20172.773594282065,
+            "vmaf": 79.49215603125,
+            "dvmaf_vs_l2": 16.24451253125,
+            "dvmaf_vs_uniform_equalbits": -16.717028920695242,
+            "lpips": 0.28196027036756277,
+            "uniform_lpips_equalbits": 0.12879337707795332,
+            "dlpips_vs_uniform_equalbits": -0.15316689328960945,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 34646.67114630628,
+            "vmaf": 86.93469928125,
+            "dvmaf_vs_l2": 23.68705578125,
+            "dvmaf_vs_uniform_equalbits": -12.064889093749997,
+            "lpips": 0.24817626818548888,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.13248990522697568,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 62163.61468785472,
+            "vmaf": 96.1609940625,
+            "dvmaf_vs_l2": 32.9133505625,
+            "dvmaf_vs_uniform_equalbits": -2.838594312500007,
+            "lpips": 0.1886453409679234,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.0729589780094102,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ],
+        "crf26_fixed": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 5700.191146424518,
+            "vmaf": 63.24764350000001,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.31962207797914743,
+            "uniform_lpips_equalbits": 0.31962207797914743,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 14080.598255769957,
+            "vmaf": 68.51658134375,
+            "dvmaf_vs_l2": 5.268937843749998,
+            "dvmaf_vs_uniform_equalbits": -22.090414765673955,
+            "lpips": 0.30397381517104805,
+            "uniform_lpips_equalbits": 0.14076281187837966,
+            "dlpips_vs_uniform_equalbits": -0.16321100329266838,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 22857.088698448733,
+            "vmaf": 72.44255559375,
+            "dvmaf_vs_l2": 9.194912093750002,
+            "dvmaf_vs_uniform_equalbits": -25.016522124664334,
+            "lpips": 0.28923902520909905,
+            "uniform_lpips_equalbits": 0.1181216098510063,
+            "dlpips_vs_uniform_equalbits": -0.17111741535809277,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 41507.73625047295,
+            "vmaf": 79.1951111875,
+            "dvmaf_vs_l2": 15.947467687500001,
+            "dvmaf_vs_uniform_equalbits": -19.804477187499998,
+            "lpips": 0.2593744348268956,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.1436880718683824,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 75834.78135452137,
+            "vmaf": 91.7991244375,
+            "dvmaf_vs_l2": 28.5514809375,
+            "dvmaf_vs_uniform_equalbits": -7.200463937500004,
+            "lpips": 0.20469785400200635,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.08901149104349315,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ],
+        "crf26_center": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 5700.191146424518,
+            "vmaf": 63.24764350000001,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.31962207797914743,
+            "uniform_lpips_equalbits": 0.31962207797914743,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 17207.014922436625,
+            "vmaf": 68.64878081250001,
+            "dvmaf_vs_l2": 5.4011373124999995,
+            "dvmaf_vs_uniform_equalbits": -27.130482925669142,
+            "lpips": 0.30409704241901636,
+            "uniform_lpips_equalbits": 0.12458406686868351,
+            "dlpips_vs_uniform_equalbits": -0.17951297555033285,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 26310.338698448733,
+            "vmaf": 72.85829559375,
+            "dvmaf_vs_l2": 9.610652093750002,
+            "dvmaf_vs_uniform_equalbits": -26.208712650074574,
+            "lpips": 0.28903190745040774,
+            "uniform_lpips_equalbits": 0.10439286387805713,
+            "dlpips_vs_uniform_equalbits": -0.18463904357235061,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 42947.65291713962,
+            "vmaf": 80.4055591875,
+            "dvmaf_vs_l2": 17.1579156875,
+            "dvmaf_vs_uniform_equalbits": -18.5940291875,
+            "lpips": 0.2595334943616763,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.14384713140316308,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 75831.03135452139,
+            "vmaf": 91.03612846875,
+            "dvmaf_vs_l2": 27.788484968749998,
+            "dvmaf_vs_uniform_equalbits": -7.963459906250009,
+            "lpips": 0.20553819637279958,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.08985183341428638,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ],
+        "crf30_perframe": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 5700.191146424518,
+            "vmaf": 63.24764350000001,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.31962207797914743,
+            "uniform_lpips_equalbits": 0.31962207797914743,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 10792.322214103293,
+            "vmaf": 72.5334095625,
+            "dvmaf_vs_l2": 9.285766062499999,
+            "dvmaf_vs_uniform_equalbits": -13.230349805408125,
+            "lpips": 0.3016802837373689,
+            "uniform_lpips_equalbits": 0.16884290230370447,
+            "dlpips_vs_uniform_equalbits": -0.13283738143366441,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 15428.297031782065,
+            "vmaf": 77.28123012500001,
+            "dvmaf_vs_l2": 14.033586624999998,
+            "dvmaf_vs_uniform_equalbits": -15.555366033191262,
+            "lpips": 0.28537249471992254,
+            "uniform_lpips_equalbits": 0.13378866953854027,
+            "dlpips_vs_uniform_equalbits": -0.15158382518138228,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 25127.798750472946,
+            "vmaf": 83.68173003125,
+            "dvmaf_vs_l2": 20.43408653125,
+            "dvmaf_vs_uniform_equalbits": -14.834654284429405,
+            "lpips": 0.2552103198831901,
+            "uniform_lpips_equalbits": 0.10909417150091215,
+            "dlpips_vs_uniform_equalbits": -0.14611614838227793,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 43574.51572952137,
+            "vmaf": 92.302829625,
+            "dvmaf_vs_l2": 29.055186125000002,
+            "dvmaf_vs_uniform_equalbits": -6.696758750000001,
+            "lpips": 0.20264070387929678,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.08695434092078358,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ],
+        "crf30_fixed": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 5700.191146424518,
+            "vmaf": 63.24764350000001,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.31962207797914743,
+            "uniform_lpips_equalbits": 0.31962207797914743,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 11329.848255769959,
+            "vmaf": 67.73350990624999,
+            "dvmaf_vs_l2": 4.485866406249999,
+            "dvmaf_vs_uniform_equalbits": -18.322712363121454,
+            "lpips": 0.3056781750638038,
+            "uniform_lpips_equalbits": 0.15499753731018548,
+            "dlpips_vs_uniform_equalbits": -0.1506806377536183,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 17208.505365115398,
+            "vmaf": 71.16736659375,
+            "dvmaf_vs_l2": 7.919723093749999,
+            "dvmaf_vs_uniform_equalbits": -24.61436289650591,
+            "lpips": 0.29248273139819503,
+            "uniform_lpips_equalbits": 0.1245763540477059,
+            "dlpips_vs_uniform_equalbits": -0.16790637735048913,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 29643.56958380628,
+            "vmaf": 76.900554375,
+            "dvmaf_vs_l2": 13.652910875,
+            "dvmaf_vs_uniform_equalbits": -22.099034000000003,
+            "lpips": 0.26609251112677157,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.15040614816825837,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 52674.78135452139,
+            "vmaf": 87.62728040625001,
+            "dvmaf_vs_l2": 24.37963690625,
+            "dvmaf_vs_uniform_equalbits": -11.372307968749993,
+            "lpips": 0.21821854764129966,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.10253218468278646,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ],
+        "crf30_center": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 5700.191146424518,
+            "vmaf": 63.24764350000001,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.31962207797914743,
+            "uniform_lpips_equalbits": 0.31962207797914743,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 13352.098255769959,
+            "vmaf": 67.90017571875,
+            "dvmaf_vs_l2": 4.6525322187499984,
+            "dvmaf_vs_uniform_equalbits": -21.501607724136363,
+            "lpips": 0.3058114587329328,
+            "uniform_lpips_equalbits": 0.1445326919027623,
+            "dlpips_vs_uniform_equalbits": -0.1612787668301705,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 19386.588698448733,
+            "vmaf": 71.47169634375001,
+            "dvmaf_vs_l2": 8.224052843749998,
+            "dvmaf_vs_uniform_equalbits": -24.371418763085018,
+            "lpips": 0.29249565210193396,
+            "uniform_lpips_equalbits": 0.1319189349502954,
+            "dlpips_vs_uniform_equalbits": -0.16057671715163854,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 30401.31958380628,
+            "vmaf": 77.86796412500001,
+            "dvmaf_vs_l2": 14.620320625,
+            "dvmaf_vs_uniform_equalbits": -21.131624249999987,
+            "lpips": 0.2664973601931706,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.1508109972346574,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 52300.78135452139,
+            "vmaf": 87.00475890625,
+            "dvmaf_vs_l2": 23.757115406249998,
+            "dvmaf_vs_uniform_equalbits": -11.994829468749998,
+            "lpips": 0.21905467670876533,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.10336831375025213,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ],
+        "crf34_perframe": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 5700.191146424518,
+            "vmaf": 63.24764350000001,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.31962207797914743,
+            "uniform_lpips_equalbits": 0.31962207797914743,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 9271.905547436625,
+            "vmaf": 70.40409759375,
+            "dvmaf_vs_l2": 7.156454093749999,
+            "dvmaf_vs_uniform_equalbits": -10.560070023006745,
+            "lpips": 0.3041599184507504,
+            "uniform_lpips_equalbits": 0.21200446588427613,
+            "dlpips_vs_uniform_equalbits": -0.09215545256647428,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 12524.744948448733,
+            "vmaf": 73.9764601875,
+            "dvmaf_vs_l2": 10.7288166875,
+            "dvmaf_vs_uniform_equalbits": -14.05657008354656,
+            "lpips": 0.2901045922189951,
+            "uniform_lpips_equalbits": 0.14881412320870216,
+            "dlpips_vs_uniform_equalbits": -0.14129046901029294,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 19293.608646306282,
+            "vmaf": 78.74823353125001,
+            "dvmaf_vs_l2": 15.500590031249999,
+            "dvmaf_vs_uniform_equalbits": -17.051587442784296,
+            "lpips": 0.2646816320484504,
+            "uniform_lpips_equalbits": 0.13228858658756906,
+            "dlpips_vs_uniform_equalbits": -0.13239304546088135,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 32208.586042021376,
+            "vmaf": 85.21630437499999,
+            "dvmaf_vs_l2": 21.968660874999998,
+            "dvmaf_vs_uniform_equalbits": -13.783284000000009,
+            "lpips": 0.22113944217562675,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.10545307921711355,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ],
+        "crf34_fixed": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 5700.191146424518,
+            "vmaf": 63.24764350000001,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.31962207797914743,
+            "uniform_lpips_equalbits": 0.31962207797914743,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 9601.098255769959,
+            "vmaf": 66.63640878125,
+            "dvmaf_vs_l2": 3.3887652812499995,
+            "dvmaf_vs_uniform_equalbits": -15.36694147674929,
+            "lpips": 0.30789078515954316,
+            "uniform_lpips_equalbits": 0.20265934863944868,
+            "dlpips_vs_uniform_equalbits": -0.10523143652009448,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 13675.7553651154,
+            "vmaf": 69.32337515625,
+            "dvmaf_vs_l2": 6.075731656249999,
+            "dvmaf_vs_uniform_equalbits": -20.61385872973598,
+            "lpips": 0.2969186934642494,
+            "uniform_lpips_equalbits": 0.14285781411103846,
+            "dlpips_vs_uniform_equalbits": -0.15406087935321092,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 22264.402917139614,
+            "vmaf": 73.6529274375,
+            "dvmaf_vs_l2": 10.405283937499998,
+            "dvmaf_vs_uniform_equalbits": -23.530179077050278,
+            "lpips": 0.2749144665431231,
+            "uniform_lpips_equalbits": 0.12047789234818194,
+            "dlpips_vs_uniform_equalbits": -0.15443657419494117,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 38372.448021188044,
+            "vmaf": 81.511639875,
+            "dvmaf_vs_l2": 18.263996374999998,
+            "dvmaf_vs_uniform_equalbits": -17.4879485,
+            "lpips": 0.2357123204274103,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.1200259574688971,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ],
+        "crf34_center": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 5700.191146424518,
+            "vmaf": 63.24764350000001,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.31962207797914743,
+            "uniform_lpips_equalbits": 0.31962207797914743,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 10884.014922436625,
+            "vmaf": 66.83341446875,
+            "dvmaf_vs_l2": 3.585770968749998,
+            "dvmaf_vs_uniform_equalbits": -18.898942420267105,
+            "lpips": 0.30805254308506846,
+            "uniform_lpips_equalbits": 0.16413324171537452,
+            "dlpips_vs_uniform_equalbits": -0.14391930136969394,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 15040.755365115398,
+            "vmaf": 69.54604975000001,
+            "dvmaf_vs_l2": 6.298406249999998,
+            "dvmaf_vs_uniform_equalbits": -22.64940690856497,
+            "lpips": 0.2969986372627318,
+            "uniform_lpips_equalbits": 0.13579414048951163,
+            "dlpips_vs_uniform_equalbits": -0.16120449677322016,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 22653.56958380628,
+            "vmaf": 74.24758628125,
+            "dvmaf_vs_l2": 10.999942781249999,
+            "dvmaf_vs_uniform_equalbits": -23.116727201462297,
+            "lpips": 0.2757678210036829,
+            "uniform_lpips_equalbits": 0.1189307207539429,
+            "dlpips_vs_uniform_equalbits": -0.15683710024974,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 38006.53135452138,
+            "vmaf": 81.021194625,
+            "dvmaf_vs_l2": 17.773551124999997,
+            "dvmaf_vs_uniform_equalbits": -17.978393749999995,
+            "lpips": 0.23683305142913014,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.12114668847061694,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ]
+      }
+    },
+    "320_crf34": {
+      "lw": 320,
+      "lh": 134,
+      "B_low": 2027.4438138479002,
+      "bicubic_vmaf": 38.6049473125,
+      "baseline_l2": {
+        "vmaf": 44.291947125,
+        "lpips": 0.3828254430554807
+      },
+      "arms": {
+        "crf26_perframe": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 2027.4438138479002,
+            "vmaf": 44.291947125,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.3828254430554807,
+            "uniform_lpips_equalbits": 0.3828254430554807,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 9305.751310655505,
+            "vmaf": 57.07315446875,
+            "dvmaf_vs_l2": 12.781207343750001,
+            "dvmaf_vs_uniform_equalbits": -23.997856126986257,
+            "lpips": 0.3586853762390092,
+            "uniform_lpips_equalbits": 0.211043652909036,
+            "dlpips_vs_uniform_equalbits": -0.1476417233299732,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 16519.444224129777,
+            "vmaf": 64.1784924375,
+            "dvmaf_vs_l2": 19.8865453125,
+            "dvmaf_vs_uniform_equalbits": -30.463271074533935,
+            "lpips": 0.335990397259593,
+            "uniform_lpips_equalbits": 0.12814214379510466,
+            "dlpips_vs_uniform_equalbits": -0.20784825346448835,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 32197.348280244987,
+            "vmaf": 74.4975271875,
+            "dvmaf_vs_l2": 30.205580062499997,
+            "dvmaf_vs_uniform_equalbits": -24.502061187500004,
+            "lpips": 0.29287508071865886,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.17718871776014566,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 59680.68243414207,
+            "vmaf": 88.81462174999999,
+            "dvmaf_vs_l2": 44.52267462500001,
+            "dvmaf_vs_uniform_equalbits": -10.184966625000015,
+            "lpips": 0.21891128458082676,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.10322492162231356,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ],
+        "crf26_fixed": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 2027.4438138479002,
+            "vmaf": 44.291947125,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.3828254430554807,
+            "uniform_lpips_equalbits": 0.3828254430554807,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 11321.488289822171,
+            "vmaf": 50.94897303125,
+            "dvmaf_vs_l2": 6.65702590625,
+            "dvmaf_vs_uniform_equalbits": -35.09341871395933,
+            "lpips": 0.36381702218204737,
+            "uniform_lpips_equalbits": 0.15504079890061936,
+            "dlpips_vs_uniform_equalbits": -0.208776223281428,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 19551.61609912978,
+            "vmaf": 55.63984971875,
+            "dvmaf_vs_l2": 11.34790259375,
+            "dvmaf_vs_uniform_equalbits": -40.28010679692717,
+            "lpips": 0.3451505322009325,
+            "uniform_lpips_equalbits": 0.1312628517641588,
+            "dlpips_vs_uniform_equalbits": -0.2138876804367737,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 36316.70505107832,
+            "vmaf": 66.24079803125,
+            "dvmaf_vs_l2": 21.94885090625,
+            "dvmaf_vs_uniform_equalbits": -32.75879034375001,
+            "lpips": 0.30665295547805727,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.19096659251954406,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 73631.13295497542,
+            "vmaf": 81.2806865625,
+            "dvmaf_vs_l2": 36.9887394375,
+            "dvmaf_vs_uniform_equalbits": -17.718901812500008,
+            "lpips": 0.23893055168446153,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.12324418872594833,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ],
+        "crf26_center": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 2027.4438138479002,
+            "vmaf": 44.291947125,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.3828254430554807,
+            "uniform_lpips_equalbits": 0.3828254430554807,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 13717.90495648884,
+            "vmaf": 51.141603875,
+            "dvmaf_vs_l2": 6.84965675,
+            "dvmaf_vs_uniform_equalbits": -38.8653612689306,
+            "lpips": 0.3633848843164742,
+            "uniform_lpips_equalbits": 0.14263969619401085,
+            "dlpips_vs_uniform_equalbits": -0.22074518812246335,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 23004.86609912978,
+            "vmaf": 56.402654749999996,
+            "dvmaf_vs_l2": 12.110707625,
+            "dvmaf_vs_uniform_equalbits": -41.12523229108743,
+            "lpips": 0.3443423043936491,
+            "uniform_lpips_equalbits": 0.11753410579120964,
+            "dlpips_vs_uniform_equalbits": -0.22680819860243945,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 40009.45505107832,
+            "vmaf": 66.01367309374999,
+            "dvmaf_vs_l2": 21.72172596875,
+            "dvmaf_vs_uniform_equalbits": -32.985915281250016,
+            "lpips": 0.30729050340596586,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.19160414044745266,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 73627.3829549754,
+            "vmaf": 80.39418534375,
+            "dvmaf_vs_l2": 36.10223821875,
+            "dvmaf_vs_uniform_equalbits": -18.605403031250006,
+            "lpips": 0.239421289996244,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.12373492703773081,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ],
+        "crf30_perframe": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 2027.4438138479002,
+            "vmaf": 44.291947125,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.3828254430554807,
+            "uniform_lpips_equalbits": 0.3828254430554807,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 6992.316414822171,
+            "vmaf": 55.85682665625001,
+            "dvmaf_vs_l2": 11.56487953125,
+            "dvmaf_vs_uniform_equalbits": -19.45205009844956,
+            "lpips": 0.3603087953524664,
+            "uniform_lpips_equalbits": 0.20674695189765194,
+            "dlpips_vs_uniform_equalbits": -0.15356184345481447,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 11892.993703296443,
+            "vmaf": 62.296530312499996,
+            "dvmaf_vs_l2": 18.004583187499996,
+            "dvmaf_vs_uniform_equalbits": -24.69134607692895,
+            "lpips": 0.3393358481116593,
+            "uniform_lpips_equalbits": 0.15208334270009335,
+            "dlpips_vs_uniform_equalbits": -0.18725250541156593,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 22505.910780244987,
+            "vmaf": 71.52629725,
+            "dvmaf_vs_l2": 27.234350125,
+            "dvmaf_vs_uniform_equalbits": -25.769262132200666,
+            "lpips": 0.29977595421951264,
+            "uniform_lpips_equalbits": 0.11951775331884916,
+            "dlpips_vs_uniform_equalbits": -0.18025820090066347,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 41182.54180914207,
+            "vmaf": 84.42721606250001,
+            "dvmaf_vs_l2": 40.1352689375,
+            "dvmaf_vs_uniform_equalbits": -14.572372312499994,
+            "lpips": 0.23256486374884844,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.11687850079033524,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ],
+        "crf30_fixed": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 2027.4438138479002,
+            "vmaf": 44.291947125,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.3828254430554807,
+            "uniform_lpips_equalbits": 0.3828254430554807,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 8346.738289822171,
+            "vmaf": 50.279696125,
+            "dvmaf_vs_l2": 5.987749000000001,
+            "dvmaf_vs_uniform_equalbits": -27.835166987814205,
+            "lpips": 0.3654498253017664,
+            "uniform_lpips_equalbits": 0.23503360022898784,
+            "dlpips_vs_uniform_equalbits": -0.13041622507277856,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 13903.032765796443,
+            "vmaf": 54.513420437499995,
+            "dvmaf_vs_l2": 10.2214733125,
+            "dvmaf_vs_uniform_equalbits": -35.799815647687815,
+            "lpips": 0.3483456461690366,
+            "uniform_lpips_equalbits": 0.14168168709275283,
+            "dlpips_vs_uniform_equalbits": -0.2066639590762838,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 25336.705051078316,
+            "vmaf": 64.019706375,
+            "dvmaf_vs_l2": 19.72775925,
+            "dvmaf_vs_uniform_equalbits": -34.59395060199668,
+            "lpips": 0.31327884015627205,
+            "uniform_lpips_equalbits": 0.10826364329323541,
+            "dlpips_vs_uniform_equalbits": -0.20501519686303665,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 50471.1329549754,
+            "vmaf": 77.3245045625,
+            "dvmaf_vs_l2": 33.0325574375,
+            "dvmaf_vs_uniform_equalbits": -21.675083812500006,
+            "lpips": 0.2523479958763346,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.1366616329178214,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ],
+        "crf30_center": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 2027.4438138479002,
+            "vmaf": 44.291947125,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.3828254430554807,
+            "uniform_lpips_equalbits": 0.3828254430554807,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 9862.988289822171,
+            "vmaf": 50.474649812500004,
+            "dvmaf_vs_l2": 6.182702687499999,
+            "dvmaf_vs_uniform_equalbits": -32.35542464203253,
+            "lpips": 0.3650976372882724,
+            "uniform_lpips_equalbits": 0.1952248186164094,
+            "dlpips_vs_uniform_equalbits": -0.169872818671863,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 16081.116099129777,
+            "vmaf": 55.196157750000005,
+            "dvmaf_vs_l2": 10.904210625,
+            "dvmaf_vs_uniform_equalbits": -38.720446382006934,
+            "lpips": 0.34779273020103574,
+            "uniform_lpips_equalbits": 0.13041042717542395,
+            "dlpips_vs_uniform_equalbits": -0.2173823030256118,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 27463.121717744987,
+            "vmaf": 63.79054803125,
+            "dvmaf_vs_l2": 19.498600906249997,
+            "dvmaf_vs_uniform_equalbits": -35.81322847606579,
+            "lpips": 0.3141665664734319,
+            "uniform_lpips_equalbits": 0.09980985794629788,
+            "dlpips_vs_uniform_equalbits": -0.214356708527134,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 50097.1329549754,
+            "vmaf": 76.61512378125,
+            "dvmaf_vs_l2": 32.32317665625,
+            "dvmaf_vs_uniform_equalbits": -22.384464593749996,
+            "lpips": 0.252920116414316,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.1372337534558028,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ],
+        "crf34_perframe": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 2027.4438138479002,
+            "vmaf": 44.291947125,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.3828254430554807,
+            "uniform_lpips_equalbits": 0.3828254430554807,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 5575.954435655505,
+            "vmaf": 54.05969721875,
+            "dvmaf_vs_l2": 9.767750093750001,
+            "dvmaf_vs_uniform_equalbits": -8.84699484608862,
+            "lpips": 0.36263701517600566,
+            "uniform_lpips_equalbits": 0.31885231641000766,
+            "dlpips_vs_uniform_equalbits": -0.043784698765998,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 9066.431203296444,
+            "vmaf": 59.46563603125,
+            "dvmaf_vs_l2": 15.17368890625,
+            "dvmaf_vs_uniform_equalbits": -20.849898228066266,
+            "lpips": 0.34388592978939414,
+            "uniform_lpips_equalbits": 0.21783746822055414,
+            "dlpips_vs_uniform_equalbits": -0.12604846156884,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 16561.90557191165,
+            "vmaf": 67.1596468125,
+            "dvmaf_vs_l2": 22.8676996875,
+            "dvmaf_vs_uniform_equalbits": -27.552363719691755,
+            "lpips": 0.3090343902586028,
+            "uniform_lpips_equalbits": 0.1279224125846568,
+            "dlpips_vs_uniform_equalbits": -0.181111977673946,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 29874.72670497541,
+            "vmaf": 77.69772649999999,
+            "dvmaf_vs_l2": 33.405779375,
+            "dvmaf_vs_uniform_equalbits": -21.301861875000014,
+            "lpips": 0.2504922393709421,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.13480587641242892,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ],
+        "crf34_fixed": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 2027.4438138479002,
+            "vmaf": 44.291947125,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.3828254430554807,
+            "uniform_lpips_equalbits": 0.3828254430554807,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 6424.738289822171,
+            "vmaf": 49.32911478125,
+            "dvmaf_vs_l2": 5.03716765625,
+            "dvmaf_vs_uniform_equalbits": -21.50401971503483,
+            "lpips": 0.3675814112648368,
+            "uniform_lpips_equalbits": 0.244073597474672,
+            "dlpips_vs_uniform_equalbits": -0.12350781379016479,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 10370.282765796443,
+            "vmaf": 52.89374828125,
+            "dvmaf_vs_l2": 8.60180115625,
+            "dvmaf_vs_uniform_equalbits": -31.537733495150945,
+            "lpips": 0.35260209580883384,
+            "uniform_lpips_equalbits": 0.1808237512913321,
+            "dlpips_vs_uniform_equalbits": -0.17177834451750174,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 18483.371717744987,
+            "vmaf": 60.84987953125,
+            "dvmaf_vs_l2": 16.557932406250004,
+            "dvmaf_vs_uniform_equalbits": -34.57267229336034,
+            "lpips": 0.32207994000054896,
+            "uniform_lpips_equalbits": 0.13550976575795076,
+            "dlpips_vs_uniform_equalbits": -0.1865701742425982,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 36168.79962164208,
+            "vmaf": 71.71962928125001,
+            "dvmaf_vs_l2": 27.42768215625,
+            "dvmaf_vs_uniform_equalbits": -27.279959093749994,
+            "lpips": 0.26961436157580465,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.15392799861729145,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ],
+        "crf34_center": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 2027.4438138479002,
+            "vmaf": 44.291947125,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.3828254430554807,
+            "uniform_lpips_equalbits": 0.3828254430554807,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 7394.904956488838,
+            "vmaf": 49.48788625,
+            "dvmaf_vs_l2": 5.195939125000001,
+            "dvmaf_vs_uniform_equalbits": -26.65504227003298,
+            "lpips": 0.36725992802530527,
+            "uniform_lpips_equalbits": 0.21515487908086461,
+            "dlpips_vs_uniform_equalbits": -0.15210504894444066,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 11735.282765796443,
+            "vmaf": 53.476624375,
+            "dvmaf_vs_l2": 9.18467725,
+            "dvmaf_vs_uniform_equalbits": -33.250338878496876,
+            "lpips": 0.3522107768803835,
+            "uniform_lpips_equalbits": 0.15289947353455857,
+            "dlpips_vs_uniform_equalbits": -0.19931130334582492,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 19715.371717744987,
+            "vmaf": 60.62143603125,
+            "dvmaf_vs_l2": 16.32948890625,
+            "dvmaf_vs_uniform_equalbits": -35.37476971569593,
+            "lpips": 0.3233156461501494,
+            "uniform_lpips_equalbits": 0.13061182467674512,
+            "dlpips_vs_uniform_equalbits": -0.19270382147340429,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 35802.88295497541,
+            "vmaf": 71.03703375,
+            "dvmaf_vs_l2": 26.745086625,
+            "dvmaf_vs_uniform_equalbits": -27.962554624999996,
+            "lpips": 0.2705425206804648,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.1548561577219516,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ]
+      }
+    },
+    "320_crf42": {
+      "lw": 320,
+      "lh": 134,
+      "B_low": 825.5409761634506,
+      "bicubic_vmaf": 29.251672531249998,
+      "baseline_l2": {
+        "vmaf": 31.61873096875,
+        "lpips": 0.4367027541156858
+      },
+      "arms": {
+        "crf26_perframe": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 825.5409761634506,
+            "vmaf": 31.61873096875,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.4367027541156858,
+            "uniform_lpips_equalbits": 0.4367027541156858,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 8330.956635688612,
+            "vmaf": 46.14391921875,
+            "dvmaf_vs_l2": 14.525188250000001,
+            "dvmaf_vs_uniform_equalbits": -31.938248685115923,
+            "lpips": 0.40853479743236676,
+            "uniform_lpips_equalbits": 0.2347040056552419,
+            "dlpips_vs_uniform_equalbits": -0.17383079177712485,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 16109.93739938044,
+            "vmaf": 53.835039406250004,
+            "dvmaf_vs_l2": 22.2163084375,
+            "dvmaf_vs_uniform_equalbits": -40.129245983311066,
+            "lpips": 0.3822478053625673,
+            "uniform_lpips_equalbits": 0.13026128119863367,
+            "dlpips_vs_uniform_equalbits": -0.25198652416393363,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 31228.12809343076,
+            "vmaf": 65.28453846874999,
+            "dvmaf_vs_l2": 33.6658075,
+            "dvmaf_vs_uniform_equalbits": -33.715049906250016,
+            "lpips": 0.33301652973750606,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.21733016677899286,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 59135.44437736473,
+            "vmaf": 81.91513571875001,
+            "dvmaf_vs_l2": 50.29640475,
+            "dvmaf_vs_uniform_equalbits": -17.084452656249994,
+            "lpips": 0.24615386058576405,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.13046749762725085,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ],
+        "crf26_fixed": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 825.5409761634506,
+            "vmaf": 31.61873096875,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.4367027541156858,
+            "uniform_lpips_equalbits": 0.4367027541156858,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 10179.680594021944,
+            "vmaf": 39.27062459375,
+            "dvmaf_vs_l2": 7.6518936250000005,
+            "dvmaf_vs_uniform_equalbits": -44.55917171612285,
+            "lpips": 0.41391695383936167,
+            "uniform_lpips_equalbits": 0.18623456264061578,
+            "dlpips_vs_uniform_equalbits": -0.2276823911987459,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 18898.153545213772,
+            "vmaf": 45.28964646875,
+            "dvmaf_vs_l2": 13.670915500000001,
+            "dvmaf_vs_uniform_equalbits": -50.32603946482218,
+            "lpips": 0.3911774073494598,
+            "uniform_lpips_equalbits": 0.13386075849131365,
+            "dlpips_vs_uniform_equalbits": -0.2573166488581462,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 34094.84944759742,
+            "vmaf": 56.38656428125,
+            "dvmaf_vs_l2": 24.7678333125,
+            "dvmaf_vs_uniform_equalbits": -42.61302409375,
+            "lpips": 0.3470877787331119,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.23140141577459872,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 71953.49125236474,
+            "vmaf": 73.81746003125001,
+            "dvmaf_vs_l2": 42.1987290625,
+            "dvmaf_vs_uniform_equalbits": -25.182128343749994,
+            "lpips": 0.26641126547474414,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.15072490251623094,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ],
+        "crf26_center": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 825.5409761634506,
+            "vmaf": 31.61873096875,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.4367027541156858,
+            "uniform_lpips_equalbits": 0.4367027541156858,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 12576.097260688612,
+            "vmaf": 39.481909625,
+            "dvmaf_vs_l2": 7.8631786562500015,
+            "dvmaf_vs_uniform_equalbits": -48.636076661375995,
+            "lpips": 0.4132475731894374,
+            "uniform_lpips_equalbits": 0.1485483825688683,
+            "dlpips_vs_uniform_equalbits": -0.2646991906205691,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 21923.153545213772,
+            "vmaf": 45.2282185,
+            "dvmaf_vs_l2": 13.60948753125,
+            "dvmaf_vs_uniform_equalbits": -51.795992689306914,
+            "lpips": 0.3908630970399827,
+            "uniform_lpips_equalbits": 0.12183456387228195,
+            "dlpips_vs_uniform_equalbits": -0.2690285331677007,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 39047.93278093076,
+            "vmaf": 55.61220784375,
+            "dvmaf_vs_l2": 23.993476875,
+            "dvmaf_vs_uniform_equalbits": -43.38738053125,
+            "lpips": 0.3470711296540685,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.2313847666955553,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 72906.24125236474,
+            "vmaf": 71.82488421875,
+            "dvmaf_vs_l2": 40.20615325,
+            "dvmaf_vs_uniform_equalbits": -27.17470415625,
+            "lpips": 0.26800962578272447,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.15232326282421127,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ],
+        "crf30_perframe": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 825.5409761634506,
+            "vmaf": 31.61873096875,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.4367027541156858,
+            "uniform_lpips_equalbits": 0.4367027541156858,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 5959.441010688612,
+            "vmaf": 45.13314684375,
+            "dvmaf_vs_l2": 13.514415875000001,
+            "dvmaf_vs_uniform_equalbits": -20.828657534645814,
+            "lpips": 0.41009813506389037,
+            "uniform_lpips_equalbits": 0.2925901125720401,
+            "dlpips_vs_uniform_equalbits": -0.11750802249185027,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 11243.109274380438,
+            "vmaf": 52.2939948125,
+            "dvmaf_vs_l2": 20.675263843750002,
+            "dvmaf_vs_uniform_equalbits": -33.61872859749846,
+            "lpips": 0.38547943555749953,
+            "uniform_lpips_equalbits": 0.15544639874227287,
+            "dlpips_vs_uniform_equalbits": -0.23003303681522666,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 21536.638510097426,
+            "vmaf": 62.79060659375,
+            "dvmaf_vs_l2": 31.171875625000002,
+            "dvmaf_vs_uniform_equalbits": -34.053632301777554,
+            "lpips": 0.3395736432285048,
+            "uniform_lpips_equalbits": 0.12337119363608065,
+            "dlpips_vs_uniform_equalbits": -0.21620244959242416,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 40578.178752364736,
+            "vmaf": 77.8138419375,
+            "dvmaf_vs_l2": 46.19511096875,
+            "dvmaf_vs_uniform_equalbits": -21.1857464375,
+            "lpips": 0.25932323769666255,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.14363687473814934,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ],
+        "crf30_fixed": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 825.5409761634506,
+            "vmaf": 31.61873096875,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.4367027541156858,
+            "uniform_lpips_equalbits": 0.4367027541156858,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 7204.930594021945,
+            "vmaf": 38.70229265625,
+            "dvmaf_vs_l2": 7.0835616875,
+            "dvmaf_vs_uniform_equalbits": -37.04706169068891,
+            "lpips": 0.41545930970460176,
+            "uniform_lpips_equalbits": 0.21118732799337886,
+            "dlpips_vs_uniform_equalbits": -0.2042719817112229,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 13122.820211880437,
+            "vmaf": 44.2668735,
+            "dvmaf_vs_l2": 12.64814253125,
+            "dvmaf_vs_uniform_equalbits": -44.755597928260954,
+            "lpips": 0.3942791427252814,
+            "uniform_lpips_equalbits": 0.14571917195449685,
+            "dlpips_vs_uniform_equalbits": -0.24855997077078457,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 23563.26611426409,
+            "vmaf": 54.504549187500004,
+            "dvmaf_vs_l2": 22.885818218750003,
+            "dvmaf_vs_uniform_equalbits": -43.283344638420246,
+            "lpips": 0.3535146202193573,
+            "uniform_lpips_equalbits": 0.1153141298383913,
+            "dlpips_vs_uniform_equalbits": -0.23820049038096602,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 48999.4079190314,
+            "vmaf": 70.19899815625,
+            "dvmaf_vs_l2": 38.5802671875,
+            "dvmaf_vs_uniform_equalbits": -28.800590218750003,
+            "lpips": 0.279788363375701,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.1641020004171878,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ],
+        "crf30_center": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 825.5409761634506,
+            "vmaf": 31.61873096875,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.4367027541156858,
+            "uniform_lpips_equalbits": 0.4367027541156858,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 8721.180594021944,
+            "vmaf": 38.905092625,
+            "dvmaf_vs_l2": 7.2863616562499995,
+            "dvmaf_vs_uniform_equalbits": -40.32056804066067,
+            "lpips": 0.414858628064394,
+            "uniform_lpips_equalbits": 0.22763843689587282,
+            "dlpips_vs_uniform_equalbits": -0.18722019116852118,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 14999.40354521377,
+            "vmaf": 44.19437578125,
+            "dvmaf_vs_l2": 12.5756448125,
+            "dvmaf_vs_uniform_equalbits": -47.93266943307363,
+            "lpips": 0.3941959764342755,
+            "uniform_lpips_equalbits": 0.13600813005686785,
+            "dlpips_vs_uniform_equalbits": -0.25818784637740766,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 26501.599447597422,
+            "vmaf": 53.7230415,
+            "dvmaf_vs_l2": 22.10431053125,
+            "dvmaf_vs_uniform_equalbits": -45.43302313906644,
+            "lpips": 0.35385682043852285,
+            "uniform_lpips_equalbits": 0.1036324873516955,
+            "dlpips_vs_uniform_equalbits": -0.25022433308682734,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 49375.99125236472,
+            "vmaf": 68.29591140625,
+            "dvmaf_vs_l2": 36.6771804375,
+            "dvmaf_vs_uniform_equalbits": -30.703676968750003,
+            "lpips": 0.28138291178038344,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.16569654882187024,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ],
+        "crf34_perframe": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 825.5409761634506,
+            "vmaf": 31.61873096875,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.4367027541156858,
+            "uniform_lpips_equalbits": 0.4367027541156858,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 4494.951427355279,
+            "vmaf": 43.4981566875,
+            "dvmaf_vs_l2": 11.87942571875,
+            "dvmaf_vs_uniform_equalbits": -16.4418637324413,
+            "lpips": 0.4122887007542886,
+            "uniform_lpips_equalbits": 0.31215450087091895,
+            "dlpips_vs_uniform_equalbits": -0.10013419988336963,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 8252.249899380438,
+            "vmaf": 49.938472937499995,
+            "dvmaf_vs_l2": 18.319741968749998,
+            "dvmaf_vs_uniform_equalbits": -27.980636444904547,
+            "lpips": 0.3898330528754741,
+            "uniform_lpips_equalbits": 0.23306024176427811,
+            "dlpips_vs_uniform_equalbits": -0.15677281111119598,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 15588.273926764092,
+            "vmaf": 59.095739718749996,
+            "dvmaf_vs_l2": 27.47700875,
+            "dvmaf_vs_uniform_equalbits": -34.0055183202727,
+            "lpips": 0.34849663550266996,
+            "uniform_lpips_equalbits": 0.13296081270840232,
+            "dlpips_vs_uniform_equalbits": -0.21553582279426764,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 29237.272502364733,
+            "vmaf": 71.69969840625001,
+            "dvmaf_vs_l2": 40.0809674375,
+            "dvmaf_vs_uniform_equalbits": -27.299889968749994,
+            "lpips": 0.27681427891366184,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.16112791595514864,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ],
+        "crf34_fixed": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 825.5409761634506,
+            "vmaf": 31.61873096875,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.4367027541156858,
+            "uniform_lpips_equalbits": 0.4367027541156858,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 5282.930594021945,
+            "vmaf": 37.842043374999996,
+            "dvmaf_vs_l2": 6.223312406250001,
+            "dvmaf_vs_uniform_equalbits": -24.260483007062156,
+            "lpips": 0.41751632932573557,
+            "uniform_lpips_equalbits": 0.3170367621287085,
+            "dlpips_vs_uniform_equalbits": -0.10047956719702705,
+            "vmaf_sign_p": 2.4633482098579407e-07
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 9481.236878547104,
+            "vmaf": 42.78754715625,
+            "dvmaf_vs_l2": 11.168816187500001,
+            "dvmaf_vs_uniform_equalbits": -38.83742940326721,
+            "lpips": 0.39860025874804705,
+            "uniform_lpips_equalbits": 0.206061971464678,
+            "dlpips_vs_uniform_equalbits": -0.19253828728336905,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 16983.599447597422,
+            "vmaf": 51.74415003125,
+            "dvmaf_vs_l2": 20.1254190625,
+            "dvmaf_vs_uniform_equalbits": -43.6655005838214,
+            "lpips": 0.3622293268563226,
+            "uniform_lpips_equalbits": 0.1257402089904876,
+            "dlpips_vs_uniform_equalbits": -0.23648911786583499,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 34899.824585698065,
+            "vmaf": 65.1035044375,
+            "dvmaf_vs_l2": 33.48477346875,
+            "dvmaf_vs_uniform_equalbits": -33.896083937499995,
+            "lpips": 0.2971917489776388,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.18150538601912558,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ],
+        "crf34_center": [
+          {
+            "frac": 0.0,
+            "k": 0,
+            "bits_per_frame": 825.5409761634506,
+            "vmaf": 31.61873096875,
+            "dvmaf_vs_l2": 0.0,
+            "dvmaf_vs_uniform_equalbits": 0.0,
+            "lpips": 0.4367027541156858,
+            "uniform_lpips_equalbits": 0.4367027541156858,
+            "dlpips_vs_uniform_equalbits": 0.0,
+            "vmaf_sign_p": 4.656612873077393e-10
+          },
+          {
+            "frac": 0.05,
+            "k": 3,
+            "bits_per_frame": 6253.097260688612,
+            "vmaf": 38.03476109375,
+            "dvmaf_vs_l2": 6.416030125000001,
+            "dvmaf_vs_uniform_equalbits": -31.001414442790356,
+            "lpips": 0.4169731717556715,
+            "uniform_lpips_equalbits": 0.2619705957051212,
+            "dlpips_vs_uniform_equalbits": -0.1550025760505503,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.1,
+            "k": 6,
+            "bits_per_frame": 10653.570211880438,
+            "vmaf": 42.765213687499994,
+            "dvmaf_vs_l2": 11.14648271875,
+            "dvmaf_vs_uniform_equalbits": -42.56053879721303,
+            "lpips": 0.39851475856266916,
+            "uniform_lpips_equalbits": 0.17278179188388976,
+            "dlpips_vs_uniform_equalbits": -0.2257329666787794,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.2,
+            "k": 12,
+            "bits_per_frame": 18753.849447597426,
+            "vmaf": 51.06807768750001,
+            "dvmaf_vs_l2": 19.44934671875,
+            "dvmaf_vs_uniform_equalbits": -44.480416191196596,
+            "lpips": 0.362822734110523,
+            "uniform_lpips_equalbits": 0.13443445408214272,
+            "dlpips_vs_uniform_equalbits": -0.2283882800283803,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          },
+          {
+            "frac": 0.4,
+            "k": 24,
+            "bits_per_frame": 35081.741252364736,
+            "vmaf": 63.373323,
+            "dvmaf_vs_l2": 31.75459203125,
+            "dvmaf_vs_uniform_equalbits": -35.626265375,
+            "lpips": 0.2988968951976858,
+            "uniform_lpips_equalbits": 0.1156863629585132,
+            "dlpips_vs_uniform_equalbits": -0.1832105322391726,
+            "vmaf_sign_p": 1.5366822481155396e-08
+          }
+        ]
+      }
+    }
+  }
+}

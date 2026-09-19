@@ -52,6 +52,7 @@
 | `h1_codec_metadata.md` | H1 codec 元数据条件化增强的数据通路：解码侧 QP/运动矢量提取方法与对齐校验（PyAV export_mvs、ffmpeg -threads1 -debug qp）、残差不可得结论、第一版条件特征集（QP+前后向MV）、复现入口 | 想了解码流条件特征/QP/MV 怎么取 |
 | `h1_condnet_falsification.md` | H1 条件网离线证伪：三臂（无条件/真条件/乱序条件）×add·cat 两注入×三训练协议，BBB 训练 TOS 留出，ΔVMAF≤0.04、cond≈shuf，端侧小样本喂条件通道不成立；假阴性边界（大规模训练、MV warping 属 H2） | 想了解 H1 为何证伪/条件网怎么做 |
 | `h2_warp_oracle.md` | **当前主线** H2 非学习时序融合证伪：DIS 稠密光流 warp 邻帧 + mean/median/置信门控融合，7 档退化全部不优于单帧 l2（最佳 gated3 仍 −0.3~−1.6 VMAF）；客户端加容量/加条件/加邻帧三路触顶，瓶颈在输入像素，转原生像素保留 tile/ROI | 想了解多帧/VSR 便宜路为何不成立/下一步为何转向输入端 |
+| `h3_roi_tile_oracle.md` | H3 选择性原生分辨率 tile+其余 SR 等码率 oracle 证伪：真实码率口径下 6 档×3 CRF×3 选法×4 面积共 216 点全部被"均匀提分辨率+l2"支配（ΔVMAF −0.2~−50，LPIPS 同向），单个原生 tile 花费 1.8~3.5 倍整帧却只盖 1/60 面积；全画幅场景 NO-GO，tile 经济学只适用视口/360；含冒烟假阳性口径教训 | 想了解输入端 ROI/tile 为何不成立/四路证伪合流/码率口径陷阱 |
 | `custom_qoe_metrics.md` | 自定义评价指标设计：BONES QoE公式局限性分析、多维度MD-QoE指标设计 | 想了解评价指标设计 |
 
 ### 多任务增强
