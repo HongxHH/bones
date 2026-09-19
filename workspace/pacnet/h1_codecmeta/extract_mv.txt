@@ -1,0 +1,14 @@
+frames=900 W=426 H=178
+top by median|MV| (med px, coverage, fi, type):
+  med=16.750 cov=0.63 fi=297 2
+  med=12.806 cov=0.62 fi=426 2
+  med=11.402 cov=0.64 fi=430 2
+  med=11.003 cov=0.57 fi=309 2
+  med=10.750 cov=0.59 fi=420 3
+  med=10.259 cov=0.67 fi=438 2
+  med=10.078 cov=0.76 fi=422 2
+  med=9.801 cov=0.62 fi=313 2
+  med=9.724 cov=0.60 fi=406 2
+  med=9.062 cov=0.63 fi=414 2
+sample fi=297 rgb(178, 426, 3) mvx(178, 426) x[0.00,12.75] y[0.00,22.25] cover=0.63
+DONE

@@ -1,0 +1,4 @@
+W=426 H=178 MB=27x12=324; qp_frames=482 decode=480
+exact-324 frames: 482/482; type-mismatch vs PyAV: 0
+top QP-variance frames: [275, 302, 303, 289]
+DONE

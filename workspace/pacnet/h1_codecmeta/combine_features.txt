@@ -1,0 +1,4 @@
+side data types seen: ['MOTION_VECTORS', 'SEI_UNREGISTERED']
+frame 275 3: rgb(178, 426, 3) mvx(178, 426) qp(178, 426) cover=0.20 mvx[0.00,17.00] mvy[0.00,0.25] qp[24,44]
+NOTE: no residual/prediction side data in h264 decoder; only MOTION_VECTORS (+SEI). Residual needs decoder patch / reference SW or pixel-domain approximation.
+DONE

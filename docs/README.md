@@ -49,6 +49,7 @@
 | `enhancer_operator_survey.md` | 阶段17增强算子普查与对症微调闭环：同口径方法、NAFNet/STDF/NanoVSR 现成算子证伪、leave-out 证明对症训练可跨块泛化（困难段 +7~14）但增益只在高运动塌陷段、4.5× 训练对齐教训 | 想了解增强地基/替代算子对比/对症训练泛化 |
 | `pacnet_progressive_enhancer.md` | **当前主线** PAC-Net 可渐进（anytime/可中断）神经增强网络：结构、阶段0最小证伪GO、阶段1弹性税定型（−0.78固有代价）、阶段2跨退化泛化（混合训练最优）、阶段3 halt控制器+播放器集成、3.3跨视频TOS验证（3轨迹3/3胜）、3.4阶段二算力紧张（gpuburn乘法负载+帧级VMAF埋点+可调度性前瞻halt，K=1.5 QoE/VMAF双胜全e3与IMDN基线） | 想了解当前新主线/可渐进增强/阶段0-3结论 |
 | `pacnet_halt_theory.md` | PAC-Net halt调度理论框架：问题建模、质量凸性/内容异质性结构性质、离线最优贪心定理、在线竞争比分析（实测0.9932）、弹性税梯度冲突解释、预测误差敏感性（σ=3仅降0.03%）、缓冲区与e3比例关系 | 想了解理论基础/竞争比/弹性税下界 |
+| `h1_codec_metadata.md` | **当前主线 H1** codec 元数据条件化增强的数据通路：解码侧 QP/运动矢量提取方法与对齐校验（PyAV export_mvs、ffmpeg -threads1 -debug qp）、残差不可得结论、第一版条件特征集（QP+前后向MV）、复现入口 | 想了解 H1/码流条件特征/QP/MV 怎么取 |
 | `custom_qoe_metrics.md` | 自定义评价指标设计：BONES QoE公式局限性分析、多维度MD-QoE指标设计 | 想了解评价指标设计 |
 
 ### 多任务增强
