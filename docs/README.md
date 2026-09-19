@@ -50,7 +50,8 @@
 | `pacnet_progressive_enhancer.md` | **当前主线** PAC-Net 可渐进（anytime/可中断）神经增强网络：结构、阶段0最小证伪GO、阶段1弹性税定型（−0.78固有代价）、阶段2跨退化泛化（混合训练最优）、阶段3 halt控制器+播放器集成、3.3跨视频TOS验证（3轨迹3/3胜）、3.4阶段二算力紧张（gpuburn乘法负载+帧级VMAF埋点+可调度性前瞻halt，K=1.5 QoE/VMAF双胜全e3与IMDN基线） | 想了解当前新主线/可渐进增强/阶段0-3结论 |
 | `pacnet_halt_theory.md` | PAC-Net halt调度理论框架：问题建模、质量凸性/内容异质性结构性质、离线最优贪心定理、在线竞争比分析（实测0.9932）、弹性税梯度冲突解释、预测误差敏感性（σ=3仅降0.03%）、缓冲区与e3比例关系 | 想了解理论基础/竞争比/弹性税下界 |
 | `h1_codec_metadata.md` | H1 codec 元数据条件化增强的数据通路：解码侧 QP/运动矢量提取方法与对齐校验（PyAV export_mvs、ffmpeg -threads1 -debug qp）、残差不可得结论、第一版条件特征集（QP+前后向MV）、复现入口 | 想了解码流条件特征/QP/MV 怎么取 |
-| `h1_condnet_falsification.md` | **当前主线 H2 前置** H1 条件网离线证伪：三臂（无条件/真条件/乱序条件）×add·cat 两注入×三训练协议，BBB 训练 TOS 留出，ΔVMAF≤0.04、cond≈shuf，端侧小样本喂条件通道不成立；假阴性边界（大规模训练、MV warping 属 H2） | 想了解 H1 为何证伪/条件网怎么做/下一步为何转 MV warping |
+| `h1_condnet_falsification.md` | H1 条件网离线证伪：三臂（无条件/真条件/乱序条件）×add·cat 两注入×三训练协议，BBB 训练 TOS 留出，ΔVMAF≤0.04、cond≈shuf，端侧小样本喂条件通道不成立；假阴性边界（大规模训练、MV warping 属 H2） | 想了解 H1 为何证伪/条件网怎么做 |
+| `h2_warp_oracle.md` | **当前主线** H2 非学习时序融合证伪：DIS 稠密光流 warp 邻帧 + mean/median/置信门控融合，7 档退化全部不优于单帧 l2（最佳 gated3 仍 −0.3~−1.6 VMAF）；客户端加容量/加条件/加邻帧三路触顶，瓶颈在输入像素，转原生像素保留 tile/ROI | 想了解多帧/VSR 便宜路为何不成立/下一步为何转向输入端 |
 | `custom_qoe_metrics.md` | 自定义评价指标设计：BONES QoE公式局限性分析、多维度MD-QoE指标设计 | 想了解评价指标设计 |
 
 ### 多任务增强
