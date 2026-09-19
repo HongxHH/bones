@@ -1,6 +1,10 @@
 # 当前状态
 
-## 最新阶段：单帧 anytime 盖棺，方向转向 codec 元数据条件化（2026-09-19）
+## 最新阶段：H1 codec 元数据条件网证伪，转向 MV 结构性利用 / H2（2026-09-19）
+
+**H1 第二步条件网离线小样本证伪完成（详见 `h1_condnet_falsification.md`，脚本 `workspace/pacnet/h1_condnet/`）**：把 QP+前/后向 MV（7 通道，零带宽）喂给单个 l2 规模轻量网 IMDN_RTC（24114 参数），三臂对照（base 无条件 / cond 真条件 / shuf 乱序条件=容量对照），BBB 训练、TOS 全程留出，hard_survey 7 档×32 帧 VMAF+LPIPS+逐帧符号检验。两种注入（add 特征相加 26190 参数、cat 输入拼接 24870 参数，cat 零条件与热启动骨干 maxdiff 0.0）×三种训练协议（warm 重微调、scratch、warm 轻微调）一致结论：**真条件相对无条件/乱序条件没有可测量增益**——最健康的 warm/cat（lr2e-5、20ep，三臂训练 L1 逐轮相同到 4 位小数 0.0360）上 cond−base 的 ΔVMAF 全在 ±0.05、ΔLPIPS≈0.001，且 cond≈shuf（乱序不差于真条件）。warm 重微调会域过拟合（base 比 stock 低 2~9 分）、scratch 单视频欠拟合（base 低于 bicubic），均不能下结论；cat 轻微调是决定性健康对照。判决：端侧"单视频、不大规模重训"约束下，把码流统计当额外通道喂通用单帧网不成立，瓶颈不是缺一个条件输入。假阴性边界：①大规模多内容训练（PnP-VCVE 类增益的前提）未检验；②MV 仅当输入通道，其真正价值可能在显式时序配准/warping（H2 anchor+残差、NEMO 式），未证伪。下一步让码流信息参与结构性运算（MV 引导 warp）而非当条件通道，与视频超分主线汇合。
+
+## 上一阶段：单帧 anytime 盖棺，方向转向 codec 元数据条件化（2026-09-19）
 
 两条独立证据在本日收敛，决定放弃“同信息加深/多出口”，转向“给增强网络喂解码器免费产出的信息”。
 
@@ -388,7 +392,8 @@ NAFNet 去模糊、STDF 去压缩块（单独）、STDF→IMDN 级联在小样�
 
 ## 当前在做什么
 
-- **H1 数据通路验证通过（2026-09-19）**：MV/QP 可从解码侧精确提取并与帧对齐，残差标准解码器不导出；详见 `h1_codec_metadata.md`，下一步构造轻量条件网离线证伪
+- **H1 条件网离线证伪完成（2026-09-19）**：add/cat 两种注入、三训练协议一致显示 QP+MV 当条件通道喂单帧 l2 网无增益（ΔVMAF≤0.04、cond≈shuf），详见 `h1_condnet_falsification.md`；下一步转向 MV 结构性利用（warping / H2 anchor+残差）
+- **H1 数据通路验证通过（2026-09-19）**：MV/QP 可从解码侧精确提取并与帧对齐，残差标准解码器不导出；详见 `h1_codec_metadata.md`
 - **H3 感知指标复验完成、单帧 anytime 盖棺（2026-09-19）**：LPIPS 复验见上，已转 H1 codec 元数据条件化
 
 - **PAC-Net 阶段3.2 播放器集成完成（2026-09-14）**：三出口+halt控制器集成进iStreamPlayer，单trace QoE +2.46(+4.2%) vs 基线imdn_always，fast_complete降为0。正在做三出口VMAF精确测量，后续多轨迹验证
@@ -404,10 +409,10 @@ NAFNet 去模糊、STDF 去压缩块（单独）、STDF→IMDN 级联在小样�
 ## 下一步计划
 
 ### 短期（优先）
-1. **H1 codec 元数据条件化增强（主攻）**：数据通路已验证（MV/QP 可得、残差不可得，见 `h1_codec_metadata.md`），下一步构造 l2 规模轻量条件网（QP 1 通道+前/后向 MV 4 通道），在 hard_survey 同口径用 VMAF+LPIPS 双指标对比同尺寸无条件网，离线小样本证伪，先不碰播放器
-2. **H1 条件注入结构**：参考飞书调研 MCN5dOGzco7r5axtI8oc67UnnzJ 中 PnP-VCVE(CVPR'25) 的注入方式，残差用像素域高频/块效应图作低成本替代候选留作消融
+1. **MV 结构性利用 / H2（主攻）**：codec 元数据当条件通道喂单帧网已证伪（`h1_condnet_falsification.md`），转向让 MV 参与显式时序配准——anchor 稀疏帧 + MV 引导 warping/残差回加（NEMO 式），与视频超分主线汇合；先用不训练的光流/warp oracle 估时序信息上限，再决定是否训练轻量 VSR
+2. **大规模多内容训练复核（低优先，资源项）**：PnP-VCVE 类条件网增益依赖多内容大数据，端侧单视频约束下不成立≠彻底不成立，待有更多视频素材与训练预算时复核，不在端侧小样本主线上继续加码
 3. **评测口径固定**：VMAF 与 LPIPS 并列（VMAF 在压缩再超分上高估锐化），卡顿单列；QoE 卡顿权重过弱（84s 卡顿仅扣约 0.046 分，analyzer.py:806）待补主流 λ 口径对照，原公式保留以维持 BONES 可比性
-4. 已完成历史项：PAC-Net 三出口 VMAF 精确测量、多轨迹验证、halt 安全系数扫描、hard_survey 难度扫描、LPIPS 复验（均见上文与 known_issues）
+4. 已完成历史项：H1 数据通路+条件网证伪、PAC-Net 三出口 VMAF 精确测量、多轨迹验证、halt 安全系数扫描、hard_survey 难度扫描、LPIPS 复验（均见上文与 known_issues）
 
 ### 中期
 1. PAC-Net 跨视频零样本验证（需用户提供第二视频素材）
@@ -423,6 +428,7 @@ NAFNet 去模糊、STDF 去压缩块（单独）、STDF→IMDN 级联在小样�
 - ❌ PAC-Net 在线统计条件化（阶段2负结果，小退化范围无用）
 - ❌ PAC-Net 梯度隔离级联（阶段1证伪，切断端到端协同）
 - ❌ 单帧共享骨干 anytime 深度伸缩/多出口：全 K 帕累托 + hard_survey + LPIPS 复验三重证伪（2026-09-19 盖棺），瓶颈在输入信息不在容量
+- ❌ H1 codec 元数据当条件通道喂单帧 l2 网：add/cat 两注入、三训练协议一致无增益（2026-09-19，`h1_condnet_falsification.md`）；MV 结构性 warping（H2）与大规模多内容训练不在此否定范围
 
 ---
 

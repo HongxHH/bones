@@ -4,7 +4,7 @@
 
 单帧 anytime（PAC-Net 多出口）经全 K 帕累托、hard_survey、LPIPS 复验三重证伪后，瓶颈判为**输入信息不足而非模型容量**（见 `current_state.md` 2026-09-19、`known_issues.md` 感知指标复验条）。H1 把 H.264 解码器免费产出、零额外带宽的码流侧信息（QP、运动矢量，残差见下）作为条件输入喂给单个轻量网，让网络知道"每个块被压得多狠、往哪运动"。
 
-本文件只记录**数据通路**：这些信号在解码侧能否拿到、如何与帧严格对齐。条件网络结构与离线证伪另行记录。脚本与样例在 `workspace/pacnet/h1_codecmeta/`。
+本文件只记录**数据通路**：这些信号在解码侧能否拿到、如何与帧严格对齐。条件网络结构与离线证伪见 `h1_condnet_falsification.md`（结论：端侧小样本下条件无增益、便宜版证伪）。本文件脚本与样例在 `workspace/pacnet/h1_codecmeta/`。
 
 ## 结论（2026-09-19，lr_426_crf34.mp4，426×178@24，H.264，MB 栅格 27×12=324）
 
@@ -47,6 +47,6 @@
 - `combine_features.py`：对同一帧（TARGET）产出 LR+MV+QP 严格对齐的 `codec_features_f275.npz/.png`，并审计 side data 类型。
 - 运行用 SR 环境解释器 `E:\dev\env\miniconda3\envs\SR\python.exe`，系统 ffmpeg 6.1.1 在 PATH。
 
-## 下一步
+## 后续：条件网证伪已完成
 
-数据通路成立后，构造 l2 规模轻量条件网（条件注入结构参考飞书调研 MCN5dOGzco7r5axtI8oc67UnnzJ 中 PnP-VCVE(CVPR'25) 的注入方式），在 hard_survey 同口径（7 档退化×32 帧、统一 1920×800 对源）用 VMAF+LPIPS 双指标对比同尺寸无条件网，做离线小样本证伪；先不碰播放器、不做大规模训练。
+数据通路成立后做了第二步：l2 规模轻量条件网（add 特征相加 / cat 输入拼接两种注入），三臂（无条件 / 真 QP+MV / 乱序条件）对照，BBB 训练、TOS 留出，hard_survey 同口径 VMAF+LPIPS+符号检验。**端侧小样本下条件无任何可测量增益（ΔVMAF≤0.04、ΔLPIPS≈0.001、真条件≈乱序条件），H1 便宜版证伪**，详见 `h1_condnet_falsification.md`。MV 用于显式时序配准（warping，H2）而非当输入通道，是未被证伪的方向。
