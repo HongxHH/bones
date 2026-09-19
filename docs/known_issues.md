@@ -56,6 +56,12 @@
 - `workspace/pacnet/hard_survey/measure_hard_survey.py` 在 7 档退化（426/320 宽即 4.5x/6x × CRF26/34/42，加 426/400k 锚点，每档 32 帧）上测 l1/l2/l3 与 PAC e1/e2/e3：l2(5.1ms)→e3(33.8ms) 的 VMAF 差全程 0~2.52，从不达 3~5 的价值阈值；差距呈倒 U（中等退化 crf26 最大 2.52，极端压缩 crf42 信息被抹除后所有模型一起崩、差距归零 0~0.5）；6x 不大于 4.5x；e3 比 l3(9.8ms) 仅高 0.6~1.7 分却慢 3.4 倍。
 - 含义：换更重压缩或更高倍率救不出 anytime 浅档价值区间，单帧 IMDN 系、压缩+下采样任务族的共享骨干 anytime 不成立。视频时序超分（VSR）这一“换信息源”维度尚未排除，但本地缺匹配退化的 VSR 代码/权重（anovsr、CARN-video 仅权重无推理代码，STDF 仅模型定义无权重且不放大），公平对比需训练，见 current_state 下一步。
 
+### 感知指标复验：VMAF 的小幅优势在 LPIPS 下反转为劣势（2026-09-19，H3 评测安全网）
+- 起因：MSU 约 12 万人主观标注显示 VMAF 在“压缩再超分”画面上与主观分相关性仅约 0.41（纯压缩约 0.9），需排除“轻≈重”是 VMAF 失灵的假象。
+- 脚本 `workspace/pacnet/hard_survey/measure_perceptual.py`（全参考 LPIPS-squeeze / CW-SSIM / VIF，7 档退化×7 方法×32 帧、统一 1920×800 对源）与 `measure_perceptual_pair.py`（l2/e3/l3 逐帧配对 + 双侧符号检验）；结果 `hard_survey_perceptual.json`、`perceptual_pair.json`。pyiqa 0.1.16（无 ERQA，DISTS 需 VGG16 528MB 默认关，`ENABLE_DISTS=1` 开启）。
+- LPIPS（越低越好）配对差 d=lpips(l2)−lpips(e3)：7 档中 6 档为负且显著（anchor、426crf26 p=0.0021，426crf34 p=0.0005，426crf42 与 320crf42 p<0.0001，320crf34 p=0.007），e3 更差帧占 75%~91%；唯一均值为正的 320crf26 不显著（p=0.050）且 68.8% 的帧 e3 仍更差（均值被少数帧拉动）。独立 l3 的 LPIPS 始终最低。CW-SSIM 差 ±0.002 属噪声级；VIF 上 e3 仅 +0.001~0.01（锐化带来的高频能量）。
+- 判决：不是 VMAF 掩盖了重模型收益，而是 VMAF/VIF 把过锐化的高频计为质量，LPIPS 识别出共享骨干重出口产出不自然纹理、感知上反而偏离 GT。单帧“压缩+下采样”任务的 anytime 深度伸缩彻底盖棺，且不是尺子问题；瓶颈在输入信息而非模型容量（独立重网 l3 相对 l2 的 LPIPS 优势也很小）。CW-SSIM 对 bicubic 平坦帧有除零爆炸（3e4 量级），该列只在模型间对比。
+
 
 
 ### PACNet 帧级 VMAF 埋点（阶段二修复，易回退）
