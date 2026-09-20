@@ -16,7 +16,16 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-RD = json.load(open(os.path.join(HERE, "seg_rd.json"), "r", encoding="utf-8"))
+# 用法：python alloc_compare.py [--rd PATH] [--tag NAME]
+# 默认 TOS（seg_rd.json / alloc_results.json / alloc_pareto.png）；
+# BBB 复核：python alloc_compare.py --rd bbb/seg_rd_bbb.json --tag bbb
+import argparse
+_ap = argparse.ArgumentParser()
+_ap.add_argument("--rd", default=os.path.join(HERE, "seg_rd.json"))
+_ap.add_argument("--tag", default="")
+_args = _ap.parse_args()
+RD = json.load(open(_args.rd, "r", encoding="utf-8"))
+TAG = f"_{_args.tag}" if _args.tag else ""
 CRF_ORDER = [42, 38, 34, 30, 26, 22]          # 低码率 -> 高码率
 BUDGET_CRFS = [42, 38, 34, 30, 26]
 NSEG = RD["crf34"]["nseg"]
@@ -189,7 +198,7 @@ def run():
               f"sqrt-eq={r['sqrt_vs_eq']:+.2f} win={r['seg_win_sr_oracle_over_sqrt']}/{NSEG}")
 
     json.dump({"summary": rows, "detail": detail},
-              open(os.path.join(HERE, "alloc_results.json"), "w", encoding="utf-8"), indent=1)
+              open(os.path.join(HERE, f"alloc_results{TAG}.json"), "w", encoding="utf-8"), indent=1)
 
     # 图：预算-postSR VMAF 前沿 + 增益柱
     kb = [r["kbps"] for r in rows]
@@ -201,7 +210,7 @@ def run():
                          ("sr_oracle_sr", "SR-aware RD oracle", "*")]:
         plt.plot(kb, [r[key] for r in rows], marker=mk, label=lab)
     plt.xlabel("total bitrate (kbps, equal budget)"); plt.ylabel("mean post-SR VMAF")
-    plt.title("Equal-bitrate allocation (TOS 426-wide, l2)")
+    plt.title(f"Equal-bitrate allocation ({_args.tag or 'TOS'} 426-wide, l2)")
     plt.legend(fontsize=8); plt.grid(alpha=.3)
     plt.subplot(1, 2, 2)
     w = 0.35; x = np.arange(len(rows))
@@ -212,8 +221,8 @@ def run():
     plt.ylabel("delta post-SR VMAF"); plt.title("Headroom vs heuristic and vs classical oracle")
     plt.legend(fontsize=8); plt.grid(alpha=.3, axis="y")
     plt.tight_layout()
-    plt.savefig(os.path.join(HERE, "alloc_pareto.png"), dpi=140)
-    print("saved alloc_pareto.png")
+    plt.savefig(os.path.join(HERE, f"alloc_pareto{TAG}.png"), dpi=140)
+    print(f"saved alloc_pareto{TAG}.png")
 
 
 if __name__ == "__main__":
