@@ -1,6 +1,10 @@
 # 当前状态
 
-## 最新阶段：SR 感知率失真码率分配证伪，码率分配侧杠杆也关闭（2026-09-20）
+## 最新阶段：SR 感知率失真分配跨内容复核封板（2026-09-20，BBB 复核完成）
+
+**BBB 跨内容复核确认 NO-GO（详见 `sr_aware_alloc_falsification.md` BBB 节，脚本 `workspace/pacnet/sr_aware_alloc/bbb/`）**：BBB 1920×1080@30fps、426 宽（426×240）、158 个 4 秒段，同六档 CRF 与连续全片双 libvmaf 管线，独立 LP 复核。SR 新颖性 0.00/0.07/0.09/0.32/0.41（TOS 0.00~0.25，两内容 10 个预算点全部 ≤0.41 VMAF）；通用 oracle 对 CBR 上限 0.00/+2.08/+1.97/+1.38/+0.96（BBB 低预算端比 TOS 高约 1，量级仍 1~2 VMAF 的两趟上帝上界）；边际 VMAF/bit 排序 bic vs post-SR Spearman=0.949（TOS 0.987）；平方根复杂度权重 vs 真实边际斜率 Spearman=−0.85（TOS −0.93），等码率下仍 3/5 输 CBR、2/5 持平。结论：①"按超分后失真做逐段码率分配"相对经典 R-D 分配无可部署增益，跨内容封板；②固定总码率下逐段重分配总上限仅 1~2 VMAF，属经典 per-segment VBR 工程而非神经增强点；③码率分配侧杠杆关闭。至此客户端增强（PAC/H1/H2）、输入端选择性原生像素（H3）、编码侧 SR 感知分配三路在两个内容上全部闭合。下一步方向需与用户讨论：不改变"端侧、单视频、全画幅、标准码率阶梯"设定已无 headroom，候选只剩改变问题设定（视口/360 已被用户排除；现代分辨率 1080→4K 超分价值；评测口径建设；跳出端侧单视频约束）。
+
+## 上一阶段：SR 感知率失真码率分配证伪，码率分配侧杠杆也关闭（2026-09-20）
 
 **SR 感知内容自适应码率分配离线证伪完成（详见 `sr_aware_alloc_falsification.md`，脚本 `workspace/pacnet/sr_aware_alloc/`）**：TOS 426 宽 183 个 4 秒段 × CRF 22-42 六点，逐段实测 bicubic 与 l2 后 R-D（连续时间序 libvmaf），严格等总码率比较五种分配：恒定 CRF、等比特 CBR、等预算平方根、原始 RD oracle、SR 感知 oracle。判决 NO-GO，三条：①**"SR 感知"新颖性为零**——以超分后失真为目标相对以原始失真为目标，post-SR VMAF 只差 0.00~0.28（逐段分配差 8.5% 但质量结果等价，最优解平坦），l2 近均匀缩放不重排段间缺码率排序；②内容自适应分配的上帝上限对等比特 CBR 仅 +0.75~+1.14 VMAF（最低预算 −0.45），可部署预测器只能吃到一部分，稳定 ≥1 不成立；③平方根启发式等码率下 4/5 预算输给等比特 CBR（−0.13~−1.28），历史"平方根 +1.70 QoE、131 轨迹 100% 胜率"由两个混淆撑出：平均多给 16.6% 码率（非等预算）与抽样帧相邻打包的 VMAF 虚高。**口径修正（已记入 known_issues）**：早期离线脚本把间隔约 550 帧的 32 个抽样帧打包成连续 clip 跑 libvmaf，人为帧间运动触发时域掩蔽加分，绝对 VMAF 虚高约 20~28 分（crf26 l2：打包 79.0 vs 连续 50.7）；hard_survey/H1/H2/H3 的绝对分不可直接引用，同口径相对排序与 LPIPS 结论不受影响。cv2 mp4v 长片时间戳漂移（实测 fps 35.97）一并记录，长片改 rawvideo 管道。至此客户端增强（PAC/H1/H2）、输入端选择性原生像素（H3）、编码侧 SR 感知分配三路杠杆在"端侧、单视频、固定通用 SR、全画幅、标准码率阶梯"设定下全部关闭；经典两趟 per-segment VBR 的约 +1 上限未被否证但不构成 SR 论文点。下一步方向需与用户讨论（候选仅剩改变问题设定：视口/360/缩放显示形态、评测口径建设、或跳出端侧单视频约束）。
 
@@ -404,7 +408,7 @@ NAFNet 去模糊、STDF 去压缩块（单独）、STDF→IMDN 级联在小样�
 
 ## 当前在做什么
 
-- **SR 感知率失真码率分配证伪完成（2026-09-20）**：等总码率下 SR 感知 oracle 与原始 RD oracle 只差 0.00~0.28 VMAF、对 CBR 上限仅 +0.75~1.14，平方根启发式等码率下不成立，详见 `sr_aware_alloc_falsification.md`；编码侧 SR 感知杠杆关闭
+- **SR 感知率失真分配证伪并跨内容封板（2026-09-20）**：TOS 与 BBB 两内容、独立 LP 复核，SR 感知 oracle 相对原始 RD oracle 新颖性 ≤0.41 VMAF、通用 oracle 对 CBR 上限 1~2，平方根等码率下不成立，详见 `sr_aware_alloc_falsification.md`；编码侧 SR 感知杠杆关闭
 - **H3 选择性原生 tile 等码率 oracle 证伪完成（2026-09-19）**：216 配置全部被均匀提分辨率+l2 支配（ΔVMAF −0.2～−50、LPIPS 同向），全画幅场景 NO-GO，详见 `h3_roi_tile_oracle.md`；PAC/H1/H2/H3 四路合流，客户端固定通用 SR + 标准全画幅码率阶梯下无 headroom
 - **H2 非学习时序 warping oracle 证伪完成（2026-09-19）**：DIS 光流配准 + mean/median/门控融合在 7 档退化上全部不优于单帧 l2（最佳 gated3 仍 −0.30～−1.60 VMAF），详见 `h2_warp_oracle.md`
 - **H1 条件网离线证伪完成（2026-09-19）**：add/cat 两种注入、三训练协议一致显示 QP+MV 当条件通道喂单帧 l2 网无增益（ΔVMAF≤0.04、cond≈shuf），详见 `h1_condnet_falsification.md`
@@ -447,7 +451,7 @@ NAFNet 去模糊、STDF 去压缩块（单独）、STDF→IMDN 级联在小样�
 - ❌ H1 codec 元数据当条件通道喂单帧 l2 网：add/cat 两注入、三训练协议一致无增益（2026-09-19，`h1_condnet_falsification.md`）；MV 结构性 warping（H2）与大规模多内容训练不在此否定范围
 - ❌ H2 非学习时序 warping/融合：DIS 稠密光流配准 + mean/median/门控融合在 7 档退化上全部不优于单帧 l2（2026-09-19，`h2_warp_oracle.md`）；学习型 VSR 未在此否定，但需大规模训练且文献偏悲观
 - ❌ H3 选择性原生分辨率 tile/ROI + 其余 SR：真实码率口径 + 均匀提分辨率对手前沿下 216 配置等码率 ΔVMAF 全负（2026-09-19，`h3_roi_tile_oracle.md`）；全画幅场景不成立，仅视口/360 等 ROI 外像素不显示场景未否定
-- ❌ SR 感知率失真码率分配：严格等总码率下 SR 感知 oracle 与原始 RD oracle 只差 0.00~0.28 VMAF、对 CBR 上限仅 +0.75~1.14，平方根启发式等码率下 4/5 预算输 CBR（2026-09-20，`sr_aware_alloc_falsification.md`）；旧平方根 VBR 增益被 +16.6% 码率与打包 VMAF 虚高混淆，经典 per-segment VBR 未被否证但无 SR 新颖性
+- ❌ SR 感知率失真码率分配：严格等总码率下 SR 感知 oracle 与原始 RD oracle 只差 ≤0.41 VMAF（TOS/BBB 两内容 10 预算点，独立 LP 复核）、通用 oracle 对 CBR 上限仅 1~2，平方根启发式等码率下不成立（2026-09-20，`sr_aware_alloc_falsification.md`）；旧平方根 VBR 增益被 +16.6% 码率与打包 VMAF 虚高混淆，经典 per-segment VBR 未被否证但无 SR 新颖性
 
 ---
 
