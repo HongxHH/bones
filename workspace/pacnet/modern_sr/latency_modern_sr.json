@@ -1,0 +1,29 @@
+{
+ "low": {
+  "gpu_fp32_mean_ms": 10.67,
+  "gpu_fp32_p50_ms": 10.51,
+  "e2e_fp32_mean_ms": 16.24,
+  "e2e_fp32_p50_ms": 16.13,
+  "gpu_fp16_mean_ms": 9.78,
+  "gpu_fp16_p50_ms": 9.65,
+  "fp16_finite": true
+ },
+ "med": {
+  "gpu_fp32_mean_ms": 30.94,
+  "gpu_fp32_p50_ms": 30.73,
+  "e2e_fp32_mean_ms": 36.23,
+  "e2e_fp32_p50_ms": 36.12,
+  "gpu_fp16_mean_ms": 22.4,
+  "gpu_fp16_p50_ms": 22.2,
+  "fp16_finite": true
+ },
+ "high": {
+  "gpu_fp32_mean_ms": 115.49,
+  "gpu_fp32_p50_ms": 115.4,
+  "e2e_fp32_mean_ms": 121.89,
+  "e2e_fp32_p50_ms": 121.92,
+  "gpu_fp16_mean_ms": 62.75,
+  "gpu_fp16_p50_ms": 62.59,
+  "fp16_finite": false
+ }
+}
