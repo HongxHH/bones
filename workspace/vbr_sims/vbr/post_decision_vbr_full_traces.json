@@ -1,0 +1,1181 @@
+[
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2010-09-13_1003CEST.json",
+    "average quality vmaf": 1.156599194968578,
+    "average oscillation vmaf": -0.04168055696202888,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.1982797519306132
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2010-09-13_1046CEST.json",
+    "average quality vmaf": 1.2297902201258069,
+    "average oscillation vmaf": -0.07607320253164485,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.3058634226574384
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2010-09-14_1038CEST.json",
+    "average quality vmaf": 1.2520892767295635,
+    "average oscillation vmaf": 0.01842679113923751,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.2336624855903153
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2010-09-14_1415CEST.json",
+    "average quality vmaf": 1.314261207547169,
+    "average oscillation vmaf": -0.13198756329113692,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.4462487708383378
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2010-09-14_2303CEST.json",
+    "average quality vmaf": 1.2976256100628945,
+    "average oscillation vmaf": -0.08638574050632819,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.3840113505692102
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2010-09-20_1542CEST.json",
+    "average quality vmaf": 1.272946899371064,
+    "average oscillation vmaf": 0.06806658227847961,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.2048803170925808
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2010-09-21_0742CEST.json",
+    "average quality vmaf": 1.1907414088050388,
+    "average oscillation vmaf": 0.019699689873415416,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.171041718931619
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2010-09-21_1001CEST.json",
+    "average quality vmaf": 1.209300716981133,
+    "average oscillation vmaf": -0.04522605696202753,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.2545267739431623
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2010-09-21_1622CEST.json",
+    "average quality vmaf": 1.2950172515723466,
+    "average oscillation vmaf": -0.10555115189873199,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.400568403471084
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2010-09-21_1735CEST.json",
+    "average quality vmaf": 1.228002628930824,
+    "average oscillation vmaf": 0.06441975316455917,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.1635828757662665
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2010-09-22_0702CEST.json",
+    "average quality vmaf": 1.2093770628930827,
+    "average oscillation vmaf": -0.0011456835443039992,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.210522746437377
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2010-09-22_0857CEST.json",
+    "average quality vmaf": 1.27298789937106,
+    "average oscillation vmaf": -0.08285674050632785,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.3558446398773896
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2010-09-23_1001CEST.json",
+    "average quality vmaf": 1.233313490566033,
+    "average oscillation vmaf": 0.02939119620253372,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.203922294363494
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2010-09-27_0942CEST.json",
+    "average quality vmaf": 1.2072197232704696,
+    "average oscillation vmaf": -0.14575732278480746,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.3529770460552726
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2010-09-28_1003CEST.json",
+    "average quality vmaf": 1.2320835974842907,
+    "average oscillation vmaf": 0.05845732911392343,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.17362626837037
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2010-09-28_1407CEST.json",
+    "average quality vmaf": 1.0750750880503404,
+    "average oscillation vmaf": -0.004878594936706726,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.0799536829870533
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2010-09-29_0702CEST.json",
+    "average quality vmaf": 1.2518401949685654,
+    "average oscillation vmaf": -0.051806234177215416,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.303646429145786
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2010-09-29_0852CEST.json",
+    "average quality vmaf": 1.0362639308176256,
+    "average oscillation vmaf": 0.022354854430381543,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.013909076387236
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2010-09-29_1622CEST.json",
+    "average quality vmaf": 1.1651446729559893,
+    "average oscillation vmaf": -0.06293905696202273,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.228083729918012
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2010-09-29_1628CEST.json",
+    "average quality vmaf": 1.1107393522012785,
+    "average oscillation vmaf": 0.09277277848101217,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.0179665737202583
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2010-09-29_1823CEST.json",
+    "average quality vmaf": 1.0307219874213729,
+    "average oscillation vmaf": -0.03920032911392202,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.0699223165352834
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2010-09-29_1827CEST.json",
+    "average quality vmaf": 1.0631414213836479,
+    "average oscillation vmaf": 0.1352989620253151,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 0.927842459358331
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2010-09-30_1058CEST.json",
+    "average quality vmaf": 1.2312819748427586,
+    "average oscillation vmaf": -0.10338818354430668,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.3346701583870697
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2010-09-30_1113CEST.json",
+    "average quality vmaf": 1.0975544716981176,
+    "average oscillation vmaf": -0.052069607594937395,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.149624079293062
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2010-09-30_1114CEST.json",
+    "average quality vmaf": 0.877646584905662,
+    "average oscillation vmaf": -0.3117683417721522,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.189414926677813
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2010-09-30_1133CEST.json",
+    "average quality vmaf": 1.128662270440259,
+    "average oscillation vmaf": 0.21591368354430251,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 0.9127485868959582
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2010-10-18_0951CEST.json",
+    "average quality vmaf": 1.195407817610075,
+    "average oscillation vmaf": 0.18075824050632772,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.0146495771037394
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2010-10-22_1458CEST.json",
+    "average quality vmaf": 1.2408193018867877,
+    "average oscillation vmaf": -0.1485807911392385,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.3894000930260262
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2010-11-04_0957CET.json",
+    "average quality vmaf": 1.281414408805034,
+    "average oscillation vmaf": -0.16187192405064188,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.4432863328556778
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2010-11-10_1424CET.json",
+    "average quality vmaf": 1.0646154150943374,
+    "average oscillation vmaf": -0.02535244303797235,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.0899678581322974
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2010-11-10_1726CET.json",
+    "average quality vmaf": 1.0529947987421338,
+    "average oscillation vmaf": 0.10842867721519234,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 0.9445661215269467
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2010-11-11_1012CET.json",
+    "average quality vmaf": 1.2633019056603843,
+    "average oscillation vmaf": -0.016470398734173664,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.2797723043945695
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2010-11-16_1857CET.json",
+    "average quality vmaf": 1.245221993710686,
+    "average oscillation vmaf": -0.09983999367088714,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.3450619873815768
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2010-11-23_1515CET.json",
+    "average quality vmaf": 1.3085249371069239,
+    "average oscillation vmaf": -0.0605958037974661,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.3691207409043926
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2010-11-23_1541CET.json",
+    "average quality vmaf": 1.2777329308176064,
+    "average oscillation vmaf": -0.15461202531645135,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.4323449561340595
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2010-11-23_1606CET.json",
+    "average quality vmaf": 1.2505344025157257,
+    "average oscillation vmaf": -0.06423155063291297,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.3147659531486369
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2010-12-09_1222CET.json",
+    "average quality vmaf": 1.2608070880503277,
+    "average oscillation vmaf": -0.21909028481012705,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.4798973728604565
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2010-12-09_1244CET.json",
+    "average quality vmaf": 1.2780616226415304,
+    "average oscillation vmaf": -0.08881712658228036,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.3668787492238081
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2010-12-09_1310CET.json",
+    "average quality vmaf": 1.245583836478005,
+    "average oscillation vmaf": -0.05719551898734121,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.302779355465347
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2010-12-09_1334CET.json",
+    "average quality vmaf": 1.3052651823899453,
+    "average oscillation vmaf": -0.13611934177215268,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.4413845241620962
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2010-12-16_1100CET.json",
+    "average quality vmaf": 1.2181734842767042,
+    "average oscillation vmaf": 0.11720102531644017,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.100972458960264
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2010-12-16_1125CET.json",
+    "average quality vmaf": 1.2522680503144699,
+    "average oscillation vmaf": -0.11549112025316521,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.3677591705676306
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2010-12-16_1149CET.json",
+    "average quality vmaf": 1.2357373836478018,
+    "average oscillation vmaf": -0.01428487341772744,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.250022257065531
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2010-12-16_1215CET.json",
+    "average quality vmaf": 1.2559075471698122,
+    "average oscillation vmaf": -0.004349310126576356,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.2602568572963904
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2010-12-21_1134CET.json",
+    "average quality vmaf": 1.2491694905660466,
+    "average oscillation vmaf": -0.12261547468354728,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.3717849652495886
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2010-12-21_1200CET.json",
+    "average quality vmaf": 1.2091458113207807,
+    "average oscillation vmaf": 0.01047261392404053,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.1986731973967366
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2010-12-21_1225CET.json",
+    "average quality vmaf": 1.2592856289308259,
+    "average oscillation vmaf": -0.050037240506333625,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.3093228694371675
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2010-12-22_0800CET.json",
+    "average quality vmaf": 1.2416173396226355,
+    "average oscillation vmaf": -0.11058144936709269,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.3521987889897247
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2010-12-22_0826CET.json",
+    "average quality vmaf": 1.1619362201258099,
+    "average oscillation vmaf": 0.07271024683544525,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.0892259732903682
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2010-12-22_0849CET.json",
+    "average quality vmaf": 1.2897227232704296,
+    "average oscillation vmaf": -0.12239167721519806,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.4121144004856276
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2011-01-04_0820CET.json",
+    "average quality vmaf": 1.284550761006301,
+    "average oscillation vmaf": -0.2189710949367134,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.5035218559430135
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2011-01-05_0819CET.json",
+    "average quality vmaf": 1.2854348805031464,
+    "average oscillation vmaf": 0.02311672784810348,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.262318152655041
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2011-01-06_0749CET.json",
+    "average quality vmaf": 1.2475319245283032,
+    "average oscillation vmaf": 0.05375680379746761,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.1937751207308338
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2011-01-06_0814CET.json",
+    "average quality vmaf": 1.3138411886792554,
+    "average oscillation vmaf": 0.009577563291142788,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.304263625388117
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2011-01-29_1125CET.json",
+    "average quality vmaf": 1.1120110188679178,
+    "average oscillation vmaf": 0.22436907594936173,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 0.8876419429185489
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2011-01-29_1423CET.json",
+    "average quality vmaf": 1.237040842767314,
+    "average oscillation vmaf": -0.08969720886075283,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.3267380516280696
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2011-01-29_1800CET.json",
+    "average quality vmaf": 1.088659584905642,
+    "average oscillation vmaf": -0.14650346835442907,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.2351630532600666
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2011-01-29_1827CET.json",
+    "average quality vmaf": 1.163594477987445,
+    "average oscillation vmaf": -0.06304582911392309,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.2266403071013627
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2011-01-30_1323CET.json",
+    "average quality vmaf": 1.1685099371069327,
+    "average oscillation vmaf": -0.01207749367088784,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.1805874307778197
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2011-01-31_1025CET.json",
+    "average quality vmaf": 1.1249153459119583,
+    "average oscillation vmaf": 0.03068297468354242,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.094232371228415
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2011-01-31_1045CET.json",
+    "average quality vmaf": 1.2291857106918087,
+    "average oscillation vmaf": -0.11746401265823003,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.3466497233500405
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2011-01-31_1830CET.json",
+    "average quality vmaf": 1.0167520691824024,
+    "average oscillation vmaf": 0.08220019620253094,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 0.934551872979867
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2011-01-31_1935CET.json",
+    "average quality vmaf": 1.202262937106923,
+    "average oscillation vmaf": 0.17708924050632469,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.0251736966006035
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2011-01-31_2032CET.json",
+    "average quality vmaf": 1.1985828050314495,
+    "average oscillation vmaf": -0.01949124050632811,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.2180740455377759
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2011-01-31_2356CET.json",
+    "average quality vmaf": 1.2362919308176146,
+    "average oscillation vmaf": -0.12957424683544083,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.3658661776530607
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2011-02-01_0629CET.json",
+    "average quality vmaf": 1.213355773584908,
+    "average oscillation vmaf": -0.039905183544300726,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.2532609571292
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2011-02-01_0740CET.json",
+    "average quality vmaf": 1.2349222452830304,
+    "average oscillation vmaf": 0.09538544936708782,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.1395367959159444
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2011-02-01_0840CET.json",
+    "average quality vmaf": 1.1565985345911969,
+    "average oscillation vmaf": -0.23902906962025394,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.3956276042113132
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2011-02-01_1000CET.json",
+    "average quality vmaf": 1.373739327044028,
+    "average oscillation vmaf": -0.06023214556961776,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.4339714726138482
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2011-02-01_1539CET.json",
+    "average quality vmaf": 1.1618525157232824,
+    "average oscillation vmaf": -0.0329409683544295,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.1947934840777066
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2011-02-01_1639CET.json",
+    "average quality vmaf": 1.2168200503144675,
+    "average oscillation vmaf": 0.19930290506329396,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.0175171452511762
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2011-02-01_1800CET.json",
+    "average quality vmaf": 1.27841481761007,
+    "average oscillation vmaf": -0.023229917721518945,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.3016447353315925
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2011-02-02_1251CET.json",
+    "average quality vmaf": 1.2750745911949792,
+    "average oscillation vmaf": -0.038220018987342286,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.313294610182325
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2011-02-02_1345CET.json",
+    "average quality vmaf": 1.2797410125786115,
+    "average oscillation vmaf": 0.020469974683543946,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.2592710378950684
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2011-02-10_1611CET.json",
+    "average quality vmaf": 1.2370802389937268,
+    "average oscillation vmaf": -0.041108075949365386,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.278188314943094
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2011-02-11_1530CET.json",
+    "average quality vmaf": 1.20412874213838,
+    "average oscillation vmaf": -0.09715384177214847,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.3012825839105204
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2011-02-11_1618CET.json",
+    "average quality vmaf": 1.2393587044025196,
+    "average oscillation vmaf": -0.14859808227847893,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.387956786681002
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2011-02-11_1729CET.json",
+    "average quality vmaf": 1.0906631823899318,
+    "average oscillation vmaf": 0.012863025316458554,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.0778001570734688
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2011-02-14_0644CET.json",
+    "average quality vmaf": 1.1019282515723177,
+    "average oscillation vmaf": -0.004763430379743916,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.1066916819520571
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2011-02-14_1728CET.json",
+    "average quality vmaf": 1.1078016981132066,
+    "average oscillation vmaf": -0.1806922341772097,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.2884939322904216
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2011-02-14_2032CET.json",
+    "average quality vmaf": 1.1026905157232818,
+    "average oscillation vmaf": 0.05433197468354223,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.0483585410397467
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2011-02-14_2051CET.json",
+    "average quality vmaf": 1.13921953459122,
+    "average oscillation vmaf": 0.0572982341772148,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.0819213004140096
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2011-02-14_2108CET.json",
+    "average quality vmaf": 1.0773273270440313,
+    "average oscillation vmaf": 0.10387006962025591,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 0.9734572574237745
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2011-02-14_2124CET.json",
+    "average quality vmaf": 1.1046104088050441,
+    "average oscillation vmaf": 0.07126910126582153,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.0333413075392315
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2011-02-14_2139CET.json",
+    "average quality vmaf": 1.1060057232704565,
+    "average oscillation vmaf": 0.03694739873417685,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.069058324536286
+  },
+  {
+    "trace_type": "3Glogs",
+    "trace_name": "report.2011-04-21_1135CEST.json",
+    "average quality vmaf": 1.1736078930817513,
+    "average oscillation vmaf": 0.10025001265822553,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.0733578804235293
+  },
+  {
+    "trace_type": "4Glogs",
+    "trace_name": "report_bicycle_0001.json",
+    "average quality vmaf": 0.8262710377358502,
+    "average oscillation vmaf": -0.3645470126582273,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.1908180503940713
+  },
+  {
+    "trace_type": "4Glogs",
+    "trace_name": "report_bicycle_0002.json",
+    "average quality vmaf": 0.8313981949685569,
+    "average oscillation vmaf": -0.34479017721518934,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.176188372183745
+  },
+  {
+    "trace_type": "4Glogs",
+    "trace_name": "report_bus_0001.json",
+    "average quality vmaf": 0.8254820691823994,
+    "average oscillation vmaf": -0.40238188607594827,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.2278639552583428
+  },
+  {
+    "trace_type": "4Glogs",
+    "trace_name": "report_bus_0002.json",
+    "average quality vmaf": 0.8262710377358502,
+    "average oscillation vmaf": -0.3645470126582273,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.1908180503940713
+  },
+  {
+    "trace_type": "4Glogs",
+    "trace_name": "report_bus_0003.json",
+    "average quality vmaf": 0.8254820691823994,
+    "average oscillation vmaf": -0.40238188607594827,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.2278639552583428
+  },
+  {
+    "trace_type": "4Glogs",
+    "trace_name": "report_bus_0004.json",
+    "average quality vmaf": 0.8262710377358502,
+    "average oscillation vmaf": -0.3645470126582273,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.1908180503940713
+  },
+  {
+    "trace_type": "4Glogs",
+    "trace_name": "report_bus_0005.json",
+    "average quality vmaf": 0.8254820691823994,
+    "average oscillation vmaf": -0.40238188607594827,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.2278639552583428
+  },
+  {
+    "trace_type": "4Glogs",
+    "trace_name": "report_bus_0006.json",
+    "average quality vmaf": 0.8262710377358502,
+    "average oscillation vmaf": -0.3645470126582273,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.1908180503940713
+  },
+  {
+    "trace_type": "4Glogs",
+    "trace_name": "report_bus_0007.json",
+    "average quality vmaf": 0.8268250314465462,
+    "average oscillation vmaf": -0.3631097468354425,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.1899347782819945
+  },
+  {
+    "trace_type": "4Glogs",
+    "trace_name": "report_bus_0008.json",
+    "average quality vmaf": 0.8262710377358502,
+    "average oscillation vmaf": -0.3645470126582273,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.1908180503940713
+  },
+  {
+    "trace_type": "4Glogs",
+    "trace_name": "report_bus_0009.json",
+    "average quality vmaf": 0.8254820691823994,
+    "average oscillation vmaf": -0.40238188607594827,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.2278639552583428
+  },
+  {
+    "trace_type": "4Glogs",
+    "trace_name": "report_bus_0010.json",
+    "average quality vmaf": 0.8254820691823994,
+    "average oscillation vmaf": -0.40238188607594827,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.2278639552583428
+  },
+  {
+    "trace_type": "4Glogs",
+    "trace_name": "report_bus_0011.json",
+    "average quality vmaf": 0.8254820691823994,
+    "average oscillation vmaf": -0.40238188607594827,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.2278639552583428
+  },
+  {
+    "trace_type": "4Glogs",
+    "trace_name": "report_car_0001.json",
+    "average quality vmaf": 0.828599408805033,
+    "average oscillation vmaf": -0.4048069240506318,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.2334063328556653
+  },
+  {
+    "trace_type": "4Glogs",
+    "trace_name": "report_car_0002.json",
+    "average quality vmaf": 0.8262710377358502,
+    "average oscillation vmaf": -0.3645470126582273,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.1908180503940713
+  },
+  {
+    "trace_type": "4Glogs",
+    "trace_name": "report_car_0003.json",
+    "average quality vmaf": 0.8254820691823994,
+    "average oscillation vmaf": -0.40238188607594827,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.2278639552583428
+  },
+  {
+    "trace_type": "4Glogs",
+    "trace_name": "report_car_0004.json",
+    "average quality vmaf": 0.8254820691823994,
+    "average oscillation vmaf": -0.40238188607594827,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.2278639552583428
+  },
+  {
+    "trace_type": "4Glogs",
+    "trace_name": "report_car_0005.json",
+    "average quality vmaf": 0.8260786352201279,
+    "average oscillation vmaf": -0.3602821518987325,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.1863607871188577
+  },
+  {
+    "trace_type": "4Glogs",
+    "trace_name": "report_car_0006.json",
+    "average quality vmaf": 0.8254820691823994,
+    "average oscillation vmaf": -0.40238188607594827,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.2278639552583428
+  },
+  {
+    "trace_type": "4Glogs",
+    "trace_name": "report_car_0007.json",
+    "average quality vmaf": 0.8254820691823994,
+    "average oscillation vmaf": -0.40238188607594827,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.2278639552583428
+  },
+  {
+    "trace_type": "4Glogs",
+    "trace_name": "report_car_0008.json",
+    "average quality vmaf": 0.8280326163522034,
+    "average oscillation vmaf": -0.3609030632911381,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.1889356796433503
+  },
+  {
+    "trace_type": "4Glogs",
+    "trace_name": "report_foot_0001.json",
+    "average quality vmaf": 0.8262710377358502,
+    "average oscillation vmaf": -0.3645470126582273,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.1908180503940713
+  },
+  {
+    "trace_type": "4Glogs",
+    "trace_name": "report_foot_0002.json",
+    "average quality vmaf": 0.8663488238993722,
+    "average oscillation vmaf": -0.3004959746835434,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.1668447985829147
+  },
+  {
+    "trace_type": "4Glogs",
+    "trace_name": "report_foot_0003.json",
+    "average quality vmaf": 0.8281157924528344,
+    "average oscillation vmaf": -0.3612976075949357,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.1894134000477692
+  },
+  {
+    "trace_type": "4Glogs",
+    "trace_name": "report_foot_0004.json",
+    "average quality vmaf": 0.8262710377358502,
+    "average oscillation vmaf": -0.3645470126582273,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.1908180503940713
+  },
+  {
+    "trace_type": "4Glogs",
+    "trace_name": "report_foot_0005.json",
+    "average quality vmaf": 0.8254820691823994,
+    "average oscillation vmaf": -0.40238188607594827,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.2278639552583428
+  },
+  {
+    "trace_type": "4Glogs",
+    "trace_name": "report_foot_0006.json",
+    "average quality vmaf": 0.8254820691823994,
+    "average oscillation vmaf": -0.40238188607594827,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.2278639552583428
+  },
+  {
+    "trace_type": "4Glogs",
+    "trace_name": "report_foot_0007.json",
+    "average quality vmaf": 0.8262710377358502,
+    "average oscillation vmaf": -0.3645470126582273,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.1908180503940713
+  },
+  {
+    "trace_type": "4Glogs",
+    "trace_name": "report_foot_0008.json",
+    "average quality vmaf": 0.8260786352201279,
+    "average oscillation vmaf": -0.3602821518987325,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.1863607871188577
+  },
+  {
+    "trace_type": "4Glogs",
+    "trace_name": "report_train_0001.json",
+    "average quality vmaf": 0.8268534591195049,
+    "average oscillation vmaf": -0.3261112911392403,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.1529647502587466
+  },
+  {
+    "trace_type": "4Glogs",
+    "trace_name": "report_train_0002.json",
+    "average quality vmaf": 0.8328409685534552,
+    "average oscillation vmaf": -0.3592060379746833,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.192047006528142
+  },
+  {
+    "trace_type": "4Glogs",
+    "trace_name": "report_train_0003.json",
+    "average quality vmaf": 0.8433921383647913,
+    "average oscillation vmaf": -0.33844348101266064,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.181835619377452
+  },
+  {
+    "trace_type": "4Glogs",
+    "trace_name": "report_tram_0001.json",
+    "average quality vmaf": 0.831893528301876,
+    "average oscillation vmaf": -0.40828673417721406,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.240180262479086
+  },
+  {
+    "trace_type": "4Glogs",
+    "trace_name": "report_tram_0002.json",
+    "average quality vmaf": 0.8356491949685818,
+    "average oscillation vmaf": -0.4294231139240492,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.2650723088926412
+  },
+  {
+    "trace_type": "4Glogs",
+    "trace_name": "report_tram_0003.json",
+    "average quality vmaf": 0.8260786352201279,
+    "average oscillation vmaf": -0.3602821518987325,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.1863607871188577
+  },
+  {
+    "trace_type": "4Glogs",
+    "trace_name": "report_tram_0004.json",
+    "average quality vmaf": 0.8281157924528344,
+    "average oscillation vmaf": -0.3612976075949357,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.1894134000477692
+  },
+  {
+    "trace_type": "4Glogs",
+    "trace_name": "report_tram_0005.json",
+    "average quality vmaf": 0.8254820691823994,
+    "average oscillation vmaf": -0.40238188607594827,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.2278639552583428
+  },
+  {
+    "trace_type": "4Glogs",
+    "trace_name": "report_tram_0006.json",
+    "average quality vmaf": 0.8270193899371066,
+    "average oscillation vmaf": -0.36350429113923965,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.1905236810763569
+  },
+  {
+    "trace_type": "4Glogs",
+    "trace_name": "report_tram_0007.json",
+    "average quality vmaf": 0.8260786352201279,
+    "average oscillation vmaf": -0.3602821518987325,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.1863607871188577
+  },
+  {
+    "trace_type": "4Glogs",
+    "trace_name": "report_tram_0008.json",
+    "average quality vmaf": 0.8262710377358502,
+    "average oscillation vmaf": -0.3645470126582273,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.1908180503940713
+  },
+  {
+    "trace_type": "root",
+    "trace_name": "3g_low.json",
+    "average quality vmaf": 1.1939929182390046,
+    "average oscillation vmaf": -0.04292222784810917,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.2369151460871137
+  },
+  {
+    "trace_type": "root",
+    "trace_name": "4g_medium.json",
+    "average quality vmaf": 0.9119201006289472,
+    "average oscillation vmaf": -0.20559470886075637,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.1175148094897054
+  },
+  {
+    "trace_type": "root",
+    "trace_name": "dummy.json",
+    "average quality vmaf": 0.9893967358490698,
+    "average oscillation vmaf": 0.007221354430376081,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 0.9821753814186991
+  },
+  {
+    "trace_type": "root",
+    "trace_name": "volatile.json",
+    "average quality vmaf": 0.9454093899371117,
+    "average oscillation vmaf": -0.041582759493672405,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 0.9869921494307903
+  },
+  {
+    "trace_type": "root",
+    "trace_name": "wifi_high.json",
+    "average quality vmaf": 0.8270193899371066,
+    "average oscillation vmaf": -0.36350429113923965,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.1905236810763569
+  }
+]

@@ -1,0 +1,206 @@
+{
+  "3G_report.2010-09-13_1003CEST_pacnet": {
+    "net_type": "3G",
+    "trace": "report.2010-09-13_1003CEST.json",
+    "enhancer": "pacnet",
+    "enh_name": "PAC-Net",
+    "metrics": {
+      "qoe": 58.497188817680346,
+      "avg_vmaf": 66.90808473576995,
+      "oscillation": 8.405294540482455,
+      "num_stall": 5,
+      "dur_stall": 8.906190395355225,
+      "num_switches": 68,
+      "fast_complete": 0,
+      "avg_bitrate": 0
+    },
+    "result_file": "E:\\dev\\Code\\Python\\bones\\player\\output\\data\\bones_pacnet_fast-True_video-bbb_trace-report.2010-09-13_1003CEST_20260914-092659.json"
+  },
+  "3G_report.2010-09-13_1003CEST_imdn_always": {
+    "net_type": "3G",
+    "trace": "report.2010-09-13_1003CEST.json",
+    "enhancer": "imdn_always",
+    "enh_name": "基线IMDN",
+    "metrics": {
+      "qoe": 58.081688758606106,
+      "avg_vmaf": 67.09916350444988,
+      "oscillation": 8.99977229695088,
+      "num_stall": 13,
+      "dur_stall": 28.146893739700317,
+      "num_switches": 59,
+      "fast_complete": 4,
+      "avg_bitrate": 0
+    },
+    "result_file": "E:\\dev\\Code\\Python\\bones\\player\\output\\data\\bones_imdn_always_fast-True_video-bbb_trace-report.2010-09-13_1003CEST_20260914-093813.json"
+  },
+  "3G_report.2010-09-14_1038CEST_pacnet": {
+    "net_type": "3G",
+    "trace": "report.2010-09-14_1038CEST.json",
+    "enhancer": "pacnet",
+    "enh_name": "PAC-Net",
+    "metrics": {
+      "qoe": 61.03813388126778,
+      "avg_vmaf": 66.53846605442818,
+      "oscillation": 5.496726713239393,
+      "num_stall": 6,
+      "dur_stall": 5.7326812744140625,
+      "num_switches": 43,
+      "fast_complete": 0,
+      "avg_bitrate": 0
+    },
+    "result_file": "E:\\dev\\Code\\Python\\bones\\player\\output\\data\\bones_pacnet_fast-True_video-bbb_trace-report.2010-09-14_1038CEST_20260914-094900.json"
+  },
+  "3G_report.2010-09-14_1038CEST_imdn_always": {
+    "net_type": "3G",
+    "trace": "report.2010-09-14_1038CEST.json",
+    "enhancer": "imdn_always",
+    "enh_name": "基线IMDN",
+    "metrics": {
+      "qoe": 57.71459585465083,
+      "avg_vmaf": 65.1490139201376,
+      "oscillation": 7.4078127305150865,
+      "num_stall": 23,
+      "dur_stall": 42.30248260498047,
+      "num_switches": 47,
+      "fast_complete": 2,
+      "avg_bitrate": 0
+    },
+    "result_file": "E:\\dev\\Code\\Python\\bones\\player\\output\\data\\bones_imdn_always_fast-True_video-bbb_trace-report.2010-09-14_1038CEST_20260914-100028.json"
+  },
+  "3G_report.2010-09-21_1001CEST_pacnet": {
+    "net_type": "3G",
+    "trace": "report.2010-09-21_1001CEST.json",
+    "enhancer": "pacnet",
+    "enh_name": "PAC-Net",
+    "metrics": {
+      "qoe": 52.13625740004829,
+      "avg_vmaf": 57.15666348649186,
+      "oscillation": 4.968853009075711,
+      "num_stall": 30,
+      "dur_stall": 81.96939301490784,
+      "num_switches": 29,
+      "fast_complete": 0,
+      "avg_bitrate": 0
+    },
+    "result_file": "E:\\dev\\Code\\Python\\bones\\player\\output\\data\\bones_pacnet_fast-True_video-bbb_trace-report.2010-09-21_1001CEST_20260914-101231.json"
+  },
+  "3G_report.2010-09-21_1001CEST_imdn_always": {
+    "net_type": "3G",
+    "trace": "report.2010-09-21_1001CEST.json",
+    "enhancer": "imdn_always",
+    "enh_name": "基线IMDN",
+    "metrics": {
+      "qoe": 46.71823720857655,
+      "avg_vmaf": 55.314426355088806,
+      "oscillation": 8.47765045060107,
+      "num_stall": 50,
+      "dur_stall": 188.47652649879456,
+      "num_switches": 47,
+      "fast_complete": 8,
+      "avg_bitrate": 0
+    },
+    "result_file": "E:\\dev\\Code\\Python\\bones\\player\\output\\data\\bones_imdn_always_fast-True_video-bbb_trace-report.2010-09-21_1001CEST_20260914-102624.json"
+  },
+  "4G_report_bicycle_0001_pacnet": {
+    "net_type": "4G",
+    "trace": "report_bicycle_0001.json",
+    "enhancer": "pacnet",
+    "enh_name": "PAC-Net",
+    "metrics": {
+      "qoe": 98.25944428763886,
+      "avg_vmaf": 98.64365885317036,
+      "oscillation": 0.3841614176817133,
+      "num_stall": 1,
+      "dur_stall": 0.08450508117675781,
+      "num_switches": 3,
+      "fast_complete": 0,
+      "avg_bitrate": 0
+    },
+    "result_file": "E:\\dev\\Code\\Python\\bones\\player\\output\\data\\bones_pacnet_fast-True_video-bbb_trace-report_bicycle_0001_20260914-103706.json"
+  },
+  "4G_report_bicycle_0001_imdn_always": {
+    "net_type": "4G",
+    "trace": "report_bicycle_0001.json",
+    "enhancer": "imdn_always",
+    "enh_name": "基线IMDN",
+    "metrics": {
+      "qoe": 98.364712284639,
+      "avg_vmaf": 98.7489259017444,
+      "oscillation": 0.3841614176817133,
+      "num_stall": 1,
+      "dur_stall": 0.08299708366394043,
+      "num_switches": 3,
+      "fast_complete": 0,
+      "avg_bitrate": 0
+    },
+    "result_file": "E:\\dev\\Code\\Python\\bones\\player\\output\\data\\bones_imdn_always_fast-True_video-bbb_trace-report_bicycle_0001_20260914-104748.json"
+  },
+  "4G_report_bus_0001_pacnet": {
+    "net_type": "4G",
+    "trace": "report_bus_0001.json",
+    "enhancer": "pacnet",
+    "enh_name": "PAC-Net",
+    "metrics": {
+      "qoe": 98.25944007632704,
+      "avg_vmaf": 98.64365885317036,
+      "oscillation": 0.3841614176817133,
+      "num_stall": 1,
+      "dur_stall": 0.0912010669708252,
+      "num_switches": 3,
+      "fast_complete": 0,
+      "avg_bitrate": 0
+    },
+    "result_file": "E:\\dev\\Code\\Python\\bones\\player\\output\\data\\bones_pacnet_fast-True_video-bbb_trace-report_bus_0001_20260914-105830.json"
+  },
+  "4G_report_bus_0001_imdn_always": {
+    "net_type": "4G",
+    "trace": "report_bus_0001.json",
+    "enhancer": "imdn_always",
+    "enh_name": "基线IMDN",
+    "metrics": {
+      "qoe": 98.36470979159039,
+      "avg_vmaf": 98.7489259017444,
+      "oscillation": 0.3841614176817133,
+      "num_stall": 1,
+      "dur_stall": 0.08696103096008301,
+      "num_switches": 3,
+      "fast_complete": 0,
+      "avg_bitrate": 0
+    },
+    "result_file": "E:\\dev\\Code\\Python\\bones\\player\\output\\data\\bones_imdn_always_fast-True_video-bbb_trace-report_bus_0001_20260914-110912.json"
+  },
+  "4G_report_car_0001_pacnet": {
+    "net_type": "4G",
+    "trace": "report_car_0001.json",
+    "enhancer": "pacnet",
+    "enh_name": "PAC-Net",
+    "metrics": {
+      "qoe": 98.25943970085527,
+      "avg_vmaf": 98.64365885317036,
+      "oscillation": 0.3841614176817133,
+      "num_stall": 1,
+      "dur_stall": 0.09179806709289551,
+      "num_switches": 3,
+      "fast_complete": 0,
+      "avg_bitrate": 0
+    },
+    "result_file": "E:\\dev\\Code\\Python\\bones\\player\\output\\data\\bones_pacnet_fast-True_video-bbb_trace-report_car_0001_20260914-111953.json"
+  },
+  "4G_report_car_0001_imdn_always": {
+    "net_type": "4G",
+    "trace": "report_car_0001.json",
+    "enhancer": "imdn_always",
+    "enh_name": "基线IMDN",
+    "metrics": {
+      "qoe": 98.36471348213006,
+      "avg_vmaf": 98.7489259017444,
+      "oscillation": 0.3841614176817133,
+      "num_stall": 1,
+      "dur_stall": 0.08109307289123535,
+      "num_switches": 3,
+      "fast_complete": 0,
+      "avg_bitrate": 0
+    },
+    "result_file": "E:\\dev\\Code\\Python\\bones\\player\\output\\data\\bones_imdn_always_fast-True_video-bbb_trace-report_car_0001_20260914-113035.json"
+  }
+}

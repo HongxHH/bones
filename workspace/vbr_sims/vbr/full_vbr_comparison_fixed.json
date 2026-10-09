@@ -1,0 +1,4718 @@
+[
+  {
+    "trace_name": "report.2010-09-13_1003CEST.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 73.94010406030567,
+        "cbr_md_qoe": 29.97012258402586,
+        "vbr_bones_qoe": 75.13838381223627,
+        "vbr_md_qoe": 30.47936401936463,
+        "bones_qoe_diff": 1.198279751930599,
+        "md_qoe_diff": 0.5092414353387724,
+        "vmaf_diff": 1.156599194968578,
+        "oscillation_diff": -0.041680556962026216
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 73.93808120066075,
+        "cbr_md_qoe": 29.970227863357213,
+        "vbr_bones_qoe": 75.64181337867207,
+        "vbr_md_qoe": 30.66601832015679,
+        "bones_qoe_diff": 1.7037321780113217,
+        "md_qoe_diff": 0.6957904567995783,
+        "vmaf_diff": 1.637845874213852,
+        "oscillation_diff": -0.06588630379746707
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 73.93808120066075,
+        "cbr_md_qoe": 29.970227863357213,
+        "vbr_bones_qoe": 75.54958891473608,
+        "vbr_md_qoe": 30.603213248195456,
+        "bones_qoe_diff": 1.61150771407533,
+        "md_qoe_diff": 0.6329853848382427,
+        "vmaf_diff": 1.6485791761006396,
+        "oscillation_diff": 0.03707146202531497
+      }
+    }
+  },
+  {
+    "trace_name": "report.2010-09-13_1046CEST.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": -139.5164697923226,
+        "cbr_md_qoe": -328379669.35067093,
+        "vbr_bones_qoe": -138.21060636966516,
+        "vbr_md_qoe": -328379668.8176179,
+        "bones_qoe_diff": 1.3058634226574384,
+        "md_qoe_diff": 0.5330530405044556,
+        "vmaf_diff": 1.2297902201258069,
+        "oscillation_diff": -0.07607320253164662
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": -139.51721242268644,
+        "cbr_md_qoe": -328379669.3505042,
+        "vbr_bones_qoe": -137.50403948868436,
+        "vbr_md_qoe": -328379668.4866029,
+        "bones_qoe_diff": 2.0131729340020854,
+        "md_qoe_diff": 0.8639013171195984,
+        "vmaf_diff": 1.9436184276729591,
+        "oscillation_diff": -0.06955450632911298
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": -139.51721242268644,
+        "cbr_md_qoe": -328379669.3505042,
+        "vbr_bones_qoe": -137.71372690525152,
+        "vbr_md_qoe": -328379668.51247376,
+        "bones_qoe_diff": 1.8034855174349218,
+        "md_qoe_diff": 0.8380304574966431,
+        "vmaf_diff": 1.907520245283024,
+        "oscillation_diff": 0.1040347278481022
+      }
+    }
+  },
+  {
+    "trace_name": "report.2010-09-14_1038CEST.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": -119.50421391026691,
+        "cbr_md_qoe": -260979861.61497274,
+        "vbr_bones_qoe": -118.2705514246766,
+        "vbr_md_qoe": -260979861.3946257,
+        "bones_qoe_diff": 1.2336624855903153,
+        "md_qoe_diff": 0.22034704685211182,
+        "vmaf_diff": 1.2520892767295635,
+        "oscillation_diff": 0.01842679113924106
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": -119.50421391026691,
+        "cbr_md_qoe": -260979861.61497274,
+        "vbr_bones_qoe": -117.39883374897401,
+        "vbr_md_qoe": -260979861.1790575,
+        "bones_qoe_diff": 2.1053801612928993,
+        "md_qoe_diff": 0.4359152317047119,
+        "vmaf_diff": 1.8566005157232865,
+        "oscillation_diff": -0.2487796455696225
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": -119.50421391026691,
+        "cbr_md_qoe": -260979861.61497274,
+        "vbr_bones_qoe": -117.4794919384494,
+        "vbr_md_qoe": -260979861.1552549,
+        "bones_qoe_diff": 2.024721971817513,
+        "md_qoe_diff": 0.45971783995628357,
+        "vmaf_diff": 1.8493294528301902,
+        "oscillation_diff": -0.17539251898734065
+      }
+    }
+  },
+  {
+    "trace_name": "report.2010-09-14_1415CEST.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": -305.4966774682294,
+        "cbr_md_qoe": -1031552773.7551821,
+        "vbr_bones_qoe": -304.05042869739106,
+        "vbr_md_qoe": -1031552773.0475154,
+        "bones_qoe_diff": 1.4462487708383378,
+        "md_qoe_diff": 0.7076667547225952,
+        "vmaf_diff": 1.314261207547169,
+        "oscillation_diff": -0.1319875632911387
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": -305.4966774682294,
+        "cbr_md_qoe": -1031552773.7551821,
+        "vbr_bones_qoe": -303.14200166510864,
+        "vbr_md_qoe": -1031552772.6116028,
+        "bones_qoe_diff": 2.354675803120756,
+        "md_qoe_diff": 1.143579363822937,
+        "vmaf_diff": 2.1902731069182337,
+        "oscillation_diff": -0.1644026962025329
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": -305.4966774682294,
+        "cbr_md_qoe": -1031552773.7551821,
+        "vbr_bones_qoe": -303.2787445743117,
+        "vbr_md_qoe": -1031552772.6669701,
+        "bones_qoe_diff": 2.217932893917691,
+        "md_qoe_diff": 1.088212013244629,
+        "vmaf_diff": 2.1687647610062797,
+        "oscillation_diff": -0.04916813291139377
+      }
+    }
+  },
+  {
+    "trace_name": "report.2010-09-14_2303CEST.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": -193.25756247650753,
+        "cbr_md_qoe": -492705066.3006376,
+        "vbr_bones_qoe": -191.87355112593832,
+        "vbr_md_qoe": -492705065.60465384,
+        "bones_qoe_diff": 1.3840113505692102,
+        "md_qoe_diff": 0.6959837675094604,
+        "vmaf_diff": 1.2976256100628945,
+        "oscillation_diff": -0.08638574050633174
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": -193.25973791476883,
+        "cbr_md_qoe": -492705066.3007601,
+        "vbr_bones_qoe": -191.11449381748358,
+        "vbr_md_qoe": -492705065.1856275,
+        "bones_qoe_diff": 2.145244097285257,
+        "md_qoe_diff": 1.1151325702667236,
+        "vmaf_diff": 2.017335628930809,
+        "oscillation_diff": -0.12790846835443048
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": -193.25973791476883,
+        "cbr_md_qoe": -492705066.3007601,
+        "vbr_bones_qoe": -191.0670716217985,
+        "vbr_md_qoe": -492705065.23824334,
+        "bones_qoe_diff": 2.1926662929703298,
+        "md_qoe_diff": 1.0625167489051819,
+        "vmaf_diff": 2.0559777106918204,
+        "oscillation_diff": -0.13668858227847913
+      }
+    }
+  },
+  {
+    "trace_name": "report.2010-09-20_1542CEST.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": -13.624943702011876,
+        "cbr_md_qoe": -47588586.57195948,
+        "vbr_bones_qoe": -12.420063384919303,
+        "vbr_md_qoe": -47588585.89673345,
+        "bones_qoe_diff": 1.2048803170925737,
+        "md_qoe_diff": 0.6752260327339172,
+        "vmaf_diff": 1.272946899371064,
+        "oscillation_diff": 0.06806658227848139
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": -13.624682085739295,
+        "cbr_md_qoe": -47588586.570794135,
+        "vbr_bones_qoe": -11.527170791654413,
+        "vbr_md_qoe": -47588585.45628487,
+        "bones_qoe_diff": 2.0975112940848817,
+        "md_qoe_diff": 1.1145092621445656,
+        "vmaf_diff": 1.8836285345912103,
+        "oscillation_diff": -0.21388275949367141
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": -13.624682085739295,
+        "cbr_md_qoe": -47588586.570794135,
+        "vbr_bones_qoe": -11.639363181273083,
+        "vbr_md_qoe": -47588585.438921444,
+        "bones_qoe_diff": 1.9853189044662116,
+        "md_qoe_diff": 1.1318726912140846,
+        "vmaf_diff": 1.9110410943396232,
+        "oscillation_diff": -0.0742778101265813
+      }
+    }
+  },
+  {
+    "trace_name": "report.2010-09-21_0742CEST.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 71.07201256966006,
+        "cbr_md_qoe": 28.731067380199807,
+        "vbr_bones_qoe": 72.24305428859168,
+        "vbr_md_qoe": 29.175212052425692,
+        "bones_qoe_diff": 1.171041718931619,
+        "md_qoe_diff": 0.4441446722258853,
+        "vmaf_diff": 1.1907414088050388,
+        "oscillation_diff": 0.01969968987341897
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 71.0711244238118,
+        "cbr_md_qoe": 28.73101146329726,
+        "vbr_bones_qoe": 73.1784311669851,
+        "vbr_md_qoe": 29.40958761342856,
+        "bones_qoe_diff": 2.107306743173311,
+        "md_qoe_diff": 0.678576150131299,
+        "vmaf_diff": 1.7647365786163505,
+        "oscillation_diff": -0.3425701645569603
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 71.0711244238118,
+        "cbr_md_qoe": 28.73101146329726,
+        "vbr_bones_qoe": 73.0341467243054,
+        "vbr_md_qoe": 29.41697510195928,
+        "bones_qoe_diff": 1.9630223004936056,
+        "md_qoe_diff": 0.6859636386620203,
+        "vmaf_diff": 1.73655152201259,
+        "oscillation_diff": -0.22647077848101116
+      }
+    }
+  },
+  {
+    "trace_name": "report.2010-09-21_1001CEST.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 58.14472111272301,
+        "cbr_md_qoe": -126476.03287246427,
+        "vbr_bones_qoe": 59.39924788666617,
+        "vbr_md_qoe": -126475.5058824286,
+        "bones_qoe_diff": 1.2545267739431551,
+        "md_qoe_diff": 0.5269900356797734,
+        "vmaf_diff": 1.209300716981133,
+        "oscillation_diff": -0.04522605696202575
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 58.14470927927026,
+        "cbr_md_qoe": -126476.03286877144,
+        "vbr_bones_qoe": 60.24075489848848,
+        "vbr_md_qoe": -126475.11978328394,
+        "bones_qoe_diff": 2.0960456192182235,
+        "md_qoe_diff": 0.9130854874965735,
+        "vmaf_diff": 2.0343301635220143,
+        "oscillation_diff": -0.06171545569620385
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 58.14470927927026,
+        "cbr_md_qoe": -126476.03286877144,
+        "vbr_bones_qoe": 60.053860637522,
+        "vbr_md_qoe": -126475.15406781898,
+        "bones_qoe_diff": 1.9091513582517408,
+        "md_qoe_diff": 0.8788009524578229,
+        "vmaf_diff": 1.979074396226423,
+        "oscillation_diff": 0.06992303797468402
+      }
+    }
+  },
+  {
+    "trace_name": "report.2010-09-21_1622CEST.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": -9.33074049069009,
+        "cbr_md_qoe": -36569699.56922975,
+        "vbr_bones_qoe": -7.930172087219006,
+        "vbr_md_qoe": -36569698.87225581,
+        "bones_qoe_diff": 1.400568403471084,
+        "md_qoe_diff": 0.696973942220211,
+        "vmaf_diff": 1.2950172515723466,
+        "oscillation_diff": -0.10555115189873554
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": -9.327862510433732,
+        "cbr_md_qoe": -36569699.56719406,
+        "vbr_bones_qoe": -6.9610248026079375,
+        "vbr_md_qoe": -36569698.38566427,
+        "bones_qoe_diff": 2.3668377078257947,
+        "md_qoe_diff": 1.1815297901630402,
+        "vmaf_diff": 2.141487163522001,
+        "oscillation_diff": -0.2253505443037982
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": -9.327862510433732,
+        "cbr_md_qoe": -36569699.56719406,
+        "vbr_bones_qoe": -7.163709550159879,
+        "vbr_md_qoe": -36569698.47254906,
+        "bones_qoe_diff": 2.164152960273853,
+        "md_qoe_diff": 1.0946450009942055,
+        "vmaf_diff": 2.123817276729554,
+        "oscillation_diff": -0.0403356835443045
+      }
+    }
+  },
+  {
+    "trace_name": "report.2010-09-21_1735CEST.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 50.79137083986332,
+        "cbr_md_qoe": -1476473.9886377694,
+        "vbr_bones_qoe": 51.95495371562957,
+        "vbr_md_qoe": -1476473.4005157258,
+        "bones_qoe_diff": 1.1635828757662523,
+        "md_qoe_diff": 0.5881220435258001,
+        "vmaf_diff": 1.228002628930824,
+        "oscillation_diff": 0.06441975316455739
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 50.785971327085676,
+        "cbr_md_qoe": -1476473.9888798567,
+        "vbr_bones_qoe": 52.78108662745986,
+        "vbr_md_qoe": -1476473.147987712,
+        "bones_qoe_diff": 1.9951153003741808,
+        "md_qoe_diff": 0.8408921447116882,
+        "vmaf_diff": 1.886565540880511,
+        "oscillation_diff": -0.10854975949367329
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 50.785971327085676,
+        "cbr_md_qoe": -1476473.9888798567,
+        "vbr_bones_qoe": 52.57480211695113,
+        "vbr_md_qoe": -1476473.212465425,
+        "bones_qoe_diff": 1.7888307898654574,
+        "md_qoe_diff": 0.7764144316315651,
+        "vmaf_diff": 1.8424762012578668,
+        "oscillation_diff": 0.053645411392404085
+      }
+    }
+  },
+  {
+    "trace_name": "report.2010-09-22_0702CEST.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 53.22656835816067,
+        "cbr_md_qoe": -1343079.0195435418,
+        "vbr_bones_qoe": 54.437091104598046,
+        "vbr_md_qoe": -1343078.3797997767,
+        "bones_qoe_diff": 1.210522746437377,
+        "md_qoe_diff": 0.6397437651176006,
+        "vmaf_diff": 1.2093770628930827,
+        "oscillation_diff": -0.0011456835443048874
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 53.225712362539305,
+        "cbr_md_qoe": -1343079.018531372,
+        "vbr_bones_qoe": 55.25594143769255,
+        "vbr_md_qoe": -1343078.0801938288,
+        "bones_qoe_diff": 2.030229075153244,
+        "md_qoe_diff": 0.9383375432807952,
+        "vmaf_diff": 1.9465381257861623,
+        "oscillation_diff": -0.08369094936708965
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 53.225712362539305,
+        "cbr_md_qoe": -1343079.018531372,
+        "vbr_bones_qoe": 55.13434207896314,
+        "vbr_md_qoe": -1343078.0818741403,
+        "bones_qoe_diff": 1.9086297164238317,
+        "md_qoe_diff": 0.9366572317667305,
+        "vmaf_diff": 1.9459118050314288,
+        "oscillation_diff": 0.03728208860759352
+      }
+    }
+  },
+  {
+    "trace_name": "report.2010-09-22_0857CEST.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 60.87551177602545,
+        "cbr_md_qoe": -14819.804833334967,
+        "vbr_bones_qoe": 62.231356415902845,
+        "vbr_md_qoe": -14819.200632434506,
+        "bones_qoe_diff": 1.3558446398773967,
+        "md_qoe_diff": 0.6042009004613647,
+        "vmaf_diff": 1.27298789937106,
+        "oscillation_diff": -0.0828567405063314
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 60.87551177602545,
+        "cbr_md_qoe": -14819.804833334967,
+        "vbr_bones_qoe": 63.09635989488542,
+        "vbr_md_qoe": -14818.871892783696,
+        "bones_qoe_diff": 2.220848118859969,
+        "md_qoe_diff": 0.9329405512708036,
+        "vmaf_diff": 1.9795152201257906,
+        "oscillation_diff": -0.24133289873417674
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 60.87551177602545,
+        "cbr_md_qoe": -14819.804833334967,
+        "vbr_bones_qoe": 62.925123605895685,
+        "vbr_md_qoe": -14818.825560186488,
+        "bones_qoe_diff": 2.049611829870237,
+        "md_qoe_diff": 0.9792731484794786,
+        "vmaf_diff": 1.9633278805031438,
+        "oscillation_diff": -0.08628394936708794
+      }
+    }
+  },
+  {
+    "trace_name": "report.2010-09-23_1001CEST.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 38.474263915464334,
+        "cbr_md_qoe": -6762476.085449623,
+        "vbr_bones_qoe": 39.67818620982784,
+        "vbr_md_qoe": -6762475.462529549,
+        "bones_qoe_diff": 1.2039222943635082,
+        "md_qoe_diff": 0.622920073568821,
+        "vmaf_diff": 1.233313490566033,
+        "oscillation_diff": 0.02939119620252928
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 38.47083544312933,
+        "cbr_md_qoe": -6762476.084978022,
+        "vbr_bones_qoe": 40.38363071046473,
+        "vbr_md_qoe": -6762475.106610473,
+        "bones_qoe_diff": 1.9127952673353974,
+        "md_qoe_diff": 0.9783675484359264,
+        "vmaf_diff": 1.8123117610062849,
+        "oscillation_diff": -0.10048350632911252
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 38.47083544312933,
+        "cbr_md_qoe": -6762476.084978022,
+        "vbr_bones_qoe": 40.33357785742753,
+        "vbr_md_qoe": -6762475.100029813,
+        "bones_qoe_diff": 1.8627424142981965,
+        "md_qoe_diff": 0.9849482085555792,
+        "vmaf_diff": 1.8342985408804822,
+        "oscillation_diff": -0.0284438734177197
+      }
+    }
+  },
+  {
+    "trace_name": "report.2010-09-27_0942CEST.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 69.31717612789551,
+        "cbr_md_qoe": -20720.573565761184,
+        "vbr_bones_qoe": 70.67015317395078,
+        "vbr_md_qoe": -20720.126085754913,
+        "bones_qoe_diff": 1.3529770460552726,
+        "md_qoe_diff": 0.44748000627078,
+        "vmaf_diff": 1.2072197232704696,
+        "oscillation_diff": -0.14575732278481102
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 69.31628041577068,
+        "cbr_md_qoe": -20720.57361832089,
+        "vbr_bones_qoe": 71.28976378883016,
+        "vbr_md_qoe": -20719.920482712016,
+        "bones_qoe_diff": 1.97348337305948,
+        "md_qoe_diff": 0.653135608874436,
+        "vmaf_diff": 1.7923280566037931,
+        "oscillation_diff": -0.1811553164556985
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 69.31628041577068,
+        "cbr_md_qoe": -20720.57361832089,
+        "vbr_bones_qoe": 71.28568769397306,
+        "vbr_md_qoe": -20719.89630743129,
+        "bones_qoe_diff": 1.9694072782023824,
+        "md_qoe_diff": 0.6773108896013582,
+        "vmaf_diff": 1.8095520440251676,
+        "oscillation_diff": -0.1598552341772157
+      }
+    }
+  },
+  {
+    "trace_name": "report.2010-09-28_1003CEST.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 56.921498565489784,
+        "cbr_md_qoe": -567155.975578616,
+        "vbr_bones_qoe": 58.095124833860154,
+        "vbr_md_qoe": -567155.2789959909,
+        "bones_qoe_diff": 1.17362626837037,
+        "md_qoe_diff": 0.6965826251544058,
+        "vmaf_diff": 1.2320835974842907,
+        "oscillation_diff": 0.05845732911392343
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 56.920461838159156,
+        "cbr_md_qoe": -567155.974091311,
+        "vbr_bones_qoe": 58.8725055550607,
+        "vbr_md_qoe": -567154.9194566426,
+        "bones_qoe_diff": 1.9520437169015423,
+        "md_qoe_diff": 1.0546346683986485,
+        "vmaf_diff": 1.853634729559758,
+        "oscillation_diff": -0.09840898734177372
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 56.920461838159156,
+        "cbr_md_qoe": -567155.974091311,
+        "vbr_bones_qoe": 58.77935721567687,
+        "vbr_md_qoe": -567154.9684773113,
+        "bones_qoe_diff": 1.8588953775177117,
+        "md_qoe_diff": 1.0056139996740967,
+        "vmaf_diff": 1.873013352201255,
+        "oscillation_diff": 0.014117974683544254
+      }
+    }
+  },
+  {
+    "trace_name": "report.2010-09-28_1407CEST.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 75.52507082889721,
+        "cbr_md_qoe": -19578.590119040906,
+        "vbr_bones_qoe": 76.60502451188427,
+        "vbr_md_qoe": -19578.08033102984,
+        "bones_qoe_diff": 1.0799536829870533,
+        "md_qoe_diff": 0.5097880110661208,
+        "vmaf_diff": 1.0750750880503404,
+        "oscillation_diff": -0.004878594936708502
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 75.601157737344,
+        "cbr_md_qoe": -19578.560250369665,
+        "vbr_bones_qoe": 77.02449309766563,
+        "vbr_md_qoe": -19577.832597085748,
+        "bones_qoe_diff": 1.42333536032163,
+        "md_qoe_diff": 0.7276532839168794,
+        "vmaf_diff": 1.3816500691823848,
+        "oscillation_diff": -0.0416852911392418
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 75.601157737344,
+        "cbr_md_qoe": -19578.560250369665,
+        "vbr_bones_qoe": 76.94345295122028,
+        "vbr_md_qoe": -19577.87730187416,
+        "bones_qoe_diff": 1.3422952138762838,
+        "md_qoe_diff": 0.6829484955051157,
+        "vmaf_diff": 1.3803082075471735,
+        "oscillation_diff": 0.03801299367088706
+      }
+    }
+  },
+  {
+    "trace_name": "report.2010-09-29_0702CEST.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 24.701882414062993,
+        "cbr_md_qoe": -10342955.159008494,
+        "vbr_bones_qoe": 26.00552884320878,
+        "vbr_md_qoe": -10342954.46381967,
+        "bones_qoe_diff": 1.303646429145786,
+        "md_qoe_diff": 0.6951888240873814,
+        "vmaf_diff": 1.2518401949685654,
+        "oscillation_diff": -0.051806234177215416
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 24.69733773768374,
+        "cbr_md_qoe": -10342955.158614986,
+        "vbr_bones_qoe": 26.759984894757224,
+        "vbr_md_qoe": -10342954.005122537,
+        "bones_qoe_diff": 2.062647157073485,
+        "md_qoe_diff": 1.1534924488514662,
+        "vmaf_diff": 1.965283182389939,
+        "oscillation_diff": -0.09736397468354596
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 24.69733773768374,
+        "cbr_md_qoe": -10342955.158614986,
+        "vbr_bones_qoe": 26.682633173914937,
+        "vbr_md_qoe": -10342954.020958008,
+        "bones_qoe_diff": 1.9852954362311976,
+        "md_qoe_diff": 1.1376569774001837,
+        "vmaf_diff": 1.9652660754717033,
+        "oscillation_diff": -0.020029360759494352
+      }
+    }
+  },
+  {
+    "trace_name": "report.2010-09-29_0852CEST.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 80.05979543563409,
+        "cbr_md_qoe": 31.48256658400202,
+        "vbr_bones_qoe": 81.07370451202132,
+        "vbr_md_qoe": 31.957748110398686,
+        "bones_qoe_diff": 1.013909076387236,
+        "md_qoe_diff": 0.47518152639666766,
+        "vmaf_diff": 1.0362639308176256,
+        "oscillation_diff": 0.022354854430381543
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 80.09279333245759,
+        "cbr_md_qoe": 31.49833402987301,
+        "vbr_bones_qoe": 81.44932378576546,
+        "vbr_md_qoe": 32.181271042889215,
+        "bones_qoe_diff": 1.3565304533078688,
+        "md_qoe_diff": 0.682937013016204,
+        "vmaf_diff": 1.2761963773584881,
+        "oscillation_diff": -0.08033407594936737
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 80.09279333245759,
+        "cbr_md_qoe": 31.49833402987301,
+        "vbr_bones_qoe": 81.28528740140115,
+        "vbr_md_qoe": 32.10420268702303,
+        "bones_qoe_diff": 1.1924940689435601,
+        "md_qoe_diff": 0.6058686571500225,
+        "vmaf_diff": 1.2557801069182375,
+        "oscillation_diff": 0.06328603797468269
+      }
+    }
+  },
+  {
+    "trace_name": "report.2010-09-29_1622CEST.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 55.84629255306704,
+        "cbr_md_qoe": -2682551.376771059,
+        "vbr_bones_qoe": 57.074376282985064,
+        "vbr_md_qoe": -2682550.939547682,
+        "bones_qoe_diff": 1.2280837299180263,
+        "md_qoe_diff": 0.43722337670624256,
+        "vmaf_diff": 1.1651446729559893,
+        "oscillation_diff": -0.06293905696202629
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 55.84436371889779,
+        "cbr_md_qoe": -2682551.37401852,
+        "vbr_bones_qoe": 57.63209320962306,
+        "vbr_md_qoe": -2682550.7455639485,
+        "bones_qoe_diff": 1.787729490725269,
+        "md_qoe_diff": 0.6284545715898275,
+        "vmaf_diff": 1.6302614654088075,
+        "oscillation_diff": -0.15746802531645532
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 55.84436371889779,
+        "cbr_md_qoe": -2682551.37401852,
+        "vbr_bones_qoe": 57.54597672220168,
+        "vbr_md_qoe": -2682550.8221920263,
+        "bones_qoe_diff": 1.7016130033038905,
+        "md_qoe_diff": 0.5518264938145876,
+        "vmaf_diff": 1.6135294779874272,
+        "oscillation_diff": -0.08808352531645713
+      }
+    }
+  },
+  {
+    "trace_name": "report.2010-09-29_1628CEST.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 53.06894255811559,
+        "cbr_md_qoe": -3841873.7105004713,
+        "vbr_bones_qoe": 54.086909131835846,
+        "vbr_md_qoe": -3841873.3099116175,
+        "bones_qoe_diff": 1.0179665737202583,
+        "md_qoe_diff": 0.4005888537503779,
+        "vmaf_diff": 1.1107393522012785,
+        "oscillation_diff": 0.09277277848101306
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 53.06128880300056,
+        "cbr_md_qoe": -3841873.70874724,
+        "vbr_bones_qoe": 54.63027253916807,
+        "vbr_md_qoe": -3841873.120657403,
+        "bones_qoe_diff": 1.5689837361675103,
+        "md_qoe_diff": 0.5880898367613554,
+        "vmaf_diff": 1.5415026855345957,
+        "oscillation_diff": -0.027481050632910176
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 53.06128880300056,
+        "cbr_md_qoe": -3841873.70874724,
+        "vbr_bones_qoe": 54.486292986067205,
+        "vbr_md_qoe": -3841873.2061297065,
+        "bones_qoe_diff": 1.4250041830666476,
+        "md_qoe_diff": 0.5026175333186984,
+        "vmaf_diff": 1.513182075471704,
+        "oscillation_diff": 0.08817789240506446
+      }
+    }
+  },
+  {
+    "trace_name": "report.2010-09-29_1823CEST.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 78.94534462705994,
+        "cbr_md_qoe": 31.152452264087554,
+        "vbr_bones_qoe": 80.01526694359522,
+        "vbr_md_qoe": 31.496022598252118,
+        "bones_qoe_diff": 1.0699223165352834,
+        "md_qoe_diff": 0.3435703341645642,
+        "vmaf_diff": 1.0307219874213729,
+        "oscillation_diff": -0.03920032911392202
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 78.96574077895866,
+        "cbr_md_qoe": 31.168705851314012,
+        "vbr_bones_qoe": 80.4397011291696,
+        "vbr_md_qoe": 31.715587311193637,
+        "bones_qoe_diff": 1.4739603502109446,
+        "md_qoe_diff": 0.546881459879625,
+        "vmaf_diff": 1.3446766666666434,
+        "oscillation_diff": -0.12928368354430386
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 78.96574077895866,
+        "cbr_md_qoe": 31.168705851314012,
+        "vbr_bones_qoe": 80.35699565615793,
+        "vbr_md_qoe": 31.70602174871121,
+        "bones_qoe_diff": 1.3912548771992732,
+        "md_qoe_diff": 0.5373158973971961,
+        "vmaf_diff": 1.322112402515728,
+        "oscillation_diff": -0.06914247468354517
+      }
+    }
+  },
+  {
+    "trace_name": "report.2010-09-29_1827CEST.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 81.92502359664834,
+        "cbr_md_qoe": 32.29851369335008,
+        "vbr_bones_qoe": 82.85286605600668,
+        "vbr_md_qoe": 32.743889255923605,
+        "bones_qoe_diff": 0.927842459358331,
+        "md_qoe_diff": 0.44537556257352406,
+        "vmaf_diff": 1.0631414213836479,
+        "oscillation_diff": 0.13529896202531688
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 81.92288217590158,
+        "cbr_md_qoe": 32.309527089456445,
+        "vbr_bones_qoe": 83.2061240222514,
+        "vbr_md_qoe": 32.9164650872629,
+        "bones_qoe_diff": 1.2832418463498243,
+        "md_qoe_diff": 0.6069379978064546,
+        "vmaf_diff": 1.3445482767295687,
+        "oscillation_diff": 0.061306430379747034
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 81.92288217590158,
+        "cbr_md_qoe": 32.309527089456445,
+        "vbr_bones_qoe": 83.03253692795158,
+        "vbr_md_qoe": 32.832449992587804,
+        "bones_qoe_diff": 1.1096547520500053,
+        "md_qoe_diff": 0.5229229031313594,
+        "vmaf_diff": 1.3428591761006317,
+        "oscillation_diff": 0.23320442405063346
+      }
+    }
+  },
+  {
+    "trace_name": "report.2010-09-30_1058CEST.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 68.99086651905552,
+        "cbr_md_qoe": -71010.88858809983,
+        "vbr_bones_qoe": 70.32553667744259,
+        "vbr_md_qoe": -71010.36987519421,
+        "bones_qoe_diff": 1.3346701583870697,
+        "md_qoe_diff": 0.5187129056139383,
+        "vmaf_diff": 1.2312819748427586,
+        "oscillation_diff": -0.10338818354430401
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 68.98879454612343,
+        "cbr_md_qoe": -71010.88711647633,
+        "vbr_bones_qoe": 70.87554817393968,
+        "vbr_md_qoe": -71010.16310568302,
+        "bones_qoe_diff": 1.8867536278162476,
+        "md_qoe_diff": 0.7240107933030231,
+        "vmaf_diff": 1.6891298050314418,
+        "oscillation_diff": -0.19762382278480928
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 68.98879454612343,
+        "cbr_md_qoe": -71010.88711647633,
+        "vbr_bones_qoe": 70.91151089108001,
+        "vbr_md_qoe": -71010.08127664558,
+        "bones_qoe_diff": 1.9227163449565836,
+        "md_qoe_diff": 0.8058398307475727,
+        "vmaf_diff": 1.7281594968553264,
+        "oscillation_diff": -0.1945568481012634
+      }
+    }
+  },
+  {
+    "trace_name": "report.2010-09-30_1113CEST.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 55.76748542669649,
+        "cbr_md_qoe": -1736334.4166094877,
+        "vbr_bones_qoe": 56.91710950598955,
+        "vbr_md_qoe": -1736333.6921628,
+        "bones_qoe_diff": 1.149624079293062,
+        "md_qoe_diff": 0.7244466876145452,
+        "vmaf_diff": 1.0975544716981176,
+        "oscillation_diff": -0.052069607594937395
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 55.781345266040496,
+        "cbr_md_qoe": -1736334.4070712528,
+        "vbr_bones_qoe": 57.35009989815577,
+        "vbr_md_qoe": -1736333.5016001053,
+        "bones_qoe_diff": 1.5687546321152723,
+        "md_qoe_diff": 0.9054711475037038,
+        "vmaf_diff": 1.5776461257861598,
+        "oscillation_diff": 0.00889149367088482
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 55.781345266040496,
+        "cbr_md_qoe": -1736334.4070712528,
+        "vbr_bones_qoe": 57.16607035054809,
+        "vbr_md_qoe": -1736333.5191914076,
+        "bones_qoe_diff": 1.3847250845075934,
+        "md_qoe_diff": 0.8878798452205956,
+        "vmaf_diff": 1.584919647798742,
+        "oscillation_diff": 0.20019456329113972
+      }
+    }
+  },
+  {
+    "trace_name": "report.2010-09-30_1114CEST.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 88.22602380881298,
+        "cbr_md_qoe": 33.17331763262045,
+        "vbr_bones_qoe": 89.4154387354908,
+        "vbr_md_qoe": 33.749975452843664,
+        "bones_qoe_diff": 1.189414926677813,
+        "md_qoe_diff": 0.5766578202232111,
+        "vmaf_diff": 0.877646584905662,
+        "oscillation_diff": -0.3117683417721513
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 88.5152744301011,
+        "cbr_md_qoe": 33.28212924499153,
+        "vbr_bones_qoe": 89.81304168549478,
+        "vbr_md_qoe": 34.01887341956247,
+        "bones_qoe_diff": 1.2977672553936799,
+        "md_qoe_diff": 0.7367441745709371,
+        "vmaf_diff": 0.9371616477987459,
+        "oscillation_diff": -0.3606056075949362
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 88.5152744301011,
+        "cbr_md_qoe": 33.28212924499153,
+        "vbr_bones_qoe": 89.73420613326965,
+        "vbr_md_qoe": 33.90460152668971,
+        "bones_qoe_diff": 1.2189317031685505,
+        "md_qoe_diff": 0.6224722816981796,
+        "vmaf_diff": 0.8993988993710786,
+        "oscillation_diff": -0.31953280379746873
+      }
+    }
+  },
+  {
+    "trace_name": "report.2010-09-30_1133CEST.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 72.47360798629892,
+        "cbr_md_qoe": -1097.200488543495,
+        "vbr_bones_qoe": 73.38635657319487,
+        "vbr_md_qoe": -1096.7701515665808,
+        "bones_qoe_diff": 0.9127485868959582,
+        "md_qoe_diff": 0.4303369769143046,
+        "vmaf_diff": 1.128662270440259,
+        "oscillation_diff": 0.2159136835443043
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 72.46854566618111,
+        "cbr_md_qoe": -1097.1965638998984,
+        "vbr_bones_qoe": 74.06058067262963,
+        "vbr_md_qoe": -1096.50210951339,
+        "bones_qoe_diff": 1.592035006448512,
+        "md_qoe_diff": 0.6944543865083688,
+        "vmaf_diff": 1.666802981132065,
+        "oscillation_diff": 0.07476797468354235
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 72.46854566618111,
+        "cbr_md_qoe": -1097.1965638998984,
+        "vbr_bones_qoe": 74.01198783384291,
+        "vbr_md_qoe": -1096.539806172985,
+        "bones_qoe_diff": 1.5434421676617944,
+        "md_qoe_diff": 0.6567577269133835,
+        "vmaf_diff": 1.6863555094339517,
+        "oscillation_diff": 0.1429133417721511
+      }
+    }
+  },
+  {
+    "trace_name": "report.2010-10-18_0951CEST.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 70.4286347901839,
+        "cbr_md_qoe": 28.425736914066484,
+        "vbr_bones_qoe": 71.44328436728765,
+        "vbr_md_qoe": 28.811438242054702,
+        "bones_qoe_diff": 1.0146495771037394,
+        "md_qoe_diff": 0.3857013279882189,
+        "vmaf_diff": 1.195407817610075,
+        "oscillation_diff": 0.18075824050632772
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 70.42862529890137,
+        "cbr_md_qoe": 28.425946117040368,
+        "vbr_bones_qoe": 72.0111262424568,
+        "vbr_md_qoe": 28.985434498855962,
+        "bones_qoe_diff": 1.5825009435554307,
+        "md_qoe_diff": 0.5594883818155942,
+        "vmaf_diff": 1.7373889182389775,
+        "oscillation_diff": 0.1548879746835441
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 70.42862529890137,
+        "cbr_md_qoe": 28.425946117040368,
+        "vbr_bones_qoe": 71.86465344940689,
+        "vbr_md_qoe": 28.98031922263102,
+        "bones_qoe_diff": 1.4360281505055212,
+        "md_qoe_diff": 0.5543731055906527,
+        "vmaf_diff": 1.742235220125778,
+        "oscillation_diff": 0.30620706962025235
+      }
+    }
+  },
+  {
+    "trace_name": "report.2010-10-22_1458CEST.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 67.13698242627976,
+        "cbr_md_qoe": 26.89688021778767,
+        "vbr_bones_qoe": 68.52638251930578,
+        "vbr_md_qoe": 27.493088423400835,
+        "bones_qoe_diff": 1.3894000930260262,
+        "md_qoe_diff": 0.5962082056131663,
+        "vmaf_diff": 1.2408193018867877,
+        "oscillation_diff": -0.14858079113924116
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 67.13698242627976,
+        "cbr_md_qoe": 26.89688021778767,
+        "vbr_bones_qoe": 69.33651105329989,
+        "vbr_md_qoe": 27.789109668830164,
+        "bones_qoe_diff": 2.199528627020129,
+        "md_qoe_diff": 0.8922294510424962,
+        "vmaf_diff": 2.003983930817597,
+        "oscillation_diff": -0.19554469620253023
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 67.13698242627976,
+        "cbr_md_qoe": 26.89688021778767,
+        "vbr_bones_qoe": 69.29841777334607,
+        "vbr_md_qoe": 27.81479223164632,
+        "bones_qoe_diff": 2.161435347066316,
+        "md_qoe_diff": 0.9179120138586505,
+        "vmaf_diff": 2.010643163522005,
+        "oscillation_diff": -0.15079218354430513
+      }
+    }
+  },
+  {
+    "trace_name": "report.2010-11-04_0957CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 61.215830648887746,
+        "cbr_md_qoe": -3580.794744006618,
+        "vbr_bones_qoe": 62.65911698174341,
+        "vbr_md_qoe": -3580.173133480205,
+        "bones_qoe_diff": 1.4432863328556635,
+        "md_qoe_diff": 0.6216105264134058,
+        "vmaf_diff": 1.281414408805034,
+        "oscillation_diff": -0.161871924050633
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 61.21582115760521,
+        "cbr_md_qoe": -3580.7945609575854,
+        "vbr_bones_qoe": 63.52395091256104,
+        "vbr_md_qoe": -3579.7599965741633,
+        "bones_qoe_diff": 2.3081297549558286,
+        "md_qoe_diff": 1.0345643834220937,
+        "vmaf_diff": 2.155397716981142,
+        "oscillation_diff": -0.15273203797468327
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 61.21582115760521,
+        "cbr_md_qoe": -3580.7945609575854,
+        "vbr_bones_qoe": 63.40874209164709,
+        "vbr_md_qoe": -3579.7973162692733,
+        "bones_qoe_diff": 2.1929209340418794,
+        "md_qoe_diff": 0.9972446883120938,
+        "vmaf_diff": 2.14443442138365,
+        "oscillation_diff": -0.048486512658227454
+      }
+    }
+  },
+  {
+    "trace_name": "report.2010-11-10_1424CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 78.2715025352679,
+        "cbr_md_qoe": 31.345496711351224,
+        "vbr_bones_qoe": 79.36147039340021,
+        "vbr_md_qoe": 31.770747997202903,
+        "bones_qoe_diff": 1.0899678581323116,
+        "md_qoe_diff": 0.4252512858516795,
+        "vmaf_diff": 1.0646154150943374,
+        "oscillation_diff": -0.025352443037974126
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 78.25832326395192,
+        "cbr_md_qoe": 31.34624748803813,
+        "vbr_bones_qoe": 79.72098856066395,
+        "vbr_md_qoe": 31.855850591152947,
+        "bones_qoe_diff": 1.4626652967120322,
+        "md_qoe_diff": 0.5096031031148165,
+        "vmaf_diff": 1.424342119496842,
+        "oscillation_diff": -0.0383231772151893
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 78.25832326395192,
+        "cbr_md_qoe": 31.34624748803813,
+        "vbr_bones_qoe": 79.60848594638166,
+        "vbr_md_qoe": 31.79310849372899,
+        "bones_qoe_diff": 1.3501626824297404,
+        "md_qoe_diff": 0.4468610056908595,
+        "vmaf_diff": 1.4049711761006307,
+        "oscillation_diff": 0.054808493670885916
+      }
+    }
+  },
+  {
+    "trace_name": "report.2010-11-10_1726CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 23.669108521313078,
+        "cbr_md_qoe": -22906088.854194436,
+        "vbr_bones_qoe": 24.613674642840024,
+        "vbr_md_qoe": -22906088.519681614,
+        "bones_qoe_diff": 0.9445661215269467,
+        "md_qoe_diff": 0.334512822329998,
+        "vmaf_diff": 1.0529947987421338,
+        "oscillation_diff": 0.10842867721519145
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 23.63985176548151,
+        "cbr_md_qoe": -22906088.85284165,
+        "vbr_bones_qoe": 24.98887500988883,
+        "vbr_md_qoe": -22906088.257820185,
+        "bones_qoe_diff": 1.34902324440732,
+        "md_qoe_diff": 0.5950214639306068,
+        "vmaf_diff": 1.355974383647819,
+        "oscillation_diff": 0.006951139240507054
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 23.63985176548151,
+        "cbr_md_qoe": -22906088.85284165,
+        "vbr_bones_qoe": 24.822609817786287,
+        "vbr_md_qoe": -22906088.350057654,
+        "bones_qoe_diff": 1.1827580523047772,
+        "md_qoe_diff": 0.5027839951217175,
+        "vmaf_diff": 1.3142657358490766,
+        "oscillation_diff": 0.13150768354430564
+      }
+    }
+  },
+  {
+    "trace_name": "report.2010-11-11_1012CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 63.04848125876889,
+        "cbr_md_qoe": -59110.788810748614,
+        "vbr_bones_qoe": 64.32825356316346,
+        "vbr_md_qoe": -59110.19046153987,
+        "bones_qoe_diff": 1.2797723043945695,
+        "md_qoe_diff": 0.598349208747095,
+        "vmaf_diff": 1.2633019056603843,
+        "oscillation_diff": -0.016470398734178993
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 63.04848125876889,
+        "cbr_md_qoe": -59110.788810748614,
+        "vbr_bones_qoe": 65.18339393459087,
+        "vbr_md_qoe": -59109.82960664854,
+        "bones_qoe_diff": 2.1349126758219796,
+        "md_qoe_diff": 0.9592041000723839,
+        "vmaf_diff": 2.0126072201257728,
+        "oscillation_diff": -0.12230545569620332
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 63.04848125876889,
+        "cbr_md_qoe": -59110.788810748614,
+        "vbr_bones_qoe": 65.16876449867812,
+        "vbr_md_qoe": -59109.83974091252,
+        "bones_qoe_diff": 2.1202832399092273,
+        "md_qoe_diff": 0.9490698360968963,
+        "vmaf_diff": 2.0337620943396075,
+        "oscillation_diff": -0.08652114556962154
+      }
+    }
+  },
+  {
+    "trace_name": "report.2010-11-16_1857CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 62.531448345752736,
+        "cbr_md_qoe": 25.337340208135924,
+        "vbr_bones_qoe": 63.876510333134306,
+        "vbr_md_qoe": 25.88965752966032,
+        "bones_qoe_diff": 1.3450619873815697,
+        "md_qoe_diff": 0.552317321524395,
+        "vmaf_diff": 1.245221993710686,
+        "oscillation_diff": -0.09983999367088536
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 62.531448345752736,
+        "cbr_md_qoe": 25.337340208135924,
+        "vbr_bones_qoe": 64.70594023055489,
+        "vbr_md_qoe": 26.254314626349124,
+        "bones_qoe_diff": 2.1744918848021513,
+        "md_qoe_diff": 0.9169744182132007,
+        "vmaf_diff": 2.1277732012578383,
+        "oscillation_diff": -0.046718683544304085
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 62.531448345752736,
+        "cbr_md_qoe": 25.337340208135924,
+        "vbr_bones_qoe": 64.70107064039487,
+        "vbr_md_qoe": 26.252083104686974,
+        "bones_qoe_diff": 2.1696222946421386,
+        "md_qoe_diff": 0.9147428965510507,
+        "vmaf_diff": 2.1301594465408726,
+        "oscillation_diff": -0.03946284810126599
+      }
+    }
+  },
+  {
+    "trace_name": "report.2010-11-23_1515CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 57.54340998037576,
+        "cbr_md_qoe": 22.377238325204253,
+        "vbr_bones_qoe": 58.912530721280156,
+        "vbr_md_qoe": 23.03020001991583,
+        "bones_qoe_diff": 1.3691207409043926,
+        "md_qoe_diff": 0.6529616947115784,
+        "vmaf_diff": 1.3085249371069239,
+        "oscillation_diff": -0.06059580379746876
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 57.54340998037576,
+        "cbr_md_qoe": 22.377238325204253,
+        "vbr_bones_qoe": 60.0852861260648,
+        "vbr_md_qoe": 23.556185060986905,
+        "bones_qoe_diff": 2.541876145689038,
+        "md_qoe_diff": 1.1789467357826524,
+        "vmaf_diff": 2.2699349811320815,
+        "oscillation_diff": -0.2719411645569618
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 57.54340998037576,
+        "cbr_md_qoe": 22.377238325204253,
+        "vbr_bones_qoe": 60.03436027804313,
+        "vbr_md_qoe": 23.50089992780298,
+        "bones_qoe_diff": 2.490950297667368,
+        "md_qoe_diff": 1.1236616025987267,
+        "vmaf_diff": 2.228495968553446,
+        "oscillation_diff": -0.2624543291139263
+      }
+    }
+  },
+  {
+    "trace_name": "report.2010-11-23_1541CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 58.795197339051256,
+        "cbr_md_qoe": -47104.16800285548,
+        "vbr_bones_qoe": 60.22754229518532,
+        "vbr_md_qoe": -47103.49738581526,
+        "bones_qoe_diff": 1.4323449561340666,
+        "md_qoe_diff": 0.6706170402176213,
+        "vmaf_diff": 1.2777329308176064,
+        "oscillation_diff": -0.15461202531645668
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 58.795197339051256,
+        "cbr_md_qoe": -47104.16800285548,
+        "vbr_bones_qoe": 61.16445264794386,
+        "vbr_md_qoe": -47103.05624515689,
+        "bones_qoe_diff": 2.3692553088926047,
+        "md_qoe_diff": 1.1117576985852793,
+        "vmaf_diff": 2.19025819496855,
+        "oscillation_diff": -0.17899711392405138
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 58.795197339051256,
+        "cbr_md_qoe": -47104.16800285548,
+        "vbr_bones_qoe": 61.17108957000419,
+        "vbr_md_qoe": -47103.07274507905,
+        "bones_qoe_diff": 2.3758922309529353,
+        "md_qoe_diff": 1.0952577764255693,
+        "vmaf_diff": 2.175726509433943,
+        "oscillation_diff": -0.20016572151898693
+      }
+    }
+  },
+  {
+    "trace_name": "report.2010-11-23_1606CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 49.672476631249744,
+        "cbr_md_qoe": -1065103.3312634015,
+        "vbr_bones_qoe": 50.98724258439838,
+        "vbr_md_qoe": -1065102.636748229,
+        "bones_qoe_diff": 1.3147659531486369,
+        "md_qoe_diff": 0.6945151726249605,
+        "vmaf_diff": 1.2505344025157257,
+        "oscillation_diff": -0.06423155063291297
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 49.672476631249744,
+        "cbr_md_qoe": -1065103.3312634015,
+        "vbr_bones_qoe": 51.921906274431,
+        "vbr_md_qoe": -1065102.2352324862,
+        "bones_qoe_diff": 2.2494296431812586,
+        "md_qoe_diff": 1.0960309153888375,
+        "vmaf_diff": 2.0124453773584747,
+        "oscillation_diff": -0.23698426582278387
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 49.672476631249744,
+        "cbr_md_qoe": -1065103.3312634015,
+        "vbr_bones_qoe": 51.88670193652002,
+        "vbr_md_qoe": -1065102.2966113773,
+        "bones_qoe_diff": 2.2142253052702756,
+        "md_qoe_diff": 1.034652024274692,
+        "vmaf_diff": 1.997769767295594,
+        "oscillation_diff": -0.21645553797468153
+      }
+    }
+  },
+  {
+    "trace_name": "report.2010-12-09_1222CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 40.15541571712341,
+        "cbr_md_qoe": -3440135.778362305,
+        "vbr_bones_qoe": 41.635313089983875,
+        "vbr_md_qoe": -3440135.1299126414,
+        "bones_qoe_diff": 1.4798973728604636,
+        "md_qoe_diff": 0.6484496635384858,
+        "vmaf_diff": 1.2608070880503277,
+        "oscillation_diff": -0.21909028481012882
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 40.15541571712341,
+        "cbr_md_qoe": -3440135.778362305,
+        "vbr_bones_qoe": 42.64997270812731,
+        "vbr_md_qoe": -3440134.747387309,
+        "bones_qoe_diff": 2.494556991003897,
+        "md_qoe_diff": 1.0309749958105385,
+        "vmaf_diff": 2.2085694213836433,
+        "oscillation_diff": -0.28598756962025185
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 40.15541571712341,
+        "cbr_md_qoe": -3440135.778362305,
+        "vbr_bones_qoe": 42.59351587678427,
+        "vbr_md_qoe": -3440134.746738982,
+        "bones_qoe_diff": 2.4381001596608556,
+        "md_qoe_diff": 1.031623322982341,
+        "vmaf_diff": 2.1767157735849025,
+        "oscillation_diff": -0.26138438607595127
+      }
+    }
+  },
+  {
+    "trace_name": "report.2010-12-09_1244CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 44.741595024688095,
+        "cbr_md_qoe": -2326950.9547673664,
+        "vbr_bones_qoe": 46.1084737739119,
+        "vbr_md_qoe": -2326950.375487262,
+        "bones_qoe_diff": 1.3668787492238081,
+        "md_qoe_diff": 0.5792801044881344,
+        "vmaf_diff": 1.2780616226415304,
+        "oscillation_diff": -0.08881712658227858
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 44.741595024688095,
+        "cbr_md_qoe": -2326950.9547673664,
+        "vbr_bones_qoe": 46.93338836924666,
+        "vbr_md_qoe": -2326949.977999859,
+        "bones_qoe_diff": 2.191793344558562,
+        "md_qoe_diff": 0.9767675073817372,
+        "vmaf_diff": 2.0724035597484374,
+        "oscillation_diff": -0.11938978481012885
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 44.741595024688095,
+        "cbr_md_qoe": -2326950.9547673664,
+        "vbr_bones_qoe": 46.816544896195154,
+        "vbr_md_qoe": -2326949.971183059,
+        "bones_qoe_diff": 2.0749498715070587,
+        "md_qoe_diff": 0.9835843075998127,
+        "vmaf_diff": 2.07374230188681,
+        "oscillation_diff": -0.001207569620253146
+      }
+    }
+  },
+  {
+    "trace_name": "report.2010-12-09_1310CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 20.95417677294656,
+        "cbr_md_qoe": -15285564.130132876,
+        "vbr_bones_qoe": 22.256956128411908,
+        "vbr_md_qoe": -15285563.530680139,
+        "bones_qoe_diff": 1.302779355465347,
+        "md_qoe_diff": 0.5994527377188206,
+        "vmaf_diff": 1.245583836478005,
+        "oscillation_diff": -0.0571955189873421
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 20.954169206669995,
+        "cbr_md_qoe": -15285564.130133525,
+        "vbr_bones_qoe": 23.167490825808606,
+        "vbr_md_qoe": -15285563.155459493,
+        "bones_qoe_diff": 2.213321619138611,
+        "md_qoe_diff": 0.9746740311384201,
+        "vmaf_diff": 2.1034301761006304,
+        "oscillation_diff": -0.10989144303797627
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 20.954169206669995,
+        "cbr_md_qoe": -15285564.130133525,
+        "vbr_bones_qoe": 23.080824473129674,
+        "vbr_md_qoe": -15285563.16211856,
+        "bones_qoe_diff": 2.1266552664596787,
+        "md_qoe_diff": 0.9680149648338556,
+        "vmaf_diff": 2.092577899371065,
+        "oscillation_diff": -0.034077367088606536
+      }
+    }
+  },
+  {
+    "trace_name": "report.2010-12-09_1334CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 39.91050715368855,
+        "cbr_md_qoe": -2898024.9228418535,
+        "vbr_bones_qoe": 41.351891677850645,
+        "vbr_md_qoe": -2898024.242391757,
+        "bones_qoe_diff": 1.4413845241620962,
+        "md_qoe_diff": 0.6804500962607563,
+        "vmaf_diff": 1.3052651823899453,
+        "oscillation_diff": -0.13611934177215446
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 39.91050715368855,
+        "cbr_md_qoe": -2898024.9228418535,
+        "vbr_bones_qoe": 42.256805033077136,
+        "vbr_md_qoe": -2898023.773953212,
+        "bones_qoe_diff": 2.3462978793885867,
+        "md_qoe_diff": 1.1488886415027082,
+        "vmaf_diff": 2.169433056603779,
+        "oscillation_diff": -0.17686482278481286
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 39.91050715368855,
+        "cbr_md_qoe": -2898024.9228418535,
+        "vbr_bones_qoe": 42.147039967397646,
+        "vbr_md_qoe": -2898023.821101702,
+        "bones_qoe_diff": 2.236532813709097,
+        "md_qoe_diff": 1.101740151643753,
+        "vmaf_diff": 2.1223184339622634,
+        "oscillation_diff": -0.11421437974683712
+      }
+    }
+  },
+  {
+    "trace_name": "report.2010-12-16_1100CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 32.264139680961264,
+        "cbr_md_qoe": -6254067.477819438,
+        "vbr_bones_qoe": 33.365112139921514,
+        "vbr_md_qoe": -6254066.97555003,
+        "bones_qoe_diff": 1.1009724589602499,
+        "md_qoe_diff": 0.5022694077342749,
+        "vmaf_diff": 1.2181734842767042,
+        "oscillation_diff": 0.11720102531645615
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 32.264139680961264,
+        "cbr_md_qoe": -6254067.477819438,
+        "vbr_bones_qoe": 34.183405530336294,
+        "vbr_md_qoe": -6254066.543981284,
+        "bones_qoe_diff": 1.91926584937503,
+        "md_qoe_diff": 0.9338381541892886,
+        "vmaf_diff": 2.0726967987421148,
+        "oscillation_diff": 0.15343094936708823
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 32.264139680961264,
+        "cbr_md_qoe": -6254067.477819438,
+        "vbr_bones_qoe": 33.952993512264484,
+        "vbr_md_qoe": -6254066.609654455,
+        "bones_qoe_diff": 1.68885383130322,
+        "md_qoe_diff": 0.8681649826467037,
+        "vmaf_diff": 2.059088654088029,
+        "oscillation_diff": 0.3702348227848091
+      }
+    }
+  },
+  {
+    "trace_name": "report.2010-12-16_1125CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 54.29127907542825,
+        "cbr_md_qoe": -567697.7752269813,
+        "vbr_bones_qoe": 55.65903824599588,
+        "vbr_md_qoe": -567697.0724947052,
+        "bones_qoe_diff": 1.3677591705676306,
+        "md_qoe_diff": 0.7027322760550305,
+        "vmaf_diff": 1.2522680503144699,
+        "oscillation_diff": -0.11549112025316699
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 54.29127907542825,
+        "cbr_md_qoe": -567697.7752269813,
+        "vbr_bones_qoe": 56.59826398642259,
+        "vbr_md_qoe": -567696.6287468236,
+        "bones_qoe_diff": 2.3069849109943377,
+        "md_qoe_diff": 1.1464801576221362,
+        "vmaf_diff": 2.1519250628930706,
+        "oscillation_diff": -0.15505984810126883
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 54.29127907542825,
+        "cbr_md_qoe": -567697.7752269813,
+        "vbr_bones_qoe": 56.44599121705709,
+        "vbr_md_qoe": -567696.6861099439,
+        "bones_qoe_diff": 2.154712141628842,
+        "md_qoe_diff": 1.089117037365213,
+        "vmaf_diff": 2.1222846226415015,
+        "oscillation_diff": -0.03242751898734486
+      }
+    }
+  },
+  {
+    "trace_name": "report.2010-12-16_1149CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 38.19078291150049,
+        "cbr_md_qoe": -4225570.198127705,
+        "vbr_bones_qoe": 39.44080516856602,
+        "vbr_md_qoe": -4225569.605405856,
+        "bones_qoe_diff": 1.250022257065531,
+        "md_qoe_diff": 0.5927218487486243,
+        "vmaf_diff": 1.2357373836478018,
+        "oscillation_diff": -0.014284873417723887
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 38.19078291150049,
+        "cbr_md_qoe": -4225570.198127705,
+        "vbr_bones_qoe": 40.24927858915354,
+        "vbr_md_qoe": -4225569.241202088,
+        "bones_qoe_diff": 2.058495677653049,
+        "md_qoe_diff": 0.9569256165996194,
+        "vmaf_diff": 2.1504109308176,
+        "oscillation_diff": 0.0919152531645544
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 38.19078291150049,
+        "cbr_md_qoe": -4225570.198127705,
+        "vbr_bones_qoe": 40.099640251043525,
+        "vbr_md_qoe": -4225569.248403429,
+        "bones_qoe_diff": 1.908857339543033,
+        "md_qoe_diff": 0.9497242756187916,
+        "vmaf_diff": 2.1342403522012603,
+        "oscillation_diff": 0.22538301265822724
+      }
+    }
+  },
+  {
+    "trace_name": "report.2010-12-16_1215CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 42.791052527334614,
+        "cbr_md_qoe": -2433878.293737051,
+        "vbr_bones_qoe": 44.05130938463101,
+        "vbr_md_qoe": -2433877.7713993406,
+        "bones_qoe_diff": 1.2602568572963975,
+        "md_qoe_diff": 0.5223377104848623,
+        "vmaf_diff": 1.2559075471698122,
+        "oscillation_diff": -0.004349310126581685
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 42.791052527334614,
+        "cbr_md_qoe": -2433878.293737051,
+        "vbr_bones_qoe": 44.982691956360966,
+        "vbr_md_qoe": -2433877.3482931387,
+        "bones_qoe_diff": 2.1916394290263526,
+        "md_qoe_diff": 0.945443912409246,
+        "vmaf_diff": 2.116441213836481,
+        "oscillation_diff": -0.07519821518987513
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 42.791052527334614,
+        "cbr_md_qoe": -2433878.293737051,
+        "vbr_bones_qoe": 44.8824285383608,
+        "vbr_md_qoe": -2433877.354698049,
+        "bones_qoe_diff": 2.0913760110261848,
+        "md_qoe_diff": 0.9390390021726489,
+        "vmaf_diff": 2.10407825786163,
+        "oscillation_diff": 0.012702246835445408
+      }
+    }
+  },
+  {
+    "trace_name": "report.2010-12-21_1134CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 22.191181849498683,
+        "cbr_md_qoe": -12616969.501647184,
+        "vbr_bones_qoe": 23.562966814748272,
+        "vbr_md_qoe": -12616968.83991501,
+        "bones_qoe_diff": 1.3717849652495886,
+        "md_qoe_diff": 0.6617321744561195,
+        "vmaf_diff": 1.2491694905660466,
+        "oscillation_diff": -0.12261547468354639
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 22.191181849498683,
+        "cbr_md_qoe": -12616969.501647184,
+        "vbr_bones_qoe": 24.44097225273091,
+        "vbr_md_qoe": -12616968.476009296,
+        "bones_qoe_diff": 2.2497904032322253,
+        "md_qoe_diff": 1.0256378874182701,
+        "vmaf_diff": 2.097813289308178,
+        "oscillation_diff": -0.151977113924052
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 22.191181849498683,
+        "cbr_md_qoe": -12616969.501647184,
+        "vbr_bones_qoe": 24.376465609987513,
+        "vbr_md_qoe": -12616968.516966106,
+        "bones_qoe_diff": 2.1852837604888293,
+        "md_qoe_diff": 0.9846810773015022,
+        "vmaf_diff": 2.097070842767309,
+        "oscillation_diff": -0.08821291772151962
+      }
+    }
+  },
+  {
+    "trace_name": "report.2010-12-21_1200CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 27.199140907117304,
+        "cbr_md_qoe": -8852326.339447746,
+        "vbr_bones_qoe": 28.397814104514033,
+        "vbr_md_qoe": -8852325.787603348,
+        "bones_qoe_diff": 1.1986731973967295,
+        "md_qoe_diff": 0.551844397559762,
+        "vmaf_diff": 1.2091458113207807,
+        "oscillation_diff": 0.010472613924049412
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 27.199140907117304,
+        "cbr_md_qoe": -8852326.339447746,
+        "vbr_bones_qoe": 29.108936606026624,
+        "vbr_md_qoe": -8852325.392274378,
+        "bones_qoe_diff": 1.9097956989093205,
+        "md_qoe_diff": 0.9471733681857586,
+        "vmaf_diff": 2.054304572327041,
+        "oscillation_diff": 0.14450887341772045
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 27.199140907117304,
+        "cbr_md_qoe": -8852326.339447746,
+        "vbr_bones_qoe": 28.94185462819845,
+        "vbr_md_qoe": -8852325.47583459,
+        "bones_qoe_diff": 1.7427137210811452,
+        "md_qoe_diff": 0.8636131566017866,
+        "vmaf_diff": 2.0377660691824104,
+        "oscillation_diff": 0.29505234810126524
+      }
+    }
+  },
+  {
+    "trace_name": "report.2010-12-21_1225CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 35.61569872103462,
+        "cbr_md_qoe": -5951604.453773491,
+        "vbr_bones_qoe": 36.92502159047177,
+        "vbr_md_qoe": -5951603.846219791,
+        "bones_qoe_diff": 1.3093228694371533,
+        "md_qoe_diff": 0.6075536999851465,
+        "vmaf_diff": 1.2592856289308259,
+        "oscillation_diff": -0.05003724050633007
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 35.61569872103462,
+        "cbr_md_qoe": -5951604.453773491,
+        "vbr_bones_qoe": 37.91122529869564,
+        "vbr_md_qoe": -5951603.499337973,
+        "bones_qoe_diff": 2.295526577661022,
+        "md_qoe_diff": 0.9544355180114508,
+        "vmaf_diff": 2.133158729559753,
+        "oscillation_diff": -0.16236784810126625
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 35.61569872103462,
+        "cbr_md_qoe": -5951604.453773491,
+        "vbr_bones_qoe": 37.85130146922346,
+        "vbr_md_qoe": -5951603.5154971145,
+        "bones_qoe_diff": 2.235602748188839,
+        "md_qoe_diff": 0.9382763765752316,
+        "vmaf_diff": 2.1698257861635284,
+        "oscillation_diff": -0.06577696202531591
+      }
+    }
+  },
+  {
+    "trace_name": "report.2010-12-22_0800CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 63.36544452643102,
+        "cbr_md_qoe": 25.14802959502135,
+        "vbr_bones_qoe": 64.71764331542074,
+        "vbr_md_qoe": 25.768983313538133,
+        "bones_qoe_diff": 1.3521987889897247,
+        "md_qoe_diff": 0.6209537185167839,
+        "vmaf_diff": 1.2416173396226355,
+        "oscillation_diff": -0.11058144936709002
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 63.36544452643102,
+        "cbr_md_qoe": 25.14802959502135,
+        "vbr_bones_qoe": 65.54007392464771,
+        "vbr_md_qoe": 26.186970234589914,
+        "bones_qoe_diff": 2.1746293982166947,
+        "md_qoe_diff": 1.0389406395685654,
+        "vmaf_diff": 2.152403081760994,
+        "oscillation_diff": -0.022226316455698836
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 63.36544452643102,
+        "cbr_md_qoe": 25.14802959502135,
+        "vbr_bones_qoe": 65.41399395597486,
+        "vbr_md_qoe": 26.13607500240484,
+        "bones_qoe_diff": 2.04854942954384,
+        "md_qoe_diff": 0.9880454073834919,
+        "vmaf_diff": 2.1336361320754804,
+        "oscillation_diff": 0.08508670253164397
+      }
+    }
+  },
+  {
+    "trace_name": "report.2010-12-22_0826CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 41.42506407700432,
+        "cbr_md_qoe": -3873612.8666071827,
+        "vbr_bones_qoe": 42.51429005029469,
+        "vbr_md_qoe": -3873612.340333289,
+        "bones_qoe_diff": 1.0892259732903682,
+        "md_qoe_diff": 0.5262738936580718,
+        "vmaf_diff": 1.1619362201258099,
+        "oscillation_diff": 0.07271024683543992
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 41.42289032650674,
+        "cbr_md_qoe": -3873612.8667549705,
+        "vbr_bones_qoe": 43.27772959591205,
+        "vbr_md_qoe": -3873611.9315137556,
+        "bones_qoe_diff": 1.8548392694053106,
+        "md_qoe_diff": 0.9352412149310112,
+        "vmaf_diff": 1.987596433962267,
+        "oscillation_diff": 0.13275716455696163
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 41.42289032650674,
+        "cbr_md_qoe": -3873612.8667549705,
+        "vbr_bones_qoe": 43.13599475103504,
+        "vbr_md_qoe": -3873611.9442547522,
+        "bones_qoe_diff": 1.7131044245283036,
+        "md_qoe_diff": 0.9225002182647586,
+        "vmaf_diff": 1.9626879245282964,
+        "oscillation_diff": 0.24958349999999996
+      }
+    }
+  },
+  {
+    "trace_name": "report.2010-12-22_0849CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 50.09269526128144,
+        "cbr_md_qoe": -926031.0914592997,
+        "vbr_bones_qoe": 51.50480966176706,
+        "vbr_md_qoe": -926030.464654845,
+        "bones_qoe_diff": 1.4121144004856205,
+        "md_qoe_diff": 0.6268044547177851,
+        "vmaf_diff": 1.2897227232704296,
+        "oscillation_diff": -0.12239167721519095
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 50.09269526128144,
+        "cbr_md_qoe": -926031.0914592997,
+        "vbr_bones_qoe": 52.47282950425572,
+        "vbr_md_qoe": -926030.099877831,
+        "bones_qoe_diff": 2.380134242974279,
+        "md_qoe_diff": 0.9915814687265083,
+        "vmaf_diff": 2.118525610062889,
+        "oscillation_diff": -0.26160863291139336
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 50.09269526128144,
+        "cbr_md_qoe": -926031.0914592997,
+        "vbr_bones_qoe": 52.35917561654774,
+        "vbr_md_qoe": -926030.1538309905,
+        "bones_qoe_diff": 2.266480355266296,
+        "md_qoe_diff": 0.937628309126012,
+        "vmaf_diff": 2.112461867924523,
+        "oscillation_diff": -0.1540184873417747
+      }
+    }
+  },
+  {
+    "trace_name": "report.2011-01-04_0820CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 7.799025632231654,
+        "cbr_md_qoe": -21360786.46956522,
+        "vbr_bones_qoe": 9.302547488174667,
+        "vbr_md_qoe": -21360785.725364957,
+        "bones_qoe_diff": 1.5035218559430135,
+        "md_qoe_diff": 0.7442002631723881,
+        "vmaf_diff": 1.284550761006301,
+        "oscillation_diff": -0.21897109493670808
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 7.799025632231654,
+        "cbr_md_qoe": -21360786.46956522,
+        "vbr_bones_qoe": 10.230640172475276,
+        "vbr_md_qoe": -21360785.272290017,
+        "bones_qoe_diff": 2.431614540243622,
+        "md_qoe_diff": 1.1972752027213573,
+        "vmaf_diff": 2.239722641509445,
+        "oscillation_diff": -0.19189189873417511
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 7.799025632231654,
+        "cbr_md_qoe": -21360786.46956522,
+        "vbr_bones_qoe": 10.16834640657288,
+        "vbr_md_qoe": -21360785.29664079,
+        "bones_qoe_diff": 2.369320774341226,
+        "md_qoe_diff": 1.172924429178238,
+        "vmaf_diff": 2.2081886540880618,
+        "oscillation_diff": -0.16113212025316415
+      }
+    }
+  },
+  {
+    "trace_name": "report.2011-01-05_0819CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 43.03893122561577,
+        "cbr_md_qoe": -1813355.001009113,
+        "vbr_bones_qoe": 44.30124937827081,
+        "vbr_md_qoe": -1813354.3688516964,
+        "bones_qoe_diff": 1.262318152655041,
+        "md_qoe_diff": 0.6321574165485799,
+        "vmaf_diff": 1.2854348805031464,
+        "oscillation_diff": 0.023116727848100815
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 43.03893122561577,
+        "cbr_md_qoe": -1813355.001009113,
+        "vbr_bones_qoe": 45.236086945144464,
+        "vbr_md_qoe": -1813353.8881321587,
+        "bones_qoe_diff": 2.197155719528695,
+        "md_qoe_diff": 1.1128769542556256,
+        "vmaf_diff": 2.148327314465405,
+        "oscillation_diff": -0.04882840506329078
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 43.03893122561577,
+        "cbr_md_qoe": -1813355.001009113,
+        "vbr_bones_qoe": 45.04676689021251,
+        "vbr_md_qoe": -1813353.9634921206,
+        "bones_qoe_diff": 2.0078356645967403,
+        "md_qoe_diff": 1.0375169923063368,
+        "vmaf_diff": 2.105913993710672,
+        "oscillation_diff": 0.09807832911392289
+      }
+    }
+  },
+  {
+    "trace_name": "report.2011-01-06_0749CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 68.01074733763237,
+        "cbr_md_qoe": 27.06889174952152,
+        "vbr_bones_qoe": 69.2045224583632,
+        "vbr_md_qoe": 27.56187831418569,
+        "bones_qoe_diff": 1.1937751207308338,
+        "md_qoe_diff": 0.49298656466417157,
+        "vmaf_diff": 1.2475319245283032,
+        "oscillation_diff": 0.0537568037974685
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 68.01074733763237,
+        "cbr_md_qoe": 27.06889174952152,
+        "vbr_bones_qoe": 70.07828890956132,
+        "vbr_md_qoe": 27.94299235732819,
+        "bones_qoe_diff": 2.067541571928956,
+        "md_qoe_diff": 0.8741006078066711,
+        "vmaf_diff": 1.973033635220105,
+        "oscillation_diff": -0.09450793670886082
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 68.01074733763237,
+        "cbr_md_qoe": 27.06889174952152,
+        "vbr_bones_qoe": 69.95426224528303,
+        "vbr_md_qoe": 27.909549278982784,
+        "bones_qoe_diff": 1.9435149076506661,
+        "md_qoe_diff": 0.8406575294612644,
+        "vmaf_diff": 1.9488155911949718,
+        "oscillation_diff": 0.005300683544304796
+      }
+    }
+  },
+  {
+    "trace_name": "report.2011-01-06_0814CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 25.895297884196207,
+        "cbr_md_qoe": -7226489.415252912,
+        "vbr_bones_qoe": 27.19956150958433,
+        "vbr_md_qoe": -7226488.732089277,
+        "bones_qoe_diff": 1.3042636253881241,
+        "md_qoe_diff": 0.6831636345013976,
+        "vmaf_diff": 1.3138411886792554,
+        "oscillation_diff": 0.009577563291137459
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 25.895297884196207,
+        "cbr_md_qoe": -7226489.415252912,
+        "vbr_bones_qoe": 28.265132937933988,
+        "vbr_md_qoe": -7226488.260689193,
+        "bones_qoe_diff": 2.3698350537377806,
+        "md_qoe_diff": 1.1545637184754014,
+        "vmaf_diff": 2.251989509433976,
+        "oscillation_diff": -0.11784554430379934
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 25.895297884196207,
+        "cbr_md_qoe": -7226489.415252912,
+        "vbr_bones_qoe": 28.107808413891302,
+        "vbr_md_qoe": -7226488.266411243,
+        "bones_qoe_diff": 2.212510529695095,
+        "md_qoe_diff": 1.1488416688516736,
+        "vmaf_diff": 2.221644308176103,
+        "oscillation_diff": 0.009133778481010602
+      }
+    }
+  },
+  {
+    "trace_name": "report.2011-01-29_1125CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 71.4028151751851,
+        "cbr_md_qoe": 28.9672710862205,
+        "vbr_bones_qoe": 72.29045711810365,
+        "vbr_md_qoe": 29.365557830326175,
+        "bones_qoe_diff": 0.8876419429185489,
+        "md_qoe_diff": 0.39828674410567544,
+        "vmaf_diff": 1.1120110188679178,
+        "oscillation_diff": 0.22436907594936706
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 71.40128327008199,
+        "cbr_md_qoe": 28.967408108806357,
+        "vbr_bones_qoe": 72.87103299048641,
+        "vbr_md_qoe": 29.48837729961722,
+        "bones_qoe_diff": 1.4697497204044225,
+        "md_qoe_diff": 0.5209691908108631,
+        "vmaf_diff": 1.6191371761006224,
+        "oscillation_diff": 0.1493874556962016
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 71.40128327008199,
+        "cbr_md_qoe": 28.967408108806357,
+        "vbr_bones_qoe": 72.754309439137,
+        "vbr_md_qoe": 29.426462661449285,
+        "bones_qoe_diff": 1.3530261690550134,
+        "md_qoe_diff": 0.4590545526429288,
+        "vmaf_diff": 1.6004592893081764,
+        "oscillation_diff": 0.24743312025316477
+      }
+    }
+  },
+  {
+    "trace_name": "report.2011-01-29_1423CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 25.107072974414713,
+        "cbr_md_qoe": -10428598.566541888,
+        "vbr_bones_qoe": 26.43381102604279,
+        "vbr_md_qoe": -10428597.892080892,
+        "bones_qoe_diff": 1.3267380516280767,
+        "md_qoe_diff": 0.6744609959423542,
+        "vmaf_diff": 1.237040842767314,
+        "oscillation_diff": -0.08969720886076082
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 25.107072974414713,
+        "cbr_md_qoe": -10428598.566541888,
+        "vbr_bones_qoe": 27.292327965418608,
+        "vbr_md_qoe": -10428597.379845213,
+        "bones_qoe_diff": 2.1852549910038945,
+        "md_qoe_diff": 1.1866966746747494,
+        "vmaf_diff": 2.0192994213836357,
+        "oscillation_diff": -0.16595556962025437
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 25.107072974414713,
+        "cbr_md_qoe": -10428598.566541888,
+        "vbr_bones_qoe": 27.14178881690338,
+        "vbr_md_qoe": -10428597.449205311,
+        "bones_qoe_diff": 2.0347158424886658,
+        "md_qoe_diff": 1.1173365768045187,
+        "vmaf_diff": 1.9667088867924605,
+        "oscillation_diff": -0.06800695569620352
+      }
+    }
+  },
+  {
+    "trace_name": "report.2011-01-29_1800CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": -57.818462015544895,
+        "cbr_md_qoe": -137826217.73440164,
+        "vbr_bones_qoe": -56.58329896228483,
+        "vbr_md_qoe": -137826217.23906484,
+        "bones_qoe_diff": 1.2351630532600666,
+        "md_qoe_diff": 0.4953368008136749,
+        "vmaf_diff": 1.088659584905642,
+        "oscillation_diff": -0.14650346835443084
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": -57.81603858779235,
+        "cbr_md_qoe": -137826217.72464484,
+        "vbr_bones_qoe": -56.178713874552955,
+        "vbr_md_qoe": -137826216.92142278,
+        "bones_qoe_diff": 1.6373247132393942,
+        "md_qoe_diff": 0.8032220602035522,
+        "vmaf_diff": 1.5300573081760973,
+        "oscillation_diff": -0.10726740506329246
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": -57.81603858779235,
+        "cbr_md_qoe": -137826217.72464484,
+        "vbr_bones_qoe": -56.27273283641905,
+        "vbr_md_qoe": -137826216.96396804,
+        "bones_qoe_diff": 1.5433057513732962,
+        "md_qoe_diff": 0.7606768012046814,
+        "vmaf_diff": 1.5168332830188689,
+        "oscillation_diff": -0.026472468354430845
+      }
+    }
+  },
+  {
+    "trace_name": "report.2011-01-29_1827CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 73.4714158324576,
+        "cbr_md_qoe": 29.535573012528673,
+        "vbr_bones_qoe": 74.69805613955896,
+        "vbr_md_qoe": 30.088212153023974,
+        "bones_qoe_diff": 1.2266403071013627,
+        "md_qoe_diff": 0.5526391404953017,
+        "vmaf_diff": 1.163594477987445,
+        "oscillation_diff": -0.0630458291139222
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 73.4721115513494,
+        "cbr_md_qoe": 29.53735475020929,
+        "vbr_bones_qoe": 75.32844667466763,
+        "vbr_md_qoe": 30.33223735555083,
+        "bones_qoe_diff": 1.8563351233182317,
+        "md_qoe_diff": 0.7948826053415416,
+        "vmaf_diff": 1.6936465157232874,
+        "oscillation_diff": -0.1626886075949372
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 73.4721115513494,
+        "cbr_md_qoe": 29.53735475020929,
+        "vbr_bones_qoe": 75.22427458785128,
+        "vbr_md_qoe": 30.272427355637532,
+        "bones_qoe_diff": 1.7521630365018837,
+        "md_qoe_diff": 0.7350726054282433,
+        "vmaf_diff": 1.6785222327044096,
+        "oscillation_diff": -0.07364080379746785
+      }
+    }
+  },
+  {
+    "trace_name": "report.2011-01-30_1323CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 55.66280012352176,
+        "cbr_md_qoe": -2676633.6661284887,
+        "vbr_bones_qoe": 56.84338755429957,
+        "vbr_md_qoe": -2676633.2063834267,
+        "bones_qoe_diff": 1.1805874307778055,
+        "md_qoe_diff": 0.4597450620494783,
+        "vmaf_diff": 1.1685099371069327,
+        "oscillation_diff": -0.012077493670885175
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 55.65919553678505,
+        "cbr_md_qoe": -2676633.6640856126,
+        "vbr_bones_qoe": 57.50130678397875,
+        "vbr_md_qoe": -2676632.96903868,
+        "bones_qoe_diff": 1.8421112471936993,
+        "md_qoe_diff": 0.6950469324365258,
+        "vmaf_diff": 1.6191249433962298,
+        "oscillation_diff": -0.22298630379746776
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 55.65919553678505,
+        "cbr_md_qoe": -2676633.6640856126,
+        "vbr_bones_qoe": 57.447856914740626,
+        "vbr_md_qoe": -2676633.025395703,
+        "bones_qoe_diff": 1.7886613779555773,
+        "md_qoe_diff": 0.6386899095959961,
+        "vmaf_diff": 1.6233522830188747,
+        "oscillation_diff": -0.16530909493670887
+      }
+    }
+  },
+  {
+    "trace_name": "report.2011-01-31_1025CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 73.09191747615732,
+        "cbr_md_qoe": -1509.2396139674588,
+        "vbr_bones_qoe": 74.18614984738574,
+        "vbr_md_qoe": -1508.7866370672928,
+        "bones_qoe_diff": 1.094232371228415,
+        "md_qoe_diff": 0.45297690016604975,
+        "vmaf_diff": 1.1249153459119583,
+        "oscillation_diff": 0.03068297468354597
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 73.09254207833867,
+        "cbr_md_qoe": -1509.2386518544345,
+        "vbr_bones_qoe": 74.77068637743908,
+        "vbr_md_qoe": -1508.5098343532889,
+        "bones_qoe_diff": 1.6781442991004099,
+        "md_qoe_diff": 0.7288175011456133,
+        "vmaf_diff": 1.5639577421383848,
+        "oscillation_diff": -0.11418655696202418
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 73.09254207833867,
+        "cbr_md_qoe": -1509.2386518544345,
+        "vbr_bones_qoe": 74.69345618334624,
+        "vbr_md_qoe": -1508.5527147779314,
+        "bones_qoe_diff": 1.6009141050075755,
+        "md_qoe_diff": 0.6859370765030235,
+        "vmaf_diff": 1.570516408805048,
+        "oscillation_diff": -0.030397696202530078
+      }
+    }
+  },
+  {
+    "trace_name": "report.2011-01-31_1045CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 41.5725927620511,
+        "cbr_md_qoe": -3327828.1011418398,
+        "vbr_bones_qoe": 42.919242485401135,
+        "vbr_md_qoe": -3327827.47264474,
+        "bones_qoe_diff": 1.3466497233500334,
+        "md_qoe_diff": 0.6284970999695361,
+        "vmaf_diff": 1.2291857106918087,
+        "oscillation_diff": -0.1174640126582247
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 41.5725927620511,
+        "cbr_md_qoe": -3327828.1011418398,
+        "vbr_bones_qoe": 43.80205865632701,
+        "vbr_md_qoe": -3327827.283958109,
+        "bones_qoe_diff": 2.2294658942759114,
+        "md_qoe_diff": 0.8171837306581438,
+        "vmaf_diff": 2.021780704402488,
+        "oscillation_diff": -0.20768518987341622
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 41.5725927620511,
+        "cbr_md_qoe": -3327828.1011418398,
+        "vbr_bones_qoe": 43.72887412850279,
+        "vbr_md_qoe": -3327827.2094731363,
+        "bones_qoe_diff": 2.1562813664516867,
+        "md_qoe_diff": 0.8916687034070492,
+        "vmaf_diff": 2.0267781006289027,
+        "oscillation_diff": -0.1295032658227857
+      }
+    }
+  },
+  {
+    "trace_name": "report.2011-01-31_1830CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": -24.85839060319168,
+        "cbr_md_qoe": -86645192.46669587,
+        "vbr_bones_qoe": -23.923838730211813,
+        "vbr_md_qoe": -86645191.83301511,
+        "bones_qoe_diff": 0.934551872979867,
+        "md_qoe_diff": 0.6336807608604431,
+        "vmaf_diff": 1.0167520691824024,
+        "oscillation_diff": 0.08220019620253183
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": -24.859883529630665,
+        "cbr_md_qoe": -86645192.45540307,
+        "vbr_bones_qoe": -23.477350173130375,
+        "vbr_md_qoe": -86645191.71969259,
+        "bones_qoe_diff": 1.3825333565002893,
+        "md_qoe_diff": 0.7357104867696762,
+        "vmaf_diff": 1.2253976729559781,
+        "oscillation_diff": -0.15713568354430496
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": -24.859883529630665,
+        "cbr_md_qoe": -86645192.45540307,
+        "vbr_bones_qoe": -23.592980449820132,
+        "vbr_md_qoe": -86645191.71203594,
+        "bones_qoe_diff": 1.2669030798105325,
+        "md_qoe_diff": 0.7433671355247498,
+        "vmaf_diff": 1.1971923899371149,
+        "oscillation_diff": -0.06971068987341855
+      }
+    }
+  },
+  {
+    "trace_name": "report.2011-01-31_1935CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 67.10753261615315,
+        "cbr_md_qoe": 27.148095144452743,
+        "vbr_bones_qoe": 68.13270631275374,
+        "vbr_md_qoe": 27.65260440506865,
+        "bones_qoe_diff": 1.0251736966005893,
+        "md_qoe_diff": 0.5045092606159081,
+        "vmaf_diff": 1.202262937106923,
+        "oscillation_diff": 0.17708924050632824
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 67.10753261615315,
+        "cbr_md_qoe": 27.148095144452743,
+        "vbr_bones_qoe": 68.96710468374333,
+        "vbr_md_qoe": 27.981314796381604,
+        "bones_qoe_diff": 1.8595720675901788,
+        "md_qoe_diff": 0.8332196519288608,
+        "vmaf_diff": 1.9647753207547254,
+        "oscillation_diff": 0.10520325316455548
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 67.10753261615315,
+        "cbr_md_qoe": 27.148095144452743,
+        "vbr_bones_qoe": 68.84607528019265,
+        "vbr_md_qoe": 27.957794793902973,
+        "bones_qoe_diff": 1.7385426640394996,
+        "md_qoe_diff": 0.8096996494502307,
+        "vmaf_diff": 1.9587990817610148,
+        "oscillation_diff": 0.22025641772151872
+      }
+    }
+  },
+  {
+    "trace_name": "report.2011-01-31_2032CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 29.852040095992848,
+        "cbr_md_qoe": -9053003.839768767,
+        "vbr_bones_qoe": 31.070114141530624,
+        "vbr_md_qoe": -9053003.374394156,
+        "bones_qoe_diff": 1.2180740455377759,
+        "md_qoe_diff": 0.4653746113181114,
+        "vmaf_diff": 1.1985828050314495,
+        "oscillation_diff": -0.019491240506326335
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 29.850797995045482,
+        "cbr_md_qoe": -9053003.83921558,
+        "vbr_bones_qoe": 31.764458323124458,
+        "vbr_md_qoe": -9053002.991045289,
+        "bones_qoe_diff": 1.9136603280789757,
+        "md_qoe_diff": 0.8481702916324139,
+        "vmaf_diff": 1.8714341635220109,
+        "oscillation_diff": -0.04222616455696304
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 29.850797995045482,
+        "cbr_md_qoe": -9053003.83921558,
+        "vbr_bones_qoe": 31.584822269426496,
+        "vbr_md_qoe": -9053003.02392196,
+        "bones_qoe_diff": 1.7340242743810137,
+        "md_qoe_diff": 0.8152936212718487,
+        "vmaf_diff": 1.8712706477987382,
+        "oscillation_diff": 0.13724637341772095
+      }
+    }
+  },
+  {
+    "trace_name": "report.2011-01-31_2356CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": -326.84262047641886,
+        "cbr_md_qoe": -1212785342.3844016,
+        "vbr_bones_qoe": -325.4767542987658,
+        "vbr_md_qoe": -1212785341.9570243,
+        "bones_qoe_diff": 1.3658661776530607,
+        "md_qoe_diff": 0.42737722396850586,
+        "vmaf_diff": 1.2362919308176146,
+        "oscillation_diff": -0.12957424683544083
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": -326.84262047641886,
+        "cbr_md_qoe": -1212785342.3844016,
+        "vbr_bones_qoe": -324.67723621266595,
+        "vbr_md_qoe": -1212785341.6118033,
+        "bones_qoe_diff": 2.1653842637529124,
+        "md_qoe_diff": 0.7725982666015625,
+        "vmaf_diff": 1.8823793270440348,
+        "oscillation_diff": -0.28300493670885807
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": -326.84262047641886,
+        "cbr_md_qoe": -1212785342.3844016,
+        "vbr_bones_qoe": -324.76676523217077,
+        "vbr_md_qoe": -1212785341.5458868,
+        "bones_qoe_diff": 2.075855244248089,
+        "md_qoe_diff": 0.8385148048400879,
+        "vmaf_diff": 1.8577334088050321,
+        "oscillation_diff": -0.21812183544303743
+      }
+    }
+  },
+  {
+    "trace_name": "report.2011-02-01_0629CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": -54.892830272905556,
+        "cbr_md_qoe": -117908256.78609799,
+        "vbr_bones_qoe": -53.63956931577634,
+        "vbr_md_qoe": -117908256.24188446,
+        "bones_qoe_diff": 1.2532609571292141,
+        "md_qoe_diff": 0.5442135334014893,
+        "vmaf_diff": 1.213355773584908,
+        "oscillation_diff": -0.0399051835443025
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": -54.89138036581217,
+        "cbr_md_qoe": -117908256.77916206,
+        "vbr_bones_qoe": -53.168923969346906,
+        "vbr_md_qoe": -117908255.99740507,
+        "bones_qoe_diff": 1.7224563964652617,
+        "md_qoe_diff": 0.7817569971084595,
+        "vmaf_diff": 1.720148358490576,
+        "oscillation_diff": -0.0023080379746840407
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": -54.89138036581217,
+        "cbr_md_qoe": -117908256.77916206,
+        "vbr_bones_qoe": -53.28805695227025,
+        "vbr_md_qoe": -117908256.02382061,
+        "bones_qoe_diff": 1.603323413541915,
+        "md_qoe_diff": 0.7553414553403854,
+        "vmaf_diff": 1.7152096603773543,
+        "oscillation_diff": 0.11188624683544113
+      }
+    }
+  },
+  {
+    "trace_name": "report.2011-02-01_0740CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 29.215887592016003,
+        "cbr_md_qoe": -8901528.4238849,
+        "vbr_bones_qoe": 30.355424387931947,
+        "vbr_md_qoe": -8901527.751517894,
+        "bones_qoe_diff": 1.1395367959159444,
+        "md_qoe_diff": 0.6723670065402985,
+        "vmaf_diff": 1.2349222452830304,
+        "oscillation_diff": 0.09538544936708782
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 29.201568496322984,
+        "cbr_md_qoe": -8901528.422883779,
+        "vbr_bones_qoe": 31.281818062918006,
+        "vbr_md_qoe": -8901527.265967727,
+        "bones_qoe_diff": 2.080249566595022,
+        "md_qoe_diff": 1.1569160521030426,
+        "vmaf_diff": 1.8272864779874283,
+        "oscillation_diff": -0.2529630886075953
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 29.201568496322984,
+        "cbr_md_qoe": -8901528.422883779,
+        "vbr_bones_qoe": 31.1307459389231,
+        "vbr_md_qoe": -8901527.271521756,
+        "bones_qoe_diff": 1.929177442600114,
+        "md_qoe_diff": 1.1513620223850012,
+        "vmaf_diff": 1.8268770691823875,
+        "oscillation_diff": -0.10230037341772125
+      }
+    }
+  },
+  {
+    "trace_name": "report.2011-02-01_0840CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": -1307.9175638228835,
+        "cbr_md_qoe": -15016496774.632915,
+        "vbr_bones_qoe": -1306.521936218672,
+        "vbr_md_qoe": -15016496773.758835,
+        "bones_qoe_diff": 1.3956276042115405,
+        "md_qoe_diff": 0.8740806579589844,
+        "vmaf_diff": 1.1565985345911969,
+        "oscillation_diff": -0.23902906962025217
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": -1307.8931717699418,
+        "cbr_md_qoe": -15016496774.618444,
+        "vbr_bones_qoe": -1305.9859217656426,
+        "vbr_md_qoe": -15016496773.358948,
+        "bones_qoe_diff": 1.9072500042991578,
+        "md_qoe_diff": 1.2594966888427734,
+        "vmaf_diff": 1.6401843207546989,
+        "oscillation_diff": -0.2670656835443044
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": -1307.8931717699418,
+        "cbr_md_qoe": -15016496774.618444,
+        "vbr_bones_qoe": -1306.1125080180907,
+        "vbr_md_qoe": -15016496773.390644,
+        "bones_qoe_diff": 1.7806637518510797,
+        "md_qoe_diff": 1.2278003692626953,
+        "vmaf_diff": 1.6004652075471597,
+        "oscillation_diff": -0.18019854430379834
+      }
+    }
+  },
+  {
+    "trace_name": "report.2011-02-01_1000CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": -2403.0684690947196,
+        "cbr_md_qoe": -47209248455.89747,
+        "vbr_bones_qoe": -2401.6344976221058,
+        "vbr_md_qoe": -47209248454.89348,
+        "bones_qoe_diff": 1.4339714726138482,
+        "md_qoe_diff": 1.0039901733398438,
+        "vmaf_diff": 1.373739327044028,
+        "oscillation_diff": -0.06023214556962131
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": -2403.0684690947196,
+        "cbr_md_qoe": -47209248455.89747,
+        "vbr_bones_qoe": -2400.6514244415866,
+        "vbr_md_qoe": -47209248454.1855,
+        "bones_qoe_diff": 2.4170446531329617,
+        "md_qoe_diff": 1.7119674682617188,
+        "vmaf_diff": 2.3564478050314435,
+        "oscillation_diff": -0.06059684810126509
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": -2403.0684690947196,
+        "cbr_md_qoe": -47209248455.89747,
+        "vbr_bones_qoe": -2400.800845556307,
+        "vbr_md_qoe": -47209248454.241714,
+        "bones_qoe_diff": 2.2676235384124084,
+        "md_qoe_diff": 1.6557540893554688,
+        "vmaf_diff": 2.317378930817611,
+        "oscillation_diff": 0.04975539240506066
+      }
+    }
+  },
+  {
+    "trace_name": "report.2011-02-01_1539CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": -215.44002301125937,
+        "cbr_md_qoe": -651664169.189873,
+        "vbr_bones_qoe": -214.24522952718166,
+        "vbr_md_qoe": -651664168.5265658,
+        "bones_qoe_diff": 1.1947934840777066,
+        "md_qoe_diff": 0.6633071899414062,
+        "vmaf_diff": 1.1618525157232824,
+        "oscillation_diff": -0.03294096835443128
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": -215.44729116514839,
+        "cbr_md_qoe": -651664169.1888926,
+        "vbr_bones_qoe": -213.82854928297337,
+        "vbr_md_qoe": -651664168.2086617,
+        "bones_qoe_diff": 1.6187418821750157,
+        "md_qoe_diff": 0.9802309274673462,
+        "vmaf_diff": 1.608347616352205,
+        "oscillation_diff": -0.010394265822785798
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": -215.44729116514839,
+        "cbr_md_qoe": -651664169.1888926,
+        "vbr_bones_qoe": -213.9919590109011,
+        "vbr_md_qoe": -651664168.2389615,
+        "bones_qoe_diff": 1.4553321542472872,
+        "md_qoe_diff": 0.9499311447143555,
+        "vmaf_diff": 1.5813036289308116,
+        "oscillation_diff": 0.12597147468354297
+      }
+    }
+  },
+  {
+    "trace_name": "report.2011-02-01_1639CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": -26.534688787122334,
+        "cbr_md_qoe": -70771109.2269692,
+        "vbr_bones_qoe": -25.51717164187116,
+        "vbr_md_qoe": -70771108.5627479,
+        "bones_qoe_diff": 1.0175171452511762,
+        "md_qoe_diff": 0.6642213016748428,
+        "vmaf_diff": 1.2168200503144675,
+        "oscillation_diff": 0.1993029050632913
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": -26.553083022374295,
+        "cbr_md_qoe": -70771109.2244272,
+        "vbr_bones_qoe": -24.85040092954729,
+        "vbr_md_qoe": -70771108.13057218,
+        "bones_qoe_diff": 1.7026820928270041,
+        "md_qoe_diff": 1.093855008482933,
+        "vmaf_diff": 1.663105333333334,
+        "oscillation_diff": -0.039576759493668234
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": -26.553083022374295,
+        "cbr_md_qoe": -70771109.2244272,
+        "vbr_bones_qoe": -25.05617428656504,
+        "vbr_md_qoe": -70771108.18863362,
+        "bones_qoe_diff": 1.4969087358092565,
+        "md_qoe_diff": 1.0357935726642609,
+        "vmaf_diff": 1.6358397421383728,
+        "oscillation_diff": 0.13893100632911626
+      }
+    }
+  },
+  {
+    "trace_name": "report.2011-02-01_1800CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 47.99072641504251,
+        "cbr_md_qoe": -899916.4379072837,
+        "vbr_bones_qoe": 49.2923711503741,
+        "vbr_md_qoe": -899915.8378303841,
+        "bones_qoe_diff": 1.3016447353315925,
+        "md_qoe_diff": 0.6000768995145336,
+        "vmaf_diff": 1.27841481761007,
+        "oscillation_diff": -0.023229917721518945
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 47.99072641504251,
+        "cbr_md_qoe": -899916.4379072837,
+        "vbr_bones_qoe": 50.14490337682899,
+        "vbr_md_qoe": -899915.4192709184,
+        "bones_qoe_diff": 2.154176961786483,
+        "md_qoe_diff": 1.018636365304701,
+        "vmaf_diff": 2.0839040377358486,
+        "oscillation_diff": -0.07027292405063257
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 47.99072641504251,
+        "cbr_md_qoe": -899916.4379072837,
+        "vbr_bones_qoe": 49.985841886183344,
+        "vbr_md_qoe": -899915.4416195612,
+        "bones_qoe_diff": 1.995115471140835,
+        "md_qoe_diff": 0.9962877224897966,
+        "vmaf_diff": 2.077214559748427,
+        "oscillation_diff": 0.08209908860759185
+      }
+    }
+  },
+  {
+    "trace_name": "report.2011-02-02_1251CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 48.834226490112215,
+        "cbr_md_qoe": -526914.4018583522,
+        "vbr_bones_qoe": 50.147521100294526,
+        "vbr_md_qoe": -526913.8791426397,
+        "bones_qoe_diff": 1.3132946101823109,
+        "md_qoe_diff": 0.5227157125482336,
+        "vmaf_diff": 1.2750745911949792,
+        "oscillation_diff": -0.03822001898734051
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 48.834226490112215,
+        "cbr_md_qoe": -526914.4018583522,
+        "vbr_bones_qoe": 51.13003554361114,
+        "vbr_md_qoe": -526913.4808577338,
+        "bones_qoe_diff": 2.295809053498928,
+        "md_qoe_diff": 0.9210006184875965,
+        "vmaf_diff": 2.084265547169821,
+        "oscillation_diff": -0.21154350632911445
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 48.834226490112215,
+        "cbr_md_qoe": -526914.4018583522,
+        "vbr_bones_qoe": 51.0398224041318,
+        "vbr_md_qoe": -526913.4297453334,
+        "bones_qoe_diff": 2.2055959140195824,
+        "md_qoe_diff": 0.9721130188554525,
+        "vmaf_diff": 2.063642584905665,
+        "oscillation_diff": -0.14195332911392455
+      }
+    }
+  },
+  {
+    "trace_name": "report.2011-02-02_1345CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 40.13891241911391,
+        "cbr_md_qoe": -3287518.864577321,
+        "vbr_bones_qoe": 41.398183457008976,
+        "vbr_md_qoe": -3287518.260436959,
+        "bones_qoe_diff": 1.2592710378950684,
+        "md_qoe_diff": 0.6041403617709875,
+        "vmaf_diff": 1.2797410125786115,
+        "oscillation_diff": 0.020469974683543057
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 40.1374533505684,
+        "cbr_md_qoe": -3287518.8646696783,
+        "vbr_bones_qoe": 42.238783112928104,
+        "vbr_md_qoe": -3287517.8023116556,
+        "bones_qoe_diff": 2.101329762359704,
+        "md_qoe_diff": 1.0623580226674676,
+        "vmaf_diff": 2.0005555471698244,
+        "oscillation_diff": -0.10077421518987517
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 40.1374533505684,
+        "cbr_md_qoe": -3287518.8646696783,
+        "vbr_bones_qoe": 42.209081270638464,
+        "vbr_md_qoe": -3287517.810684513,
+        "bones_qoe_diff": 2.071627920070064,
+        "md_qoe_diff": 1.0539851654320955,
+        "vmaf_diff": 2.0391266289308163,
+        "oscillation_diff": -0.03250129113924327
+      }
+    }
+  },
+  {
+    "trace_name": "report.2011-02-10_1611CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 68.84364639140992,
+        "cbr_md_qoe": 27.56287347232216,
+        "vbr_bones_qoe": 70.12183470635301,
+        "vbr_md_qoe": 28.141719785033906,
+        "bones_qoe_diff": 1.278188314943094,
+        "md_qoe_diff": 0.5788463127117467,
+        "vmaf_diff": 1.2370802389937268,
+        "oscillation_diff": -0.04110807594936805
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 68.84113965938221,
+        "cbr_md_qoe": 27.563539351103422,
+        "vbr_bones_qoe": 70.86170533950322,
+        "vbr_md_qoe": 28.49277829654853,
+        "bones_qoe_diff": 2.0205656801210097,
+        "md_qoe_diff": 0.9292389454451069,
+        "vmaf_diff": 1.9142425408805082,
+        "oscillation_diff": -0.10632313924050862
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 68.84113965938221,
+        "cbr_md_qoe": 27.563539351103422,
+        "vbr_bones_qoe": 70.79589058442798,
+        "vbr_md_qoe": 28.41289558815827,
+        "bones_qoe_diff": 1.9547509250457722,
+        "md_qoe_diff": 0.8493562370548489,
+        "vmaf_diff": 1.896374842767301,
+        "oscillation_diff": -0.0583760822784809
+      }
+    }
+  },
+  {
+    "trace_name": "report.2011-02-11_1530CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": -94.65189441299371,
+        "cbr_md_qoe": -214266125.8364308,
+        "vbr_bones_qoe": -93.35061182908319,
+        "vbr_md_qoe": -214266125.27328882,
+        "bones_qoe_diff": 1.3012825839105204,
+        "md_qoe_diff": 0.5631419718265533,
+        "vmaf_diff": 1.20412874213838,
+        "oscillation_diff": -0.09715384177215114
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": -94.65664824230666,
+        "cbr_md_qoe": -214266125.8324459,
+        "vbr_bones_qoe": -92.71478653360514,
+        "vbr_md_qoe": -214266125.05341098,
+        "bones_qoe_diff": 1.9418617087015235,
+        "md_qoe_diff": 0.7790349125862122,
+        "vmaf_diff": 1.6433480251572234,
+        "oscillation_diff": -0.29851368354430186
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": -94.65664824230666,
+        "cbr_md_qoe": -214266125.8324459,
+        "vbr_bones_qoe": -92.72997957201767,
+        "vbr_md_qoe": -214266125.05625367,
+        "bones_qoe_diff": 1.92666867028899,
+        "md_qoe_diff": 0.7761922180652618,
+        "vmaf_diff": 1.6643540943396147,
+        "oscillation_diff": -0.26231457594936636
+      }
+    }
+  },
+  {
+    "trace_name": "report.2011-02-11_1618CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 2.3588290281341884,
+        "cbr_md_qoe": -23692474.678312376,
+        "vbr_bones_qoe": 3.7467858148151905,
+        "vbr_md_qoe": -23692474.158847965,
+        "bones_qoe_diff": 1.387956786681002,
+        "md_qoe_diff": 0.519464410841465,
+        "vmaf_diff": 1.2393587044025196,
+        "oscillation_diff": -0.14859808227847893
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 2.3588290281341884,
+        "cbr_md_qoe": -23692474.678312376,
+        "vbr_bones_qoe": 4.634868186959125,
+        "vbr_md_qoe": -23692473.71748408,
+        "bones_qoe_diff": 2.2760391588249362,
+        "md_qoe_diff": 0.9608282968401909,
+        "vmaf_diff": 2.079415905660383,
+        "oscillation_diff": -0.19662325316455487
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 2.3588290281341884,
+        "cbr_md_qoe": -23692474.678312376,
+        "vbr_bones_qoe": 4.554980201010558,
+        "vbr_md_qoe": -23692473.785101622,
+        "bones_qoe_diff": 2.1961511728763696,
+        "md_qoe_diff": 0.8932107537984848,
+        "vmaf_diff": 2.059027685534602,
+        "oscillation_diff": -0.1371234873417695
+      }
+    }
+  },
+  {
+    "trace_name": "report.2011-02-11_1729CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 17.851746961391576,
+        "cbr_md_qoe": -24829930.494669896,
+        "vbr_bones_qoe": 18.929547118465045,
+        "vbr_md_qoe": -24829930.195631973,
+        "bones_qoe_diff": 1.0778001570734688,
+        "md_qoe_diff": 0.2990379221737385,
+        "vmaf_diff": 1.0906631823899318,
+        "oscillation_diff": 0.012863025316456778
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 17.84410229623753,
+        "cbr_md_qoe": -24829930.491774675,
+        "vbr_bones_qoe": 19.448113933766358,
+        "vbr_md_qoe": -24829929.95195259,
+        "bones_qoe_diff": 1.6040116375288278,
+        "md_qoe_diff": 0.5398220829665661,
+        "vmaf_diff": 1.3671512704402318,
+        "oscillation_diff": -0.2368603670886058
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 17.84410229623753,
+        "cbr_md_qoe": -24829930.491774675,
+        "vbr_bones_qoe": 19.352833437667336,
+        "vbr_md_qoe": -24829930.035033867,
+        "bones_qoe_diff": 1.5087311414298057,
+        "md_qoe_diff": 0.4567408077418804,
+        "vmaf_diff": 1.3367736540880486,
+        "oscillation_diff": -0.17195748734176863
+      }
+    }
+  },
+  {
+    "trace_name": "report.2011-02-14_0644CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 46.716282538718886,
+        "cbr_md_qoe": -4853413.092066871,
+        "vbr_bones_qoe": 47.82297422067094,
+        "vbr_md_qoe": -4853412.602090577,
+        "bones_qoe_diff": 1.1066916819520571,
+        "md_qoe_diff": 0.48997629433870316,
+        "vmaf_diff": 1.1019282515723177,
+        "oscillation_diff": -0.004763430379747469
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 46.716282538718886,
+        "cbr_md_qoe": -4853413.092066871,
+        "vbr_bones_qoe": 48.49540072086998,
+        "vbr_md_qoe": -4853412.36095568,
+        "bones_qoe_diff": 1.7791181821510946,
+        "md_qoe_diff": 0.731111191213131,
+        "vmaf_diff": 1.6579112201257828,
+        "oscillation_diff": -0.12120696202531711
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 46.716282538718886,
+        "cbr_md_qoe": -4853413.092066871,
+        "vbr_bones_qoe": 48.45100900213738,
+        "vbr_md_qoe": -4853412.362895054,
+        "bones_qoe_diff": 1.7347264634184967,
+        "md_qoe_diff": 0.7291718171909451,
+        "vmaf_diff": 1.6204847798742037,
+        "oscillation_diff": -0.11424168354430453
+      }
+    }
+  },
+  {
+    "trace_name": "report.2011-02-14_1728CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 3.154150754228155,
+        "cbr_md_qoe": -39533873.091034815,
+        "vbr_bones_qoe": 4.442644686518577,
+        "vbr_md_qoe": -39533872.63167513,
+        "bones_qoe_diff": 1.2884939322904216,
+        "md_qoe_diff": 0.45935968309640884,
+        "vmaf_diff": 1.1078016981132066,
+        "oscillation_diff": -0.18069223417721414
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 3.1488128464978757,
+        "cbr_md_qoe": -39533873.088211745,
+        "vbr_bones_qoe": 4.735055297019329,
+        "vbr_md_qoe": -39533872.40920643,
+        "bones_qoe_diff": 1.5862424505214534,
+        "md_qoe_diff": 0.6790053173899651,
+        "vmaf_diff": 1.4841858176100544,
+        "oscillation_diff": -0.10205663291139278
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 3.1488128464978757,
+        "cbr_md_qoe": -39533873.088211745,
+        "vbr_bones_qoe": 4.524363569211033,
+        "vbr_md_qoe": -39533872.50508355,
+        "bones_qoe_diff": 1.3755507227131574,
+        "md_qoe_diff": 0.5831281915307045,
+        "vmaf_diff": 1.4312748113207476,
+        "oscillation_diff": 0.055724088607593814
+      }
+    }
+  },
+  {
+    "trace_name": "report.2011-02-14_2032CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 66.95698638715271,
+        "cbr_md_qoe": -169520.91481977273,
+        "vbr_bones_qoe": 68.00534492819244,
+        "vbr_md_qoe": -169520.45024191472,
+        "bones_qoe_diff": 1.0483585410397325,
+        "md_qoe_diff": 0.4645778580161277,
+        "vmaf_diff": 1.1026905157232818,
+        "oscillation_diff": 0.054331974683544004
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 66.94427146318169,
+        "cbr_md_qoe": -169520.91535682534,
+        "vbr_bones_qoe": 68.48615301106803,
+        "vbr_md_qoe": -169520.19357039037,
+        "bones_qoe_diff": 1.5418815478863337,
+        "md_qoe_diff": 0.7217864349659067,
+        "vmaf_diff": 1.558820433962282,
+        "oscillation_diff": 0.016938886075950066
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 66.94427146318169,
+        "cbr_md_qoe": -169520.91535682534,
+        "vbr_bones_qoe": 68.32853186314986,
+        "vbr_md_qoe": -169520.25194880797,
+        "bones_qoe_diff": 1.38426039996817,
+        "md_qoe_diff": 0.6634080173680559,
+        "vmaf_diff": 1.5201128050314594,
+        "oscillation_diff": 0.135852405063293
+      }
+    }
+  },
+  {
+    "trace_name": "report.2011-02-14_2051CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 69.20078970436185,
+        "cbr_md_qoe": -166384.58015751478,
+        "vbr_bones_qoe": 70.28271100477586,
+        "vbr_md_qoe": -166384.07909120191,
+        "bones_qoe_diff": 1.0819213004140096,
+        "md_qoe_diff": 0.5010663128632586,
+        "vmaf_diff": 1.13921953459122,
+        "oscillation_diff": 0.057298234177217466
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 69.1938781401552,
+        "cbr_md_qoe": -166384.57850968966,
+        "vbr_bones_qoe": 70.80988820113761,
+        "vbr_md_qoe": -166383.80698602463,
+        "bones_qoe_diff": 1.6160100609824042,
+        "md_qoe_diff": 0.7715236650255974,
+        "vmaf_diff": 1.6530703647798788,
+        "oscillation_diff": 0.0370603037974675
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 69.1938781401552,
+        "cbr_md_qoe": -166384.57850968966,
+        "vbr_bones_qoe": 70.55916042058671,
+        "vbr_md_qoe": -166383.8684712369,
+        "bones_qoe_diff": 1.3652822804315008,
+        "md_qoe_diff": 0.7100384527584538,
+        "vmaf_diff": 1.613924691823911,
+        "oscillation_diff": 0.24864241139240573
+      }
+    }
+  },
+  {
+    "trace_name": "report.2011-02-14_2108CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 75.50284537476813,
+        "cbr_md_qoe": -3299.4490053148265,
+        "vbr_bones_qoe": 76.4763026321919,
+        "vbr_md_qoe": -3298.9458485459063,
+        "bones_qoe_diff": 0.9734572574237745,
+        "md_qoe_diff": 0.5031567689202348,
+        "vmaf_diff": 1.0773273270440313,
+        "oscillation_diff": 0.10387006962025414
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 75.49626898451258,
+        "cbr_md_qoe": -3299.44635410594,
+        "vbr_bones_qoe": 76.95189316913164,
+        "vbr_md_qoe": -3298.7235612309805,
+        "bones_qoe_diff": 1.4556241846190545,
+        "md_qoe_diff": 0.7227928749593957,
+        "vmaf_diff": 1.423755830188668,
+        "oscillation_diff": -0.03186835443037861
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 75.49626898451258,
+        "cbr_md_qoe": -3299.44635410594,
+        "vbr_bones_qoe": 76.76520076482467,
+        "vbr_md_qoe": -3298.731039560264,
+        "bones_qoe_diff": 1.2689317803120872,
+        "md_qoe_diff": 0.7153145456759376,
+        "vmaf_diff": 1.382285710691832,
+        "oscillation_diff": 0.11335393037974928
+      }
+    }
+  },
+  {
+    "trace_name": "report.2011-02-14_2124CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 74.55430601946499,
+        "cbr_md_qoe": 29.422447937939236,
+        "vbr_bones_qoe": 75.5876473270042,
+        "vbr_md_qoe": 29.970925165708454,
+        "bones_qoe_diff": 1.0333413075392173,
+        "md_qoe_diff": 0.5484772277692187,
+        "vmaf_diff": 1.1046104088050441,
+        "oscillation_diff": 0.07126910126582331
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 74.53472792854868,
+        "cbr_md_qoe": 29.421664604840952,
+        "vbr_bones_qoe": 76.03868238153808,
+        "vbr_md_qoe": 30.186347691436698,
+        "bones_qoe_diff": 1.5039544529894044,
+        "md_qoe_diff": 0.7646830865957455,
+        "vmaf_diff": 1.507263427672953,
+        "oscillation_diff": 0.0033089746835441858
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 74.53472792854868,
+        "cbr_md_qoe": 29.421664604840952,
+        "vbr_bones_qoe": 75.82845541242735,
+        "vbr_md_qoe": 30.12154591571335,
+        "bones_qoe_diff": 1.2937274838786692,
+        "md_qoe_diff": 0.6998813108723994,
+        "vmaf_diff": 1.453453547169815,
+        "oscillation_diff": 0.15972606329114036
+      }
+    }
+  },
+  {
+    "trace_name": "report.2011-02-14_2139CET.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 72.11537119898175,
+        "cbr_md_qoe": -66936.3767731352,
+        "vbr_bones_qoe": 73.18442952351803,
+        "vbr_md_qoe": -66935.80277557486,
+        "bones_qoe_diff": 1.069058324536286,
+        "md_qoe_diff": 0.573997560335556,
+        "vmaf_diff": 1.1060057232704565,
+        "oscillation_diff": 0.03694739873417774
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 72.11062831473689,
+        "cbr_md_qoe": -66936.3719262837,
+        "vbr_bones_qoe": 73.59740039992117,
+        "vbr_md_qoe": -66935.62945949403,
+        "bones_qoe_diff": 1.4867720851842847,
+        "md_qoe_diff": 0.7424667896702886,
+        "vmaf_diff": 1.464667540880498,
+        "oscillation_diff": -0.022104544303795493
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 72.11062831473689,
+        "cbr_md_qoe": -66936.3719262837,
+        "vbr_bones_qoe": 73.38397046874532,
+        "vbr_md_qoe": -66935.69498477656,
+        "bones_qoe_diff": 1.2733421540084322,
+        "md_qoe_diff": 0.6769415071321419,
+        "vmaf_diff": 1.4245096666666655,
+        "oscillation_diff": 0.15116751265823059
+      }
+    }
+  },
+  {
+    "trace_name": "report.2011-04-21_1135CEST.json",
+    "trace_type": "3Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 75.10649399478544,
+        "cbr_md_qoe": 30.002420385820074,
+        "vbr_bones_qoe": 76.17985187520897,
+        "vbr_md_qoe": 30.45969267836604,
+        "bones_qoe_diff": 1.0733578804235293,
+        "md_qoe_diff": 0.4572722925459658,
+        "vmaf_diff": 1.1736078930817513,
+        "oscillation_diff": 0.10025001265822642
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 75.10587386804394,
+        "cbr_md_qoe": 30.003318562547637,
+        "vbr_bones_qoe": 76.94865491429822,
+        "vbr_md_qoe": 30.713242971663043,
+        "bones_qoe_diff": 1.8427810462542737,
+        "md_qoe_diff": 0.7099244091154056,
+        "vmaf_diff": 1.6543186918238888,
+        "oscillation_diff": -0.1884623544303805
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 75.10587386804394,
+        "cbr_md_qoe": 30.003318562547637,
+        "vbr_bones_qoe": 76.88894779726931,
+        "vbr_md_qoe": 30.708071049812883,
+        "bones_qoe_diff": 1.7830739292253668,
+        "md_qoe_diff": 0.704752487265246,
+        "vmaf_diff": 1.6452791823899275,
+        "oscillation_diff": -0.13779474683544457
+      }
+    }
+  },
+  {
+    "trace_name": "report_bicycle_0001.json",
+    "trace_type": "4Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 89.82210216706471,
+        "cbr_md_qoe": 34.182740377052575,
+        "vbr_bones_qoe": 91.01292021745878,
+        "vbr_md_qoe": 34.736427368577026,
+        "bones_qoe_diff": 1.1908180503940713,
+        "md_qoe_diff": 0.5536869915244509,
+        "vmaf_diff": 0.8262710377358502,
+        "oscillation_diff": -0.36454701265822687
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 90.26841880658385,
+        "cbr_md_qoe": 34.33511578494313,
+        "vbr_bones_qoe": 91.48609801699703,
+        "vbr_md_qoe": 35.004519607649144,
+        "bones_qoe_diff": 1.2176792104131806,
+        "md_qoe_diff": 0.6694038227060162,
+        "vmaf_diff": 0.8599437547169657,
+        "oscillation_diff": -0.35773545569620224
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 90.26841880658385,
+        "cbr_md_qoe": 34.33511578494313,
+        "vbr_bones_qoe": 91.41218718867923,
+        "vbr_md_qoe": 34.90656498842554,
+        "bones_qoe_diff": 1.1437683820953737,
+        "md_qoe_diff": 0.571449203482409,
+        "vmaf_diff": 0.8207156289308131,
+        "oscillation_diff": -0.3230527531645573
+      }
+    }
+  },
+  {
+    "trace_name": "report_bicycle_0002.json",
+    "trace_type": "4Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 89.70352541202931,
+        "cbr_md_qoe": 34.13567072107258,
+        "vbr_bones_qoe": 90.87971378421305,
+        "vbr_md_qoe": 34.69033715141497,
+        "bones_qoe_diff": 1.176188372183745,
+        "md_qoe_diff": 0.5546664303423938,
+        "vmaf_diff": 0.8313981949685569,
+        "oscillation_diff": -0.34479017721518934
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 90.13175212550752,
+        "cbr_md_qoe": 34.283593163863074,
+        "vbr_bones_qoe": 91.33530318824137,
+        "vbr_md_qoe": 34.953264148724976,
+        "bones_qoe_diff": 1.203551062733851,
+        "md_qoe_diff": 0.6696709848619022,
+        "vmaf_diff": 0.8615860880503021,
+        "oscillation_diff": -0.3419649746835445
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 90.13175212550752,
+        "cbr_md_qoe": 34.283593163863074,
+        "vbr_bones_qoe": 91.26490308207946,
+        "vbr_md_qoe": 34.85641684303834,
+        "bones_qoe_diff": 1.1331509565719387,
+        "md_qoe_diff": 0.572823679175265,
+        "vmaf_diff": 0.8241768616352232,
+        "oscillation_diff": -0.30897409493670924
+      }
+    }
+  },
+  {
+    "trace_name": "report_bus_0001.json",
+    "trace_type": "4Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 89.7960057097763,
+        "cbr_md_qoe": 34.18411388617463,
+        "vbr_bones_qoe": 91.02386966503464,
+        "vbr_md_qoe": 34.742667341628604,
+        "bones_qoe_diff": 1.2278639552583428,
+        "md_qoe_diff": 0.5585534554539748,
+        "vmaf_diff": 0.8254820691823994,
+        "oscillation_diff": -0.4023818860759487
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 90.25245788324973,
+        "cbr_md_qoe": 34.33645727548277,
+        "vbr_bones_qoe": 91.48540043503701,
+        "vbr_md_qoe": 35.00888100220326,
+        "bones_qoe_diff": 1.232942551787275,
+        "md_qoe_diff": 0.6724237267204884,
+        "vmaf_diff": 0.8602328176100542,
+        "oscillation_diff": -0.372709734177215
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 90.25245788324973,
+        "cbr_md_qoe": 34.33645727548277,
+        "vbr_bones_qoe": 91.41621475479658,
+        "vbr_md_qoe": 34.911805242018765,
+        "bones_qoe_diff": 1.1637568715468518,
+        "md_qoe_diff": 0.5753479665359933,
+        "vmaf_diff": 0.8204982955974884,
+        "oscillation_diff": -0.3432585759493674
+      }
+    }
+  },
+  {
+    "trace_name": "report_bus_0002.json",
+    "trace_type": "4Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 89.82210216706473,
+        "cbr_md_qoe": 34.182740377054394,
+        "vbr_bones_qoe": 91.0129202174588,
+        "vbr_md_qoe": 34.736427368578845,
+        "bones_qoe_diff": 1.1908180503940713,
+        "md_qoe_diff": 0.5536869915244509,
+        "vmaf_diff": 0.8262710377358502,
+        "oscillation_diff": -0.36454701265822687
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 90.26841880658387,
+        "cbr_md_qoe": 34.335115784944946,
+        "vbr_bones_qoe": 91.48609801699705,
+        "vbr_md_qoe": 35.00451960765096,
+        "bones_qoe_diff": 1.2176792104131806,
+        "md_qoe_diff": 0.6694038227060162,
+        "vmaf_diff": 0.8599437547169657,
+        "oscillation_diff": -0.35773545569620224
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 90.26841880658387,
+        "cbr_md_qoe": 34.335115784944946,
+        "vbr_bones_qoe": 91.41218718867924,
+        "vbr_md_qoe": 34.906564988427355,
+        "bones_qoe_diff": 1.1437683820953737,
+        "md_qoe_diff": 0.571449203482409,
+        "vmaf_diff": 0.8207156289308131,
+        "oscillation_diff": -0.3230527531645573
+      }
+    }
+  },
+  {
+    "trace_name": "report_bus_0003.json",
+    "trace_type": "4Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 89.79600570977628,
+        "cbr_md_qoe": 34.18411388617281,
+        "vbr_bones_qoe": 91.02386966503462,
+        "vbr_md_qoe": 34.742667341626785,
+        "bones_qoe_diff": 1.2278639552583428,
+        "md_qoe_diff": 0.5585534554539748,
+        "vmaf_diff": 0.8254820691823994,
+        "oscillation_diff": -0.4023818860759487
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 90.25245788324972,
+        "cbr_md_qoe": 34.33645727548095,
+        "vbr_bones_qoe": 91.485400435037,
+        "vbr_md_qoe": 35.00888100220144,
+        "bones_qoe_diff": 1.232942551787275,
+        "md_qoe_diff": 0.6724237267204884,
+        "vmaf_diff": 0.8602328176100542,
+        "oscillation_diff": -0.372709734177215
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 90.25245788324972,
+        "cbr_md_qoe": 34.33645727548095,
+        "vbr_bones_qoe": 91.41621475479657,
+        "vbr_md_qoe": 34.911805242016946,
+        "bones_qoe_diff": 1.1637568715468518,
+        "md_qoe_diff": 0.5753479665359933,
+        "vmaf_diff": 0.8204982955974884,
+        "oscillation_diff": -0.3432585759493674
+      }
+    }
+  },
+  {
+    "trace_name": "report_bus_0004.json",
+    "trace_type": "4Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 89.82210216706473,
+        "cbr_md_qoe": 34.1827403770553,
+        "vbr_bones_qoe": 91.0129202174588,
+        "vbr_md_qoe": 34.736427368579754,
+        "bones_qoe_diff": 1.1908180503940713,
+        "md_qoe_diff": 0.5536869915244509,
+        "vmaf_diff": 0.8262710377358502,
+        "oscillation_diff": -0.36454701265822687
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 90.26841880658387,
+        "cbr_md_qoe": 34.335115784945856,
+        "vbr_bones_qoe": 91.48609801699705,
+        "vbr_md_qoe": 35.00451960765187,
+        "bones_qoe_diff": 1.2176792104131806,
+        "md_qoe_diff": 0.6694038227060162,
+        "vmaf_diff": 0.8599437547169657,
+        "oscillation_diff": -0.35773545569620224
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 90.26841880658387,
+        "cbr_md_qoe": 34.335115784945856,
+        "vbr_bones_qoe": 91.41218718867924,
+        "vbr_md_qoe": 34.906564988428265,
+        "bones_qoe_diff": 1.1437683820953737,
+        "md_qoe_diff": 0.571449203482409,
+        "vmaf_diff": 0.8207156289308131,
+        "oscillation_diff": -0.3230527531645573
+      }
+    }
+  },
+  {
+    "trace_name": "report_bus_0005.json",
+    "trace_type": "4Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 89.7960057097763,
+        "cbr_md_qoe": 34.18411388617554,
+        "vbr_bones_qoe": 91.02386966503464,
+        "vbr_md_qoe": 34.74266734162951,
+        "bones_qoe_diff": 1.2278639552583428,
+        "md_qoe_diff": 0.5585534554539748,
+        "vmaf_diff": 0.8254820691823994,
+        "oscillation_diff": -0.4023818860759487
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 90.25245788324973,
+        "cbr_md_qoe": 34.33645727548368,
+        "vbr_bones_qoe": 91.48540043503701,
+        "vbr_md_qoe": 35.00888100220417,
+        "bones_qoe_diff": 1.232942551787275,
+        "md_qoe_diff": 0.6724237267204884,
+        "vmaf_diff": 0.8602328176100542,
+        "oscillation_diff": -0.372709734177215
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 90.25245788324973,
+        "cbr_md_qoe": 34.33645727548368,
+        "vbr_bones_qoe": 91.41621475479658,
+        "vbr_md_qoe": 34.911805242019675,
+        "bones_qoe_diff": 1.1637568715468518,
+        "md_qoe_diff": 0.5753479665359933,
+        "vmaf_diff": 0.8204982955974884,
+        "oscillation_diff": -0.3432585759493674
+      }
+    }
+  },
+  {
+    "trace_name": "report_bus_0006.json",
+    "trace_type": "4Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 89.82210216706471,
+        "cbr_md_qoe": 34.182740377051665,
+        "vbr_bones_qoe": 91.01292021745878,
+        "vbr_md_qoe": 34.736427368576116,
+        "bones_qoe_diff": 1.1908180503940713,
+        "md_qoe_diff": 0.5536869915244509,
+        "vmaf_diff": 0.8262710377358502,
+        "oscillation_diff": -0.36454701265822687
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 90.26841880658385,
+        "cbr_md_qoe": 34.33511578494222,
+        "vbr_bones_qoe": 91.48609801699703,
+        "vbr_md_qoe": 35.004519607648234,
+        "bones_qoe_diff": 1.2176792104131806,
+        "md_qoe_diff": 0.6694038227060162,
+        "vmaf_diff": 0.8599437547169657,
+        "oscillation_diff": -0.35773545569620224
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 90.26841880658385,
+        "cbr_md_qoe": 34.33511578494222,
+        "vbr_bones_qoe": 91.41218718867923,
+        "vbr_md_qoe": 34.90656498842463,
+        "bones_qoe_diff": 1.1437683820953737,
+        "md_qoe_diff": 0.571449203482409,
+        "vmaf_diff": 0.8207156289308131,
+        "oscillation_diff": -0.3230527531645573
+      }
+    }
+  },
+  {
+    "trace_name": "report_bus_0007.json",
+    "trace_type": "4Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 89.50618105982804,
+        "cbr_md_qoe": 33.45966918905644,
+        "vbr_bones_qoe": 90.69611583811003,
+        "vbr_md_qoe": 34.02882537620091,
+        "bones_qoe_diff": 1.1899347782819945,
+        "md_qoe_diff": 0.5691561871444719,
+        "vmaf_diff": 0.8268250314465462,
+        "oscillation_diff": -0.36310974683544206
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 89.94617405441446,
+        "cbr_md_qoe": 33.60685479257207,
+        "vbr_bones_qoe": 91.15476835574397,
+        "vbr_md_qoe": 34.31434930200259,
+        "bones_qoe_diff": 1.2085943013295122,
+        "md_qoe_diff": 0.7074945094305178,
+        "vmaf_diff": 0.8655543899371025,
+        "oscillation_diff": -0.34303991139240475
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 89.94617405441446,
+        "cbr_md_qoe": 33.60685479257207,
+        "vbr_bones_qoe": 91.06560008000956,
+        "vbr_md_qoe": 34.18816217574076,
+        "bones_qoe_diff": 1.1194260255951036,
+        "md_qoe_diff": 0.581307383168685,
+        "vmaf_diff": 0.822272955974853,
+        "oscillation_diff": -0.29715306962025334
+      }
+    }
+  },
+  {
+    "trace_name": "report_bus_0008.json",
+    "trace_type": "4Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 89.82210216706471,
+        "cbr_md_qoe": 34.182740377052575,
+        "vbr_bones_qoe": 91.01292021745878,
+        "vbr_md_qoe": 34.736427368577026,
+        "bones_qoe_diff": 1.1908180503940713,
+        "md_qoe_diff": 0.5536869915244509,
+        "vmaf_diff": 0.8262710377358502,
+        "oscillation_diff": -0.36454701265822687
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 90.26841880658385,
+        "cbr_md_qoe": 34.33511578494313,
+        "vbr_bones_qoe": 91.48609801699703,
+        "vbr_md_qoe": 35.004519607649144,
+        "bones_qoe_diff": 1.2176792104131806,
+        "md_qoe_diff": 0.6694038227060162,
+        "vmaf_diff": 0.8599437547169657,
+        "oscillation_diff": -0.35773545569620224
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 90.26841880658385,
+        "cbr_md_qoe": 34.33511578494313,
+        "vbr_bones_qoe": 91.41218718867923,
+        "vbr_md_qoe": 34.90656498842554,
+        "bones_qoe_diff": 1.1437683820953737,
+        "md_qoe_diff": 0.571449203482409,
+        "vmaf_diff": 0.8207156289308131,
+        "oscillation_diff": -0.3230527531645573
+      }
+    }
+  },
+  {
+    "trace_name": "report_bus_0009.json",
+    "trace_type": "4Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 89.7960057097763,
+        "cbr_md_qoe": 34.18411388617463,
+        "vbr_bones_qoe": 91.02386966503464,
+        "vbr_md_qoe": 34.742667341628604,
+        "bones_qoe_diff": 1.2278639552583428,
+        "md_qoe_diff": 0.5585534554539748,
+        "vmaf_diff": 0.8254820691823994,
+        "oscillation_diff": -0.4023818860759487
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 90.25245788324973,
+        "cbr_md_qoe": 34.33645727548277,
+        "vbr_bones_qoe": 91.48540043503701,
+        "vbr_md_qoe": 35.00888100220326,
+        "bones_qoe_diff": 1.232942551787275,
+        "md_qoe_diff": 0.6724237267204884,
+        "vmaf_diff": 0.8602328176100542,
+        "oscillation_diff": -0.372709734177215
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 90.25245788324973,
+        "cbr_md_qoe": 34.33645727548277,
+        "vbr_bones_qoe": 91.41621475479658,
+        "vbr_md_qoe": 34.911805242018765,
+        "bones_qoe_diff": 1.1637568715468518,
+        "md_qoe_diff": 0.5753479665359933,
+        "vmaf_diff": 0.8204982955974884,
+        "oscillation_diff": -0.3432585759493674
+      }
+    }
+  },
+  {
+    "trace_name": "report_bus_0010.json",
+    "trace_type": "4Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 89.79600570977628,
+        "cbr_md_qoe": 34.1841138861719,
+        "vbr_bones_qoe": 91.02386966503462,
+        "vbr_md_qoe": 34.742667341625875,
+        "bones_qoe_diff": 1.2278639552583428,
+        "md_qoe_diff": 0.5585534554539748,
+        "vmaf_diff": 0.8254820691823994,
+        "oscillation_diff": -0.4023818860759487
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 90.25245788324972,
+        "cbr_md_qoe": 34.33645727548004,
+        "vbr_bones_qoe": 91.485400435037,
+        "vbr_md_qoe": 35.00888100220053,
+        "bones_qoe_diff": 1.232942551787275,
+        "md_qoe_diff": 0.6724237267204884,
+        "vmaf_diff": 0.8602328176100542,
+        "oscillation_diff": -0.372709734177215
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 90.25245788324972,
+        "cbr_md_qoe": 34.33645727548004,
+        "vbr_bones_qoe": 91.41621475479657,
+        "vbr_md_qoe": 34.91180524201604,
+        "bones_qoe_diff": 1.1637568715468518,
+        "md_qoe_diff": 0.5753479665359933,
+        "vmaf_diff": 0.8204982955974884,
+        "oscillation_diff": -0.3432585759493674
+      }
+    }
+  },
+  {
+    "trace_name": "report_bus_0011.json",
+    "trace_type": "4Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 89.79600570977628,
+        "cbr_md_qoe": 34.18411388617281,
+        "vbr_bones_qoe": 91.02386966503462,
+        "vbr_md_qoe": 34.742667341626785,
+        "bones_qoe_diff": 1.2278639552583428,
+        "md_qoe_diff": 0.5585534554539748,
+        "vmaf_diff": 0.8254820691823994,
+        "oscillation_diff": -0.4023818860759487
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 90.25245788324972,
+        "cbr_md_qoe": 34.33645727548095,
+        "vbr_bones_qoe": 91.485400435037,
+        "vbr_md_qoe": 35.00888100220144,
+        "bones_qoe_diff": 1.232942551787275,
+        "md_qoe_diff": 0.6724237267204884,
+        "vmaf_diff": 0.8602328176100542,
+        "oscillation_diff": -0.372709734177215
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 90.25245788324972,
+        "cbr_md_qoe": 34.33645727548095,
+        "vbr_bones_qoe": 91.41621475479657,
+        "vbr_md_qoe": 34.911805242016946,
+        "bones_qoe_diff": 1.1637568715468518,
+        "md_qoe_diff": 0.5753479665359933,
+        "vmaf_diff": 0.8204982955974884,
+        "oscillation_diff": -0.3432585759493674
+      }
+    }
+  },
+  {
+    "trace_name": "report_car_0001.json",
+    "trace_type": "4Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 89.59827533273622,
+        "cbr_md_qoe": 34.12680573864698,
+        "vbr_bones_qoe": 90.83168166559189,
+        "vbr_md_qoe": 34.68624259036529,
+        "bones_qoe_diff": 1.2334063328556653,
+        "md_qoe_diff": 0.5594368517183099,
+        "vmaf_diff": 0.828599408805033,
+        "oscillation_diff": -0.4048069240506318
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 90.03383613975797,
+        "cbr_md_qoe": 34.27380344783295,
+        "vbr_bones_qoe": 91.2716315244407,
+        "vbr_md_qoe": 34.94828031032947,
+        "bones_qoe_diff": 1.237795384682741,
+        "md_qoe_diff": 0.674476862496526,
+        "vmaf_diff": 0.865429220125776,
+        "oscillation_diff": -0.37236616455696225
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 90.03383613975797,
+        "cbr_md_qoe": 34.27380344783295,
+        "vbr_bones_qoe": 91.20627306512219,
+        "vbr_md_qoe": 34.851506829278854,
+        "bones_qoe_diff": 1.1724369253642237,
+        "md_qoe_diff": 0.5777033814459074,
+        "vmaf_diff": 0.8257377924528413,
+        "oscillation_diff": -0.3466991329113931
+      }
+    }
+  },
+  {
+    "trace_name": "report_car_0002.json",
+    "trace_type": "4Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 89.82210216706473,
+        "cbr_md_qoe": 34.1827403770553,
+        "vbr_bones_qoe": 91.0129202174588,
+        "vbr_md_qoe": 34.736427368579754,
+        "bones_qoe_diff": 1.1908180503940713,
+        "md_qoe_diff": 0.5536869915244509,
+        "vmaf_diff": 0.8262710377358502,
+        "oscillation_diff": -0.36454701265822687
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 90.26841880658387,
+        "cbr_md_qoe": 34.335115784945856,
+        "vbr_bones_qoe": 91.48609801699705,
+        "vbr_md_qoe": 35.00451960765187,
+        "bones_qoe_diff": 1.2176792104131806,
+        "md_qoe_diff": 0.6694038227060162,
+        "vmaf_diff": 0.8599437547169657,
+        "oscillation_diff": -0.35773545569620224
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 90.26841880658387,
+        "cbr_md_qoe": 34.335115784945856,
+        "vbr_bones_qoe": 91.41218718867924,
+        "vbr_md_qoe": 34.906564988428265,
+        "bones_qoe_diff": 1.1437683820953737,
+        "md_qoe_diff": 0.571449203482409,
+        "vmaf_diff": 0.8207156289308131,
+        "oscillation_diff": -0.3230527531645573
+      }
+    }
+  },
+  {
+    "trace_name": "report_car_0003.json",
+    "trace_type": "4Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 89.79600570977628,
+        "cbr_md_qoe": 34.18411388617281,
+        "vbr_bones_qoe": 91.02386966503462,
+        "vbr_md_qoe": 34.742667341626785,
+        "bones_qoe_diff": 1.2278639552583428,
+        "md_qoe_diff": 0.5585534554539748,
+        "vmaf_diff": 0.8254820691823994,
+        "oscillation_diff": -0.4023818860759487
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 90.25245788324972,
+        "cbr_md_qoe": 34.33645727548095,
+        "vbr_bones_qoe": 91.485400435037,
+        "vbr_md_qoe": 35.00888100220144,
+        "bones_qoe_diff": 1.232942551787275,
+        "md_qoe_diff": 0.6724237267204884,
+        "vmaf_diff": 0.8602328176100542,
+        "oscillation_diff": -0.372709734177215
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 90.25245788324972,
+        "cbr_md_qoe": 34.33645727548095,
+        "vbr_bones_qoe": 91.41621475479657,
+        "vbr_md_qoe": 34.911805242016946,
+        "bones_qoe_diff": 1.1637568715468518,
+        "md_qoe_diff": 0.5753479665359933,
+        "vmaf_diff": 0.8204982955974884,
+        "oscillation_diff": -0.3432585759493674
+      }
+    }
+  },
+  {
+    "trace_name": "report_car_0004.json",
+    "trace_type": "4Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 89.7960057097763,
+        "cbr_md_qoe": 34.18411388617554,
+        "vbr_bones_qoe": 91.02386966503464,
+        "vbr_md_qoe": 34.74266734162951,
+        "bones_qoe_diff": 1.2278639552583428,
+        "md_qoe_diff": 0.5585534554539748,
+        "vmaf_diff": 0.8254820691823994,
+        "oscillation_diff": -0.4023818860759487
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 90.25245788324973,
+        "cbr_md_qoe": 34.33645727548368,
+        "vbr_bones_qoe": 91.48540043503701,
+        "vbr_md_qoe": 35.00888100220417,
+        "bones_qoe_diff": 1.232942551787275,
+        "md_qoe_diff": 0.6724237267204884,
+        "vmaf_diff": 0.8602328176100542,
+        "oscillation_diff": -0.372709734177215
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 90.25245788324973,
+        "cbr_md_qoe": 34.33645727548368,
+        "vbr_bones_qoe": 91.41621475479658,
+        "vbr_md_qoe": 34.911805242019675,
+        "bones_qoe_diff": 1.1637568715468518,
+        "md_qoe_diff": 0.5753479665359933,
+        "vmaf_diff": 0.8204982955974884,
+        "oscillation_diff": -0.3432585759493674
+      }
+    }
+  },
+  {
+    "trace_name": "report_car_0005.json",
+    "trace_type": "4Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 89.75214607224743,
+        "cbr_md_qoe": 33.757794865272885,
+        "vbr_bones_qoe": 90.93850685936629,
+        "vbr_md_qoe": 34.32362133642252,
+        "bones_qoe_diff": 1.1863607871188577,
+        "md_qoe_diff": 0.5658264711496344,
+        "vmaf_diff": 0.8260786352201279,
+        "oscillation_diff": -0.36028215189873336
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 90.19846271176657,
+        "cbr_md_qoe": 33.91000382292922,
+        "vbr_bones_qoe": 91.39334405457366,
+        "vbr_md_qoe": 34.58253107442413,
+        "bones_qoe_diff": 1.1948813428070935,
+        "md_qoe_diff": 0.6725272514949125,
+        "vmaf_diff": 0.8581178364779873,
+        "oscillation_diff": -0.33676350632911345
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 90.19846271176657,
+        "cbr_md_qoe": 33.91000382292922,
+        "vbr_bones_qoe": 91.32007500270679,
+        "vbr_md_qoe": 34.48249740734532,
+        "bones_qoe_diff": 1.1216122909402202,
+        "md_qoe_diff": 0.572493584416101,
+        "vmaf_diff": 0.8197180314465555,
+        "oscillation_diff": -0.3018942594936709
+      }
+    }
+  },
+  {
+    "trace_name": "report_car_0006.json",
+    "trace_type": "4Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 89.79600570977627,
+        "cbr_md_qoe": 34.18411388617099,
+        "vbr_bones_qoe": 91.02386966503461,
+        "vbr_md_qoe": 34.742667341624966,
+        "bones_qoe_diff": 1.2278639552583428,
+        "md_qoe_diff": 0.5585534554539748,
+        "vmaf_diff": 0.8254820691823994,
+        "oscillation_diff": -0.4023818860759487
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 90.2524578832497,
+        "cbr_md_qoe": 34.336457275479134,
+        "vbr_bones_qoe": 91.48540043503698,
+        "vbr_md_qoe": 35.00888100219962,
+        "bones_qoe_diff": 1.232942551787275,
+        "md_qoe_diff": 0.6724237267204884,
+        "vmaf_diff": 0.8602328176100542,
+        "oscillation_diff": -0.372709734177215
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 90.2524578832497,
+        "cbr_md_qoe": 34.336457275479134,
+        "vbr_bones_qoe": 91.41621475479656,
+        "vbr_md_qoe": 34.91180524201513,
+        "bones_qoe_diff": 1.1637568715468518,
+        "md_qoe_diff": 0.5753479665359933,
+        "vmaf_diff": 0.8204982955974884,
+        "oscillation_diff": -0.3432585759493674
+      }
+    }
+  },
+  {
+    "trace_name": "report_car_0007.json",
+    "trace_type": "4Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 89.79600570977628,
+        "cbr_md_qoe": 34.18411388617281,
+        "vbr_bones_qoe": 91.02386966503462,
+        "vbr_md_qoe": 34.742667341626785,
+        "bones_qoe_diff": 1.2278639552583428,
+        "md_qoe_diff": 0.5585534554539748,
+        "vmaf_diff": 0.8254820691823994,
+        "oscillation_diff": -0.4023818860759487
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 90.25245788324972,
+        "cbr_md_qoe": 34.33645727548095,
+        "vbr_bones_qoe": 91.485400435037,
+        "vbr_md_qoe": 35.00888100220144,
+        "bones_qoe_diff": 1.232942551787275,
+        "md_qoe_diff": 0.6724237267204884,
+        "vmaf_diff": 0.8602328176100542,
+        "oscillation_diff": -0.372709734177215
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 90.25245788324972,
+        "cbr_md_qoe": 34.33645727548095,
+        "vbr_bones_qoe": 91.41621475479657,
+        "vbr_md_qoe": 34.911805242016946,
+        "bones_qoe_diff": 1.1637568715468518,
+        "md_qoe_diff": 0.5753479665359933,
+        "vmaf_diff": 0.8204982955974884,
+        "oscillation_diff": -0.3432585759493674
+      }
+    }
+  },
+  {
+    "trace_name": "report_car_0008.json",
+    "trace_type": "4Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 89.47842031195762,
+        "cbr_md_qoe": 33.53387735781807,
+        "vbr_bones_qoe": 90.66735599160097,
+        "vbr_md_qoe": 34.09732273686163,
+        "bones_qoe_diff": 1.1889356796433503,
+        "md_qoe_diff": 0.5634453790435572,
+        "vmaf_diff": 0.8280326163522034,
+        "oscillation_diff": -0.36090306329113897
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 89.91841330654404,
+        "cbr_md_qoe": 33.68086621450338,
+        "vbr_bones_qoe": 91.12368341075546,
+        "vbr_md_qoe": 34.381097075349594,
+        "bones_qoe_diff": 1.2052701042114222,
+        "md_qoe_diff": 0.7002308608462116,
+        "vmaf_diff": 0.8693235345911745,
+        "oscillation_diff": -0.3359465696202526
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 89.91841330654404,
+        "cbr_md_qoe": 33.68086621450338,
+        "vbr_bones_qoe": 91.0344147862431,
+        "vbr_md_qoe": 34.264473705517105,
+        "bones_qoe_diff": 1.1160014796990652,
+        "md_qoe_diff": 0.5836074910137228,
+        "vmaf_diff": 0.8269842075471701,
+        "oscillation_diff": -0.28901727215189865
+      }
+    }
+  },
+  {
+    "trace_name": "report_foot_0001.json",
+    "trace_type": "4Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 89.82210216706471,
+        "cbr_md_qoe": 34.182740377051665,
+        "vbr_bones_qoe": 91.01292021745878,
+        "vbr_md_qoe": 34.736427368576116,
+        "bones_qoe_diff": 1.1908180503940713,
+        "md_qoe_diff": 0.5536869915244509,
+        "vmaf_diff": 0.8262710377358502,
+        "oscillation_diff": -0.36454701265822687
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 90.26841880658385,
+        "cbr_md_qoe": 34.33511578494222,
+        "vbr_bones_qoe": 91.48609801699703,
+        "vbr_md_qoe": 35.004519607648234,
+        "bones_qoe_diff": 1.2176792104131806,
+        "md_qoe_diff": 0.6694038227060162,
+        "vmaf_diff": 0.8599437547169657,
+        "oscillation_diff": -0.35773545569620224
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 90.26841880658385,
+        "cbr_md_qoe": 34.33511578494222,
+        "vbr_bones_qoe": 91.41218718867923,
+        "vbr_md_qoe": 34.90656498842463,
+        "bones_qoe_diff": 1.1437683820953737,
+        "md_qoe_diff": 0.571449203482409,
+        "vmaf_diff": 0.8207156289308131,
+        "oscillation_diff": -0.3230527531645573
+      }
+    }
+  },
+  {
+    "trace_name": "report_foot_0002.json",
+    "trace_type": "4Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 89.54666851775335,
+        "cbr_md_qoe": 34.10290071335297,
+        "vbr_bones_qoe": 90.71351331633626,
+        "vbr_md_qoe": 34.65866703837061,
+        "bones_qoe_diff": 1.1668447985829147,
+        "md_qoe_diff": 0.5557663250176361,
+        "vmaf_diff": 0.8663488238993722,
+        "oscillation_diff": -0.30049597468354383
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 89.98774573334128,
+        "cbr_md_qoe": 34.25414748513474,
+        "vbr_bones_qoe": 91.18982208148235,
+        "vbr_md_qoe": 34.9282221343921,
+        "bones_qoe_diff": 1.2020763481410626,
+        "md_qoe_diff": 0.6740746492573635,
+        "vmaf_diff": 0.9023129937106944,
+        "oscillation_diff": -0.2997633544303797
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 89.98774573334128,
+        "cbr_md_qoe": 34.25414748513474,
+        "vbr_bones_qoe": 91.11121560695804,
+        "vbr_md_qoe": 34.8292058512176,
+        "bones_qoe_diff": 1.1234698736167559,
+        "md_qoe_diff": 0.5750583660828639,
+        "vmaf_diff": 0.8633219685534641,
+        "oscillation_diff": -0.26014790506329133
+      }
+    }
+  },
+  {
+    "trace_name": "report_foot_0003.json",
+    "trace_type": "4Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 89.56982883054694,
+        "cbr_md_qoe": 33.3781246762232,
+        "vbr_bones_qoe": 90.75924223059471,
+        "vbr_md_qoe": 33.95858074875052,
+        "bones_qoe_diff": 1.1894134000477692,
+        "md_qoe_diff": 0.5804560725273191,
+        "vmaf_diff": 0.8281157924528344,
+        "oscillation_diff": -0.3612976075949361
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 90.01614547006606,
+        "cbr_md_qoe": 33.53013172290617,
+        "vbr_bones_qoe": 91.21809639817688,
+        "vbr_md_qoe": 34.24784646704409,
+        "bones_qoe_diff": 1.2019509281108185,
+        "md_qoe_diff": 0.7177147441379219,
+        "vmaf_diff": 0.8660043584905708,
+        "oscillation_diff": -0.3359465696202526
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 90.01614547006606,
+        "cbr_md_qoe": 33.53013172290617,
+        "vbr_bones_qoe": 91.1290324529098,
+        "vbr_md_qoe": 34.12339685930094,
+        "bones_qoe_diff": 1.112886982843733,
+        "md_qoe_diff": 0.5932651363947699,
+        "vmaf_diff": 0.823869710691838,
+        "oscillation_diff": -0.28901727215189865
+      }
+    }
+  },
+  {
+    "trace_name": "report_foot_0004.json",
+    "trace_type": "4Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 89.82210216706473,
+        "cbr_md_qoe": 34.1827403770553,
+        "vbr_bones_qoe": 91.0129202174588,
+        "vbr_md_qoe": 34.736427368579754,
+        "bones_qoe_diff": 1.1908180503940713,
+        "md_qoe_diff": 0.5536869915244509,
+        "vmaf_diff": 0.8262710377358502,
+        "oscillation_diff": -0.36454701265822687
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 90.26841880658387,
+        "cbr_md_qoe": 34.335115784945856,
+        "vbr_bones_qoe": 91.48609801699705,
+        "vbr_md_qoe": 35.00451960765187,
+        "bones_qoe_diff": 1.2176792104131806,
+        "md_qoe_diff": 0.6694038227060162,
+        "vmaf_diff": 0.8599437547169657,
+        "oscillation_diff": -0.35773545569620224
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 90.26841880658387,
+        "cbr_md_qoe": 34.335115784945856,
+        "vbr_bones_qoe": 91.41218718867924,
+        "vbr_md_qoe": 34.906564988428265,
+        "bones_qoe_diff": 1.1437683820953737,
+        "md_qoe_diff": 0.571449203482409,
+        "vmaf_diff": 0.8207156289308131,
+        "oscillation_diff": -0.3230527531645573
+      }
+    }
+  },
+  {
+    "trace_name": "report_foot_0005.json",
+    "trace_type": "4Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 89.7960057097763,
+        "cbr_md_qoe": 34.18411388617554,
+        "vbr_bones_qoe": 91.02386966503464,
+        "vbr_md_qoe": 34.74266734162951,
+        "bones_qoe_diff": 1.2278639552583428,
+        "md_qoe_diff": 0.5585534554539748,
+        "vmaf_diff": 0.8254820691823994,
+        "oscillation_diff": -0.4023818860759487
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 90.25245788324973,
+        "cbr_md_qoe": 34.33645727548368,
+        "vbr_bones_qoe": 91.48540043503701,
+        "vbr_md_qoe": 35.00888100220417,
+        "bones_qoe_diff": 1.232942551787275,
+        "md_qoe_diff": 0.6724237267204884,
+        "vmaf_diff": 0.8602328176100542,
+        "oscillation_diff": -0.372709734177215
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 90.25245788324973,
+        "cbr_md_qoe": 34.33645727548368,
+        "vbr_bones_qoe": 91.41621475479658,
+        "vbr_md_qoe": 34.911805242019675,
+        "bones_qoe_diff": 1.1637568715468518,
+        "md_qoe_diff": 0.5753479665359933,
+        "vmaf_diff": 0.8204982955974884,
+        "oscillation_diff": -0.3432585759493674
+      }
+    }
+  },
+  {
+    "trace_name": "report_foot_0006.json",
+    "trace_type": "4Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 89.79600570977628,
+        "cbr_md_qoe": 34.18411388617372,
+        "vbr_bones_qoe": 91.02386966503462,
+        "vbr_md_qoe": 34.742667341627694,
+        "bones_qoe_diff": 1.2278639552583428,
+        "md_qoe_diff": 0.5585534554539748,
+        "vmaf_diff": 0.8254820691823994,
+        "oscillation_diff": -0.4023818860759487
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 90.25245788324972,
+        "cbr_md_qoe": 34.33645727548186,
+        "vbr_bones_qoe": 91.485400435037,
+        "vbr_md_qoe": 35.00888100220235,
+        "bones_qoe_diff": 1.232942551787275,
+        "md_qoe_diff": 0.6724237267204884,
+        "vmaf_diff": 0.8602328176100542,
+        "oscillation_diff": -0.372709734177215
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 90.25245788324972,
+        "cbr_md_qoe": 34.33645727548186,
+        "vbr_bones_qoe": 91.41621475479657,
+        "vbr_md_qoe": 34.911805242017856,
+        "bones_qoe_diff": 1.1637568715468518,
+        "md_qoe_diff": 0.5753479665359933,
+        "vmaf_diff": 0.8204982955974884,
+        "oscillation_diff": -0.3432585759493674
+      }
+    }
+  },
+  {
+    "trace_name": "report_foot_0007.json",
+    "trace_type": "4Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 89.82210216706473,
+        "cbr_md_qoe": 34.1827403770553,
+        "vbr_bones_qoe": 91.0129202174588,
+        "vbr_md_qoe": 34.736427368579754,
+        "bones_qoe_diff": 1.1908180503940713,
+        "md_qoe_diff": 0.5536869915244509,
+        "vmaf_diff": 0.8262710377358502,
+        "oscillation_diff": -0.36454701265822687
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 90.26841880658387,
+        "cbr_md_qoe": 34.335115784945856,
+        "vbr_bones_qoe": 91.48609801699705,
+        "vbr_md_qoe": 35.00451960765187,
+        "bones_qoe_diff": 1.2176792104131806,
+        "md_qoe_diff": 0.6694038227060162,
+        "vmaf_diff": 0.8599437547169657,
+        "oscillation_diff": -0.35773545569620224
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 90.26841880658387,
+        "cbr_md_qoe": 34.335115784945856,
+        "vbr_bones_qoe": 91.41218718867924,
+        "vbr_md_qoe": 34.906564988428265,
+        "bones_qoe_diff": 1.1437683820953737,
+        "md_qoe_diff": 0.571449203482409,
+        "vmaf_diff": 0.8207156289308131,
+        "oscillation_diff": -0.3230527531645573
+      }
+    }
+  },
+  {
+    "trace_name": "report_foot_0008.json",
+    "trace_type": "4Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 89.75214607224743,
+        "cbr_md_qoe": 33.757794865272885,
+        "vbr_bones_qoe": 90.93850685936629,
+        "vbr_md_qoe": 34.32362133642252,
+        "bones_qoe_diff": 1.1863607871188577,
+        "md_qoe_diff": 0.5658264711496344,
+        "vmaf_diff": 0.8260786352201279,
+        "oscillation_diff": -0.36028215189873336
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 90.19846271176657,
+        "cbr_md_qoe": 33.91000382292922,
+        "vbr_bones_qoe": 91.39334405457366,
+        "vbr_md_qoe": 34.58253107442413,
+        "bones_qoe_diff": 1.1948813428070935,
+        "md_qoe_diff": 0.6725272514949125,
+        "vmaf_diff": 0.8581178364779873,
+        "oscillation_diff": -0.33676350632911345
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 90.19846271176657,
+        "cbr_md_qoe": 33.91000382292922,
+        "vbr_bones_qoe": 91.32007500270679,
+        "vbr_md_qoe": 34.48249740734532,
+        "bones_qoe_diff": 1.1216122909402202,
+        "md_qoe_diff": 0.572493584416101,
+        "vmaf_diff": 0.8197180314465555,
+        "oscillation_diff": -0.3018942594936709
+      }
+    }
+  },
+  {
+    "trace_name": "report_train_0001.json",
+    "trace_type": "4Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 89.44168500616988,
+        "cbr_md_qoe": 33.43589145030599,
+        "vbr_bones_qoe": 90.59464975642862,
+        "vbr_md_qoe": 34.00034538935062,
+        "bones_qoe_diff": 1.1529647502587466,
+        "md_qoe_diff": 0.5644539390446326,
+        "vmaf_diff": 0.8268534591195049,
+        "oscillation_diff": -0.32611129113923987
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 89.87655746974761,
+        "cbr_md_qoe": 33.58538333218253,
+        "vbr_bones_qoe": 91.06085213155798,
+        "vbr_md_qoe": 34.28797025674058,
+        "bones_qoe_diff": 1.1842946618103696,
+        "md_qoe_diff": 0.702586924558048,
+        "vmaf_diff": 0.863548433962265,
+        "oscillation_diff": -0.3207462278481006
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 89.87655746974761,
+        "cbr_md_qoe": 33.58538333218253,
+        "vbr_bones_qoe": 90.96211615301328,
+        "vbr_md_qoe": 34.1598636252161,
+        "bones_qoe_diff": 1.085558683265674,
+        "md_qoe_diff": 0.5744802930335666,
+        "vmaf_diff": 0.8203190440251689,
+        "oscillation_diff": -0.26523963924050653
+      }
+    }
+  },
+  {
+    "trace_name": "report_train_0002.json",
+    "trace_type": "4Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 89.49775047739033,
+        "cbr_md_qoe": 33.449184499686275,
+        "vbr_bones_qoe": 90.68979748391847,
+        "vbr_md_qoe": 34.020627659631955,
+        "bones_qoe_diff": 1.192047006528142,
+        "md_qoe_diff": 0.5714431599456802,
+        "vmaf_diff": 0.8328409685534552,
+        "oscillation_diff": -0.35920603797468287
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 89.94292120416367,
+        "cbr_md_qoe": 33.59983632234167,
+        "vbr_bones_qoe": 91.14159287098954,
+        "vbr_md_qoe": 34.305708990244554,
+        "bones_qoe_diff": 1.1986716668258737,
+        "md_qoe_diff": 0.7058726679028808,
+        "vmaf_diff": 0.8680716415094167,
+        "oscillation_diff": -0.33060002531645516
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 89.94292120416367,
+        "cbr_md_qoe": 33.59983632234167,
+        "vbr_bones_qoe": 91.04343208789109,
+        "vbr_md_qoe": 34.17800963737933,
+        "bones_qoe_diff": 1.1005108837274236,
+        "md_qoe_diff": 0.5781733150376596,
+        "vmaf_diff": 0.8253163710691922,
+        "oscillation_diff": -0.2751945126582287
+      }
+    }
+  },
+  {
+    "trace_name": "report_train_0003.json",
+    "trace_type": "4Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 88.20042582911391,
+        "cbr_md_qoe": 33.593032954820515,
+        "vbr_bones_qoe": 89.38226144849136,
+        "vbr_md_qoe": 34.12778824843775,
+        "bones_qoe_diff": 1.181835619377452,
+        "md_qoe_diff": 0.5347552936172377,
+        "vmaf_diff": 0.8433921383647913,
+        "oscillation_diff": -0.3384434810126571
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 88.60626798634662,
+        "cbr_md_qoe": 33.731741841356126,
+        "vbr_bones_qoe": 89.84715782592944,
+        "vbr_md_qoe": 34.40151936397621,
+        "bones_qoe_diff": 1.2408898395828203,
+        "md_qoe_diff": 0.6697775226200875,
+        "vmaf_diff": 0.906081345911943,
+        "oscillation_diff": -0.3348084936708857
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 88.60626798634662,
+        "cbr_md_qoe": 33.731741841356126,
+        "vbr_bones_qoe": 89.7630275547329,
+        "vbr_md_qoe": 34.30014663968958,
+        "bones_qoe_diff": 1.1567595683862777,
+        "md_qoe_diff": 0.5684047983334537,
+        "vmaf_diff": 0.863830194968557,
+        "oscillation_diff": -0.29292937341772207
+      }
+    }
+  },
+  {
+    "trace_name": "report_tram_0001.json",
+    "trace_type": "4Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 89.67175002026113,
+        "cbr_md_qoe": 34.14984708540489,
+        "vbr_bones_qoe": 90.91193028274022,
+        "vbr_md_qoe": 34.711779894280085,
+        "bones_qoe_diff": 1.240180262479086,
+        "md_qoe_diff": 0.5619328088751914,
+        "vmaf_diff": 0.831893528301876,
+        "oscillation_diff": -0.4082867341772145
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 90.1173077457607,
+        "cbr_md_qoe": 34.29954166705587,
+        "vbr_bones_qoe": 91.35858319707825,
+        "vbr_md_qoe": 34.973220548159134,
+        "bones_qoe_diff": 1.2412754513175486,
+        "md_qoe_diff": 0.6736788811032639,
+        "vmaf_diff": 0.8652066918238859,
+        "oscillation_diff": -0.3760687594936707
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 90.1173077457607,
+        "cbr_md_qoe": 34.29954166705587,
+        "vbr_bones_qoe": 91.28895138922061,
+        "vbr_md_qoe": 34.875355649301376,
+        "bones_qoe_diff": 1.171643643459916,
+        "md_qoe_diff": 0.5758139822455064,
+        "vmaf_diff": 0.8248543333333345,
+        "oscillation_diff": -0.3467893101265829
+      }
+    }
+  },
+  {
+    "trace_name": "report_tram_0002.json",
+    "trace_type": "4Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 89.75316473302283,
+        "cbr_md_qoe": 34.170943023181074,
+        "vbr_bones_qoe": 91.01823704191547,
+        "vbr_md_qoe": 34.741132902092865,
+        "bones_qoe_diff": 1.2650723088926412,
+        "md_qoe_diff": 0.5701898789117905,
+        "vmaf_diff": 0.8356491949685818,
+        "oscillation_diff": -0.4294231139240492
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 90.20280680809648,
+        "cbr_md_qoe": 34.32150886537219,
+        "vbr_bones_qoe": 91.45253699128254,
+        "vbr_md_qoe": 35.001845568301235,
+        "bones_qoe_diff": 1.2497301831860597,
+        "md_qoe_diff": 0.680336702929047,
+        "vmaf_diff": 0.8701150566037796,
+        "oscillation_diff": -0.3796151265822787
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 90.20280680809648,
+        "cbr_md_qoe": 34.32150886537219,
+        "vbr_bones_qoe": 91.39321530499164,
+        "vbr_md_qoe": 34.906351150745955,
+        "bones_qoe_diff": 1.1904084968951594,
+        "md_qoe_diff": 0.5848422853737674,
+        "vmaf_diff": 0.8310814905660493,
+        "oscillation_diff": -0.3593270063291141
+      }
+    }
+  },
+  {
+    "trace_name": "report_tram_0003.json",
+    "trace_type": "4Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 89.75214607224743,
+        "cbr_md_qoe": 33.757794865271066,
+        "vbr_bones_qoe": 90.93850685936629,
+        "vbr_md_qoe": 34.3236213364207,
+        "bones_qoe_diff": 1.1863607871188577,
+        "md_qoe_diff": 0.5658264711496344,
+        "vmaf_diff": 0.8260786352201279,
+        "oscillation_diff": -0.36028215189873336
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 90.19846271176657,
+        "cbr_md_qoe": 33.9100038229274,
+        "vbr_bones_qoe": 91.39334405457366,
+        "vbr_md_qoe": 34.58253107442231,
+        "bones_qoe_diff": 1.1948813428070935,
+        "md_qoe_diff": 0.6725272514949125,
+        "vmaf_diff": 0.8581178364779873,
+        "oscillation_diff": -0.33676350632911345
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 90.19846271176657,
+        "cbr_md_qoe": 33.9100038229274,
+        "vbr_bones_qoe": 91.32007500270679,
+        "vbr_md_qoe": 34.4824974073435,
+        "bones_qoe_diff": 1.1216122909402202,
+        "md_qoe_diff": 0.572493584416101,
+        "vmaf_diff": 0.8197180314465555,
+        "oscillation_diff": -0.3018942594936709
+      }
+    }
+  },
+  {
+    "trace_name": "report_tram_0004.json",
+    "trace_type": "4Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 89.56982883054694,
+        "cbr_md_qoe": 33.3781246762232,
+        "vbr_bones_qoe": 90.75924223059471,
+        "vbr_md_qoe": 33.95858074875052,
+        "bones_qoe_diff": 1.1894134000477692,
+        "md_qoe_diff": 0.5804560725273191,
+        "vmaf_diff": 0.8281157924528344,
+        "oscillation_diff": -0.3612976075949361
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 90.01614547006606,
+        "cbr_md_qoe": 33.53013172290617,
+        "vbr_bones_qoe": 91.21809639817688,
+        "vbr_md_qoe": 34.24784646704409,
+        "bones_qoe_diff": 1.2019509281108185,
+        "md_qoe_diff": 0.7177147441379219,
+        "vmaf_diff": 0.8660043584905708,
+        "oscillation_diff": -0.3359465696202526
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 90.01614547006606,
+        "cbr_md_qoe": 33.53013172290617,
+        "vbr_bones_qoe": 91.1290324529098,
+        "vbr_md_qoe": 34.12339685930094,
+        "bones_qoe_diff": 1.112886982843733,
+        "md_qoe_diff": 0.5932651363947699,
+        "vmaf_diff": 0.823869710691838,
+        "oscillation_diff": -0.28901727215189865
+      }
+    }
+  },
+  {
+    "trace_name": "report_tram_0005.json",
+    "trace_type": "4Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 89.7960057097763,
+        "cbr_md_qoe": 34.18411388617554,
+        "vbr_bones_qoe": 91.02386966503464,
+        "vbr_md_qoe": 34.74266734162951,
+        "bones_qoe_diff": 1.2278639552583428,
+        "md_qoe_diff": 0.5585534554539748,
+        "vmaf_diff": 0.8254820691823994,
+        "oscillation_diff": -0.4023818860759487
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 90.25245788324973,
+        "cbr_md_qoe": 34.33645727548368,
+        "vbr_bones_qoe": 91.48540043503701,
+        "vbr_md_qoe": 35.00888100220417,
+        "bones_qoe_diff": 1.232942551787275,
+        "md_qoe_diff": 0.6724237267204884,
+        "vmaf_diff": 0.8602328176100542,
+        "oscillation_diff": -0.372709734177215
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 90.25245788324973,
+        "cbr_md_qoe": 34.33645727548368,
+        "vbr_bones_qoe": 91.41621475479658,
+        "vbr_md_qoe": 34.911805242019675,
+        "bones_qoe_diff": 1.1637568715468518,
+        "md_qoe_diff": 0.5753479665359933,
+        "vmaf_diff": 0.8204982955974884,
+        "oscillation_diff": -0.3432585759493674
+      }
+    }
+  },
+  {
+    "trace_name": "report_tram_0006.json",
+    "trace_type": "4Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 89.50388312558711,
+        "cbr_md_qoe": 33.457239309947084,
+        "vbr_bones_qoe": 90.69440680666347,
+        "vbr_md_qoe": 34.02813045013982,
+        "bones_qoe_diff": 1.1905236810763569,
+        "md_qoe_diff": 0.5708911401927352,
+        "vmaf_diff": 0.8270193899371066,
+        "oscillation_diff": -0.36350429113923965
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 89.95019976510625,
+        "cbr_md_qoe": 33.60933117807671,
+        "vbr_bones_qoe": 91.15571967020935,
+        "vbr_md_qoe": 34.31473813325413,
+        "bones_qoe_diff": 1.2055199051031025,
+        "md_qoe_diff": 0.7054069551774234,
+        "vmaf_diff": 0.8624799937106928,
+        "oscillation_diff": -0.34303991139240475
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 89.95019976510625,
+        "cbr_md_qoe": 33.60933117807671,
+        "vbr_bones_qoe": 91.06718023095291,
+        "vbr_md_qoe": 34.188808105023064,
+        "bones_qoe_diff": 1.116980465846666,
+        "md_qoe_diff": 0.5794769269463558,
+        "vmaf_diff": 0.8198273962264153,
+        "oscillation_diff": -0.29715306962025334
+      }
+    }
+  },
+  {
+    "trace_name": "report_tram_0007.json",
+    "trace_type": "4Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 89.75214607224743,
+        "cbr_md_qoe": 33.757794865272885,
+        "vbr_bones_qoe": 90.93850685936629,
+        "vbr_md_qoe": 34.32362133642252,
+        "bones_qoe_diff": 1.1863607871188577,
+        "md_qoe_diff": 0.5658264711496344,
+        "vmaf_diff": 0.8260786352201279,
+        "oscillation_diff": -0.36028215189873336
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 90.19846271176657,
+        "cbr_md_qoe": 33.91000382292922,
+        "vbr_bones_qoe": 91.39334405457366,
+        "vbr_md_qoe": 34.58253107442413,
+        "bones_qoe_diff": 1.1948813428070935,
+        "md_qoe_diff": 0.6725272514949125,
+        "vmaf_diff": 0.8581178364779873,
+        "oscillation_diff": -0.33676350632911345
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 90.19846271176657,
+        "cbr_md_qoe": 33.91000382292922,
+        "vbr_bones_qoe": 91.32007500270679,
+        "vbr_md_qoe": 34.48249740734532,
+        "bones_qoe_diff": 1.1216122909402202,
+        "md_qoe_diff": 0.572493584416101,
+        "vmaf_diff": 0.8197180314465555,
+        "oscillation_diff": -0.3018942594936709
+      }
+    }
+  },
+  {
+    "trace_name": "report_tram_0008.json",
+    "trace_type": "4Glogs",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 89.82210216706473,
+        "cbr_md_qoe": 34.1827403770553,
+        "vbr_bones_qoe": 91.0129202174588,
+        "vbr_md_qoe": 34.736427368579754,
+        "bones_qoe_diff": 1.1908180503940713,
+        "md_qoe_diff": 0.5536869915244509,
+        "vmaf_diff": 0.8262710377358502,
+        "oscillation_diff": -0.36454701265822687
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 90.26841880658387,
+        "cbr_md_qoe": 34.335115784945856,
+        "vbr_bones_qoe": 91.48609801699705,
+        "vbr_md_qoe": 35.00451960765187,
+        "bones_qoe_diff": 1.2176792104131806,
+        "md_qoe_diff": 0.6694038227060162,
+        "vmaf_diff": 0.8599437547169657,
+        "oscillation_diff": -0.35773545569620224
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 90.26841880658387,
+        "cbr_md_qoe": 34.335115784945856,
+        "vbr_bones_qoe": 91.41218718867924,
+        "vbr_md_qoe": 34.906564988428265,
+        "bones_qoe_diff": 1.1437683820953737,
+        "md_qoe_diff": 0.571449203482409,
+        "vmaf_diff": 0.8207156289308131,
+        "oscillation_diff": -0.3230527531645573
+      }
+    }
+  },
+  {
+    "trace_name": "3g_low.json",
+    "trace_type": "root",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 69.4328697798344,
+        "cbr_md_qoe": 27.917811895338644,
+        "vbr_bones_qoe": 70.6697849259215,
+        "vbr_md_qoe": 28.410082612281307,
+        "bones_qoe_diff": 1.2369151460870995,
+        "md_qoe_diff": 0.492270716942663,
+        "vmaf_diff": 1.1939929182390046,
+        "oscillation_diff": -0.042922227848103844
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 69.4315895505533,
+        "cbr_md_qoe": 27.91773838596095,
+        "vbr_bones_qoe": 71.45784337333812,
+        "vbr_md_qoe": 28.70242896282476,
+        "bones_qoe_diff": 2.026253822784824,
+        "md_qoe_diff": 0.784690576863813,
+        "vmaf_diff": 1.9107850000000042,
+        "oscillation_diff": -0.11546882278481085
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 69.4315895505533,
+        "cbr_md_qoe": 27.91773838596095,
+        "vbr_bones_qoe": 71.37220547723112,
+        "vbr_md_qoe": 28.634338293041942,
+        "bones_qoe_diff": 1.9406159266778218,
+        "md_qoe_diff": 0.7165999070809939,
+        "vmaf_diff": 1.92774758490566,
+        "oscillation_diff": -0.012868341772151126
+      }
+    }
+  },
+  {
+    "trace_name": "4g_medium.json",
+    "trace_type": "root",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 87.10392793117585,
+        "cbr_md_qoe": 32.79546987284808,
+        "vbr_bones_qoe": 88.22144274066555,
+        "vbr_md_qoe": 33.37304691587572,
+        "bones_qoe_diff": 1.1175148094897054,
+        "md_qoe_diff": 0.5775770430276381,
+        "vmaf_diff": 0.9119201006289472,
+        "oscillation_diff": -0.20559470886075815
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 87.27498848375924,
+        "cbr_md_qoe": 32.872131849928486,
+        "vbr_bones_qoe": 88.57412749084467,
+        "vbr_md_qoe": 33.624448385984735,
+        "bones_qoe_diff": 1.2991390070854294,
+        "md_qoe_diff": 0.7523165360562487,
+        "vmaf_diff": 0.9830888805031464,
+        "oscillation_diff": -0.31605012658227816
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 87.27498848375924,
+        "cbr_md_qoe": 32.872131849928486,
+        "vbr_bones_qoe": 88.45002693647004,
+        "vbr_md_qoe": 33.49942740778615,
+        "bones_qoe_diff": 1.175038452710794,
+        "md_qoe_diff": 0.6272955578576642,
+        "vmaf_diff": 0.9386474716981326,
+        "oscillation_diff": -0.23639098101265832
+      }
+    }
+  },
+  {
+    "trace_name": "dummy.json",
+    "trace_type": "root",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 82.58812708355227,
+        "cbr_md_qoe": 32.377701472447264,
+        "vbr_bones_qoe": 83.57030246497095,
+        "vbr_md_qoe": 32.913472733189195,
+        "bones_qoe_diff": 0.9821753814186849,
+        "md_qoe_diff": 0.5357712607419316,
+        "vmaf_diff": 0.9893967358490698,
+        "oscillation_diff": 0.00722135443038141
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 82.6434745561261,
+        "cbr_md_qoe": 32.40573982832903,
+        "vbr_bones_qoe": 83.89390188420508,
+        "vbr_md_qoe": 32.98863349324555,
+        "bones_qoe_diff": 1.2504273280789846,
+        "md_qoe_diff": 0.5828936649165186,
+        "vmaf_diff": 1.1238211635220239,
+        "oscillation_diff": -0.1266061645569625
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 82.6434745561261,
+        "cbr_md_qoe": 32.40573982832903,
+        "vbr_bones_qoe": 83.81998905222515,
+        "vbr_md_qoe": 32.92895313867269,
+        "bones_qoe_diff": 1.1765144960990597,
+        "md_qoe_diff": 0.5232133103436567,
+        "vmaf_diff": 1.103954616352226,
+        "oscillation_diff": -0.07255987974683542
+      }
+    }
+  },
+  {
+    "trace_name": "volatile.json",
+    "trace_type": "root",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 82.1188688130324,
+        "cbr_md_qoe": 32.32845645533953,
+        "vbr_bones_qoe": 83.10586096246318,
+        "vbr_md_qoe": 32.845492662566535,
+        "bones_qoe_diff": 0.9869921494307761,
+        "md_qoe_diff": 0.517036207227008,
+        "vmaf_diff": 0.9454093899371117,
+        "oscillation_diff": -0.04158275949366974
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 82.28459434802164,
+        "cbr_md_qoe": 32.3856198691928,
+        "vbr_bones_qoe": 83.66069055381735,
+        "vbr_md_qoe": 33.00198090999681,
+        "bones_qoe_diff": 1.3760962057957045,
+        "md_qoe_diff": 0.6163610408040086,
+        "vmaf_diff": 1.1551574842767138,
+        "oscillation_diff": -0.22093872151898886
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 82.28459434802164,
+        "cbr_md_qoe": 32.3856198691928,
+        "vbr_bones_qoe": 83.58338335960512,
+        "vbr_md_qoe": 32.99212544095907,
+        "bones_qoe_diff": 1.2987890115834801,
+        "md_qoe_diff": 0.6065055717662702,
+        "vmaf_diff": 1.1317691698113208,
+        "oscillation_diff": -0.16701984177215312
+      }
+    }
+  },
+  {
+    "trace_name": "wifi_high.json",
+    "trace_type": "root",
+    "strategies": {
+      "\u4e8c\u503c\u5206\u914d": {
+        "cbr_bones_qoe": 89.50388312558714,
+        "cbr_md_qoe": 33.45723930995163,
+        "vbr_bones_qoe": 90.6944068066635,
+        "vbr_md_qoe": 34.02813045014437,
+        "bones_qoe_diff": 1.1905236810763569,
+        "md_qoe_diff": 0.5708911401927352,
+        "vmaf_diff": 0.8270193899371066,
+        "oscillation_diff": -0.36350429113923965
+      },
+      "\u5e73\u65b9\u6839\u5206\u914d": {
+        "cbr_bones_qoe": 89.95019976510628,
+        "cbr_md_qoe": 33.609331178081256,
+        "vbr_bones_qoe": 91.15571967020938,
+        "vbr_md_qoe": 34.31473813325868,
+        "bones_qoe_diff": 1.2055199051031025,
+        "md_qoe_diff": 0.7054069551774234,
+        "vmaf_diff": 0.8624799937106928,
+        "oscillation_diff": -0.34303991139240475
+      },
+      "4\u6863\u5206\u914d": {
+        "cbr_bones_qoe": 89.95019976510628,
+        "cbr_md_qoe": 33.609331178081256,
+        "vbr_bones_qoe": 91.06718023095294,
+        "vbr_md_qoe": 34.18880810502761,
+        "bones_qoe_diff": 1.116980465846666,
+        "md_qoe_diff": 0.5794769269463558,
+        "vmaf_diff": 0.8198273962264153,
+        "oscillation_diff": -0.29715306962025334
+      }
+    }
+  }
+]

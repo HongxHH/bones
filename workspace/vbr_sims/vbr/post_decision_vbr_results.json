@@ -1,0 +1,56 @@
+[
+  {
+    "trace_type": "4G",
+    "trace_name": "report_bicycle_0001.json",
+    "average quality vmaf": 0.8262710377358502,
+    "average oscillation vmaf": -0.3645470126582273,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.1908180503940713
+  },
+  {
+    "trace_type": "4G",
+    "trace_name": "report_bus_0001.json",
+    "average quality vmaf": 0.8254820691823994,
+    "average oscillation vmaf": -0.40238188607594827,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.2278639552583428
+  },
+  {
+    "trace_type": "4G",
+    "trace_name": "report_bus_0002.json",
+    "average quality vmaf": 0.8262710377358502,
+    "average oscillation vmaf": -0.3645470126582273,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.1908180503940713
+  },
+  {
+    "trace_type": "3G",
+    "trace_name": "report.2010-09-13_1003CEST.json",
+    "average quality vmaf": 1.156599194968578,
+    "average oscillation vmaf": -0.04168055696202888,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.1982797519306132
+  },
+  {
+    "trace_type": "3G",
+    "trace_name": "report.2010-09-13_1046CEST.json",
+    "average quality vmaf": 1.2297902201258069,
+    "average oscillation vmaf": -0.07607320253164485,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.3058634226574384
+  },
+  {
+    "trace_type": "3G",
+    "trace_name": "report.2010-09-14_1038CEST.json",
+    "average quality vmaf": 1.2520892767295635,
+    "average oscillation vmaf": 0.01842679113923751,
+    "freeze time": 0.0,
+    "average bandwidth": 0.0,
+    "qoe": 1.2336624855903153
+  }
+]

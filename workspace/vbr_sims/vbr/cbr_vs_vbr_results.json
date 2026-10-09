@@ -1,0 +1,68 @@
+[
+  {
+    "trace_type": "4G",
+    "trace_name": "report_bicycle_0001.json",
+    "qoe_diff": 0.09269420113844262,
+    "vmaf_diff": -0.02716377987421481,
+    "oscillation_diff": -0.11985798101265821,
+    "freeze_diff": -7.275957614183426e-12,
+    "bandwidth_diff": -2.643056603774312,
+    "cbr_qoe": 96.56940511882014,
+    "vbr_qoe": 96.66209931995859
+  },
+  {
+    "trace_type": "4G",
+    "trace_name": "report_bus_0001.json",
+    "qoe_diff": -0.04536622167820781,
+    "vmaf_diff": -0.01644597484275323,
+    "oscillation_diff": 0.02892024683544281,
+    "freeze_diff": 7.275957614183426e-12,
+    "bandwidth_diff": -9.186867924528087,
+    "cbr_qoe": 96.64310640812833,
+    "vbr_qoe": 96.59774018645012
+  },
+  {
+    "trace_type": "4G",
+    "trace_name": "report_bus_0002.json",
+    "qoe_diff": 0.09269420113842841,
+    "vmaf_diff": -0.02716377987421481,
+    "oscillation_diff": -0.11985798101265821,
+    "freeze_diff": 7.275957614183426e-12,
+    "bandwidth_diff": -2.643056603774312,
+    "cbr_qoe": 96.56940511882016,
+    "vbr_qoe": 96.66209931995859
+  },
+  {
+    "trace_type": "3G",
+    "trace_name": "report.2010-09-13_1003CEST.json",
+    "qoe_diff": -1.2637785734813605,
+    "vmaf_diff": 1.388791610062924,
+    "oscillation_diff": 2.6525701835443023,
+    "freeze_diff": -2.9103830456733704e-11,
+    "bandwidth_diff": 20.385069182389998,
+    "cbr_qoe": 73.8947587779237,
+    "vbr_qoe": 72.63098020444234
+  },
+  {
+    "trace_type": "3G",
+    "trace_name": "report.2010-09-13_1046CEST.json",
+    "qoe_diff": 0.04145943119092976,
+    "vmaf_diff": 0.8871956477987482,
+    "oscillation_diff": 0.1867690126582282,
+    "freeze_diff": 1047.7578542798292,
+    "bandwidth_diff": 16.41525786163527,
+    "cbr_qoe": -139.53681788658267,
+    "vbr_qoe": -139.49535845539174
+  },
+  {
+    "trace_type": "3G",
+    "trace_name": "report.2010-09-14_1038CEST.json",
+    "qoe_diff": 0.7420945549799285,
+    "vmaf_diff": 1.1579861949685437,
+    "oscillation_diff": 0.8074249177215167,
+    "freeze_diff": -622.5379115953692,
+    "bandwidth_diff": -0.4267924528301137,
+    "cbr_qoe": -119.50421391026703,
+    "vbr_qoe": -118.7621193552871
+  }
+]
