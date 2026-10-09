@@ -56,6 +56,7 @@
 | `sr_aware_alloc_falsification.md` | SR 感知率失真码率分配证伪：TOS 426 宽 183 段×6 CRF 严格等总码率，SR 感知 oracle 相对原始 RD oracle 仅 +0.00~0.28 VMAF（新颖性为零），内容自适应 oracle 对等比特 CBR 上限仅 +0.75~1.14，平方根启发式等码率下 4/5 预算输给 CBR；旧平方根 VBR 增益来自 +16.6% 码率与打包 VMAF 虚高 | 想了解码率分配侧为何 NO-GO/旧 VBR 结论的口径问题 |
 | `custom_qoe_metrics.md` | 自定义评价指标设计：BONES QoE公式局限性分析、多维度MD-QoE指标设计 | 想了解评价指标设计 |
 | `modern_sr_probe.md` | 现代分辨率（1080p→4K x2）超分生死探针：crf34 四片段连续 VMAF/LPIPS 实测，NO-GO（VMAF 中位+1.2、LPIPS 全段恶化），延迟三档结论，转向高频先验旁路 | 想了解 4K 区间 SR 为何证伪/下一步为何转向旁路引导 |
+| `side_channel_probe.md` | 高频先验旁路信息论上界探针：真残差 D+128 CRF 阶梯 oracle，+2 VMAF 拐点在旁路 30% 主码流而非 1~2%，NO-GO；含 ffmpeg blend 自定义表达式静默失效的坑 | 想了解旁路引导为何证伪/下一步为何转向渐进式引导流 |
 
 ### 多任务增强
 

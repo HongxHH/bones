@@ -1,0 +1,30 @@
+{
+ "config": {
+  "base_kbps": 726,
+  "side": "grainextract D+128 libx264 veryfast",
+  "vmaf": "vmaf_4k_v0.6.1 n_subsample=2"
+ },
+ "clips": {
+  "0": {
+   "bic_vmaf": 74.617,
+   "crf38": {
+    "side_kbps": 489,
+    "side_pct": 67.36,
+    "vmaf": 83.721,
+    "delta": 9.104
+   },
+   "crf50": {
+    "side_kbps": 144,
+    "side_pct": 19.83,
+    "vmaf": 73.944,
+    "delta": -0.673
+   },
+   "crf62": {
+    "side_kbps": 143,
+    "side_pct": 19.7,
+    "vmaf": 73.946,
+    "delta": -0.672
+   }
+  }
+ }
+}

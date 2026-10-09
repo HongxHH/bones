@@ -1,6 +1,10 @@
 # 当前状态
 
-## 最新阶段：现代分辨率超分生死探针 NO-GO，转向高频先验旁路（2026-10-08）
+## 最新阶段：高频先验旁路信息论上界 NO-GO（2026-10-09）
+
+**旁路 oracle 探针封板 NO-GO（详见 `side_channel_probe.md`，脚本 `workspace/pacnet/side_channel/side_channel_probe.py`）**：真 4K60 BBB clip0 200 帧，主码流 1080p crf34=726kbps，旁路传真残差 D=4K−bicubic（grainextract=D+128，libx264 CRF 阶梯），客户端 F=bic+解码残差（grainmerge），4K VMAF 连续测量。结果：旁路 489kbps(67%)→ΔVMAF+9.1；278kbps(38%)→+4.6；188kbps(26%)→+0.2；144kbps(20%)→−0.7 钉死。+2 VMAF 拐点在旁路 ~220kbps ≈ 主码流 30%，而非目标 1~2%（7~15kbps）。这是信息论上界——学习式先验不可能比直接传真残差更省码率——所以原假设"1~2% 带宽旁路把救糊区间拉到 +2"不成立。学习式 token 最多省 2~5 倍，仍需 6~15% 旁路，等价于再加半条码流，不构成便宜旁路卖点。工程坑：本机 ffmpeg `blend=all_expr` 自定义表达式静默失效（连 X 直通都 corr≈0），必须用内置 grainextract/grainmerge；numpy 逐帧 pipe 第二 CRF 必现死锁。下一步：转向渐进式/可伸缩引导流（借组里块状渐进 SR 积累），卖点从"旁路便宜"改为"同一份高频 token 按预算渐进传输"，绕开 1~2% 装不下残差的死结。
+
+## 上一阶段：现代分辨率超分生死探针 NO-GO，转向高频先验旁路（2026-10-08）
 
 **1080p→4K x2 探针封板 NO-GO（详见 `modern_sr_probe.md`，脚本 `workspace/pacnet/modern_sr/`）**：真 4K60 BBB，LR 为 1080p crf34（726kbps，理论最该有增益的压缩档）×4 片段（各 20s），bicubic vs IMDN low/med/high（DIV2K 零样本 x2）连续全片 4K VMAF + LPIPS。med 最佳 ΔVMAF 仅 +0.49/+1.12/+1.33/+2.71（中位约 +1.2），唯一明显增益的 c3 同时 LPIPS 恶化 54%（+0.070），三档 LPIPS 在全部片段全部恶化；med 优于 low、high 反降，加大模型无收益。结论：纯客户端后处理超分在 426 宽 x4 救糊与 1080p→4K x2 两区间均不成立，根因同为输入码流不含被重建的信息。延迟结论：low 可 60fps、med 仅 fp16 可 30fps、high 不可实时。crf18/26 不必补跑。下一步：传统主码流之外加 1~2% 带宽的学习式高频先验旁路、端侧轻量网条件于该旁路增强（文献坐标与 5 个候选选题见飞书 MJpIdy0d4oaFDixEX8hcq2OXnne，2026-10-08）。
 
