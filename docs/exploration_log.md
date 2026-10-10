@@ -140,6 +140,14 @@ reward = vmaf_enh_avg(全局平均,稳定) + gamma_p - λ_i(内容感知) * enha
 
 **6轨迹中4胜2负**。2个略输轨迹（4G_car、hd_fixed）可能与恒定带宽预测不准确有关。
 
+### 8.3 档案复核注记（2026-10-10，档案 #3）
+
+- 前瞻数字是**未来内容 oracle 上界**：base_known 直接取未来段逐段真实质量表（`control/bones_ca.py:384-388`），因果落地依赖增益预测器（#4 已证时序外推失败）；QoE 为仿真器 ms/10 口径（见 known_issues）。
+- 归档单轨迹 +2.55（80.19）是 dl_time 修复前陈旧产物，当前代码为 +0.93（json 已重生成）；多轨迹 4 胜 2 负与三/四方案 json 经当前代码重跑字节复现。
+- "增量传输"保留了 BONES 整段可行性闸门（`control/bones_incremental.py:174`），救回不可行段的机制从不触发，且全程无额外字节建模（与 side_channel 真残差旁路不是一类东西）；联合方案的背包 DP 存在 10ms 向上取整网格失真（`control/bones_combined.py:120`）。
+- 三/四方案轨迹为手工 30s 阶梯合成；mt_comparison_10traces.json 消费 #1 已判编造的数据，不可引用。
+- 完整复核见 `workspace/vbr_sims/lookahead/README.md`；可复活部分并入帧级指标体系，不单独重开。
+
 ---
 
 ## 阶段9：多任务增强（Multi-Task Enhancement）

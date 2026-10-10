@@ -33,43 +33,42 @@
     }
   },
   "ca_n2": {
-    "playback time": 636835.8547204401,
-    "average quality vmaf": 83.58327816981132,
-    "average oscillation vmaf": 3.3108198164556972,
-    "average quality ssim": 0.972395320754717,
-    "average oscillation ssim": 0.010007259493670885,
-    "freeze time": 136.75744417542228,
-    "freeze event": 2,
+    "playback time": 636699.0972762643,
+    "average quality vmaf": 82.91760010062893,
+    "average oscillation vmaf": 4.348556816455695,
+    "average quality ssim": 0.9733126981132078,
+    "average oscillation ssim": 0.010262335443037984,
+    "freeze time": 3.637978807091713e-11,
+    "freeze event": 1,
     "average bandwidth": [
-      1204.6722893081762
+      1228.9750566037735
     ],
-    "qoe": 80.18644738217613,
+    "qoe": 78.5690432841732,
     "enhance_level_dist": {
-      "0": 16,
-      "1": 61,
-      "2": 79,
+      "0": 11,
+      "1": 104,
+      "2": 42,
       "3": 1,
-      "4": 2
+      "4": 1
     }
   },
   "ca_n3": {
-    "playback time": 636835.8547204401,
-    "average quality vmaf": 83.58327816981132,
-    "average oscillation vmaf": 3.3108198164556972,
-    "average quality ssim": 0.972395320754717,
-    "average oscillation ssim": 0.010007259493670885,
-    "freeze time": 136.75744417542228,
-    "freeze event": 2,
+    "playback time": 636699.0972762645,
+    "average quality vmaf": 82.45136679245283,
+    "average oscillation vmaf": 3.809165664556964,
+    "average quality ssim": 0.9728940566037736,
+    "average oscillation ssim": 0.009851993670886084,
+    "freeze time": 0,
+    "freeze event": 0,
     "average bandwidth": [
-      1204.6722893081762
+      1189.8305911949685
     ],
-    "qoe": 80.18644738217613,
+    "qoe": 78.64220112789587,
     "enhance_level_dist": {
-      "0": 16,
-      "1": 61,
-      "2": 79,
-      "3": 1,
-      "4": 2
+      "0": 6,
+      "1": 110,
+      "2": 42,
+      "4": 1
     }
   }
 }

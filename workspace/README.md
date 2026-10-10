@@ -25,7 +25,7 @@
 | 目录 | 做的什么 | 状态 | 结论 |
 |---|---|---|---|
 | `vbr_sims/vbr/` | 服务端 VBR、CBR、平方根、四阶梯、连续/阶梯/sigmoid 码率 | 已封板 | 历史"+1.7 QoE"是抽样帧打包虚高+多 16.6% 码率撑出 |
-| `vbr_sims/lookahead/` | 多段前瞻 MPC、四方案/三方案/10 轨迹对比 | 数据留存 | 修 bytes/Kb bug 后 6 轨迹 4 胜 2 负 |
+| `vbr_sims/lookahead/` | 多段前瞻 MPC、增量传输+渐进增强、帧级DP联合、MT 对比（MT 两脚本属 #1 错放、数据作废） | 已封板（档案 #3） | 前瞻 N=2 六真实轨迹 4 胜 2 负但为未来内容 oracle 上界；增量被整段闸门架空、联合受 10ms 网格失真；单轨迹 +2.55 陈旧数字作废（当前 +0.93）；详见目录 README |
 | `vbr_sims/frame_level/` | 帧级 DP 调度、逐帧 VMAF 测量 | 已封板 | 3G +0.83，预算充足时与固定档位等价 |
 | `vbr_sims/md_qoe/` | 自定义 MD-QoE 指标 | 设计稿 | 未落地 |
 | `vbr_sims/multitask_usm/` | 多任务增强管线、USM 锐化、NAFNet 去模糊 | 已封板 | 1080p 下 USM 无增益；hd_fs 带宽下增强不触发 |
