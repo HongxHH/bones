@@ -152,6 +152,7 @@ ModuleNotFoundError。复现方式：cwd=`workspace/`，设
   ③ 选帧改因果预测排序（I3/J4）；④ 成本连续毫秒记账、决策与记账同一套数（J1）。
   该机制与 #2 帧级 DP 是同一科学问题的两个壳，复活时合并为一条线，不另立。
   I1/I2/I3/J1/J2/J10 的逐行改法、顺序与验收统一见 `docs/frame_scheduling_fix_plan.md`（M0-M5，2026-10-10 现地核码），以该清单为准。
+- **M1/M2 已完成（2026-10-10）**：`bones_combined.py` 的 DP 已切到 `simulation/gpu_grid.py` 0.1ms 网格（J1：删除 +1 向上取整与 5000 步硬帽），缓冲推入改用决策网格成本之和并带 ≤6ms 残差断言（J10）；`bones_incremental.py` 帧数计算与推入同步网格同源。three_way/four_way 四轨迹冒烟通过。I1/J2 闸门与 I2/J3 的 seg_time/2 赠送仍在（M3/M4 处理），I3/J4 oracle 选帧仍在（M5 处理）。
 - "增量传输"若未来指真实 SVC/残差字节，属于 #15 side_channel 范畴（已 NO-GO），
   本目录的同名仿真器不传递任何额外字节，禁止混为一谈（I8）。
 

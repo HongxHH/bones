@@ -1,8 +1,17 @@
 # 当前状态
 
-## 最新阶段：全工作区复盘建档完成，帧级调度复活簇修改清单待审（2026-10-10）
+## 最新阶段：帧级调度复活簇 M0/M1/M2 完成（2026-10-10）
 
-15 条工作线档案 README + workspace 总索引已全部提交（d585f49→1820d39）。复盘确认的同源记账缺陷汇总为统一修改清单 `docs/frame_scheduling_fix_plan.md`（**只成文、未改代码，待审阅**）：M0 仿真器卡顿 ms/10 与播放器秒/10 的 1000 倍口径差（C1b，四处 report）、M1 DP 10ms 网格向下/向上取整（B1/J1）、M2 决策与缓冲记账两套成本（J10）、M3/M4 整段可行性闸门使部分增强从不触发 + seg_time/2 时间赠送（I1/J2/I2）、M5 选帧全知 oracle 需因果化（I3）。顺序 M0→M1/M2→M3/M4→M5；调度逻辑修复可用现有逐帧张量验证，对外质量数字须等帧级指标 A 阶段连续 rawvideo 重测。
+统一修改清单见 `docs/frame_scheduling_fix_plan.md`。M0（卡顿单位秒，commit 3870f76）、M1/M2（本轮）已落地：
+- **M1**：新建 `simulation/gpu_grid.py`（STEP_MS=0.1、`to_steps` 四舍五入、向量化帧级背包 DP、成本断言、记账残差）；三处 DP（`control/bones_frame_level.py`、`control/bones_combined.py`、`workspace/vbr_sims/frame_level/eval_frame_level_scheduling.py`）统一改用 0.1ms 网格与向量化求解；删除 `bones_combined.py` 原 5000 步硬帽与 +1 向上取整。
+- **M2**：三处缓冲推入改用与决策同一张网格成本表，逐段断言 pushed==Σ决策成本、连续毫秒残差 ≤6ms（frame_level 含退化路径）。
+- 验收：`tests/test_gpu_grid.py` 5 项 + `tests/test_freeze_unit.py` 全部 PASSED；frame_level/three_way/four_way 三个仿真器在 4 条合成轨迹上端到端冒烟通过（M2 断言曾抓出 seg158 退化路径 2.95ms 记账不一致，已修）。
+- 离线 eval 0.1ms 收敛口径（158 段，2026-10-10）：DP vs 固定增益 240p/2000 **+2.83**、360p/2000 +0.69、360p/4000 +3.41、480p/2000 +1.40、480p/4000 +0.40；网格收敛性验证 step 0.5/0.2/0.1ms 增益 2.84/2.83/2.83 已收敛，10ms floor 旧口径 +3.90 为取整虚高。结论方向不变：帧级 DP 仅在 GPU 预算紧（2000ms 档）有 1.4~2.8 分正增益，且仍为全知 oracle（B6，M5 处理）。
+- 未做：M3/M4（删整段闸门、删 seg_time/2 赠送、建帧级跨段 EDF 队列）、M5（选帧因果化、六轨迹回归）。对外质量数字仍须等帧级指标 A 阶段连续 rawvideo 重测。
+
+## 上一阶段：全工作区复盘建档完成，帧级调度复活簇修改清单成文（2026-10-10）
+
+15 条工作线档案 README + workspace 总索引已全部提交（d585f49→1820d39）。复盘确认的同源记账缺陷汇总为统一修改清单 `docs/frame_scheduling_fix_plan.md`：M0 仿真器卡顿 ms/10 与播放器秒/10 的 1000 倍口径差（C1b，四处 report）、M1 DP 10ms 网格向下/向上取整（B1/J1）、M2 决策与缓冲记账两套成本（J10）、M3/M4 整段可行性闸门使部分增强从不触发 + seg_time/2 时间赠送（I1/J2/I2）、M5 选帧全知 oracle 需因果化（I3）。顺序 M0→M1/M2→M3/M4→M5；调度逻辑修复可用现有逐帧张量验证，对外质量数字须等帧级指标 A 阶段连续 rawvideo 重测。
 
 ## 上一阶段：高频先验旁路信息论上界 NO-GO（2026-10-09）
 

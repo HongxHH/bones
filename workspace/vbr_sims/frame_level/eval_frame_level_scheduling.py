@@ -171,49 +171,62 @@ def frame_lookahead_dp(vmafs, gpu_budget_ms, fps_table, res_idx, content_feature
         decisions, total_vmaf, gpu_used
     """
     num_frames = 120
-    # GPU时间离散化到10ms粒度，减少状态数
-    step_ms = 10
-    budget_steps = int(gpu_budget_ms / step_ms) + 1
+    # GPU时间离散化到0.1ms粒度（M1：原10ms向下取整使最便宜增强档零成本）
+    step_ms = 0.1
+    budget_steps = int(round(gpu_budget_ms / step_ms)) + 1
 
-    # 预计算每帧每个级别的GPU时间（步数）和VMAF
-    frame_gpu_steps = np.zeros((num_frames, 4), dtype=int)
+    # 预计算每帧每个级别的GPU时间（步数，四舍五入）和VMAF
+    frame_gpu_steps = np.zeros((num_frames, 4), dtype=np.int64)
     frame_vmaf = np.zeros((num_frames, 4))
     for f in range(num_frames):
         for level in range(4):
             frame_vmaf[f][level] = vmafs[level][f]
             gpu_ms = compute_gpu_time_ms(fps_table, res_idx, level, 1)
-            frame_gpu_steps[f][level] = int(gpu_ms / step_ms)
+            frame_gpu_steps[f][level] = int(round(gpu_ms / step_ms))
 
-    # DP
-    # dp[f][c] = 前f帧用c步GPU时间的最大总VMAF
+    # 断言：增强级别（1-3）不允许零成本，且最小正成本 >= 50 步（5ms）
+    positive_steps = frame_gpu_steps[:, 1:]
+    if np.any(positive_steps <= 0):
+        raise AssertionError("存在零成本增强动作，检查延迟表/网格步长")
+    if positive_steps.min() < 50:
+        raise AssertionError(
+            f"最小正成本动作仅 {positive_steps.min()} 步 < 50，检查延迟表")
+
+    # 向量化DP：dp[f][c] = 前f帧用c步GPU时间的最大总VMAF
     dp = np.full((num_frames + 1, budget_steps), -np.inf)
     dp[0][0] = 0
-    # 记录决策
-    choice = np.zeros((num_frames + 1, budget_steps), dtype=int)
+    choice = np.zeros((num_frames + 1, budget_steps), dtype=np.int64)
 
     for f in range(num_frames):
-        for c in range(budget_steps):
-            if dp[f][c] == -np.inf:
-                continue
-            for level in range(4):
-                new_c = c + frame_gpu_steps[f][level]
-                if new_c < budget_steps:
-                    new_vmaf = dp[f][c] + frame_vmaf[f][level]
-                    if new_vmaf > dp[f + 1][new_c]:
-                        dp[f + 1][new_c] = new_vmaf
-                        choice[f + 1][new_c] = level
+        prev = dp[f]
+        best = np.full(budget_steps, -np.inf)
+        ch = np.zeros(budget_steps, dtype=np.int64)
+        for level in range(4):
+            w = int(frame_gpu_steps[f][level])
+            cand = np.full(budget_steps, -np.inf)
+            if w == 0:
+                cand = prev + frame_vmaf[f][level]
+            elif w < budget_steps:
+                cand[w:] = prev[:budget_steps - w] + frame_vmaf[f][level]
+            better = cand > best
+            best[better] = cand[better]
+            ch[better] = level
+        dp[f + 1] = best
+        choice[f + 1] = ch
 
     # 找最优终点
-    best_c = np.argmax(dp[num_frames])
+    best_c = int(np.argmax(dp[num_frames]))
     total_vmaf = dp[num_frames][best_c]
 
     # 回溯决策
-    decisions = np.zeros(num_frames, dtype=int)
+    decisions = np.zeros(num_frames, dtype=np.int64)
     c = best_c
     for f in range(num_frames - 1, -1, -1):
-        level = choice[f + 1][c]
+        level = int(choice[f + 1][c])
         decisions[f] = level
         c -= frame_gpu_steps[f][level]
+    if c != 0:
+        raise AssertionError(f"DP 回溯成本不守恒: 残余 {c} 步")
 
     gpu_used = best_c * step_ms
     return decisions, total_vmaf, gpu_used

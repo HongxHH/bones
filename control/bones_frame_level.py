@@ -12,6 +12,9 @@ import numpy as np
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from control.bones import BONES
+from simulation.gpu_grid import (STEP_MS, to_steps, budget_to_steps,
+                                 assert_cost_table, solve_frame_dp,
+                                 grid_residual_ms)
 
 
 class BONESFrameLevel(BONES):
@@ -48,8 +51,8 @@ class BONESFrameLevel(BONES):
         # 帧级决策存储：segment_index -> np.array(120,) of enhancement levels
         self.frame_decisions = {}
 
-        # GPU时间步长（用于DP离散化）
-        self.gpu_step_ms = 10
+        # GPU时间步长（M1：统一 0.1ms 网格，原 10ms 向下取整产生免费动作）
+        self.gpu_step_ms = STEP_MS
 
         # 段间平滑性约束
         self.prev_seg_avg_vmaf = None  # 上一段平均VMAF
@@ -111,77 +114,69 @@ class BONESFrameLevel(BONES):
             # 不支持的分辨率（720p/1080p），退化为段级固定
             decisions = np.full(120, max_level, dtype=int)
             total_vmaf = None
-            gpu_used = self._compute_frame_gpu_time_ms(res_idx, max_level, 120)
+            # M2：退化路径同样走网格成本，保证推送==决策成本之和
+            gpu_used = (to_steps(self._compute_frame_gpu_time_ms(res_idx, max_level, 1))
+                        * 120 * STEP_MS)
             return decisions, total_vmaf, gpu_used
 
         vmafs = self._get_frame_vmafs(seg_idx, res)
         if vmafs is None:
             decisions = np.full(120, max_level, dtype=int)
-            gpu_used = self._compute_frame_gpu_time_ms(res_idx, max_level, 120)
+            gpu_used = (to_steps(self._compute_frame_gpu_time_ms(res_idx, max_level, 1))
+                        * 120 * STEP_MS)
             return decisions, None, gpu_used
 
         num_frames = 120
-        budget_steps = int(gpu_budget_ms / self.gpu_step_ms) + 1
+        budget_steps = budget_to_steps(gpu_budget_ms)
 
-        # 预计算每帧每个级别的GPU时间（步数）和VMAF（含平滑性惩罚）
-        frame_gpu_steps = np.zeros((num_frames, 4), dtype=int)
+        # 预计算每帧每个级别的GPU时间（0.1ms 步数，四舍五入）和VMAF（含平滑性惩罚）
+        frame_gpu_steps = np.zeros((num_frames, 4), dtype=np.int64)
         frame_vmaf_raw = np.zeros((num_frames, 4))  # 原始VMAF
         frame_vmaf_obj = np.zeros((num_frames, 4))  # 目标函数VMAF（含惩罚）
 
         for f in range(num_frames):
             for level in range(4):
                 if level > max_level:
+                    # 不允许的级别：价值 -inf，成本给大数（向量 DP 按 max_level 截断，双保险）
                     frame_vmaf_raw[f][level] = -np.inf
                     frame_vmaf_obj[f][level] = -np.inf
-                    frame_gpu_steps[f][level] = 999999
+                    frame_gpu_steps[f][level] = 10 ** 9
                     continue
                 raw_vmaf = vmafs[level][f]
                 frame_vmaf_raw[f][level] = raw_vmaf
                 gpu_ms = self._compute_frame_gpu_time_ms(res_idx, level, 1)
-                frame_gpu_steps[f][level] = int(gpu_ms / self.gpu_step_ms)
+                frame_gpu_steps[f][level] = to_steps(gpu_ms)
 
                 # 平滑性惩罚：使段平均VMAF接近上一段
                 # 惩罚 = smooth_weight * (vmaf - prev_vmaf) / num_frames
-                # 这样总惩罚 = smooth_weight * |seg_avg - prev_vmaf|
+                # 这样总惩罚 = smooth_weight * (seg_avg - prev_vmaf)（线性有符号，B2 待 M3 后复核）
                 if prev_seg_vmaf is not None:
                     penalty = self.smooth_weight * (raw_vmaf - prev_seg_vmaf) / num_frames
                     frame_vmaf_obj[f][level] = raw_vmaf - penalty
                 else:
                     frame_vmaf_obj[f][level] = raw_vmaf
 
-        # DP（用含惩罚的VMAF做决策）
-        dp = np.full((num_frames + 1, budget_steps), -np.inf)
-        dp[0][0] = 0
-        choice = np.zeros((num_frames + 1, budget_steps), dtype=int)
+        # M1 断言：增强级别不允许零成本动作
+        allowed = frame_gpu_steps[:, :max_level + 1].copy()
+        assert_cost_table(allowed)
 
-        for f in range(num_frames):
-            for c in range(budget_steps):
-                if dp[f][c] == -np.inf:
-                    continue
-                for level in range(4):
-                    if level > max_level:
-                        continue
-                    new_c = c + frame_gpu_steps[f][level]
-                    if new_c < budget_steps:
-                        new_vmaf = dp[f][c] + frame_vmaf_obj[f][level]
-                        if new_vmaf > dp[f + 1][new_c]:
-                            dp[f + 1][new_c] = new_vmaf
-                            choice[f + 1][new_c] = level
+        # 向量化DP（用含惩罚的VMAF做决策）
+        decisions, best_c, _ = solve_frame_dp(
+            frame_gpu_steps, frame_vmaf_obj, budget_steps, max_level=max_level)
 
-        # 找最优终点
-        best_c = np.argmax(dp[num_frames])
-
-        # 回溯（用原始VMAF计算总VMAF）
-        decisions = np.zeros(num_frames, dtype=int)
-        c = best_c
+        # 回溯后用原始VMAF计算总VMAF
         total_vmaf = 0.0
-        for f in range(num_frames - 1, -1, -1):
-            level = choice[f + 1][c]
-            decisions[f] = level
-            total_vmaf += frame_vmaf_raw[f][level]
-            c -= frame_gpu_steps[f][level]
+        for f in range(num_frames):
+            total_vmaf += frame_vmaf_raw[f][decisions[f]]
 
         gpu_used = best_c * self.gpu_step_ms
+        # M2：决策网格成本与连续毫秒成本对账（每帧 <=0.05ms，本段 <=6ms）
+        continuous_ms = sum(
+            self._compute_frame_gpu_time_ms(res_idx, int(decisions[f]), 1)
+            for f in range(num_frames))
+        residual = grid_residual_ms(continuous_ms, best_c)
+        if abs(residual) > 6.0 + 1e-6:
+            raise AssertionError(f"帧级DP网格记账残差超界: {residual:.3f}ms")
         return decisions, total_vmaf, gpu_used
 
     def control_download_finish(self):
@@ -226,6 +221,15 @@ class BONESFrameLevel(BONES):
                 prev_seg_vmaf=self.prev_seg_avg_vmaf)
 
             self.frame_decisions[seg_idx] = decisions
+
+            # M2 断言：推入增强缓冲的时间必须等于决策帧网格成本之和（决策与记账同源）
+            pushed_steps = sum(
+                to_steps(self._compute_frame_gpu_time_ms(action_down, int(lv), 1))
+                for lv in decisions)
+            if abs(pushed_steps * self.gpu_step_ms - gpu_used) > 1e-9:
+                raise AssertionError(
+                    f"seg {seg_idx} 推送时间 {gpu_used:.2f}ms 与决策成本之和 "
+                    f"{pushed_steps * self.gpu_step_ms:.2f}ms 不一致")
 
             # 更新上一段平均VMAF（用于下一段的平滑性约束）
             if total_vmaf is not None:

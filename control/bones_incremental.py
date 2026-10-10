@@ -19,6 +19,7 @@ import numpy as np
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from control.bones import BONES
+from simulation.gpu_grid import STEP_MS, to_steps, grid_residual_ms
 
 
 class BONESIncremental(BONES):
@@ -105,7 +106,10 @@ class BONESIncremental(BONES):
         # 加上播放过程中继续增强的时间（保守估计：播放前半段时间）
         available_time_ms = buffer_level_ms + self.seg_time / 2  # 播放过程中还能增强一半时间
 
-        enhanced_count = min(120, int(available_time_ms / frame_enhance_time_ms))
+        # M2：帧数与推入记账共用 0.1ms 网格（消灭决策/记账两套数）
+        frame_cost_steps = to_steps(frame_enhance_time_ms)
+        available_steps = to_steps(available_time_ms)
+        enhanced_count = min(120, available_steps // frame_cost_steps)
         return enhanced_count, max_level
 
     def _select_frames_to_enhance(self, seg_idx, res, max_level, enhanced_count):
@@ -199,10 +203,17 @@ class BONESIncremental(BONES):
                     self.total_frames += 120
 
             # 用实际增强时间推入增强缓冲
-            # 实际增强时间 = enhanced_count帧的增强时间（可能小于段增强时间）
+            # M2：实际增强时间 = enhanced_count 帧的网格成本之和（与帧数决策同源）
             if enhanced_count > 0:
                 seg_enhance_time_ms = self.enhance_time[action_down][action_enh]
-                actual_enhance_time = seg_enhance_time_ms * enhanced_count / 120.0
+                frame_cost_steps = to_steps(seg_enhance_time_ms / 120.0)
+                actual_enhance_time = enhanced_count * frame_cost_steps * STEP_MS
+                # 网格与连续毫秒成本对账（本段残差理论上界 6ms）
+                continuous_ms = seg_enhance_time_ms * enhanced_count / 120.0
+                residual = grid_residual_ms(continuous_ms, enhanced_count * frame_cost_steps)
+                if abs(residual) > 6.0 + 1e-6:
+                    raise AssertionError(
+                        f"seg {seg_idx} 增量方案网格记账残差超界: {residual:.3f}ms")
                 self.buffer_enhance.push(
                     segment_index=seg_idx, decision=action_enh,
                     segment_time=actual_enhance_time)

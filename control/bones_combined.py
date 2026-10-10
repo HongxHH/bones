@@ -18,6 +18,9 @@ import numpy as np
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from control.bones import BONES
+from simulation.gpu_grid import (STEP_MS, to_steps, budget_to_steps,
+                                 assert_cost_table, solve_frame_dp,
+                                 grid_residual_ms)
 
 
 class BONESCombined(BONES):
@@ -103,10 +106,10 @@ class BONESCombined(BONES):
             return decisions, enhanced_mask, np.mean(vmafs[max_level]) if vmafs else None
 
         num_frames = 120
-        gpu_step_ms = 10  # DP时间步长
+        gpu_step_ms = STEP_MS  # M1：统一 0.1ms 网格（原 10ms 向上取整使浅档超额计费）
 
-        # 计算每帧每个级别的增强时间（步）和VMAF
-        frame_gpu_steps = np.zeros((num_frames, 4), dtype=int)
+        # 计算每帧每个级别的增强时间（0.1ms 步数，四舍五入）和VMAF
+        frame_gpu_steps = np.zeros((num_frames, 4), dtype=np.int64)
         frame_vmaf = np.zeros((num_frames, 4))
         for f in range(num_frames):
             for level in range(4):
@@ -117,43 +120,24 @@ class BONESCombined(BONES):
                     method_idx = level
                     if method_idx < self.enhance_time.shape[1]:
                         seg_time = self.enhance_time[res_idx][method_idx]
-                        frame_gpu_steps[f][level] = int(seg_time / 120.0 / gpu_step_ms) + 1
+                        frame_gpu_steps[f][level] = to_steps(seg_time / 120.0)
                     else:
-                        frame_gpu_steps[f][level] = 9999
+                        frame_gpu_steps[f][level] = 10 ** 9
+
+        # M1 断言：允许级别内不允许零成本动作
+        assert_cost_table(frame_gpu_steps[:, :max_level + 1])
 
         # 步骤1：帧级DP - 预算=段增强时间（固定），决定每帧最优级别
         total_budget_ms = self.enhance_time[res_idx][max_level] if max_level > 0 else 0
-        budget_steps = int(total_budget_ms / gpu_step_ms) + 1
-        budget_steps = min(budget_steps, 5000)
+        budget_steps = budget_to_steps(total_budget_ms)  # M1：删除原 5000 步硬帽
 
-        dp = np.full((num_frames + 1, budget_steps), -np.inf)
-        dp[0][0] = 0
-        choice = np.zeros((num_frames + 1, budget_steps), dtype=int)
+        ideal_decisions, best_c, _ = solve_frame_dp(
+            frame_gpu_steps, frame_vmaf, budget_steps, max_level=max_level)
 
-        for f in range(num_frames):
-            for c in range(budget_steps):
-                if dp[f][c] == -np.inf:
-                    continue
-                for level in range(max_level + 1):
-                    new_c = c + frame_gpu_steps[f][level]
-                    if new_c < budget_steps:
-                        new_vmaf = dp[f][c] + frame_vmaf[f][level]
-                        if new_vmaf > dp[f + 1][new_c]:
-                            dp[f + 1][new_c] = new_vmaf
-                            choice[f + 1][new_c] = level
-
-        # 回溯得到理想决策
-        best_c = np.argmax(dp[num_frames])
-        ideal_decisions = np.zeros(num_frames, dtype=int)
-        c = best_c
-        for f in range(num_frames - 1, -1, -1):
-            level = choice[f + 1][c]
-            ideal_decisions[f] = level
-            c -= frame_gpu_steps[f][level]
-
-        # 步骤2：计算每帧的理想增益和增强时间（ms）
+        # 步骤2：计算每帧的理想增益和增强时间（ms，与决策同一张网格成本表）
         ideal_gains = np.array([vmafs[ideal_decisions[f]][f] - vmafs[0][f] for f in range(num_frames)])
-        ideal_times_ms = np.array([frame_gpu_steps[f][ideal_decisions[f]] * gpu_step_ms for f in range(num_frames)])
+        ideal_times_ms = np.array([frame_gpu_steps[f][ideal_decisions[f]] * gpu_step_ms
+                                   for f in range(num_frames)])
 
         # 步骤3：增量传输 - 按增益排序，在可用时间内选择
         valid_mask = (ideal_gains > 0) & (ideal_times_ms > 0)
@@ -232,17 +216,25 @@ class BONESCombined(BONES):
             if seg_vmaf is not None:
                 self.segment_actual_vmaf[seg_idx] = seg_vmaf
 
-            # 计算实际增强时间（已增强帧的时间之和）
-            actual_enhance_time = 0.0
+            # 计算实际增强时间：M2 起与决策共用同一张 0.1ms 网格成本表
+            grid_steps = 0
+            continuous_ms = 0.0
             res = self.bitrate_to_res.get(action_down, None)
             if res is not None and res in self.res_to_idx:
                 for f in range(120):
                     if enhanced_mask[f]:
-                        level = decisions[f]
+                        level = int(decisions[f])
                         if level > 0:
                             method_idx = level
                             if method_idx < self.enhance_time.shape[1]:
-                                actual_enhance_time += self.enhance_time[action_down][method_idx] / 120.0
+                                frame_ms = self.enhance_time[action_down][method_idx] / 120.0
+                                grid_steps += to_steps(frame_ms)
+                                continuous_ms += frame_ms
+            actual_enhance_time = grid_steps * STEP_MS
+            # 网格与连续毫秒成本对账（本段残差理论上界 6ms）
+            residual = grid_residual_ms(continuous_ms, grid_steps)
+            if abs(residual) > 6.0 + 1e-6:
+                raise AssertionError(f"seg {seg_idx} 联合方案网格记账残差超界: {residual:.3f}ms")
 
             # 推入增强缓冲
             if actual_enhance_time > 0:
