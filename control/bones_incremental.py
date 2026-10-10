@@ -258,7 +258,8 @@ class BONESIncremental(BONES):
 
         quality_vmaf_avg = np.mean(quality_vmaf)
         oscillation_vmaf = oscillation_vmaf / (num_seg - 1)
-        avg_freeze = self.buffer_download.idle_time / num_seg
+        # idle_time 内部为毫秒，QoE 卡顿项与播放器同口径用秒（1 秒卡顿惩罚 0.1）
+        avg_freeze = self.buffer_download.idle_time / 1000.0 / num_seg
         avg_bandwidth = total_bandwidth / num_seg / self.seg_time
         qoe = quality_vmaf_avg - oscillation_vmaf - avg_freeze / 10
 
@@ -272,6 +273,7 @@ class BONESIncremental(BONES):
             "average quality vmaf": quality_vmaf_avg,
             "average oscillation vmaf": oscillation_vmaf,
             "freeze time": self.buffer_download.idle_time,
+            "freeze time sec": self.buffer_download.idle_time / 1000.0,
             "freeze event": self.buffer_download.idle_event,
             "average bandwidth": avg_bandwidth,
             "qoe": qoe,

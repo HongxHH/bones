@@ -32,7 +32,7 @@ class BufferModel():
         self.time_spent = 0  # 当前分段已消费的时间（毫秒），用于部分消费场景
 
         # 性能统计记录
-        self.idle_time = 0  # 累计空转时间（毫秒），当缓冲区为空但需要消费时累加
+        self.idle_time = 0  # 累计空转时间（毫秒），当缓冲区为空但需要消费时累加；QoE 边界必须 /1000 换算为秒（与播放器 analyzer 同口径）
         self.idle_event = 0  # 空转事件计数，记录缓冲区耗尽的次数
 
     def consume(self, time):

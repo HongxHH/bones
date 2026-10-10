@@ -214,10 +214,11 @@ class Simulator():
         quality_ssim = np.mean(quality_ssim)  # 平均SSIM质量
         oscillation_vmaf = oscillation_vmaf / (num_seg - 1)  # 平均VMAF振荡
         oscillation_ssim = oscillation_ssim / (num_seg - 1)  # 平均SSIM振荡
-        avg_freeze = self.buffer_download.idle_time / self.seg_size.shape[0]  # 平均卡顿时长
+        # 平均卡顿时长：idle_time 内部为毫秒，QoE 与播放器同口径用秒（analyzer.py:801,806）
+        avg_freeze = self.buffer_download.idle_time / 1000.0 / self.seg_size.shape[0]  # 平均卡顿时长（秒/段）
         avg_bandwidth = total_bandwidth / num_seg / self.seg_time  # 平均带宽
 
-        # 计算QoE（Quality of Experience）
+        # 计算QoE（Quality of Experience），卡顿项单位为秒（1 秒卡顿惩罚 0.1）
         qoe = quality_vmaf - oscillation_vmaf - avg_freeze / 10  # QoE公式
 
         # 构建报告字典
@@ -227,7 +228,8 @@ class Simulator():
             "average oscillation vmaf": oscillation_vmaf,  # 平均VMAF振荡
             "average quality ssim": quality_ssim,  # 平均SSIM质量
             "average oscillation ssim": oscillation_ssim,  # 平均SSIM振荡
-            "freeze time": self.buffer_download.idle_time,  # 卡顿总时间
+            "freeze time": self.buffer_download.idle_time,  # 卡顿总时间（毫秒，内部口径）
+            "freeze time sec": self.buffer_download.idle_time / 1000.0,  # 卡顿总时间（秒，QoE 口径）
             "freeze event": self.buffer_download.idle_event,  # 卡顿事件数
             "average bandwidth": avg_bandwidth,  # 平均带宽
             "qoe": qoe,  # QoE指标

@@ -114,6 +114,9 @@ $py = "E:\dev\env\miniconda3\envs\SR\python.exe"
 ### E6（工程，未污染结论）
 `vbr_encode.py:160-167 measure_vmaf` 失真用单段、参考用整片且无 `-ss` 对齐；1080p 下该命令 120s 超时全部失败（`vbr_test_output.txt` 可见），未产出有效数据。早期小实验（`vbr_experiment_output{,_v2,_v3}.txt`，低超支口径）VBR 为 90.89/91.17/91.65 vs CBR 91.38，增益在 −0.5~+0.3 之间，与 E0/E1 的等码率结论方向一致。
 
+### E7（口径，2026-10-10 M0 复核补记）
+本目录 `sqrt_vbr_full_traces.py:112-118`、`4stair_vbr_full_traces.py:98-101`、`post_decision_vbr.py:124-130` 自带的 QoE 汇总把毫秒 `freeze_time` 直接 /段数/10（同档案 #6 C1b，1 秒卡顿罚 100），仿真器四处 report 已于 M0 修为秒口径（见 `docs/frame_scheduling_fix_plan.md`）。本线已封板、脚本保持原样不改；其 QoE 绝对值为修正前口径，CBR/VBR 两臂同口径差值比较不受影响。
+
 ## 7. 影响面：哪些历史结论作废
 
 | 历史结论（docs/server_side_vbr_coding.md） | 复核判决 |
