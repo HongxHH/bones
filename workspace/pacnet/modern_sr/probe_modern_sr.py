@@ -6,8 +6,10 @@
   参考：原生 3840x2160@60fps BBB（bbb_2160p_60fps.mp4）。
   退化：4K bicubic 下采样到 1920x1080，libx264 CRF 18/22/26/30/34（gen_1080p_ladder.ps1）。
   复原：bicubic x2 / IMDN low(nf=6,m=3) / medium(nf=12,m=5) / high(nf=32,m=6)，全部 DIV2K 泛化权重。
-  打分：连续片段（4x20s，自然 60fps 时间序，禁止抽样帧打包），4K VMAF 模型逐帧；
-        LPIPS 每 100 帧取 1 帧（无运动项，抽样不影响）；单帧延迟在 1080p 输入上实测。
+  打分：连续片段（4x20s，自然 60fps 时间序，禁止抽样帧打包），4K VMAF 模型逐帧
+        （libvmaf n_subsample=2：每 2 帧打 1 帧，json frameNum 记原始偶数帧号，
+        1200 帧输入→600 个分）；LPIPS 全量每 200 帧取 1 帧（6 帧/片段）、
+        冒烟每 100 帧（无运动项，抽样不影响均值方向）；单帧延迟在 1080p 输入上实测。
 输出 modern_sr_probe.json。冒烟：set MODERN_SR_SMOKE=1。
 """
 import os, json, subprocess, time, shutil

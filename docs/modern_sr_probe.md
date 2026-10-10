@@ -37,5 +37,14 @@
 
 ## 复现注意
 
-- Windows 下需限线程（OMP_NUM_THREADS=4、libvmaf n_threads=2），双 worker 并行会把 16 核打满导致桌面卡死。
+- Windows 下需限线程（OMP_NUM_THREADS=4、libvmaf n_threads=2），双 worker 并行会把 16 核打满导致桌面卡死（worker_A.log 即双 worker 抢同一 tmp 文件名、rawvideo 读 0 字节死亡的现场；固定为单 worker 串行）。
 - 长片 VMAF 必须连续时间序逐帧（n_subsample=2 为时间抽样），禁止把间隔帧打包成连续 clip（虚高 20~28 分，口径教训见 sr_aware_alloc_falsification.md）。
+
+## 2026-10-10 档案复核补记（#14）
+
+- **隔帧 frameNum 之谜已查明，非 bug**：libvmaf `n_subsample=2` 每 2 帧打 1 帧，json frameNum 记原始偶数帧号（0,2,…,1198），1200 帧输入→600 个分，四臂同参数、pooled 均值与结果 json 一致；4K VMAF v0.6.1 为逐帧空间模型无时间项，均匀时间抽样不偏均值。
+- **参考/LR 帧对齐原为假设、已实测验证**（`audit_alignment.py`）：8 个抽检点（4 片段×片头/片中）下采样 4K 参考帧与同时间戳 crf34 LR 帧 PSNR 26.5~37.2 dB（差值仅含 crf34 压缩失真）；故意偏移 ±1 帧 PSNR 下降 2.5~14 dB（c3 高运动段对齐点 26.49 vs 偏移帧 11.9~13.1），offset=0 处处为最大值，双管道独立 seek 帧精确对齐。
+- **逐帧配对分布**（`modern_sr_frame_vmaf.json`，每片段 600 帧）：med 档帧胜率 c0~c3 = 87.8%/98.7%/100%/100%，但 ΔVMAF p90 仅 +1.77/+2.82/+1.84/+3.03、逐帧中位 +0.22/+0.74/+1.23/+2.73——SR 确实在多数帧上小胜 bicubic，NO-GO 的含义是"增益量级过小（≤约 1~3）且 LPIPS 16/16 全恶化"，不是"SR 无效"。
+- **冒烟 crf26 证据残缺说明**：clip0 120 帧 VMAF 已从 tmp 原始 json 复现（+0.44/+0.75/+0.55）；该轮 LPIPS（0.197/0.199/0.200 vs bic 0.188，仅 2 抽样帧）未落盘（smoke 输出 json 已不存在），不可复算，但 crf34 全量 LPIPS 才是判决证据。
+- **fp16**：high 档 fp16 输出含非有限值（latency json `fp16_finite=false`），不可用；med fp16 22.4ms 仍超 60fps 帧预算 16.7ms，仅 low（9.8ms）可实时。
+- 参考片为 crf0 x264（视觉无损而非数学无损），四臂共用不影响 Δ 比较；ladder mp4（57~440MB）、ref mkv（335~954MB）、tmp 不入库。
