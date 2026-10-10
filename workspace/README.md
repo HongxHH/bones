@@ -37,7 +37,7 @@
 |---|---|---|
 | `deblur_vmaf_test/` | 早期去模糊模型 VMAF 增益测量 | 已封板 |
 | `gain_predictor/` | GBDT/RF VMAF 增益预测器（含 .pkl） | 已封板：不准的预测比没预测更有害 |
-| `enhancer_survey/` | 增强算子普查（NAFNet/STDF/NanoVSR 现成算子对比） | 已封板：同口径下无现成算子占优 |
+| `enhancer_survey/` | 增强算子普查（NAFNet/STDF/NanoVSR）+ leave-segments-out 对症微调闭环 | 已封板：现成算子全输 IMDN；对症跨块泛化定性成立但 +7~14 含 checkpoint 选择泄漏（干净块内 n=2：+3.3/+0.3），见目录 README |
 
 ## 复现入口
 

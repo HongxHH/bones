@@ -59,7 +59,7 @@
 - STDF 去压缩块单独 vs base：−8.08 / −5.11 / −2.01；
 - STDF→IMDN 级联 vs 直接 IMDN：−8.5 / −9.0 / −3.0（前置去块平滑改变 SR 输入分布，反而劣化）。
 
-内容相关性：NanoVSR−IMDN 的差值与段运动强度 Spearman −0.21、与纹理复杂度 −0.21；片尾高运动高纹理段（seg140/150，motion≈25、texture 3000~5000）NanoVSR 输 31~36 分，时序隐式对齐在压缩+快运动下失效最严重。
+内容相关性：NanoVSR−IMDN-DIV2K 的差值与段运动强度 Spearman −0.21、与纹理复杂度 −0.21；NanoVSR−IMDN-BBB 为 −0.61/−0.52（越复杂输得越多）。片尾高运动高纹理段（seg140/150，motion≈25、texture 3000~5000）NanoVSR 输 31~36 分，时序隐式对齐在压缩+快运动下失效最严重。
 
 ## 根因
 
@@ -105,6 +105,8 @@ block 连续块留出（连相邻段都不训练）揭示真泛化与近邻记�
 
 **未消除的边界**：block 仍只证明同一视频 BBB 内跨块泛化（intra-video），不是跨视频零样本（inter-video）；真实流媒体遇到全新视频能否保持需第二个视频验证（外网直链多次失败，待手动提供素材）。仅 240p；普通段轻微遗忘可用更小 lr 或混入 DIV2K 数据缓解。
 
+> **2026-10-10 档案复核补注（checkpoint 选择泄漏）**：block 训练 best epoch 按 val 段 [30,90,140,150] 的 RGB PSNR 选取（`train_leaveout.py:105-106,131-133`），而上表 seg140/150 正是 val 段，+13.98/+7.26 含间接选择泄漏（按 PSNR 选 epoch、按 VMAF 报告；val 每段仅 3 帧）。零泄漏的块内段只有 seg145（+3.34）、seg155（+0.27，n=2）；uniform 口径排除 val 段（30/90/140）后干净 13 段 LO−DIV 均值 +1.72、中位 −0.71、4 赢 8 输。"能跨块、增益只在困难段"定性保留，+7~14 不得直接引用；严谨重测见 `workspace/enhancer_survey/README.md` §11 R1。同期复核：STDF/NAFNet/级联小样本负数已重跑落盘 `step1b_stdf_nafnet.json`（与上文 ±0.03 一致）；`step4_analyze.py` 对 block json 的 KeyError 已修复；`*_ms` 字段含 VMAF 全程墙钟、非模型延迟；VMAF 经 cv2 mp4v 双臂打包，绝对分待 rawvideo 金标准复核（帧级指标 A 阶段）。
+
 ## 产物索引
 
 - `workspace/enhancer_survey/step1_operator_gain_survey.py`：同口径普查主脚本（算子可插拔）
@@ -112,6 +114,7 @@ block 连续块留出（连相邻段都不训练）揭示真泛化与近邻记�
 - `workspace/enhancer_survey/stdf_model.py`：TV 版 STDF 网络
 - `step2_analyze.py`/`step3_analyze.py`：非单调与同口径公平对比分析
 - `step2_survey16.json`/`step3_fair16.json`：16 段原始测量结果
+- `step1b_stdf_nafnet.json`：seg2/60/129 的 STDF/NAFNet/级联小样本（2026-10-10 复核重跑落盘）
 - `train_leaveout.py`：leave-segments-out 对症微调（`--holdout uniform|block`，按真实 4.5× 对齐裁 GT）
 - `step4_analyze.py`：闭环泛化判决分析
 - `step4_leaveout16.json`（uniform）、`step4b_block6.json`（block）：留出段对照结果
