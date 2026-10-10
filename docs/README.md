@@ -44,6 +44,7 @@
 | `lookahead_planning_theory.md` | 内容感知多段前瞻规划的理论框架、复杂度分析、可行性 | 想了解前瞻规划方向 |
 | `frame_level_content_aware_scheduling.md` | 帧级内容感知调度设计：理论框架、DP算法、实现要点 | 想了解帧级调度设计 |
 | `incremental_transmission_progressive_enhancement.md` | 增量传输+渐进增强设计：数据分层、状态机、与帧级调度协同 | 想了解增量传输设计 |
+| `frame_scheduling_fix_plan.md` | 帧级调度复活簇统一修改清单（2026-10-10 现地核码）：C1b 卡顿 ms/秒口径、B1/J1 时间网格、J10 决策记账两套数、I1/J2 整段闸门、I2 时间赠送、I3 oracle 选帧，M0-M5 改法与验收 | 要动手复活帧级DP/增量/联合仿真器前必读 |
 | `server_side_vbr_coding.md` | 服务端内容感知VBR编码：各分辨率VMAF提升、三种集成方式对比、纯净验证结果、连续码率分配优化结论 | 想了解VBR编码方向 |
 | `selective_enhancement_gain_predictor.md` | 增益预测驱动选择性增强：四阶段规划、阶段一离线Go、阶段1.5接入仿真器端到端证伪与根因、转向帧级 | 想了解选择性增强/增益预测器 |
 | `enhancer_operator_survey.md` | 阶段17增强算子普查与对症微调闭环：同口径方法、NAFNet/STDF/NanoVSR 现成算子证伪、leave-out 证明对症训练可跨块泛化（困难段 +7~14）但增益只在高运动塌陷段、4.5× 训练对齐教训 | 想了解增强地基/替代算子对比/对症训练泛化 |

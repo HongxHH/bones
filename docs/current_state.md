@@ -1,6 +1,10 @@
 # 当前状态
 
-## 最新阶段：高频先验旁路信息论上界 NO-GO（2026-10-09）
+## 最新阶段：全工作区复盘建档完成，帧级调度复活簇修改清单待审（2026-10-10）
+
+15 条工作线档案 README + workspace 总索引已全部提交（d585f49→1820d39）。复盘确认的同源记账缺陷汇总为统一修改清单 `docs/frame_scheduling_fix_plan.md`（**只成文、未改代码，待审阅**）：M0 仿真器卡顿 ms/10 与播放器秒/10 的 1000 倍口径差（C1b，四处 report）、M1 DP 10ms 网格向下/向上取整（B1/J1）、M2 决策与缓冲记账两套成本（J10）、M3/M4 整段可行性闸门使部分增强从不触发 + seg_time/2 时间赠送（I1/J2/I2）、M5 选帧全知 oracle 需因果化（I3）。顺序 M0→M1/M2→M3/M4→M5；调度逻辑修复可用现有逐帧张量验证，对外质量数字须等帧级指标 A 阶段连续 rawvideo 重测。
+
+## 上一阶段：高频先验旁路信息论上界 NO-GO（2026-10-09）
 
 **旁路 oracle 探针封板 NO-GO（详见 `side_channel_probe.md`，脚本 `workspace/pacnet/side_channel/side_channel_probe.py`）**：真 4K60 BBB clip0 200 帧，主码流 1080p crf34=726kbps，旁路传真残差 D=4K−bicubic（grainextract=D+128，libx264 CRF 阶梯），客户端 F=bic+解码残差（grainmerge），4K VMAF 连续测量。结果：旁路 489kbps(67%)→ΔVMAF+9.1；278kbps(38%)→+4.6；188kbps(26%)→+0.2；144kbps(20%)→−0.7 钉死。+2 VMAF 拐点在旁路 ~220kbps ≈ 主码流 30%，而非目标 1~2%（7~15kbps）。这是信息论上界——学习式先验不可能比直接传真残差更省码率——所以原假设"1~2% 带宽旁路把救糊区间拉到 +2"不成立。学习式 token 最多省 2~5 倍，仍需 6~15% 旁路，等价于再加半条码流，不构成便宜旁路卖点。工程坑：本机 ffmpeg `blend=all_expr` 自定义表达式静默失效（连 X 直通都 corr≈0），必须用内置 grainextract/grainmerge；numpy 逐帧 pipe 第二 CRF 必现死锁。下一步：转向渐进式/可伸缩引导流（借组里块状渐进 SR 积累），卖点从"旁路便宜"改为"同一份高频 token 按预算渐进传输"，绕开 1~2% 装不下残差的死结。
 
