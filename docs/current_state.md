@@ -1,6 +1,15 @@
 # 当前状态
 
-## 最新阶段：帧级调度复活簇 M0/M1/M2 完成（2026-10-10）
+## 最新阶段：帧级调度复活簇 M3/M4 完成（2026-10-10）
+
+统一修改清单见 `docs/frame_scheduling_fix_plan.md`。M0（3870f76）、M1/M2（9118c0f）之后，M3/M4 本轮落地：
+- 新建 `simulation/frame_enhance_queue.py`：帧作业带播放截止墙钟（deadline=入队时刻+段首帧提前量+帧序号×帧播放间隔），EDF 可调度性前瞻逐帧收作业（按单位网格成本 VMAF 增益密度降序、档级链依赖打包检验），到点未完成帧判 missed 按基础质量播放；`final_assert` 总守恒（入队=增强+错过、GPU 承诺=缓冲推入）。
+- 三个控制器（`control/bones_incremental.py`、`bones_frame_level.py`、`bones_combined.py`）全部改为队列调度：删除整段可行性闸门、删除半段播放时间赠送（原 seg_time/2）；frame_level/combined 在线帧级 DP 整段下线（B2 线性有符号平滑惩罚、B4 动态预算乘数 1.3/1.0/0.7 随之删除，离线 DP 仅保留于 `workspace/vbr_sims/frame_level/eval_frame_level_scheduling.py` 与 gpu_grid）；720p/1080p 无逐帧数据分辨率保留 BONES 整段闸门作回退。
+- 会话引擎约束（实跑定位）：零时长增强条目不得入 buffer_enhance——双等待 tie（cd_download=cd_enhance=0）时 SessionModel.next 走增强侧且 consume(0) 不弹队首，会死循环；基础段/全 missed 段不推入（history 默认 0），与基类 BONES 行为一致。
+- 验收：`tests/test_frame_queue.py` 5 项 PASSED（ample 全增强、tight 111 增强/9 missed、zero-lead 全 missed、多段守恒、EDF 早帧优先）；四轨迹×四策略冒烟（`workspace/vbr_sims/lookahead/run_four_way_comparison.py`）exit=0，三控制器 VMAF/QoE 收敛一致。紧预算 3g_low：旧闸门下增强 0 帧，新队列增强 99.0% 帧，VMAF 79.44→80.41、QoE 72.63→73.78（+1.15）；4g_medium/wifi_high/volatile QoE 分别 +0.08/+0.06/+0.11。
+- 未做：M5（队列密度排序仍用真 VMAF 增益=全知 oracle，需因果化；六真实轨迹回归、卡顿向量逐策略独立仿真）。当前调度验证用 `data/bbb/per_frame_quality.json`（旧 mp4v 口径），对外质量数字仍须等帧级指标 A 阶段连续 rawvideo 重测。
+
+## 上一阶段：帧级调度复活簇 M0/M1/M2 完成（2026-10-10）
 
 统一修改清单见 `docs/frame_scheduling_fix_plan.md`。M0（卡顿单位秒，commit 3870f76）、M1/M2（本轮）已落地：
 - **M1**：新建 `simulation/gpu_grid.py`（STEP_MS=0.1、`to_steps` 四舍五入、向量化帧级背包 DP、成本断言、记账残差）；三处 DP（`control/bones_frame_level.py`、`control/bones_combined.py`、`workspace/vbr_sims/frame_level/eval_frame_level_scheduling.py`）统一改用 0.1ms 网格与向量化求解；删除 `bones_combined.py` 原 5000 步硬帽与 +1 向上取整。

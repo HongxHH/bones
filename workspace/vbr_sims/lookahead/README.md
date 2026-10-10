@@ -153,6 +153,7 @@ ModuleNotFoundError。复现方式：cwd=`workspace/`，设
   该机制与 #2 帧级 DP 是同一科学问题的两个壳，复活时合并为一条线，不另立。
   I1/I2/I3/J1/J2/J10 的逐行改法、顺序与验收统一见 `docs/frame_scheduling_fix_plan.md`（M0-M5，2026-10-10 现地核码），以该清单为准。
 - **M1/M2 已完成（2026-10-10）**：`bones_combined.py` 的 DP 已切到 `simulation/gpu_grid.py` 0.1ms 网格（J1：删除 +1 向上取整与 5000 步硬帽），缓冲推入改用决策网格成本之和并带 ≤6ms 残差断言（J10）；`bones_incremental.py` 帧数计算与推入同步网格同源。three_way/four_way 四轨迹冒烟通过。I1/J2 闸门与 I2/J3 的 seg_time/2 赠送仍在（M3/M4 处理），I3/J4 oracle 选帧仍在（M5 处理）。
+- **M3/M4 已完成（2026-10-10）**：增量/联合两个仿真器与 #2 frame_level 一起整文件重写，三者帧调度统一为 `simulation/frame_enhance_queue.py` 的帧级 EDF 队列，§8 复活四点中 ①（删 I1/J2 整段闸门、建跨段帧队列）②（删 I2/J3 半段赠送，提前量=水位−段长，无赠送）④（决策与缓冲推入同为 0.1ms 网格、逐段 ≤6ms 残差断言）已落地；③ 选帧因果化（I3/J4）归 M5。实跑定位一条会话引擎约束：零时长增强条目不得入 buffer_enhance（双等待 cd=0 tie 时 SessionModel.next 走增强侧、consume(0) 不弹队首导致死循环），基础段/全 missed 段不推入，与基类 BONES 一致。紧预算 3g_low 增量方案增强 99.0% 帧（旧闸门为 0），四轨迹 QoE +1.15/+0.08/+0.06/+0.11（旧 mp4v 张量口径，仅原型验证）。三控制器 VMAF/QoE 已完全一致，"两个壳"事实合并；`high_prio_ratio` 无效指标随旧选帧代码删除。
 - "增量传输"若未来指真实 SVC/残差字节，属于 #15 side_channel 范畴（已 NO-GO），
   本目录的同名仿真器不传递任何额外字节，禁止混为一谈（I8）。
 

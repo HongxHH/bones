@@ -20,6 +20,7 @@ import numpy as np
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from control.bones import BONES
 from simulation.gpu_grid import STEP_MS, to_steps, grid_residual_ms
+from simulation.frame_enhance_queue import FrameEnhanceQueue
 
 
 class BONESIncremental(BONES):
@@ -52,11 +53,14 @@ class BONESIncremental(BONES):
         self.segment_download_time = {}  # seg_idx -> 下载完成时间（ms）
         self.segment_actual_vmaf = {}  # seg_idx -> 实际播放VMAF（含渐进增强）
 
+        # M3：帧级 EDF 工作队列（播放截止墙钟 + 可调度性前瞻 + missed 显式记账）
+        self.frames_per_seg = 120
+        self.frame_queue = FrameEnhanceQueue(self.frames_per_seg)
+        self.total_pushed_steps = 0  # 累计推入增强缓冲的 GPU 网格步（守恒断言用）
+
         # 统计
         self.total_enhanced_frames = 0
         self.total_frames = 0
-        self.high_priority_enhanced = 0
-        self.high_priority_total = 0
 
         print(f"[BONESIncremental] 逐帧数据加载完成: {len(self.per_frame_data['results'])} 个测量")
 
@@ -72,98 +76,45 @@ class BONESIncremental(BONES):
                 return None
         return vmafs
 
-    def _compute_enhanced_count(self, seg_idx, action_down, action_enh, buffer_level_ms):
-        """
-        计算该段在播放开始时已增强的帧数
-
-        利用缓冲区提前量：下载完成后到播放开始前的时间 = buffer_level_ms
-        GPU在这段时间内可以增强的帧数 = min(120, buffer_level_ms / frame_enhance_time)
-
-        Args:
-            seg_idx: 段索引
-            action_down: 码率索引
-            action_enh: 增强级别索引
-            buffer_level_ms: 下载完成时的缓冲区水位（ms）
+    def _schedule_segment_frames(self, seg_idx, action_down, max_level,
+                                 play_start_lead_ms, backlog_ms):
+        """M3：帧级 EDF 队列调度，替代旧的"整段可行性闸门 + 半段时间赠送 + 解析式帧数"。
 
         Returns:
-            enhanced_count: 已增强帧数
-            max_level: 最大增强级别
+            decisions: np.array(120,) 每帧承诺增强档（0=基础，错过播放截止）
+            admitted_steps: 被接收作业的总 GPU 网格步
+            seg_vmaf: 段帧均 VMAF
         """
-        if action_enh == 0:
-            return 0, 0
+        res = self.bitrate_to_res.get(action_down, None)
+        vmafs = self._get_frame_vmafs(seg_idx, res) if res is not None else None
+        n = self.frames_per_seg
+        if vmafs is None:
+            return None, None, None
 
-        max_level = self.enh_to_level.get(action_enh, 3)
+        frame_cost_steps = np.zeros((n, 4), dtype=np.int64)
+        frame_vmaf = np.zeros((n, 4))
+        for f in range(n):
+            for level in range(4):
+                frame_vmaf[f][level] = vmafs[level][f]
+                if level > 0:
+                    frame_cost_steps[f][level] = to_steps(
+                        self.enhance_time[action_down][level] / float(n))
 
-        # 单帧增强时间（ms）
-        # enhance_time[action_down][action_enh]是整段120帧的时间
-        seg_enhance_time_ms = self.enhance_time[action_down][action_enh]
-        if seg_enhance_time_ms <= 0:
-            return 0, max_level
-
-        frame_enhance_time_ms = seg_enhance_time_ms / 120.0
-
-        # 可用于增强的时间 = 缓冲区水位（下载完成到播放开始的时间）
-        # 加上播放过程中继续增强的时间（保守估计：播放前半段时间）
-        available_time_ms = buffer_level_ms + self.seg_time / 2  # 播放过程中还能增强一半时间
-
-        # M2：帧数与推入记账共用 0.1ms 网格（消灭决策/记账两套数）
-        frame_cost_steps = to_steps(frame_enhance_time_ms)
-        available_steps = to_steps(available_time_ms)
-        enhanced_count = min(120, available_steps // frame_cost_steps)
-        return enhanced_count, max_level
-
-    def _select_frames_to_enhance(self, seg_idx, res, max_level, enhanced_count):
-        """
-        帧级DP：选择VMAF增益最高的enhanced_count帧增强
-
-        Returns:
-            decisions: np.array(120,) of enhancement levels
-            seg_vmaf: 该段实际平均VMAF（已增强帧用增强质量，未增强帧用基础质量）
-        """
-        vmafs = self._get_frame_vmafs(seg_idx, res)
-        if vmafs is None or enhanced_count == 0:
-            decisions = np.zeros(120, dtype=int)
-            if vmafs is not None:
-                seg_vmaf = np.mean(vmafs[0])
-            else:
-                seg_vmaf = None
-            return decisions, seg_vmaf
-
-        # 计算每帧在max_level下的VMAF增益
-        gains = vmafs[max_level] - vmafs[0]
-
-        # 选择增益最高的enhanced_count帧
-        if enhanced_count >= 120:
-            selected = np.ones(120, dtype=bool)
-        else:
-            # 取增益最高的enhanced_count个索引
-            top_indices = np.argsort(gains)[-enhanced_count:]
-            selected = np.zeros(120, dtype=bool)
-            selected[top_indices] = True
-
-        decisions = np.zeros(120, dtype=int)
-        decisions[selected] = max_level
-
-        # 计算段平均VMAF
-        seg_vmaf = np.mean([
-            vmafs[decisions[f]][f] for f in range(120)
-        ])
-
-        # 统计高优先级帧（增益前30%）的增强情况
-        high_priority_count = int(120 * 0.3)
-        high_priority_indices = np.argsort(gains)[-high_priority_count:]
-        self.high_priority_total += high_priority_count
-        self.high_priority_enhanced += np.sum(selected[high_priority_indices])
-
-        return decisions, seg_vmaf
+        decisions, admitted_steps, seg_vmaf = self.frame_queue.schedule_segment(
+            now_ms=self.global_time, seg_idx=seg_idx,
+            play_start_lead_ms=play_start_lead_ms,
+            frame_play_ms=self.seg_time / n,
+            frame_cost_steps=frame_cost_steps, frame_vmaf=frame_vmaf,
+            max_level=max_level, backlog_steps=to_steps(backlog_ms))
+        return decisions, admitted_steps, seg_vmaf
 
     def control_download_finish(self):
         """
-        下载完成收尾（增量传输版本）：
-        - 段立即可播放（基础质量），不需要等增强
-        - 计算利用缓冲区提前量可以增强多少帧
-        - 帧级DP选择高增益帧增强
-        - 推入增强缓冲（用实际增强时间，可能小于段增强时间）
+        下载完成收尾（M3 帧级 EDF 队列版）：
+        - 段下载完成即可按基础质量播放，不做整段可行性闸门
+        - 120 个帧作业带播放截止墙钟入队，EDF 前瞻决定哪些帧/档能在播放前完成
+        - 到点未完成的帧按基础质量播放（missed，显式记账）
+        - 推入增强缓冲的 GPU 时间恒等于被接收作业成本之和
         """
         # 若增强缓冲为空，唤醒增强
         if self.buffer_enhance.buffer_level == 0:
@@ -174,63 +125,58 @@ class BONESIncremental(BONES):
         action_down = self.buffer_download.history[self.idx_enh]
         action_enh = self.action_enh
 
-        # BONES原版：来不及增强则回退为不增强
-        if buff_down - buff_enh - self.seg_time < self.enhance_time[action_down][action_enh]:
-            action_enh = 0
-            self.action_enh = 0
-
         seg_idx = self.idx_enh
 
         # 记录下载完成时间
         self.segment_download_time[seg_idx] = self.global_time
 
+        max_level = self.enh_to_level.get(action_enh, 3)
+
         if action_enh != 0:
-            # 计算利用缓冲区提前量可以增强的帧数
-            enhanced_count, max_level = self._compute_enhanced_count(
-                seg_idx, action_down, action_enh, buff_down)
+            # 帧级数据可用分辨率走 EDF 队列；段第 0 帧播放提前量 = 水位 − 段长
+            # （下载完成钩子中 buff_down 已含本段），不再赠送半段播放时间。
+            play_start_lead_ms = buff_down - self.seg_time
+            decisions, admitted_steps, seg_vmaf = self._schedule_segment_frames(
+                seg_idx, action_down, max_level, play_start_lead_ms, buff_enh)
 
-            self.segment_enhanced_count[seg_idx] = enhanced_count
-            self.segment_max_enhance_level[seg_idx] = max_level
+            if decisions is not None:
+                self.segment_max_enhance_level[seg_idx] = max_level
+                enhanced_count = int(np.sum(decisions > 0))
+                self.segment_enhanced_count[seg_idx] = enhanced_count
+                self.segment_actual_vmaf[seg_idx] = seg_vmaf
+                self.total_enhanced_frames += enhanced_count
+                self.total_frames += self.frames_per_seg
 
-            # 帧级DP选择高增益帧增强，计算实际VMAF
-            res = self.bitrate_to_res.get(action_down, None)
-            if res is not None and res in self.res_to_idx:
-                decisions, seg_vmaf = self._select_frames_to_enhance(
-                    seg_idx, res, max_level, enhanced_count)
-                if seg_vmaf is not None:
-                    self.segment_actual_vmaf[seg_idx] = seg_vmaf
-                    self.total_enhanced_frames += enhanced_count
-                    self.total_frames += 120
-
-            # 用实际增强时间推入增强缓冲
-            # M2：实际增强时间 = enhanced_count 帧的网格成本之和（与帧数决策同源）
-            if enhanced_count > 0:
-                seg_enhance_time_ms = self.enhance_time[action_down][action_enh]
-                frame_cost_steps = to_steps(seg_enhance_time_ms / 120.0)
-                actual_enhance_time = enhanced_count * frame_cost_steps * STEP_MS
+                actual_enhance_time = admitted_steps * STEP_MS
+                self.total_pushed_steps += admitted_steps
                 # 网格与连续毫秒成本对账（本段残差理论上界 6ms）
-                continuous_ms = seg_enhance_time_ms * enhanced_count / 120.0
-                residual = grid_residual_ms(continuous_ms, enhanced_count * frame_cost_steps)
+                continuous_ms = sum(
+                    self.enhance_time[action_down][int(decisions[f])] / self.frames_per_seg
+                    for f in range(self.frames_per_seg) if decisions[f] > 0)
+                residual = grid_residual_ms(continuous_ms, admitted_steps)
                 if abs(residual) > 6.0 + 1e-6:
                     raise AssertionError(
                         f"seg {seg_idx} 增量方案网格记账残差超界: {residual:.3f}ms")
-                self.buffer_enhance.push(
-                    segment_index=seg_idx, decision=action_enh,
-                    segment_time=actual_enhance_time)
+                # 零时长条目不得入增强缓冲（会话引擎在双等待 tie 下会空转死循环）
+                if actual_enhance_time > 0:
+                    self.buffer_enhance.push(
+                        segment_index=seg_idx, decision=action_enh,
+                        segment_time=actual_enhance_time)
             else:
-                self.buffer_enhance.push(
-                    segment_index=seg_idx, decision=0, segment_time=0)
+                # 无逐帧数据的分辨率（720p/1080p）：保留 BONES 整段可行性语义
+                if buff_down - buff_enh - self.seg_time < self.enhance_time[action_down][action_enh]:
+                    action_enh = 0
+                    self.action_enh = 0
+                    self._push_base_segment(seg_idx, action_down)
+                else:
+                    self.segment_enhanced_count[seg_idx] = self.frames_per_seg
+                    self.segment_max_enhance_level[seg_idx] = max_level
+                    full_steps = to_steps(self.enhance_time[action_down][action_enh])
+                    self.buffer_enhance.push(
+                        segment_index=seg_idx, decision=action_enh,
+                        segment_time=full_steps * STEP_MS)
         else:
-            # 不增强
-            self.segment_enhanced_count[seg_idx] = 0
-            self.segment_max_enhance_level[seg_idx] = 0
-            res = self.bitrate_to_res.get(action_down, None)
-            if res is not None and res in self.res_to_idx:
-                vmafs = self._get_frame_vmafs(seg_idx, res)
-                if vmafs is not None:
-                    self.segment_actual_vmaf[seg_idx] = np.mean(vmafs[0])
-                    self.total_frames += 120
-
+            self._push_base_segment(seg_idx, action_down)
         self.idx_enh += 1
 
         # 计算等待时间，避免下载缓冲溢出
@@ -239,6 +185,18 @@ class BONESIncremental(BONES):
         time_wait = buffer_level + self.seg_time - max_level
         time_wait = max(0, time_wait)
         self.session.set_download(False, time_wait)
+
+    def _push_base_segment(self, seg_idx, action_down):
+        """不增强段的记账。"""
+        self.segment_enhanced_count[seg_idx] = 0
+        self.segment_max_enhance_level[seg_idx] = 0
+        res = self.bitrate_to_res.get(action_down, None)
+        if res is not None and res in self.res_to_idx:
+            vmafs = self._get_frame_vmafs(seg_idx, res)
+            if vmafs is not None:
+                self.segment_actual_vmaf[seg_idx] = np.mean(vmafs[0])
+                self.total_frames += self.frames_per_seg
+        # 基础段不入增强缓冲（history 默认 0；零时长条目会让会话引擎空转）
 
     def report(self, title=""):
         """
@@ -276,8 +234,10 @@ class BONESIncremental(BONES):
 
         # 增量传输特有指标
         enh_frame_ratio = self.total_enhanced_frames / self.total_frames if self.total_frames > 0 else 0
-        high_priority_ratio = (self.high_priority_enhanced / self.high_priority_total
-                                if self.high_priority_total > 0 else 0)
+
+        # M3：帧队列总守恒断言（入队=增强+错过，GPU 承诺=推入）
+        self.frame_queue.final_assert(self.total_pushed_steps)
+        queue_summary = self.frame_queue.summary()
 
         report_simulator = {
             "playback time": self.global_time,
@@ -289,9 +249,9 @@ class BONESIncremental(BONES):
             "average bandwidth": avg_bandwidth,
             "qoe": qoe,
             "enhanced frame ratio": enh_frame_ratio,
-            "high priority enhanced ratio": high_priority_ratio,
             "total enhanced frames": self.total_enhanced_frames,
             "total frames": self.total_frames,
+            "frame queue": queue_summary,
             "download history": history_down,
             "enhance history": history_enh,
         }
