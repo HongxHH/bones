@@ -76,3 +76,19 @@ workspace/E
 workspace/deblur_vmaf_test/
 workspace/sim_logs*/
 workspace/*.log
+
+# workspace 运行时产物（pid/err/progress/临时目录/stdout 转储，递归生效）
+*.err
+workspace/**/*pid*.txt
+progress.txt
+workspace/temp_log.txt
+workspace/**/tmp/
+workspace/**/vmaf_tmp/
+workspace/**/probe_*.txt
+workspace/**/smoke_*.txt
+workspace/**/*_output*.txt
+workspace/**/sim_log_*.txt
+workspace/**/measure_progress.txt
+workspace/**/vbr_720p_*_vmaf.txt
+workspace/**/*_trainlog.json
+workspace/pacnet/h1_condnet/C
