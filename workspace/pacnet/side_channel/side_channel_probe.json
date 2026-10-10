@@ -2,7 +2,8 @@
  "config": {
   "base_kbps": 726,
   "side": "grainextract D+128 libx264 veryfast",
-  "vmaf": "vmaf_4k_v0.6.1 n_subsample=2"
+  "vmaf": "vmaf_4k_v0.6.1 n_subsample=2",
+  "note": "2026-10-10 由 tmp 原始 vmaf json 与 side mp4 码率聚合复原；clip0 200帧冒烟（108 scored frames），全量4片段未跑"
  },
  "clips": {
   "0": {
@@ -12,6 +13,18 @@
     "side_pct": 67.36,
     "vmaf": 83.721,
     "delta": 9.104
+   },
+   "crf42": {
+    "side_kbps": 278,
+    "side_pct": 38.29,
+    "vmaf": 79.259,
+    "delta": 4.642
+   },
+   "crf46": {
+    "side_kbps": 188,
+    "side_pct": 25.9,
+    "vmaf": 74.822,
+    "delta": 0.205
    },
    "crf50": {
     "side_kbps": 144,

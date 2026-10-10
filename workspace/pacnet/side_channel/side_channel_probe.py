@@ -4,6 +4,14 @@
 side = grainextract(ref, bic) = ref - bic + 128，libx264 CRF 阶梯编码；
 F    = grainmerge(bic, side)  = bic + side - 128；
 测 F vs ref 的 4K VMAF。判决：旁路 7~15kbps（主码流 726kbps 的 1~2%）时 ΔVMAF>=+2。
+
+依赖：modern_sr/tmp/ref_c{ci}.mkv（4K crf0 参考片段）与
+      modern_sr/ladder/lr1080_crf34.mp4（1080p crf34 主码流，726kbps）。
+bic_c{ci}.mkv = 主码流 ffmpeg YUV 域 bicubic 放大到 4K 后 crf0 落盘，由 ensure_bic 生成；
+注意必须用 ffmpeg 原生 YUV 域放大（约 73~75 VMAF），不要用 modern_sr 探针的
+cv2 RGB 域 INTER_CUBIC 路径（同帧段仅 64.4，约 9~10 分的色彩/重采样路径差，
+见 docs/side_channel_probe.md 2026-10-10 复核补记）。
+归档曲线为 clip0 200 帧冒烟、CRF 38/42/46/50/62（tmp 原始 vmaf json 为证据）。
 """
 import os, json, subprocess, shutil
 import numpy as np
@@ -13,10 +21,12 @@ MODERN = os.path.join(os.path.dirname(HERE), "modern_sr")
 TMP = os.path.join(HERE, "tmp")
 os.makedirs(TMP, exist_ok=True)
 REFDIR = os.path.join(MODERN, "tmp")
+LADDER = os.path.join(MODERN, "ladder", "lr1080_crf34.mp4")
+CLIP_STARTS = [60, 220, 380, 540]  # 与 modern_sr/probe_modern_sr.py 一致
 VMAF_MODEL_SRC = os.path.join(MODERN, "models", "vmaf_4k_v0.6.1.json")
 W, H, FPS = 3840, 2160, 60
 N = FPS * 20
-CRFS = [38, 44, 50, 56, 62]
+CRFS = [38, 42, 46, 50, 62]  # 归档冒烟扫描点（tmp/side_c0_crf*.mp4）
 OUT_JSON = os.path.join(HERE, "side_channel_probe.json")
 SMOKE = os.environ.get("SC_SMOKE") == "1"
 
@@ -26,6 +36,19 @@ def run(cmd, **kw):
     if r.returncode != 0:
         raise RuntimeError(f"cmd failed: {cmd[:6]}\n{r.stderr[-400:]}")
     return r
+
+
+def ensure_bic(ci, nframes):
+    """主码流 ffmpeg YUV 域 bicubic 放大 4K、crf0 ultrafast 落盘（缺则生成）。"""
+    out = os.path.join(TMP, f"bic_c{ci}.mkv")
+    if os.path.exists(out):
+        return out
+    run(["ffmpeg", "-y", "-v", "error", "-ss", str(CLIP_STARTS[ci]), "-i", LADDER,
+         "-frames:v", str(nframes),
+         "-vf", f"scale={W}:{H}:flags=bicubic",
+         "-c:v", "libx264", "-crf", "0", "-preset", "ultrafast",
+         "-pix_fmt", "yuv420p", "-an", out])
+    return out
 
 
 def kbps_of(path):
@@ -83,6 +106,7 @@ def main():
                           "vmaf": "vmaf_4k_v0.6.1 n_subsample=2"}, "clips": {}}
     for ci in clips:
         row = {}
+        ensure_bic(ci, nframes)
         # bic 基线：F=bic 本身
         bic_v = vmaf_vs_ref(ci, os.path.join(TMP, f"bic_c{ci}.mkv"), nframes, "bic")
         row["bic_vmaf"] = round(bic_v, 3)
