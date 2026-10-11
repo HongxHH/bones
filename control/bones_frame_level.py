@@ -39,8 +39,10 @@ class BONESFrameLevel(BONES):
         self.frames_per_seg = 120
         self.frame_decisions = {}  # seg_idx -> np.array(120,) 实际增强档
 
-        # M3：帧级 EDF 工作队列
-        self.frame_queue = FrameEnhanceQueue(self.frames_per_seg)
+        # M3：帧级 EDF 工作队列；M5 默认 EDF 因果排序，--oracle 为全知上界
+        self.oracle_rank = bool(getattr(args, "oracle_rank", False))
+        rank_mode = "oracle" if self.oracle_rank else "edf"
+        self.frame_queue = FrameEnhanceQueue(self.frames_per_seg, rank_mode=rank_mode)
         self.total_pushed_steps = 0
 
         print(f"[BONESFrameLevel] 逐帧数据加载完成: {len(self.per_frame_data['results'])} 个测量")
@@ -195,10 +197,10 @@ class BONESFrameLevel(BONES):
                 total_frames += len(decisions)
                 for level in range(4):
                     level_counts[level] += int(np.sum(decisions == level))
-        enh_ratio = enh_frame_count / total_frames if total_frames > 0 else 0
-
         # M3：帧队列总守恒断言
         self.frame_queue.final_assert(self.total_pushed_steps)
+        # M5：增强帧比例统一取队列口径（只计有逐帧数据段，三控制器分母一致）
+        enh_ratio = self.frame_queue.summary()["enhanced frame ratio"]
 
         report_simulator = {
             "playback time": self.global_time,
@@ -209,6 +211,7 @@ class BONESFrameLevel(BONES):
             "freeze event": self.buffer_download.idle_event,
             "average bandwidth": avg_bandwidth,
             "qoe": qoe,
+            "rank mode": self.frame_queue.rank_mode,
             "enhanced frame ratio": enh_ratio,
             "level distribution": (
                 {k: v / total_frames for k, v in level_counts.items()}

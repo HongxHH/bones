@@ -120,10 +120,29 @@ def test_deadline_ordering_early_frames_priority():
     print(f"ok EDF early-frame priority: {len(enhanced_idx)} frames, head all enhanced")
 
 
+def test_oracle_mode_tight_budget():
+    """M5：oracle 模式（真增益密度）紧预算下同样部分增强，守恒成立，且为标注上界。"""
+    rng = np.random.default_rng(1)
+    gains = np.zeros((F, 3))
+    gains[:, 0] = rng.uniform(0.5, 3.0, size=F)
+    costs, vmaf = make_tables([40.0, 40.0, 40.0], gains)
+    q = FrameEnhanceQueue(F, rank_mode="oracle")
+    assert q.rank_mode == "oracle"
+    decisions, steps, _ = q.schedule_segment(
+        now_ms=0.0, seg_idx=0, play_start_lead_ms=500.0,
+        frame_play_ms=FRAME_PLAY, frame_cost_steps=costs, frame_vmaf=vmaf,
+        max_level=1, backlog_steps=0)
+    enhanced = int(np.sum(decisions > 0))
+    assert 0 < enhanced < F, enhanced
+    q.final_assert(steps)
+    print(f"ok oracle-mode tight-budget: enhanced={enhanced}, missed={F-enhanced}")
+
+
 if __name__ == "__main__":
     test_ample_lead_all_enhanced()
     test_tight_budget_partial()
     test_zero_lead_all_missed()
     test_backlog_conservation_multi_segment()
     test_deadline_ordering_early_frames_priority()
-    print("M3/M4 frame_enhance_queue tests PASSED")
+    test_oracle_mode_tight_budget()
+    print("M3-M5 frame_enhance_queue tests PASSED")

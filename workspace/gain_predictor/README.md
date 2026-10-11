@@ -147,6 +147,7 @@ temporal 下连全局均值 B0 的 R² 也为 −1.70/−2.65/−2.85（分布�
 - 上游：`data/bbb/per_frame_quality.json`（档案 #2，帧级张量，含 B7 口径隐患）；`data/bbb/imdn_bbb_2080ti.json`（BONES 段级测量表，2080Ti 口径）；8 月 CA-BONES（`control/bones_ca.py`、`player/.../nes/ca_bones.py`、`docs/ca_bones_modes.md`，vmaf_gain_predictor.pkl 与 −6.92 失败）；`control/bones.py` Lyapunov 联合决策。
 - 同层：档案 #6（卡顿 ms/秒口径，解释 step17/19 均值爆炸）；档案 #7（VBR 与增量传输，step22 的非阻塞调度思想与档案 #7 增量传输仿真相关，审计时交叉引用）。
 - 下游：**暂停中的帧级指标体系 B 阶段**（在线预测器：walk-forward 评估、排序指标、尾部保护目标）直接吸收 D1/D6；帧级指标体系 A 阶段负责修 D4 的标签口径；step22 是"服务端引导选方法"的封板证据，后续不再提该方向。
+- 2026-10-11 M5（`workspace/m5_causal_rank/`）：段级可预测不延伸到帧级——帧增益对下载前特征 Spearman 仅 0.05–0.34，帧排序退回 EDF，本档案"不准的预测比没预测更有害"教训再次成立。
 
 ## 11. 复盘备注（复活检查清单）
 

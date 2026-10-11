@@ -19,9 +19,16 @@ from simulation.gpu_grid import STEP_MS, to_steps
 
 
 class FrameEnhanceQueue:
-    def __init__(self, frames_per_seg=120, step_ms=STEP_MS):
+    def __init__(self, frames_per_seg=120, step_ms=STEP_MS, rank_mode="edf"):
+        """rank_mode:
+        - "edf"（默认，可部署因果版）：候选按播放截止时刻排序，等增益假设下
+          EDF 是最优可行性保持顺序；不使用任何增强后信息。
+        - "oracle"（全知上界）：候选按真实增量 VMAF/增量成本密度降序，
+          只能在带 --oracle 的离线脚本中使用，不得作为可部署结果（M5/B6）。
+        """
         self.frames_per_seg = frames_per_seg
         self.step_ms = step_ms
+        self.rank_mode = rank_mode
         # 累计统计
         self.total_enqueued = 0
         self.total_enhanced_frames = 0   # 最终 level>0 的帧
@@ -90,32 +97,54 @@ class FrameEnhanceQueue:
                     continue
                 candidates.append((f, l, dc, dv, dv / dc))
 
-        # 按密度降序；多趟处理档级链依赖（收 l 必须先收 l-1）
-        remaining = sorted(candidates, key=lambda c: -c[4])
-        for _pass in range(max_level):
-            progressed = False
-            next_remaining = []
-            for f, l, dc, dv, density in remaining:
-                if cur_level[f] >= l:
-                    continue
-                # 该档级缺失的低档链一并打包检验
-                chain = [(ff, ll) for ff, ll in ((f, x) for x in range(cur_level[f] + 1, l + 1))]
-                trial = [(deadlines[ff],
-                          int(frame_cost_steps[ff][ll] - frame_cost_steps[ff][ll - 1]))
-                         for ff, ll in chain]
-                base = [(d, c) for (d, c, _, _) in admitted]
-                if self._edf_feasible(base + trial, backlog_steps, now_ms, self.step_ms):
-                    for (ff, ll), (dd, cc) in zip(chain, trial):
-                        admitted.append((dd, cc, ff, ll))
-                        cur_level[ff] = ll
-                    progressed = True
-                else:
-                    # 当前档级不可行，更低档级留给后续趟次重试
-                    if l == cur_level[f] + 1:
-                        next_remaining.append((f, l, dc, dv, density))
-            remaining = next_remaining
-            if not progressed:
-                break
+        def try_admit(ff, ll):
+            """检验并接收帧 ff 的档级 ll（单步，含已承诺集合）。"""
+            trial = [(deadlines[ff],
+                      int(frame_cost_steps[ff][ll] - frame_cost_steps[ff][ll - 1]))]
+            base = [(d, c) for (d, c, _, _) in admitted]
+            if self._edf_feasible(base + trial, backlog_steps, now_ms, self.step_ms):
+                admitted.append((trial[0][0], trial[0][1], ff, ll))
+                cur_level[ff] = ll
+                return True
+            return False
+
+        if self.rank_mode == "oracle":
+            # 全知上界：按真密度降序；多趟处理档级链依赖（收 l 必须先收 l-1）
+            remaining = sorted(candidates, key=lambda c: -c[4])
+            for _pass in range(max_level):
+                progressed = False
+                next_remaining = []
+                for f, l, dc, dv, density in remaining:
+                    if cur_level[f] >= l:
+                        continue
+                    # 该档级缺失的低档链一并打包检验
+                    chain = [(ff, ll) for ff, ll in
+                             ((f, x) for x in range(cur_level[f] + 1, l + 1))]
+                    trial = [(deadlines[ff],
+                              int(frame_cost_steps[ff][ll] - frame_cost_steps[ff][ll - 1]))
+                             for ff, ll in chain]
+                    base = [(d, c) for (d, c, _, _) in admitted]
+                    if self._edf_feasible(base + trial, backlog_steps, now_ms, self.step_ms):
+                        for (ff, ll), (dd, cc) in zip(chain, trial):
+                            admitted.append((dd, cc, ff, ll))
+                            cur_level[ff] = ll
+                        progressed = True
+                    else:
+                        # 当前档级不可行，更低档级留给后续趟次重试
+                        if l == cur_level[f] + 1:
+                            next_remaining.append((f, l, dc, dv, density))
+                remaining = next_remaining
+                if not progressed:
+                    break
+        elif self.rank_mode == "edf":
+            # 可部署因果版：按播放截止时刻（帧序）扫描，每帧逐档取到最深可行档。
+            # 等增益假设下 EDF 为最优可行性保持顺序；不使用增强后 VMAF。
+            for f in range(num_frames):
+                for l in range(1, max_level + 1):
+                    if not try_admit(f, l):
+                        break
+        else:
+            raise ValueError(f"unknown rank_mode {self.rank_mode}")
 
         decisions = np.array(cur_level, dtype=int)
         admitted_steps = int(sum(c for (_, c, _, _) in admitted))
@@ -149,6 +178,7 @@ class FrameEnhanceQueue:
 
     def summary(self):
         return {
+            "rank mode": self.rank_mode,
             "segments scheduled": self.total_segments,
             "frames enqueued": self.total_enqueued,
             "frames enhanced": self.total_enhanced_frames,

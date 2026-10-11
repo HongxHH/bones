@@ -55,7 +55,10 @@ class BONESIncremental(BONES):
 
         # M3：帧级 EDF 工作队列（播放截止墙钟 + 可调度性前瞻 + missed 显式记账）
         self.frames_per_seg = 120
-        self.frame_queue = FrameEnhanceQueue(self.frames_per_seg)
+        # M5：默认 EDF 因果排序；--oracle 时按真增益密度（全知上界）
+        self.oracle_rank = bool(getattr(args, "oracle_rank", False))
+        rank_mode = "oracle" if self.oracle_rank else "edf"
+        self.frame_queue = FrameEnhanceQueue(self.frames_per_seg, rank_mode=rank_mode)
         self.total_pushed_steps = 0  # 累计推入增强缓冲的 GPU 网格步（守恒断言用）
 
         # 统计
@@ -232,12 +235,13 @@ class BONESIncremental(BONES):
         avg_bandwidth = total_bandwidth / num_seg / self.seg_time
         qoe = quality_vmaf_avg - oscillation_vmaf - avg_freeze / 10
 
-        # 增量传输特有指标
-        enh_frame_ratio = self.total_enhanced_frames / self.total_frames if self.total_frames > 0 else 0
+        # 增量传输特有指标：增强帧比例统一取帧队列口径（只计有逐帧数据的段，
+        # 三控制器分母一致；M5 修复 FL 85.8% vs INC 99.0% 的 cosmetic 差异）
+        queue_summary = self.frame_queue.summary()
+        enh_frame_ratio = queue_summary["enhanced frame ratio"]
 
         # M3：帧队列总守恒断言（入队=增强+错过，GPU 承诺=推入）
         self.frame_queue.final_assert(self.total_pushed_steps)
-        queue_summary = self.frame_queue.summary()
 
         report_simulator = {
             "playback time": self.global_time,
@@ -248,6 +252,7 @@ class BONESIncremental(BONES):
             "freeze event": self.buffer_download.idle_event,
             "average bandwidth": avg_bandwidth,
             "qoe": qoe,
+            "rank mode": self.frame_queue.rank_mode,
             "enhanced frame ratio": enh_frame_ratio,
             "total enhanced frames": self.total_enhanced_frames,
             "total frames": self.total_frames,

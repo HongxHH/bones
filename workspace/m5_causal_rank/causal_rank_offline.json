@@ -1,0 +1,84 @@
+{
+  "cv": "5 contiguous blocks, train4/test1, no shuffle",
+  "n_rows": 56880,
+  "models": {
+    "H0_texture": {
+      "level1": {
+        "spearman_mean": 0.3352,
+        "spearman_median": 0.4573,
+        "overestimate_rate_mean": 0.9922,
+        "top25_regret_vmaf_mean": 0.6882,
+        "top50_regret_vmaf_mean": 0.4399,
+        "top75_regret_vmaf_mean": 0.234
+      },
+      "level2": {
+        "spearman_mean": 0.1372,
+        "spearman_median": 0.1296,
+        "overestimate_rate_mean": 0.995,
+        "top25_regret_vmaf_mean": 0.6124,
+        "top50_regret_vmaf_mean": 0.3935,
+        "top75_regret_vmaf_mean": 0.2061
+      },
+      "level3": {
+        "spearman_mean": 0.1195,
+        "spearman_median": 0.1271,
+        "overestimate_rate_mean": 0.9942,
+        "top25_regret_vmaf_mean": 0.7278,
+        "top50_regret_vmaf_mean": 0.4712,
+        "top75_regret_vmaf_mean": 0.2441
+      }
+    },
+    "GBR_median": {
+      "level1": {
+        "spearman_mean": 0.2415,
+        "spearman_median": 0.2552,
+        "overestimate_rate_mean": 0.4493,
+        "top25_regret_vmaf_mean": 0.9273,
+        "top50_regret_vmaf_mean": 0.589,
+        "top75_regret_vmaf_mean": 0.2922
+      },
+      "level2": {
+        "spearman_mean": 0.1024,
+        "spearman_median": 0.0934,
+        "overestimate_rate_mean": 0.455,
+        "top25_regret_vmaf_mean": 0.7367,
+        "top50_regret_vmaf_mean": 0.4406,
+        "top75_regret_vmaf_mean": 0.2266
+      },
+      "level3": {
+        "spearman_mean": 0.0612,
+        "spearman_median": 0.0525,
+        "overestimate_rate_mean": 0.4936,
+        "top25_regret_vmaf_mean": 0.8189,
+        "top50_regret_vmaf_mean": 0.4802,
+        "top75_regret_vmaf_mean": 0.245
+      }
+    },
+    "GBR_q15": {
+      "level1": {
+        "spearman_mean": 0.2613,
+        "spearman_median": 0.3023,
+        "overestimate_rate_mean": 0.1749,
+        "top25_regret_vmaf_mean": 0.8832,
+        "top50_regret_vmaf_mean": 0.5482,
+        "top75_regret_vmaf_mean": 0.2758
+      },
+      "level2": {
+        "spearman_mean": 0.107,
+        "spearman_median": 0.1133,
+        "overestimate_rate_mean": 0.1748,
+        "top25_regret_vmaf_mean": 0.7257,
+        "top50_regret_vmaf_mean": 0.4524,
+        "top75_regret_vmaf_mean": 0.2249
+      },
+      "level3": {
+        "spearman_mean": 0.0554,
+        "spearman_median": 0.0639,
+        "overestimate_rate_mean": 0.1876,
+        "top25_regret_vmaf_mean": 0.792,
+        "top50_regret_vmaf_mean": 0.5015,
+        "top75_regret_vmaf_mean": 0.2603
+      }
+    }
+  }
+}

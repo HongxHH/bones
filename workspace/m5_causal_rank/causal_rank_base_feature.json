@@ -1,0 +1,29 @@
+{
+  "note": "base VMAF = offline pre-measured per-frame base table (BONES static-table paradigm)",
+  "levels": {
+    "level1": {
+      "spearman_minus_base_mean": 0.3042,
+      "spearman_gbr_with_base_mean": 0.2937,
+      "overestimate_rate": 0.1812,
+      "regret_top25": 0.7858,
+      "regret_top50": 0.4868,
+      "regret_top75": 0.2614
+    },
+    "level2": {
+      "spearman_minus_base_mean": 0.1948,
+      "spearman_gbr_with_base_mean": 0.0878,
+      "overestimate_rate": 0.1762,
+      "regret_top25": 0.712,
+      "regret_top50": 0.4569,
+      "regret_top75": 0.2351
+    },
+    "level3": {
+      "spearman_minus_base_mean": 0.1695,
+      "spearman_gbr_with_base_mean": 0.1007,
+      "overestimate_rate": 0.1925,
+      "regret_top25": 0.7074,
+      "regret_top50": 0.4318,
+      "regret_top75": 0.2245
+    }
+  }
+}
