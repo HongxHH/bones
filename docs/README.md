@@ -32,6 +32,7 @@
 | 文件 | 内容 | 何时看 |
 |---|---|---|
 | `fast_complete.md` | fast_complete 机制原理、代码位置、对 VMAF 影响 | 想了解 fast_complete |
+| `frame_quality_measurement.md` | 全项目唯一逐帧画质度量规范：连续 rawvideo+libvmaf 金标准管道、禁止打包/抽帧、权威数据集 `data/quality/` schema、扩展规则 | 要测 VMAF/画质或新增方法、视频前必读 |
 | `key_findings.md` | 根因分析、技术洞察 | 想知道为什么某方法行/不行 |
 
 ### 已探索方向（设计文档）

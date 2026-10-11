@@ -42,6 +42,7 @@
 | `enhancer_survey/` | 现成增强算子普查（NAFNet/STDF/NanoVSR）+ leave-segments-out 对症微调 | 已封板：现成算子全输 IMDN；对症跨块定性成立，+7~14 含 checkpoint 选择泄漏 | `enhancer_survey/README.md` |
 | `gain_predictor/` | KNN 延迟预测 + RF/HistGBDT VMAF 增益预测器（step0-23 全套，含 pkl/csv） | 已封板：离线 R²≈0.91 在线 QoE −6.92，不准的预测比没预测更有害 | `gain_predictor/README.md` |
 | `m5_causal_rank/` | M5 帧级选帧因果化：增益可预测性验证、EDF/oracle 双模式、四轨迹端到端、六真实轨迹回归 | 已完成：帧增益 Spearman 0.05–0.34 不部署学习排序；COMB(EDF) 对 BONES 5/6 胜、中位 +1.30 | `m5_causal_rank/README.md` |
+| `quality_baseline/` | 统一帧级质量基线：按 `docs/frame_quality_measurement.md` 金标准管道测 BBB bicubic/IMDN 三档逐帧 VMAF，产出权威 `data/quality/` | 进行中：清单待审阅（13 臂×19039 帧） | `quality_baseline/README.md` |
 | `deblur_vmaf_test/` | 最早期去模糊/USM/wiener 段 mp4 对比（大 mp4 数据） | 已封板，整目录 ignore 不入库 | 归 multitask_usm 档案 |
 | `sim_logs_v2/` `sim_logs_v3/` | 0 字节 .log 空壳（批量仿真占位） | 无内容，ignore | — |
 
