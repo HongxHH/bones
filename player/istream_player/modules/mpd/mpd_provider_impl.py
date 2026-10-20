@@ -27,6 +27,7 @@ class MPDProviderImpl(Module, MPDProvider):
         self.parser = DefaultMPDParser()
         # 上次更新时间戳，用于控制MPD文件的更新频率
         self.last_updated = 0
+        self._last_content_hash: Optional[str] = None
 
         # 异步资源对象，用于管理MPD对象的异步访问
         # 使用AsyncResource确保MPD对象在可用时能被正确获取
@@ -71,10 +72,14 @@ class MPDProviderImpl(Module, MPDProvider):
 
     # 更新MPD文件的方法 - 使用critical_task装饰器确保关键任务执行
     @critical_task()
-    async def update(self):
+    async def update(self, force: bool = False):
         # 检查是否需要更新MPD文件
-        # 如果MPD已存在且距离上次更新时间小于更新间隔，则跳过更新
-        if self.mpd is not None and (time.time() - self.last_updated) < self.update_interval:
+        # 如果MPD已存在且距离上次更新时间小于更新间隔，则跳过更新（force 可绕过）
+        if (
+            not force
+            and self.mpd is not None
+            and (time.time() - self.last_updated) < self.update_interval
+        ):
             return
         
         # 下载MPD文件
@@ -84,15 +89,23 @@ class MPDProviderImpl(Module, MPDProvider):
         content, size = await self.download_manager.wait_complete(self.mpd_url)
         # 将字节内容解码为UTF-8文本
         text = content.decode("utf-8")
+        content_hash = str(hash(text))
+        if (
+            not force
+            and self._last_content_hash == content_hash
+            and self.mpd is not None
+        ):
+            self.last_updated = time.time()
+            return
 
-        # 打印MPD URL用于调试
-        print("mpd url: ", self.mpd_url)
+        self.log.info("mpd url: %s (changed=%s)", self.mpd_url, self._last_content_hash != content_hash)
 
         # 解析MPD文件内容
         # 使用解析器将XML文本转换为MPD对象
         mpd = self.parser.parse(text, url=self.mpd_url)
         # 更新异步资源中的MPD对象
         self._mpd_res.value = mpd
+        self._last_content_hash = content_hash
         
         # 构建段URL到段对象的映射
         # 遍历所有自适应集

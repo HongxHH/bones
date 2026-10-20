@@ -1,18 +1,20 @@
 import asyncio
+import json
+import logging
+import ssl
+import time
 from collections import defaultdict
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, Optional, Tuple
+
+import aiohttp
+import numpy as np
 
 from istream_player.config.config import PlayerConfig
 from istream_player.core.downloader import (DownloadEventListener,
                                             DownloadManager, DownloadRequest)
 from istream_player.core.module import Module, ModuleOption
-
-import time
-import json
-import numpy as np
-from dataclasses import dataclass
-import logging
 
 @dataclass
 class Trace:
@@ -104,20 +106,34 @@ class TraceClient(Module, DownloadManager):
     def is_busy(self):
         return False
 
+    @staticmethod
+    def _is_http(url: str) -> bool:
+        low = url.lower()
+        return low.startswith("http://") or low.startswith("https://")
+
     async def download(self, request: DownloadRequest, save: bool = False) -> Optional[bytes]:
         url = request.url
         self.transfer_compl[url] = asyncio.Event()
-        self.transfer_size[url] = Path(url).stat().st_size
         for listener in self.listeners:
             await listener.on_transfer_start(url)
-        asyncio.create_task(self.request_read(url), name=f"TASK_LOCAL_REQREAD_{url.rsplit('/', 1)[-1]}")
+        # Local paths: stream from disk. HTTP (Prism Origin): fetch then throttle —
+        # Lab sessions always use http://…/origin/… MPD URLs.
+        if self._is_http(url):
+            asyncio.create_task(
+                self.request_read_http(url),
+                name=f"TASK_TRACE_HTTP_{url.rsplit('/', 1)[-1]}",
+            )
+        else:
+            self.transfer_size[url] = Path(url).stat().st_size
+            asyncio.create_task(
+                self.request_read(url),
+                name=f"TASK_LOCAL_REQREAD_{url.rsplit('/', 1)[-1]}",
+            )
         if save:
             await self.transfer_compl[url].wait()
             content = self.content[url]
             return content
-        else:
-            return None
-
+        return None
 
     async def close(self):
         pass
@@ -128,6 +144,38 @@ class TraceClient(Module, DownloadManager):
     def add_listener(self, listener: DownloadEventListener):
         if listener not in self.listeners:
             self.listeners.append(listener)
+
+    async def _enqueue_bytes(self, url: str, payload: bytes):
+        self.transfer_size[url] = len(payload)
+        offset = 0
+        n = len(payload)
+        while offset < n:
+            chunk = payload[offset : offset + self.max_packet_size]
+            offset += len(chunk)
+            await self.transfer_queue.put((url, chunk))
+        await self.transfer_queue.put((url, b""))
+
+    async def request_read_http(self, url: str):
+        # Local Origin is plain HTTP; HTTPS uses unverified TLS (same idea as TCP downloader).
+        connector = None
+        if url.lower().startswith("https://"):
+            ssl_context = ssl.SSLContext(protocol=ssl.PROTOCOL_TLS_CLIENT)
+            ssl_context.check_hostname = False
+            ssl_context.verify_mode = ssl.CERT_NONE
+            connector = aiohttp.TCPConnector(ssl=ssl_context)
+        try:
+            async with aiohttp.ClientSession(connector=connector) as session:
+                async with session.get(url) as resp:
+                    resp.raise_for_status()
+                    payload = await resp.read()
+        except Exception:
+            self.log.exception("HTTP fetch failed for %s", url)
+            self.transfer_size[url] = 0
+            self.transfer_compl[url].set()
+            for listener in self.listeners:
+                await listener.on_transfer_end(0, url)
+            return
+        await self._enqueue_bytes(url, payload)
 
     async def request_read(self, url: str):
         # print(f"Request : {url}")

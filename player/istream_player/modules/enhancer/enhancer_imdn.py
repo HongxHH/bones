@@ -18,6 +18,7 @@ from istream_player.core.player import PlayerEventListener
 from istream_player.models.mpd_objects import Segment
 from istream_player.core.player import Player
 from istream_player.core.downloader import (DownloadManager, DownloadRequest, DownloadType)
+from .compare_view import drop_segment, keep_input, start_segment
 from .imdn_model import IMDN, IMDN_RTC
 import torch
 import os
@@ -215,6 +216,10 @@ class IMDNEnhancer(Module, Enhancer, PlayerEventListener):
         while self._is_ready:
             # 从增强缓冲区获取待增强的段
             index, segments = await self.enhance_buffer.dequeue()
+            if index is None or segments is None:
+                self._is_ready = False
+                self.log.info("Enhancer closed")
+                return
 
             # 检查增强缓冲区是否为空
             if self.enhance_buffer.is_empty():
@@ -275,6 +280,7 @@ class IMDNEnhancer(Module, Enhancer, PlayerEventListener):
                 model = self.model_pool[(scale, level)]
                 # 初始化增强结果列表
                 result : List[torch.Tensor] = []
+                start_segment(segment, self.config)
                 # 初始化帧计数器
                 cnt = 0
 
@@ -290,7 +296,7 @@ class IMDNEnhancer(Module, Enhancer, PlayerEventListener):
                         break
 
                     # 增强当前帧
-                    surf_enh = await self.enhance_one_frame(surf, model, tensor_converter)
+                    surf_enh = await self.enhance_one_frame(surf, model, tensor_converter, segment)
                     # 将增强结果添加到结果列表
                     result.append(surf_enh)
                     # 增加帧计数
@@ -309,6 +315,7 @@ class IMDNEnhancer(Module, Enhancer, PlayerEventListener):
 
                 # 如果中止，记录日志并跳出
                 if abort:
+                    drop_segment(segment)
                     self.log.info(f"Abort enhancing segment index: {index}, download action: {segment.download_action}, enhance action: {segment.enhance_action}")
                     break
 
@@ -328,11 +335,12 @@ class IMDNEnhancer(Module, Enhancer, PlayerEventListener):
                 self.log.info(f"增强帧数: {cnt}, 增强FPS: {cnt / (end_time - start_time):.3f}")
 
     # 增强单帧的方法
-    async def enhance_one_frame(self, surf: nvc.Surface, model: torch.nn.Module, tensor_converter: TensorConverter) -> torch.Tensor:
+    async def enhance_one_frame(self, surf: nvc.Surface, model: torch.nn.Module, tensor_converter: TensorConverter, compare_segment=None) -> torch.Tensor:
         # 将NVIDIA Surface转换为PyTorch张量
         tensor = tensor_converter.surface_to_tensor(surf)
         # 将张量移动到指定设备
         tensor = tensor.to(self.device)
+        keep_input(compare_segment, tensor)
         # 让出控制权给其他任务
         await asyncio.sleep(0)
         # 使用模型进行推理（不计算梯度）

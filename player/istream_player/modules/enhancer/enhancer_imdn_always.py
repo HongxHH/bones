@@ -21,6 +21,7 @@ from istream_player.models.mpd_objects import Segment
 from istream_player.core.player import Player
 from istream_player.core.downloader import (DownloadManager, DownloadRequest, DownloadType)
 from istream_player.core.renderer import Renderer
+from .compare_view import drop_segment, keep_input, keep_same, pad_same, start_segment
 from .imdn_model import IMDN, IMDN_RTC
 from .enhancement_plan import (
     EnhancementDecision, 
@@ -354,6 +355,10 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
         while self._is_ready:
             # 从增强缓冲区获取待增强的段
             index, segments = await self.enhance_buffer.dequeue()
+            if index is None or segments is None:
+                self._is_ready = False
+                self.log.info("Enhancer closed")
+                return
             # 设置当前正在增强的段索引（用于提前检测）
             self._current_enhancing_index = index
             # 检查增强缓冲区是否为空
@@ -461,6 +466,8 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                 model = self.model_pool[(scale, level)]
 
                 result : List[object] = [] # 初始化增强结果列表（张量或Surface）
+                segment.frame_enhanced = []
+                start_segment(segment, self.config)
                 self.cnt = 0 # 初始化帧计数器
                 self._enhanced_frames = 0 # 初始化已增强帧计数器
                 fast_complete = False # 标记是否需要快速完成（abort时使用）
@@ -479,6 +486,8 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                         # 创建解码器包装器，将解码器传递给 renderer 进行实时解码
                         decoder_wrapper = DecoderWrapper(decoder, remaining_frames)
                         result.append(decoder_wrapper)
+                        segment.frame_enhanced.extend([False] * remaining_frames)
+                        pad_same(segment, remaining_frames)
                         fast_complete = True
                         break  
 
@@ -493,12 +502,14 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                     # 正常处理：根据计划决定增强或插值
                     decision = next(plan_iter, None)
                     if decision.should_enhance:
-                        surf_enh = await self.enhance_one_frame(surf, model, tensor_converter)
+                        surf_enh = await self.enhance_one_frame(surf, model, tensor_converter, segment)
                         self._enhanced_frames += 1
                     else:
+                        keep_same(segment)
                         surf_enh = surf.Clone(decoder.gpu_id)
 
                     result.append(surf_enh) # 将增强结果添加到结果列表
+                    segment.frame_enhanced.append(bool(getattr(decision, "should_enhance", False)))
                     self.cnt += 1  # 增加帧计数
 
                     await asyncio.sleep(0)  # 让出控制权给其他任务
@@ -516,6 +527,7 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                 # 如果中止，记录日志并跳出
                 if abort:
                     # 记录段级别的中止原因与浪费的增强帧数
+                    drop_segment(segment)
                     segment.is_enhance = False
                     segment.abort_reason = abort_reason
                     segment.wasted_enhanced_cnt = self._enhanced_frames
@@ -556,6 +568,9 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                 is_enhance = True  # 执行了增强
                 end_time = time.perf_counter() # 记录增强结束时间
                 enhance_latency = end_time - start_time
+                # 播放器读的是段对象上的标志。只写 segment_stats 时，画面仍会被当成未增强。
+                segment.is_enhance = True
+                segment.enhance_latency = enhance_latency
                 # 若执行了增强动作，增强完成后该增强段距离播放开始的时间 
                 if self._current_enhancing_index <= self.renderer.get_current_render_segment_index():
                     enhance_end_to_play_time = (segment.duration - self.renderer.remain_task()) + (self._current_enhancing_index - self.renderer.get_current_render_segment_index()) * segment.duration
@@ -614,11 +629,12 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
                 self._update_safe_factor(aborted=False, fast_complete_triggered=fast_complete)
 
     # 增强单帧的方法
-    async def enhance_one_frame(self, surf: nvc.Surface, model: torch.nn.Module, tensor_converter: TensorConverter) -> torch.Tensor:
+    async def enhance_one_frame(self, surf: nvc.Surface, model: torch.nn.Module, tensor_converter: TensorConverter, compare_segment=None) -> torch.Tensor:
         # 将NVIDIA Surface转换为PyTorch张量
         tensor = tensor_converter.surface_to_tensor(surf)
         # 将张量移动到指定设备
         tensor = tensor.to(self.device)
+        keep_input(compare_segment, tensor)
         # 让出控制权给其他任务
         await asyncio.sleep(0)
         # 使用模型进行推理（不计算梯度）
@@ -637,8 +653,10 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
             # 让出控制权给其他任务
             await asyncio.sleep(0)
             from ._gpuburn import burn as _burn; _burn(fwd_ms)
-        # 将张量移回CPU以节省GPU内存
-        tensor = tensor.cpu()  # save on CPU to save GPU memory
+            # 缓冲里会同时留着约 30 秒的帧。float32 一帧 1080p 约 24MB，整段缓冲约 20GB，
+            # 机器内存被占满后 c10 分配器会访问违例，播放进程直接退出。这里收成 uint8 再离开 GPU。
+            tensor = tensor.mul(255).clamp_(0, 255).to(dtype=torch.uint8)
+        tensor = tensor.cpu()
         # 让出控制权给其他任务
         await asyncio.sleep(0)
         return tensor

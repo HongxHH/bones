@@ -30,6 +30,7 @@ from istream_player.core.enhancer import Enhancer
 
 from istream_player.modules.download_buffer import DownloadBufferImpl
 from istream_player.modules.enhance_buffer import EnhanceBufferImpl
+from istream_player.modules.status.stall_tracker import stalls_from_state_timeline
 from istream_player.utils.gpu_monitor import GPUMonitor
 
 # 分析器段数据类 - 存储单个视频段的详细分析信息
@@ -565,21 +566,13 @@ class PlaybackAnalyzer(
                     last_quality = segment.quality
                     quality_switches += 1
 
-        # ===== 统计卡顿次数和时长 =====
-        buffering_start = None
-        self._stalls = []
-        for time, state, position in self._states:
-            if state == State.BUFFERING and buffering_start is None:
-                # 开始缓冲（卡顿开始）
-                buffering_start = time
-            elif state == State.READY and buffering_start is not None:
-                # 结束缓冲（卡顿结束）
-                duration = time - buffering_start
-                # 记录卡顿信息
-                self._stalls.append(Stall(buffering_start, time))
-                total_stall_num += 1
-                total_stall_duration += duration
-                buffering_start = None
+        # ===== 统计卡顿次数和时长（与 StatusExporter StallTracker 同一语义）=====
+        # BUFFERING → 任意非 BUFFERING；若仍开着则用时间线末尾闭合。
+        close_at = self._states[-1][0] if self._states else None
+        intervals, total_stall_duration, total_stall_num = stalls_from_state_timeline(
+            self._states, close_open_at=close_at
+        )
+        self._stalls = [Stall(s.time_start, s.time_end) for s in intervals]
 
         # ===== 计算平均比特率 =====
         average_bitrate = sum(bitrates) / len(bitrates) if len(bitrates) > 0 else 0

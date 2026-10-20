@@ -2,7 +2,9 @@ import asyncio
 import copy
 import itertools
 import logging
+import os
 import os.path
+import stat
 import tempfile
 import shutil
 from asyncio import Task
@@ -24,6 +26,15 @@ from istream_player.utils import critical_task
 from istream_player.modules.download_buffer import DownloadBufferImpl
 from istream_player.modules.enhance_buffer import EnhanceBufferImpl
 from istream_player.core.enhancer import Enhancer
+
+
+def _ignore_locked(func, path, _exc_info) -> None:
+    """Skip a file another player still has open, instead of aborting startup."""
+    try:
+        os.chmod(path, stat.S_IWRITE)
+        func(path)
+    except OSError:
+        return
 
 
 # 调度器实现类 - 继承自Module和Scheduler接口
@@ -123,13 +134,11 @@ class SchedulerImpl(Module, Scheduler):
             # 格式错误，抛出异常
             raise Exception("select_as should be of the format '<uint>-<uint>' or '<uint>'.")
 
-        # 设置运行目录
+        # 设置运行目录。上一次播放留下的临时 mp4 可能仍被占用，清不掉时继续启动。
         if self.run_dir is not None:
-            # 如果目录已存在，先删除
             if os.path.exists(self.run_dir):
-                shutil.rmtree(self.run_dir)
-            # 创建新的运行目录
-            os.mkdir(self.run_dir)
+                shutil.rmtree(self.run_dir, onerror=_ignore_locked)
+            os.makedirs(self.run_dir, exist_ok=True)
 
     def segment_limits(self, adap_sets: Dict[int, AdaptationSet]) -> tuple[int, int]:
         """
@@ -186,10 +195,9 @@ class SchedulerImpl(Module, Scheduler):
             # 确保MPD仍然可用
             assert self.mpd_provider.mpd is not None
 
-            # 处理动态MPD - 需要定期更新
+            # 处理动态MPD - 需要定期更新（force 以便会话策略变更立即生效）
             if self.mpd_provider.mpd.type == "dynamic":
-                # 更新MPD内容
-                await self.mpd_provider.update()
+                await self.mpd_provider.update(force=True)
                 # 重新选择自适应集
                 self.adaptation_sets = self.select_adaptation_sets(self.mpd_provider.mpd.adaptation_sets)
                 # 重新计算段索引范围
@@ -240,6 +248,20 @@ class SchedulerImpl(Module, Scheduler):
                     # 只处理视频轨道
                     if adapt_set.content_type != "video":
                         continue
+
+                    # 动态 MPD 可能撤掉部分 representation，钳制到仍可用的档位
+                    if download_action not in adapt_set.representations:
+                        available = sorted(adapt_set.representations.keys())
+                        if not available:
+                            raise KeyError(f"No representations left in adaptation set {adaptation_set_id}")
+                        clamped = min(available, key=lambda rid: abs(rid - download_action))
+                        self.log.warning(
+                            "Representation %s gone after MPD update; clamping to %s",
+                            download_action,
+                            clamped,
+                        )
+                        download_action = clamped
+                        download_actions[adaptation_set_id] = clamped
 
                     # 获取对应的段对象
                     segment = adapt_set.representations[download_action].segments[self._index]

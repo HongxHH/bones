@@ -17,6 +17,7 @@ import torch.nn.functional as F
 from istream_player.config.config import PlayerConfig
 from istream_player.core.module import Module, ModuleOption
 from istream_player.modules.enhance_buffer import EnhanceBufferImpl
+from istream_player.modules.enhancer.compare_view import drop_segment, keep_input, pad_same, start_segment
 from istream_player.modules.enhancer.enhancer_imdn_always import IMDNEnhancerAlways
 from istream_player.modules.enhancer.pacnet_model import PACNet
 from istream_player.modules.decoder import TensorConverter
@@ -168,12 +169,13 @@ class PACNetEnhancer(IMDNEnhancerAlways):
             return 1   # e2
         return 0       # e1 保命
 
-    async def enhance_one_frame(self, surf, model, tensor_converter, exit_idx=None):
+    async def enhance_one_frame(self, surf, model, tensor_converter, exit_idx=None, compare_segment=None):
         """重写：用 PACNet 指定出口增强。exit_idx 由 run 循环里的 halt 控制器设置。"""
         if exit_idx is None:
             exit_idx = self._current_exit_idx
         tensor = tensor_converter.surface_to_tensor(surf)
         tensor = tensor.to(self.device)
+        keep_input(compare_segment, tensor)
         await asyncio_sleep()
         with torch.no_grad():
             import time as _time
@@ -199,6 +201,10 @@ class PACNetEnhancer(IMDNEnhancerAlways):
 
         while self._is_ready:
             index, segments = await self.enhance_buffer.dequeue()
+            if index is None or segments is None:
+                self._is_ready = False
+                self.log.info("PACNet Enhancer closed")
+                return
             self._current_enhancing_index = index
             if self.enhance_buffer.is_empty():
                 if self.scheduler.is_end:
@@ -249,6 +255,7 @@ class PACNetEnhancer(IMDNEnhancerAlways):
                 self.task_total = self.pacnet_latency[1] * self._num_frames  # e2延迟×帧数，段级估计
 
                 result = []
+                start_segment(segment, self.config)
                 self.cnt = 0
                 self._enhanced_frames = 0
                 # 段内三出口实际增强帧计数 [e1,e2,e3]，供 analyzer 按帧占比算真实 VMAF
@@ -266,6 +273,7 @@ class PACNetEnhancer(IMDNEnhancerAlways):
                         remaining_frames = self._num_frames - self.cnt
                         # headless模式下不存decoder_wrapper，只标记剩余帧数
                         result.extend([None] * remaining_frames)
+                        pad_same(segment, remaining_frames)
                         self.cnt = self._num_frames
                         break
 
@@ -285,13 +293,18 @@ class PACNetEnhancer(IMDNEnhancerAlways):
                     remaining_frames = max(self._num_frames - self.cnt, 1)
                     self._current_exit_idx = self._halt_decide(lead_time, remaining_frames, index)
 
-                    surf_enh = await self.enhance_one_frame(surf, model, tensor_converter)
+                    surf_enh = await self.enhance_one_frame(
+                        surf, model, tensor_converter, compare_segment=segment
+                    )
                     self._enhanced_frames += 1
                     # 记录该帧实际使用的出口（halt 帧级决策结果）
                     _ei = self._current_exit_idx if self._current_exit_idx in (0, 1, 2) else 2
                     self._exit_frame_cnt[_ei] += 1
-                    # headless模式下不存完整CPU tensor（渲染器不用，analyzer用离线VMAF），避免内存积压
-                    result.append(None)
+                    # 对比打开时留下 uint8 增强帧，关闭时仍不占缓冲。
+                    if getattr(segment, "compare_lr", None) is not None:
+                        result.append(_uint8_cpu(surf_enh))
+                    else:
+                        result.append(None)
                     self.cnt += 1
                     await asyncio_sleep()
 
@@ -305,6 +318,7 @@ class PACNetEnhancer(IMDNEnhancerAlways):
                         self.check_abort = False
 
                 if abort:
+                    drop_segment(segment)
                     segment.is_enhance = False
                     segment.abort_reason = abort_reason
                     segment.wasted_enhanced_cnt = self._enhanced_frames
@@ -361,3 +375,13 @@ class PACNetEnhancer(IMDNEnhancerAlways):
 def asyncio_sleep():
     import asyncio
     return asyncio.sleep(0)
+
+
+def _uint8_cpu(tensor):
+    """Display tensor as uint8 so compare mode does not keep float frames."""
+    if tensor is None:
+        return None
+    sample = tensor.detach()
+    if getattr(sample, "dtype", None) is not None and sample.dtype == torch.uint8:
+        return sample.cpu().contiguous()
+    return (sample * 255).clamp(0, 255).to(dtype=torch.uint8).cpu().contiguous()

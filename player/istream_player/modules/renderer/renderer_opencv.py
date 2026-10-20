@@ -3,6 +3,7 @@ import logging
 import os
 import time
 import threading
+import urllib.request
 from datetime import datetime
 from fileinput import filename
 from typing import Dict, Optional
@@ -21,6 +22,7 @@ from istream_player.models import Segment, State
 from istream_player.modules.decoder import DecoderNvCodec
 from istream_player.modules.download_buffer import DownloadBufferImpl
 from istream_player.modules.enhance_buffer import EnhanceBufferImpl
+from istream_player.modules.enhancer.compare_view import drop_segment, enabled as compare_enabled, take as take_baseline, to_display_bgr
 from istream_player.core.bw_meter import BandwidthMeter
 
 
@@ -33,25 +35,85 @@ class FPSLogger:
         # 上次记录时间戳，用于计算时间间隔
         self.seconds = time.perf_counter()
 
-        self.fps = 0
+        self.fps = 0.0
+
+    def tick(self) -> float:
+        """Count one presented frame; return the latest windowed FPS."""
+        self.framecount += 1
+        now = time.perf_counter()
+        elapsed = now - self.seconds
+        if elapsed >= self.interval:
+            self.fps = self.framecount / elapsed if elapsed > 0 else 0.0
+            self.framecount = 0
+            self.seconds = now
+        return float(self.fps)
 
     def log(self, titlebar=True, fmt="fps : {0}"):
-        # 增加帧计数
-        self.framecount += 1
-        # 检查是否到达记录间隔
-        if self.seconds + self.interval < time.perf_counter():
-            # 计算FPS（帧数除以时间间隔）
-            self.fps = self.framecount / self.interval
-            # 重置帧计数
-            self.framecount = 0
-            # 更新记录时间戳
-            self.seconds = time.perf_counter()
-            # 根据参数决定输出方式
-            if titlebar:
-                return fmt.format(self.fps)
-            else:
-                return fmt.format(self.fps)
+        before = self.seconds
+        fps = self.tick()
+        if self.seconds != before:
+            return fmt.format(fps)
         return None
+
+
+class PreviewPusher:
+    """Push a downscaled JPEG of the enhanced frame to the Lab preview."""
+
+    def __init__(self, url: str, run_id: str, arm_id: str) -> None:
+        self.url = url
+        self.run_id = run_id
+        self.arm_id = arm_id
+        self._latest: Optional[bytes] = None
+        self._lock = threading.Lock()
+        self._stop = threading.Event()
+        self._last_encode = 0.0
+        self._thread = threading.Thread(target=self._loop, name="prism-preview", daemon=True)
+        self._thread.start()
+
+    def submit(self, frame_bgr: np.ndarray) -> None:
+        now = time.perf_counter()
+        if now - self._last_encode < 0.12:
+            return
+        self._last_encode = now
+        try:
+            h, w = frame_bgr.shape[:2]
+            if w > 720:
+                scale = 720 / float(w)
+                frame_bgr = cv2.resize(frame_bgr, (720, max(2, int(h * scale))))
+            ok, buf = cv2.imencode(".jpg", frame_bgr, [int(cv2.IMWRITE_JPEG_QUALITY), 55])
+            if not ok:
+                return
+            with self._lock:
+                self._latest = buf.tobytes()
+        except Exception:
+            return
+
+    def close(self) -> None:
+        self._stop.set()
+
+    def _loop(self) -> None:
+        while not self._stop.is_set():
+            with self._lock:
+                payload = self._latest
+                self._latest = None
+            if not payload:
+                self._stop.wait(0.05)
+                continue
+            req = urllib.request.Request(
+                self.url,
+                data=payload,
+                method="POST",
+                headers={
+                    "Content-Type": "image/jpeg",
+                    "X-Prism-Run": self.run_id,
+                    "X-Prism-Arm": self.arm_id,
+                },
+            )
+            try:
+                with urllib.request.urlopen(req, timeout=1.5) as resp:
+                    resp.read()
+            except Exception:
+                pass
 
 
 class FrameRecorder:
@@ -135,6 +197,18 @@ class FrameRecorder:
         self.log.info("Frame recorder stopped: %s", self.output_path)
 
 
+class _BgrSink:
+    def __init__(self, sink) -> None:
+        self._sink = sink
+
+    def submit(self, frame_bgr: np.ndarray) -> None:
+        rgb = cv2.cvtColor(frame_bgr, cv2.COLOR_BGR2RGB)
+        self._sink.write(rgb)
+
+    def close(self) -> None:
+        self._sink.close()
+
+
 @ModuleOption("opencv", requires=[Player,DownloadBufferImpl, EnhanceBufferImpl,BandwidthMeter])
 class OpenCVRenderer(Module, Renderer, PlayerEventListener):
     log = logging.getLogger("OpenCV Renderer")
@@ -147,6 +221,20 @@ class OpenCVRenderer(Module, Renderer, PlayerEventListener):
         self.fps = None     # 目标帧率，用于控制渲染速度
         self.device = None  # 渲染设备类型（CPU或GPU），决定渲染路径
         self.frame_recorder: Optional[FrameRecorder] = None
+        self.preview: Optional[PreviewPusher] = None
+        self.frame_sink = None
+        self.base_sink = None
+        self.frame_archive = None
+        self._frame_in_segment = 0
+        self._compare_lr = None
+        self._compare_segment = None
+        self._compare_dec = None
+        self._compare_dec_index = 0
+        self._compare_dec_failed = False
+        self._compare_down = None
+        self._compare_buf = None
+        self._compare_native = (0, 0)
+        self.window_ok = False
 
         # OpenCV相关
         self.window_name = "IStream Player - OpenCV"
@@ -177,6 +265,7 @@ class OpenCVRenderer(Module, Renderer, PlayerEventListener):
                     bw_meter: BandwidthMeter,
                     ):
         player.add_listener(self)
+        self.player = player
         self.config = config
         self.width = config.display_width
         self.height = config.display_height
@@ -188,9 +277,16 @@ class OpenCVRenderer(Module, Renderer, PlayerEventListener):
 
         self.current_fps = 0
 
-        # 初始化OpenCV窗口
-        cv2.namedWindow(self.window_name, cv2.WINDOW_AUTOSIZE)
-        cv2.setWindowTitle(self.window_name, "IStream Player - OpenCV")
+        self._init_frame_sink()
+        if self.frame_sink is None:
+            # 有的 OpenCV 构建没有 highgui；窗口失败时仍把帧推到 Lab 预览
+            try:
+                cv2.namedWindow(self.window_name, cv2.WINDOW_AUTOSIZE)
+                cv2.setWindowTitle(self.window_name, "IStream Player - OpenCV")
+                self.window_ok = True
+            except cv2.error as exc:
+                self.window_ok = False
+                self.log.warning("OpenCV window unavailable, preview only: %s", exc)
 
         # 初始化NVIDIA解码器下载器
         self.nv_down = nvc.PySurfaceDownloader(self.width, self.height, nvc.PixelFormat.RGB, 0)
@@ -200,11 +296,17 @@ class OpenCVRenderer(Module, Renderer, PlayerEventListener):
         self.log.info(f"OpenCV Renderer initialized: {self.width}x{self.height} @ {self.fps}fps")
 
         self._init_recorder()  # 初始化帧记录器
+        self._init_archive()
+        self._init_preview()
 
     def remain_task(self):
         if self.task_start is None: # 如果任务未开始，返回0
             return 0
         return max(self.task_total - (time.perf_counter() - self.task_start), 0) # 返回剩余任务时间（总时间 - 已用时间）
+
+    def render_fps(self) -> float:
+        """Latest ~1s window of presented frames per second."""
+        return float(getattr(self.fps_logger, "fps", 0.0) or 0.0)
     
     # 获取当前正在渲染的片段的索引
     def get_current_render_segment_index(self):
@@ -219,6 +321,7 @@ class OpenCVRenderer(Module, Renderer, PlayerEventListener):
             segment = segments[as_idx] # 获取当前片段
             # 重置帧率节拍参考，避免跨片段累计导致加速或减速
             self.current_segment_index = (int)(segment.url.split('segment_')[1].split('.')[0])
+            self._frame_in_segment = 0
             self.current_segment_url = segment.url
             self.current_segment_download_action = segment.download_action
             self.current_segment_enhance_action = segment.enhance_action
@@ -231,17 +334,28 @@ class OpenCVRenderer(Module, Renderer, PlayerEventListener):
             self.decision_time_buffer_level = segment.decision_time_buffer_level #  abr算法做出决策时的缓冲区剩余时长
 
             self.log.info(f"Rendering segment {segment.url}") # 记录渲染片段的URL
+            self._compare_segment = segment
+            self._reset_compare_decoder()
 
             if segment.decode_data is None:  # 预解码的数据来自增强缓冲区替换回来的段，若没有则表明该段未被增强
+                self._frame_enhanced = []
+                self._compare_lr = None
+                drop_segment(segment)
                 # 实时解码
                 await self._render_segment_realtime(segment) # 渲染实时解码的片段
             else:
+                self._frame_enhanced = getattr(segment, "frame_enhanced", None)
+                self._compare_lr = getattr(segment, "compare_lr", None) if compare_enabled(self.config) else None
+                if self._compare_lr is None:
+                    drop_segment(segment)
                 # 使用预解码数据
                 await self._render_segment_predecoded(segment, segment.decode_data) # 渲染预解码的片段
                 # 播放完成后释放内存
                 # segment.decode_data = None
                 del segment.decode_data
                 segment.decode_data = None
+                drop_segment(segment)
+                self._compare_lr = None
 
 
         self.is_playing = False # 设置播放状态标志为False
@@ -352,28 +466,38 @@ class OpenCVRenderer(Module, Renderer, PlayerEventListener):
 
             # if self.frame_recorder:
             #     self.frame_recorder.submit(frame)
-            # 添加信息覆盖层
-            # frame = self._add_overlay(frame)
+            index = self._frame_in_segment
+            baseline = self._baseline_bgr(index)
+            self._archive_frame(frame, baseline)
+            if self.frame_sink is not None:
+                if compare_enabled(self.config) and self.base_sink is not None and baseline is not None:
+                    # Only a real bicubic original goes to the left side.
+                    # Repeating this frame made the wipe look unchanged.
+                    self.base_sink.submit(baseline)
+                self.frame_sink.submit(frame)
+            elif getattr(self.config, "display_overlay", True):
+                frame = self._add_overlay(frame)
             # if self.frame_recorder:
             #     self.frame_recorder.submit(frame)
 
-            # 显示帧
-            cv2.imshow(self.window_name, frame)
+            if self.preview is not None and self.frame_sink is None:
+                self.preview.submit(frame)
 
-            # 检查退出条件
-            key = cv2.waitKey(1) & 0xFF
-            if key == ord('q') or key == 27:  # 'q' 或 ESC 键退出
-                self.log.info("User requested exit")
-                self.is_playing = False
-                return
-            elif key == ord(' '):  # 空格键暂停/继续
-                self._toggle_pause()
+            if self.window_ok:
+                cv2.imshow(self.window_name, frame)
+                key = cv2.waitKey(1) & 0xFF
+                if key == ord('q') or key == 27:
+                    self.log.info("User requested exit")
+                    self.is_playing = False
+                    return
+                elif key == ord(' '):
+                    self._toggle_pause()
 
-            # 更新FPS显示
+            # 更新出画 FPS（滑窗）；日志仍按间隔打
             fps_text = self.fps_logger.log()
+            self.current_fps = float(self.fps_logger.fps)
             if fps_text:
-                self.current_fps = fps_text
-                self.log.info(f"Current FPS: {fps_text}")
+                self.log.info("Current FPS: %s", fps_text)
 
         except Exception as e:
             self.log.error(f"Error rendering frame: {e}")
@@ -388,7 +512,7 @@ class OpenCVRenderer(Module, Renderer, PlayerEventListener):
     async def _wait_if_paused(self):
         """如果处于暂停状态，则阻塞渲染直到恢复"""
         while self.is_paused and self.is_playing:
-            key = cv2.waitKey(1) & 0xFF
+            key = cv2.waitKey(1) & 0xFF if self.window_ok else 255
             if key == ord('q') or key == 27:
                 self.log.info("User requested exit while paused")
                 self.is_playing = False
@@ -475,12 +599,232 @@ class OpenCVRenderer(Module, Renderer, PlayerEventListener):
         )
         self.log.info("Recording rendered output to %s", output_path)
 
+    def _init_frame_sink(self) -> None:
+        name = (getattr(self.config, "frame_shm", "") or "").strip()
+        if not name or self.config is None:
+            return
+        try:
+            from pathlib import Path
+            import sys as _sys
+
+            repo = Path(__file__).resolve().parents[4]
+            if str(repo) not in _sys.path:
+                _sys.path.insert(0, str(repo))
+            from prism.frame_sink import FrameSink
+
+            sink = FrameSink(name, create=False)
+            sink.open()
+            self.frame_sink = _BgrSink(sink)
+            try:
+                base = FrameSink(name + "Base", create=False)
+                base.open()
+                self.base_sink = _BgrSink(base)
+            except Exception as exc:
+                self.base_sink = None
+                self.log.warning("compare sink unavailable: %s", exc)
+            self.window_ok = False
+            self.log.info("Prism picture pane <- shared frame %s", name)
+        except Exception as exc:
+            self.log.warning("frame sink unavailable: %s", exc)
+
+    def _buffer_seconds(self, buffer, *, continuous: bool = True) -> float | None:
+        if buffer is None:
+            return None
+        try:
+            return float(buffer.buffer_level(continuous=continuous))
+        except Exception:
+            return None
+
+    def _enhanced_ready_seconds(self) -> float | None:
+        buffer = self.download_buffer
+        if buffer is None:
+            return None
+        total = 0.0
+        try:
+            for group in (getattr(buffer, "_segments", {}) or {}).values():
+                for segment in group.values():
+                    has_frames = getattr(segment, "decode_data", None) is not None
+                    if has_frames or bool(getattr(segment, "is_enhance", False)):
+                        total += float(getattr(segment, "duration", 0.0) or 0.0)
+                    break
+        except Exception:
+            return None
+        return total
+
+    def _plain(self, value):
+        if value is None or isinstance(value, (str, int, float, bool)):
+            return value
+        if isinstance(value, dict):
+            return {str(key): self._plain(item) for key, item in value.items()}
+        if isinstance(value, (list, tuple)):
+            return [self._plain(item) for item in value]
+        return str(value)
+
+    def _frame_was_enhanced(self, index: int) -> bool:
+        flags = getattr(self, "_frame_enhanced", None)
+        if flags is None:
+            return bool(getattr(self, "is_enhance", False))
+        if 0 <= index < len(flags):
+            return bool(flags[index])
+        return False
+
+    def _baseline_bgr(self, index: int):
+        """Bicubic original for an enhanced frame. None means 'no distinct pair'."""
+        if not compare_enabled(self.config):
+            self._close_compare_decoder()
+            return None
+        if not self._frame_was_enhanced(index):
+            return None
+        item = take_baseline(self._compare_lr, index)
+        if item is not None:
+            try:
+                return to_display_bgr(item, int(self.width), int(self.height))
+            except Exception as exc:
+                self.log.warning("baseline upscale failed: %s", exc)
+        # Segments enhanced before compare was turned on have no stored LR.
+        # Re-decode that same segment and bicubic it up to the display size.
+        return self._baseline_from_file(index)
+
+    def _reset_compare_decoder(self) -> None:
+        self._close_compare_decoder()
+        self._compare_dec_failed = False
+
+    def _close_compare_decoder(self) -> None:
+        dec = getattr(self, "_compare_dec", None)
+        self._compare_dec = None
+        self._compare_down = None
+        self._compare_buf = None
+        self._compare_dec_index = 0
+        self._compare_native = (0, 0)
+        if dec is None:
+            return
+        path = getattr(dec, "mp4_path", None)
+        del dec
+        if path:
+            try:
+                os.remove(path)
+            except OSError:
+                pass
+
+    def _baseline_from_file(self, index: int):
+        if self._compare_dec_failed:
+            return None
+        if index < self._compare_dec_index - 1:
+            return None
+        if self._compare_dec is None and not self._open_compare_decoder():
+            return None
+        dec = self._compare_dec
+        try:
+            while self._compare_dec_index <= index:
+                surf = dec.decode_one_frame()
+                self._compare_dec_index += 1
+                if surf is None:
+                    self._compare_dec_failed = True
+                    self.log.warning("compare decoder ran out of frames at %s", index)
+                    return None
+                if self._compare_dec_index - 1 == index:
+                    return self._surface_bicubic_bgr(surf)
+        except Exception as exc:
+            self._compare_dec_failed = True
+            self.log.warning("compare baseline decode failed: %s", exc)
+        return None
+
+    def _open_compare_decoder(self) -> bool:
+        segment = self._compare_segment
+        if segment is None or not getattr(segment, "path", None) or not getattr(segment, "init_path", None):
+            self._compare_dec_failed = True
+            return False
+        try:
+            dec = DecoderNvCodec(self.config, segment, resize=False)
+            width, height = dec.resolution()
+            self._compare_dec = dec
+            self._compare_dec_index = 0
+            self._compare_native = (int(width), int(height))
+            self._compare_down = nvc.PySurfaceDownloader(int(width), int(height), nvc.PixelFormat.RGB, 0)
+            self._compare_buf = np.zeros((int(width) * int(height), 3), np.uint8)
+            self.log.info("Compare baseline decoder %sx%s", width, height)
+            return True
+        except Exception as exc:
+            self._compare_dec_failed = True
+            self.log.warning("compare decoder unavailable: %s", exc)
+            return False
+
+    def _surface_bicubic_bgr(self, surf):
+        width, height = self._compare_native
+        self._compare_down.DownloadSingleSurface(surf, self._compare_buf)
+        rgb = self._compare_buf.reshape((height, width, 3))
+        bgr = cv2.cvtColor(rgb, cv2.COLOR_RGB2BGR)
+        display_w, display_h = int(self.width), int(self.height)
+        if (width, height) != (display_w, display_h):
+            bgr = cv2.resize(bgr, (display_w, display_h), interpolation=cv2.INTER_CUBIC)
+        return np.ascontiguousarray(bgr)
+
+    def _archive_frame(self, frame, baseline=None) -> None:
+        archive = self.frame_archive
+        if archive is None:
+            return
+        segment = int(getattr(self, "current_segment_index", 0) or 0)
+        index = self._frame_in_segment
+        self._frame_in_segment += 1
+        fps = float(self.fps or 30)
+        duration = float(self.task_total or 0)
+        pts = max(segment - 1, 0) * duration + index / fps
+        archive.submit(
+            frame,
+            {
+                "segment": segment,
+                "frame_in_segment": index,
+                "pts": round(pts, 4),
+                "representation": self._plain(getattr(self, "current_segment_download_action", None)),
+                "enhance_level": self._plain(getattr(self, "current_segment_enhance_action", None)),
+                "enhanced": self._frame_was_enhanced(index),
+                "has_baseline": baseline is not None,
+                "download_buffer_s": self._buffer_seconds(self.download_buffer),
+                "enhanced_ready_s": self._enhanced_ready_seconds(),
+                "enhance_pending_s": self._buffer_seconds(self.enhance_buffer, continuous=True),
+                "enhance_buffer_s": self._buffer_seconds(self.enhance_buffer, continuous=True),
+                "enhance_latency_s": self._plain(getattr(self, "enhance_latency", None)),
+            },
+            baseline,
+        )
+
+    def _init_archive(self) -> None:
+        directory = (getattr(self.config, "frame_archive", "") or "").strip()
+        if not directory:
+            return
+        try:
+            from .frame_archive import FrameArchive
+
+            self.frame_archive = FrameArchive(directory)
+            self.log.info("Frame archive -> %s", directory)
+        except Exception as exc:
+            self.log.warning("frame archive unavailable: %s", exc)
+
+    def _init_preview(self) -> None:
+        if self.config is None or self.frame_sink is not None:
+            return
+        run_id = getattr(self.config, "telemetry_run_id", "") or ""
+        arm_id = getattr(self.config, "telemetry_arm_id", "") or ""
+        if not run_id or not arm_id:
+            return
+        base = (getattr(self.config, "status_server_url", "") or "http://127.0.0.1:8080").rstrip("/")
+        self.preview = PreviewPusher(f"{base}/v1/preview", run_id, arm_id)
+        self.log.info("Lab preview -> %s arm %s", base, arm_id)
 
     def _toggle_pause(self):
-        """切换暂停状态"""
+        """切换暂停状态（同步到 Player 控制面）"""
+        if getattr(self, "player", None) is not None:
+            if self.player.state == State.PAUSED or getattr(self.player, "_paused", False):
+                self.player.resume()
+            else:
+                self.player.pause()
+            return
         self.is_paused = not self.is_paused
         state = "paused" if self.is_paused else "resumed"
         self.log.info(f"Playback {state}")
+
+    async def on_state_change(self, position, old_state: State, new_state: State):
+        self.is_paused = new_state == State.PAUSED
 
     async def cleanup(self):
         """清理资源"""
@@ -488,10 +832,28 @@ class OpenCVRenderer(Module, Renderer, PlayerEventListener):
         self.log.info("OpenCV Renderer cleaned up")
 
     def _cleanup_resources(self):
+        self._close_compare_decoder()
         if self.frame_recorder:
             self.frame_recorder.close()
             self.frame_recorder = None
-        cv2.destroyAllWindows()
+        if self.preview:
+            self.preview.close()
+            self.preview = None
+        if self.frame_sink is not None:
+            closer = getattr(self.frame_sink, "close", None)
+            if closer:
+                closer()
+            self.frame_sink = None
+        if self.base_sink is not None:
+            closer = getattr(self.base_sink, "close", None)
+            if closer:
+                closer()
+            self.base_sink = None
+        if self.frame_archive is not None:
+            self.frame_archive.close()
+            self.frame_archive = None
+        if self.window_ok:
+            cv2.destroyAllWindows()
 
     def __del__(self):
         """析构函数"""

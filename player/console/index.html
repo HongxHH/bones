@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BONES · Player Console</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"
+    rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #12212b;
+      --muted: #4d5e6a;
+      --paper: #e7eef1;
+      --paper-2: #f4f7f8;
+      --teal: #0b6e6e;
+      --teal-deep: #084848;
+      --amber: #c45c12;
+      --line: rgba(18, 33, 43, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+    }
+
+    body {
+      font-family: "IBM Plex Sans", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(1200px 480px at 10% -10%, rgba(11, 110, 110, 0.16), transparent 55%),
+        radial-gradient(900px 420px at 100% 0%, rgba(196, 92, 18, 0.10), transparent 50%),
+        linear-gradient(180deg, var(--paper) 0%, #d9e3e8 100%);
+    }
+
+    header {
+      padding: 28px 36px 8px;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      font-family: Fraunces, serif;
+      font-size: clamp(42px, 6vw, 72px);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 0.9;
+      margin: 0;
+    }
+
+    .brand span {
+      color: var(--teal);
+    }
+
+    .lede {
+      max-width: 28rem;
+      color: var(--muted);
+      margin: 0;
+      font-size: 15px;
+    }
+
+    main {
+      padding: 12px 36px 48px;
+      display: grid;
+      gap: 28px;
+    }
+
+    .live {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 24px;
+      align-items: end;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 24px;
+    }
+
+    @media (max-width: 860px) {
+
+      header,
+      main {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+
+      .live {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .state-name {
+      font-family: Fraunces, serif;
+      font-size: clamp(36px, 5vw, 56px);
+      margin: 0;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px 20px;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 13px;
+    }
+
+    .metrics b {
+      display: block;
+      font-size: 22px;
+      font-weight: 500;
+      color: var(--teal-deep);
+    }
+
+    .metrics span {
+      color: var(--muted);
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      font-family: inherit;
+      font-weight: 600;
+      border: 0;
+      background: var(--teal);
+      color: white;
+      padding: 10px 18px;
+      cursor: pointer;
+    }
+
+    button.ghost {
+      background: transparent;
+      color: var(--ink);
+      outline: 1px solid var(--line);
+    }
+
+    button:hover {
+      background: var(--teal-deep);
+    }
+
+    button.ghost:hover {
+      background: rgba(11, 110, 110, 0.08);
+    }
+
+    section h2 {
+      font-family: Fraunces, serif;
+      font-size: 22px;
+      margin: 0 0 8px;
+    }
+
+    section p.hint {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    pre,
+    input,
+    textarea {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 12px;
+    }
+
+    pre {
+      background: var(--paper-2);
+      padding: 14px;
+      overflow: auto;
+      max-height: 240px;
+      border: 1px solid var(--line);
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    input {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      background: var(--paper-2);
+      color: var(--ink);
+      margin-bottom: 10px;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media (max-width: 860px) {
+      .row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+      background: var(--amber);
+      margin-right: 8px;
+    }
+
+    .dot.on {
+      background: var(--teal);
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1 class="brand">BONES<span>.</span></h1>
+    <p class="lede">播放内核仍在本机窗口出画。这是外置控制台：状态、暂停，以及对接实验服务端的会话入口。</p>
+  </header>
+  <main>
+    <div class="live">
+      <div>
+        <p class="state-name" id="state">CONNECTING</p>
+        <p><span class="dot" id="dot"></span><span id="conn">等待播放器 StatusExporter</span></p>
+        <div class="controls" style="margin-top:16px">
+          <button type="button" id="pause">暂停</button>
+          <button type="button" class="ghost" id="resume">继续</button>
+          <button type="button" class="ghost" id="stop">停止</button>
+        </div>
+      </div>
+      <div class="metrics">
+        <div><span>position</span><b id="position">0.0s</b></div>
+        <div><span>download buffer</span><b id="dbuf">0.0s</b></div>
+        <div><span>enhance buffer</span><b id="ebuf">0.0s</b></div>
+        <div><span>bandwidth</span><b id="bw">—</b></div>
+        <div><span>download action</span><b id="dact">—</b></div>
+        <div><span>enhance action</span><b id="eact">—</b></div>
+      </div>
+    </div>
+
+    <section>
+      <h2>当前配置</h2>
+      <p class="hint">只读快照，来自播放进程的 PlayerConfig。</p>
+      <pre id="config">{}</pre>
+    </section>
+
+    <section>
+      <h2>服务端会话</h2>
+      <p class="hint">U2：代理到实验服务。创建 session 后可切换当前 MPD，或另起一个 player 进程同播。</p>
+      <div class="row">
+        <div>
+          <label for="serverUrl">服务端基址</label>
+          <input id="serverUrl" value="http://127.0.0.1:8080" />
+          <div class="controls">
+            <button type="button" id="loadPubs">加载 publications</button>
+          </div>
+          <pre id="pubs">尚未加载</pre>
+        </div>
+        <div>
+          <label for="pubId">publication_id</label>
+          <input id="pubId" placeholder="pub_..." />
+          <label for="mpdUrl">MPD URL</label>
+          <input id="mpdUrl" placeholder="http://127.0.0.1:8080/origin/..." />
+          <div class="controls">
+            <button type="button" id="openSess">创建 session</button>
+            <button type="button" class="ghost" id="switchSrc">切换当前源</button>
+            <button type="button" class="ghost" id="launchPlayer">另起 player</button>
+          </div>
+          <pre id="sess">尚未创建</pre>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const fmt = (n) => Number(n || 0).toFixed(1) + "s";
+    const fmtBw = (n) => {
+      const v = Number(n || 0);
+      if (v <= 0) return "—";
+      if (v > 1e6) return (v / 1e6).toFixed(2) + " Mbps";
+      return (v / 1e3).toFixed(0) + " kbps";
+    };
+    const fmtAct = (obj) => {
+      if (!obj || Object.keys(obj).length === 0) return "—";
+      return Object.values(obj).join(", ");
+    };
+    const serverHeaders = () => ({ "X-Bones-Server": $("serverUrl").value });
+    function render(snap) {
+      $("state").textContent = snap.state || "UNKNOWN";
+      $("position").textContent = fmt(snap.position);
+      $("dbuf").textContent = fmt(snap.download_buffer_s);
+      $("ebuf").textContent = fmt(snap.enhance_buffer_s);
+      $("bw").textContent = fmtBw(snap.bandwidth_bps);
+      $("dact").textContent = fmtAct(snap.download_action);
+      $("eact").textContent = fmtAct(snap.enhance_action);
+      $("config").textContent = JSON.stringify(snap.config || {}, null, 2);
+      if (snap.config && snap.config.input && !$("mpdUrl").value) {
+        $("mpdUrl").value = snap.config.input;
+      }
+    }
+    function setConn(ok, text) {
+      $("dot").className = "dot" + (ok ? " on" : "");
+      $("conn").textContent = text;
+    }
+    $("pause").onclick = () => fetch("/api/pause", { method: "POST" });
+    $("resume").onclick = () => fetch("/api/resume", { method: "POST" });
+    $("stop").onclick = () => fetch("/api/stop", { method: "POST" });
+
+    const proto = location.protocol === "https:" ? "wss" : "ws";
+    const ws = new WebSocket(proto + "://" + location.host + "/ws");
+    ws.onopen = () => setConn(true, "已连接播放进程");
+    ws.onclose = () => setConn(false, "连接断开");
+    ws.onerror = () => setConn(false, "连接失败");
+    ws.onmessage = (ev) => {
+      try { render(JSON.parse(ev.data)); } catch (e) { }
+    };
+
+    $("loadPubs").onclick = async () => {
+      const res = await fetch("/api/server/publications", { headers: serverHeaders() });
+      const data = await res.json();
+      $("pubs").textContent = JSON.stringify(data, null, 2);
+      if (Array.isArray(data) && data[0]) $("pubId").value = data[0].id;
+    };
+    $("openSess").onclick = async () => {
+      const res = await fetch("/api/server/sessions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", ...serverHeaders() },
+        body: JSON.stringify({ publication_id: $("pubId").value }),
+      });
+      const data = await res.json();
+      const play = await fetch("/api/server/sessions/" + data.id + "/play", { headers: serverHeaders() });
+      const hint = await play.json();
+      if (hint.mpd_url) $("mpdUrl").value = hint.mpd_url;
+      $("sess").textContent = JSON.stringify({ session: data, play: hint }, null, 2);
+    };
+    $("switchSrc").onclick = async () => {
+      const url = $("mpdUrl").value;
+      if (!url) { $("sess").textContent = "请先填写 MPD URL"; return; }
+      const res = await fetch("/api/switch_source", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url }),
+      });
+      $("sess").textContent = JSON.stringify(await res.json(), null, 2);
+    };
+    $("launchPlayer").onclick = async () => {
+      const url = $("mpdUrl").value;
+      if (!url) { $("sess").textContent = "请先填写 MPD URL"; return; }
+      const res = await fetch("/api/launch", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url, mod_renderer: "headless", mod_status: "off" }),
+      });
+      $("sess").textContent = JSON.stringify(await res.json(), null, 2);
+    };
+  </script>
+</body>
+
+</html>

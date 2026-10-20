@@ -104,6 +104,29 @@ class PlayerConfig:
     mod_renderer: str = "opengl"  # 可选的OpenCV渲染器 opencv、opengl、headless
     # 分析器模块列表 - 数据收集和分析组件，使用工厂函数创建默认列表
     mod_analyzer: list[str] = field(default_factory=lambda: ["data_collector"])
+    # 状态导出 / 本机控制台。默认 off，避免批量实验占端口；UI 用 --mod_status status
+    mod_status: str = "off"
+
+    status_host: str = "127.0.0.1"
+    status_port: int = 8765
+    status_server_url: str = "http://127.0.0.1:8080"
+    # Prism L2 telemetry → control plane /v1/telemetry
+    telemetry_run_id: str = ""
+    telemetry_arm_id: str = ""
+    telemetry_session_id: str = ""
+    telemetry_experiment_id: str = ""
+    telemetry_interval_ms: int = 500
+    # Host CPU/GPU/RSS into status/telemetry. Map from ExperimentSpec collect.system_metrics.
+    collect_system_metrics: bool = True
+    # When set, full-resolution frames go to the Prism window instead of a player window.
+    frame_shm: str = ""
+    # Right-hand wipe: same-frame LR bicubic baseline vs the enhanced picture.
+    # Off by default so playback keeps a single frame and no extra memory.
+    compare_view: bool = False
+    # Directory for the per-frame index and JPEG archive.
+    frame_archive: str = ""
+    # OpenCV HUD overlay（仅 opencv renderer）
+    display_overlay: bool = True
 
     # 控制视频增强帧间隔
     enhance_frame_interval = 0 # 0:每帧都增强

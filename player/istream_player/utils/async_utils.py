@@ -8,9 +8,9 @@ from typing import Generic, TypeVar
 def critical_task(ignore_exc: list[type[BaseException]] = [CancelledError]):
     def wrapper(func):
         @functools.wraps(func)
-        async def wrapped(*args):
+        async def wrapped(*args, **kwargs):
             try:
-                return await func(*args)
+                return await func(*args, **kwargs)
             except Exception as e:  # noqa
                 if e.__class__ not in ignore_exc:
                     traceback.print_exc()

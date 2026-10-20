@@ -38,6 +38,12 @@ class DASHPlayer(Module, Player):
         self._playback_started = False
         # 当前播放位置（时间戳，单位：秒）
         self._position = 0.0
+        self._paused = False
+        self._stopped = False
+        self._pause_gate = asyncio.Event()
+        self._pause_gate.set()
+        self._current_segments = None
+        self._current_index = None
 
     async def setup(self,
                     config: PlayerConfig,
@@ -97,18 +103,87 @@ class DASHPlayer(Module, Player):
             await listener.on_state_change(self._position, old_state, new_state)
 
     def stop(self) -> None:
-        """
-        停止播放器 - 停止播放并重置所有状态
-        注意：此方法在当前实现中未完成，抛出NotImplementedError
-        """
-        raise NotImplementedError
+        self._stopped = True
+        self._paused = False
+        self._pause_gate.set()
+        try:
+            loop = asyncio.get_running_loop()
+            loop.create_task(self._wake_stop())
+        except RuntimeError:
+            pass
 
     def pause(self) -> None:
-        """
-        暂停播放器 - 暂停播放
-        注意：此方法在当前实现中未完成，抛出NotImplementedError
-        """
-        raise NotImplementedError
+        if self._stopped or self._state in (State.END, State.IDLE):
+            return
+        self._paused = True
+        self._pause_gate.clear()
+        try:
+            loop = asyncio.get_running_loop()
+            loop.create_task(self._emit_paused())
+        except RuntimeError:
+            pass
+
+    def resume(self) -> None:
+        if self._stopped:
+            return
+        self._paused = False
+        self._pause_gate.set()
+        try:
+            loop = asyncio.get_running_loop()
+            loop.create_task(self._emit_resumed())
+        except RuntimeError:
+            pass
+
+    async def _wake_stop(self) -> None:
+        try:
+            await self.download_buffer.cleanup()
+        except Exception:
+            pass
+        try:
+            await self.scheduler.stop()
+        except Exception:
+            pass
+
+    async def _emit_paused(self) -> None:
+        if self._state not in (State.PAUSED, State.END):
+            old = self._state
+            self._state = State.PAUSED
+            await self._switch_state(old, State.PAUSED)
+
+    async def _emit_resumed(self) -> None:
+        if self._state == State.PAUSED:
+            old = self._state
+            self._state = State.READY
+            await self._switch_state(old, State.READY)
+
+    async def _apply_pause_gate(self) -> bool:
+        if self._stopped:
+            return False
+        if self._paused and self._state != State.PAUSED:
+            old = self._state
+            self._state = State.PAUSED
+            await self._switch_state(old, State.PAUSED)
+        await self._pause_gate.wait()
+        if self._stopped:
+            return False
+        return True
+
+    async def _finish(self) -> None:
+        if self._state != State.END:
+            old = self._state
+            self._state = State.END
+            await self._switch_state(old, State.END)
+        try:
+            await self.scheduler.stop()
+        except Exception:
+            pass
+        try:
+            await self.download_buffer.cleanup()
+            await self.enhance_buffer.cleanup()
+            await self.enhancer.cleanup()
+        except Exception:
+            pass
+        self.log.info("Player closed")
 
     def add_listener(self, listener: PlayerEventListener):
         """
@@ -139,15 +214,29 @@ class DASHPlayer(Module, Player):
 
         # 主播放循环 - 持续运行直到播放结束
         while self._state != State.END:
+            if not await self._apply_pause_gate():
+                await self._finish()
+                return
+
             # 从下载缓冲区获取下一个要播放的段
             index, segments = await self.download_buffer.dequeue()
+            if self._stopped or index is None:
+                await self._finish()
+                return
+
+            if not await self._apply_pause_gate():
+                await self._finish()
+                return
             
             # 如果当前状态是缓冲，切换到就绪状态
             if self.state == State.BUFFERING:
                 await self._switch_state(self._state, State.READY)
+                self._state = State.READY
 
             # 记录正在播放的段索引
             self.log.info(f"Playing index: {index}")
+            self._current_index = index
+            self._current_segments = segments
 
             # 计算首次开始时间（用于确定播放起始点）
             if first_start_time is None:
@@ -160,7 +249,9 @@ class DASHPlayer(Module, Player):
             for listener in self.listeners:
                 await listener.on_position_change(self._position)
             # 确保状态为就绪
-            await self._switch_state(self._state, State.READY)
+            if self._state != State.PAUSED:
+                await self._switch_state(self._state, State.READY)
+                self._state = State.READY
 
             # 通知所有监听器段播放开始
             for listener in self.listeners:
@@ -179,20 +270,12 @@ class DASHPlayer(Module, Player):
             if self.download_buffer.is_empty():
                 # 如果调度器已结束，则播放结束
                 if self.scheduler.is_end:
-                    # 切换到结束状态
-                    await self._switch_state(self._state, State.END)
-                    self._state = State.END
-                    # 清理所有缓冲区
-                    await self.download_buffer.cleanup()
-                    await self.enhance_buffer.cleanup()
-                    await self.enhancer.cleanup()
-                    # 记录播放器关闭日志
-                    self.log.info("Player closed")
+                    await self._finish()
                     return
                 else:
                     # 如果调度器未结束但缓冲区为空，进入缓冲状态
                     await self._switch_state(self._state, State.BUFFERING)
                     self._state = State.BUFFERING
-            else:
-                # 如果缓冲区不为空，保持就绪状态
+            elif self._state != State.PAUSED:
                 await self._switch_state(self._state, State.READY)
+                self._state = State.READY

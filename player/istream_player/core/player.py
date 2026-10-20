@@ -55,3 +55,10 @@ class Player(ModuleInterface, ABC):
         Pause the playback
         """
         pass
+
+    def resume(self) -> None:
+        """
+        Resume playback after pause. Default is a no-op for implementations
+        that treat pause() as a toggle.
+        """
+        pass

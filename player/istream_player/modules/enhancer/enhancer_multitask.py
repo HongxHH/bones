@@ -26,6 +26,7 @@ import torch
 import PyNvCodec as nvc
 
 from istream_player.config.config import PlayerConfig
+from istream_player.modules.enhancer.compare_view import drop_segment, keep_input, keep_same, start_segment
 from istream_player.core.module import Module, ModuleOption
 from istream_player.core.enhancer import Enhancer, EnhancerEventListener
 from istream_player.core.scheduler import Scheduler
@@ -219,7 +220,8 @@ class MultiTaskEnhancer(IMDNEnhancer):
         return torch.clamp(sharpened, 0.0, 1.0)
 
     async def enhance_one_frame(self, surf: nvc.Surface, model: Optional[torch.nn.Module],
-                                 tensor_converter: TensorConverter, task_combo: int = TASK_SR_LIGHT) -> torch.Tensor:
+                                 tensor_converter: TensorConverter, task_combo: int = TASK_SR_LIGHT,
+                                 compare_segment=None) -> torch.Tensor:
         """
         增强单帧，根据任务组合执行不同管线
 
@@ -232,6 +234,7 @@ class MultiTaskEnhancer(IMDNEnhancer):
         # 将 Surface 转换为 PyTorch 张量 (GPU)
         tensor = tensor_converter.surface_to_tensor(surf)
         tensor = tensor.to(self.device)
+        keep_input(compare_segment, tensor)
         await asyncio.sleep(0)
 
         with torch.no_grad():
@@ -325,6 +328,10 @@ class MultiTaskEnhancer(IMDNEnhancer):
 
         while self._is_ready:
             index, segments = await self.enhance_buffer.dequeue()
+            if index is None or segments is None:
+                self._is_ready = False
+                self.log.info("MultiTaskEnhancer closed")
+                return
 
             if self.enhance_buffer.is_empty():
                 if self.scheduler.is_end:
@@ -408,6 +415,7 @@ class MultiTaskEnhancer(IMDNEnhancer):
                     sr_model = self.model_pool[(scale, sr_level)]
 
                 result: List[torch.Tensor] = []
+                start_segment(segment, self.config)
                 cnt = 0
                 fast_complete_triggered = False
                 effective_task = task_combo  # fast_complete后可能降级为SR_light
@@ -437,9 +445,12 @@ class MultiTaskEnhancer(IMDNEnhancer):
 
                     if effective_task == self.TASK_NONE:
                         # 基础质量：直接clone surface（不做增强）
+                        keep_same(segment)
                         surf_enh = surf.Clone(decoder.gpu_id)
                     else:
-                        surf_enh = await self.enhance_one_frame(surf, current_model, tensor_converter, effective_task)
+                        surf_enh = await self.enhance_one_frame(
+                            surf, current_model, tensor_converter, effective_task, segment
+                        )
 
                     result.append(surf_enh)
                     cnt += 1
@@ -453,6 +464,7 @@ class MultiTaskEnhancer(IMDNEnhancer):
                         self.check_abort = False
 
                 if abort:
+                    drop_segment(segment)
                     self.log.info(f"Abort seg {index} during processing")
                     segment.is_enhance = False
                     segment.abort_reason = "Aborted during processing"

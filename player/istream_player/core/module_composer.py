@@ -6,6 +6,15 @@ from pprint import pformat
 from typing import Any, Callable, Dict, Optional, Type, TypedDict
 
 from istream_player.config.config import PlayerConfig
+
+
+def _parse_bool_arg(value: str) -> bool:
+    v = str(value).strip().lower()
+    if v in ("1", "true", "yes", "on"):
+        return True
+    if v in ("0", "false", "no", "off"):
+        return False
+    raise argparse.ArgumentTypeError(f"expected bool, got {value!r}")
 from istream_player.core.module import Module, ModuleInterface
 from istream_player.modules.nes import (BONESController,
                                         DynamicGreedyController,
@@ -39,6 +48,7 @@ from istream_player.modules.scheduler.scheduler import SchedulerImpl
 
 from istream_player.modules.renderer import OpenGLRenderer, HeadlessRenderer, OpenCVRenderer
 from istream_player.modules.enhancer import IMDNEnhancer, IMDNEnhancerAlways, MultiTaskEnhancer, PACNetEnhancer
+from istream_player.modules.status import StatusExporter, StatusOff
 
 # 模块初始化函数类型定义 - 用于创建模块实例的函数签名
 ModInitFnType = Callable[[str, Any, Any], Dict[str, Module]]
@@ -293,6 +303,27 @@ class PlayerComposer:
         parser.add_argument("-l", "--log", help="Log file path", type=str, required=False)
         parser.add_argument('-r', "--run_dir",  help="Run directory, will be automatically OVERWRITTEN", default="output/istream_run_dir")
         parser.add_argument('-aw', "--content_aware", help="Content-aware enhancement", action="store_true", required=False)
+        parser.add_argument("--status_port", type=int, required=False)
+        parser.add_argument("--status_server_url", type=str, required=False)
+        parser.add_argument("--telemetry_run_id", type=str, required=False)
+        parser.add_argument("--telemetry_arm_id", type=str, required=False)
+        parser.add_argument("--telemetry_session_id", type=str, required=False)
+        parser.add_argument("--telemetry_experiment_id", type=str, required=False)
+        parser.add_argument("--telemetry_interval_ms", type=int, required=False)
+        parser.add_argument(
+            "--collect_system_metrics",
+            type=_parse_bool_arg,
+            required=False,
+            help="Collect host CPU/GPU/RSS into telemetry (true/false)",
+        )
+        parser.add_argument("--frame_shm", type=str, required=False)
+        parser.add_argument("--frame_archive", type=str, required=False)
+        parser.add_argument(
+            "--compare_view",
+            type=_parse_bool_arg,
+            required=False,
+            help="Keep a bicubic baseline for the Prism wipe (true/false, default false)",
+        )
         # pprint(self.module_cli)  # 调试输出模块CLI配置
         
         # 为每个模块类型添加命令行参数
@@ -482,6 +513,7 @@ class PlayerComposer:
         )
         # 注册渲染器模块（支持多种渲染方式）
         self.register_module("renderer", [OpenGLRenderer, HeadlessRenderer, OpenCVRenderer], single_initializer, "Renderer", False, "headless")
+        self.register_module("status", [StatusExporter, StatusOff], single_initializer, "Status exporter / local console", False, "off")
 
 
 def single_initializer(mod_type, mod_name, composer: PlayerComposer) -> Dict[str, Module]:

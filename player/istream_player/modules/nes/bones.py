@@ -138,6 +138,10 @@ class BONESController(Module, NESController):
         self.buff_enh = self.enhance_buffer.buffer_level(continuous=True) * 1000   # 增强缓冲水位
         # 获取增强质量表（VMAF分数）
         self.vmaf_enh_avg = self.enhancer.get_quality_table()
+        # 质量表按完整 5 档梯子准备。实验若只放出其中几档，表和段大小形状对不上，决策会直接退出。
+        n_repr = len(bitrate)
+        self.enhance_time = self._fit_rungs(self.enhance_time, n_repr)
+        self.vmaf_enh_avg = self._fit_rungs(self.vmaf_enh_avg, n_repr)
         
         # 记录缓冲状态用于调试
         self.log.info(f"Download buffer level: {self.buff_down}")
@@ -147,6 +151,19 @@ class BONESController(Module, NESController):
         self.action_down, self.action_enh = self._bones_control()
 
         return self.action_down, self.action_enh
+
+    @staticmethod
+    def _fit_rungs(table, n_repr: int):
+        """Keep one table row per representation that is actually in the MPD."""
+        arr = np.asarray(table, dtype=float)
+        if arr.ndim == 1:
+            arr = arr.reshape(-1, 1)
+        if arr.shape[0] == n_repr:
+            return arr
+        if arr.shape[0] > n_repr:
+            return arr[:n_repr]
+        extra = np.repeat(arr[-1:], n_repr - arr.shape[0], axis=0)
+        return np.concatenate([arr, extra], axis=0)
 
     def _bones_control(self):
         """
