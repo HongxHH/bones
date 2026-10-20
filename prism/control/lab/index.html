@@ -1,0 +1,1948 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Prism Lab</title>
+  <style>
+    :root {
+      --ink: #0e1a22;
+      --muted: #5a6b76;
+      --paper: #eef3f5;
+      --panel: #f7fafb;
+      --line: rgba(14, 26, 34, 0.12);
+      --accent: #0d6e6a;
+      --accent-2: #0a5552;
+      --warn: #b45309;
+      --bad: #b42318;
+      --ok: #0d6e6a;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(900px 420px at 0% 0%, rgba(13, 110, 106, 0.12), transparent 55%),
+        radial-gradient(700px 360px at 100% 0%, rgba(180, 83, 9, 0.08), transparent 50%),
+        linear-gradient(180deg, var(--paper), #dde6ea);
+    }
+
+    .shell {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      min-height: 100vh;
+    }
+
+    @media (max-width: 860px) {
+      .shell {
+        grid-template-columns: 1fr;
+      }
+
+      nav {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+      }
+    }
+
+    nav {
+      padding: 28px 20px;
+      border-right: 1px solid var(--line);
+      background: rgba(247, 250, 251, 0.72);
+      backdrop-filter: blur(8px);
+    }
+
+    .brand {
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      font-weight: 800;
+      font-size: 34px;
+      letter-spacing: -0.04em;
+      margin: 0 0 4px;
+      line-height: 1;
+    }
+
+    .brand span {
+      color: var(--accent);
+    }
+
+    .tag {
+      color: var(--muted);
+      font-size: 13px;
+      margin: 0 0 28px;
+    }
+
+    .nav-btn {
+      display: block;
+      width: 100%;
+      text-align: left;
+      border: 0;
+      background: transparent;
+      color: var(--ink);
+      font: inherit;
+      font-weight: 600;
+      padding: 10px 12px;
+      margin-bottom: 4px;
+      cursor: pointer;
+    }
+
+    .nav-btn:hover {
+      background: rgba(13, 110, 106, 0.08);
+    }
+
+    .nav-btn.active {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    main {
+      padding: 28px 32px 48px;
+    }
+
+    h1 {
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      font-size: 28px;
+      margin: 0 0 8px;
+      letter-spacing: -0.03em;
+    }
+
+    .hint {
+      color: var(--muted);
+      margin: 0 0 20px;
+      font-size: 14px;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    button.action {
+      font: inherit;
+      font-weight: 600;
+      border: 0;
+      background: var(--accent);
+      color: #fff;
+      padding: 10px 16px;
+      cursor: pointer;
+    }
+
+    button.action:hover {
+      background: var(--accent-2);
+    }
+
+    button.action.ghost {
+      background: transparent;
+      color: var(--ink);
+      outline: 1px solid var(--line);
+    }
+
+    button.action.ghost:hover {
+      background: rgba(13, 110, 106, 0.08);
+    }
+
+    button.action:disabled {
+      opacity: 0.5;
+      cursor: wait;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .stat {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      padding: 14px 16px;
+    }
+
+    .stat span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .stat b {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 22px;
+      font-weight: 500;
+      color: var(--accent-2);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      font-size: 13px;
+    }
+
+    th,
+    td {
+      text-align: left;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    code,
+    .mono {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 12px;
+    }
+
+    pre {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      padding: 14px;
+      overflow: auto;
+      max-height: 360px;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 12px;
+    }
+
+    .status-line {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+      font-size: 14px;
+    }
+
+    .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--warn);
+    }
+
+    .dot.ok {
+      background: var(--ok);
+    }
+
+    .dot.bad {
+      background: var(--bad);
+    }
+
+    .msg {
+      margin: 12px 0;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      font-size: 13px;
+    }
+
+    .msg.err {
+      border-color: rgba(180, 35, 24, 0.35);
+      color: var(--bad);
+    }
+
+    .msg.ok {
+      border-color: rgba(13, 110, 106, 0.35);
+    }
+
+    .panel {
+      display: none;
+    }
+
+    .panel.active {
+      display: block;
+    }
+
+    a {
+      color: var(--accent-2);
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 960px) {
+      .split {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* —— Unified section (配方 / 机器 / 历史 / 其它折叠) —— */
+    details.sec {
+      margin: 0 0 10px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+    }
+
+    details.sec>summary {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      cursor: pointer;
+      user-select: none;
+      font-weight: 650;
+      font-size: 13px;
+      color: var(--ink);
+    }
+
+    details.sec>summary::-webkit-details-marker {
+      display: none;
+    }
+
+    details.sec>summary::before {
+      content: "";
+      flex: 0 0 auto;
+      width: 0;
+      height: 0;
+      border-left: 5px solid var(--muted);
+      border-top: 4px solid transparent;
+      border-bottom: 4px solid transparent;
+      opacity: 0.75;
+    }
+
+    details.sec[open]>summary::before {
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 5px solid var(--muted);
+      border-bottom: 0;
+    }
+
+    .sec-title {
+      flex: 0 0 auto;
+    }
+
+    .sec-aside {
+      flex: 1 1 auto;
+      min-width: 0;
+      font-weight: 500;
+      font-size: 12px;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-align: right;
+    }
+
+    details.sec[open]>summary .sec-aside {
+      display: none;
+    }
+
+    .sec-body {
+      padding: 0 12px 12px;
+      border-top: 1px solid var(--line);
+    }
+
+    details.fold {
+      margin: 0 0 10px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+    }
+
+    details.fold>summary {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      cursor: pointer;
+      user-select: none;
+      font-weight: 650;
+      font-size: 13px;
+      color: var(--ink);
+    }
+
+    details.fold>summary::-webkit-details-marker {
+      display: none;
+    }
+
+    details.fold>summary::before {
+      content: "";
+      flex: 0 0 auto;
+      width: 0;
+      height: 0;
+      border-left: 5px solid var(--muted);
+      border-top: 4px solid transparent;
+      border-bottom: 4px solid transparent;
+      opacity: 0.75;
+    }
+
+    details.fold[open]>summary::before {
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 5px solid var(--muted);
+      border-bottom: 0;
+    }
+
+    details.fold .fold-body {
+      padding: 0 12px 12px;
+      border-top: 1px solid var(--line);
+    }
+
+    .control-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 0 0 10px;
+      flex-wrap: wrap;
+    }
+
+    .run-status {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    .control-bar:has(#runControls[data-state="running"]) .run-status,
+    .control-bar:has(#runControls[data-state="preparing"]) .run-status {
+      color: var(--accent-2);
+    }
+
+    .control-bar:has(#runControls[data-state="failed"]) .run-status {
+      color: var(--bad);
+    }
+
+    .monitor {
+      margin: 0 0 10px;
+    }
+
+    .monitor-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+      margin: 0 0 8px;
+    }
+
+    .monitor-label {
+      font-weight: 650;
+      font-size: 13px;
+      color: var(--ink);
+    }
+
+    .timeline {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      padding: 8px 12px 10px;
+      margin: 0 0 8px;
+    }
+
+    .tl-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .tl-actions {
+      display: flex;
+      align-items: center;
+    }
+
+    .tl-actions button {
+      border: 0;
+      background: transparent;
+      color: var(--accent-2);
+      font: inherit;
+      font-size: 12px;
+      font-weight: 650;
+      padding: 0 8px;
+      cursor: pointer;
+    }
+
+    .tl-actions button+button {
+      border-left: 1px solid var(--line);
+    }
+
+    .tl-actions button:hover {
+      color: var(--accent);
+    }
+
+    .timeline input[type="range"] {
+      width: 100%;
+      margin: 6px 0 4px;
+      accent-color: var(--accent);
+    }
+
+    .tl-arms {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    #frameMeta {
+      white-space: pre-line;
+      margin: 0;
+    }
+
+    .pipeline {
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      margin: 0 0 8px;
+    }
+
+    .pipeline .meter {
+      background: transparent;
+      border: 0;
+      padding: 8px 12px 6px;
+    }
+
+    .pipeline .meter+.meter {
+      border-top: 1px solid var(--line);
+    }
+
+    .pipeline-foot {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 14px;
+      margin: 0;
+      padding: 7px 12px;
+      border-top: 1px solid var(--line);
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .meter-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    .meter-name {
+      font-weight: 650;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .meter-value {
+      font-variant-numeric: tabular-nums;
+      font-family: "JetBrains Mono", monospace;
+      font-weight: 500;
+      font-size: 15px;
+      white-space: nowrap;
+      color: var(--ink);
+    }
+
+    body.in-shell .meter-value {
+      font-size: 13px;
+    }
+
+    .meter-toggle {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: inherit;
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .meter-toggle:hover .meter-name {
+      color: var(--accent-2);
+    }
+
+    .meter-toggle .meter-name::after {
+      content: "";
+      display: inline-block;
+      width: 0;
+      height: 0;
+      margin-left: 6px;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 5px solid var(--muted);
+      vertical-align: middle;
+      opacity: 0.7;
+    }
+
+    .meter-toggle[aria-expanded="true"] .meter-name::after {
+      border-top: 0;
+      border-bottom: 5px solid var(--muted);
+    }
+
+    .inv-panel {
+      margin: 8px 0 4px;
+      border-top: 1px solid var(--line);
+      padding-top: 8px;
+      max-height: 180px;
+      overflow: auto;
+    }
+
+    .inv-panel[hidden] {
+      display: none;
+    }
+
+    .inv-empty {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .inv-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+      background: transparent;
+      border: 0;
+    }
+
+    .inv-table th,
+    .inv-table td {
+      padding: 4px 6px;
+      border-bottom: 1px solid rgba(14, 26, 34, 0.08);
+      white-space: nowrap;
+    }
+
+    .inv-table th {
+      color: var(--muted);
+      font-weight: 600;
+      background: transparent;
+    }
+
+    .inv-table tr.is-enhancing td {
+      color: var(--warn);
+      font-weight: 600;
+    }
+
+    canvas.spark {
+      width: 100%;
+      height: 44px;
+      display: block;
+    }
+
+    .nav-fold {
+      margin-top: 18px;
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 12px;
+      letter-spacing: 0.06em;
+    }
+
+    #moreNav[hidden] {
+      display: none;
+    }
+
+    .quiet {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .run-controls {
+      display: inline-flex;
+      align-items: stretch;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      margin: 0;
+    }
+
+    .run-btn {
+      font: inherit;
+      font-size: 13px;
+      font-weight: 650;
+      border: 0;
+      background: transparent;
+      color: var(--ink);
+      padding: 8px 16px;
+      cursor: pointer;
+      line-height: 1.2;
+    }
+
+    .run-btn+.run-btn {
+      border-left: 1px solid var(--line);
+    }
+
+    .run-btn:hover:not(:disabled) {
+      background: rgba(13, 110, 106, 0.08);
+    }
+
+    .run-btn:disabled {
+      opacity: 0.38;
+      cursor: default;
+    }
+
+    .run-controls[data-state="idle"] .run-start,
+    .run-controls[data-state="stopped"] .run-start,
+    .run-controls[data-state="failed"] .run-start {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .run-controls[data-state="idle"] .run-start:hover:not(:disabled),
+    .run-controls[data-state="stopped"] .run-start:hover:not(:disabled),
+    .run-controls[data-state="failed"] .run-start:hover:not(:disabled) {
+      background: var(--accent-2);
+    }
+
+    .run-controls[data-state="running"] .run-start,
+    .run-controls[data-state="preparing"] .run-start {
+      color: var(--muted);
+    }
+
+    .run-controls[data-state="running"] .run-stop,
+    .run-controls[data-state="preparing"] .run-stop {
+      color: var(--bad);
+    }
+
+    .run-controls[data-state="running"] .run-stop:hover:not(:disabled),
+    .run-controls[data-state="preparing"] .run-stop:hover:not(:disabled) {
+      background: rgba(180, 35, 24, 0.08);
+    }
+
+    #runMsg:empty {
+      display: none;
+    }
+
+    #runMsg {
+      margin: 0 0 10px;
+    }
+
+    .recipe-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px 8px;
+      padding-top: 10px;
+    }
+
+    @media (max-width: 520px) {
+      .recipe-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    body.in-shell .recipe-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      min-width: 0;
+    }
+
+    .field.span-2 {
+      grid-column: 1 / -1;
+    }
+
+    .field label {
+      font-size: 11px;
+      font-weight: 650;
+      color: var(--muted);
+      letter-spacing: 0.02em;
+    }
+
+    .field select,
+    .field input[type="text"] {
+      width: 100%;
+      font: inherit;
+      font-size: 13px;
+      padding: 6px 8px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+    }
+
+    .field select:disabled,
+    .field input:disabled {
+      opacity: 0.55;
+    }
+
+    .field-hint {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .trace-tools {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      margin-top: 4px;
+    }
+
+    .trace-tools input[type="search"] {
+      flex: 1 1 140px;
+      min-width: 0;
+      font: inherit;
+      font-size: 12px;
+      padding: 6px 8px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+    }
+
+    .trace-tools input[type="search"]:disabled {
+      opacity: 0.55;
+    }
+
+    .trace-tools button {
+      font: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid var(--line);
+      background: transparent;
+      color: var(--ink);
+      padding: 5px 10px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .trace-tools button:hover:not(:disabled) {
+      background: rgba(13, 110, 106, 0.08);
+    }
+
+    .trace-tools button:disabled {
+      opacity: 0.45;
+      cursor: default;
+    }
+
+    body.in-shell .status-line {
+      display: none;
+    }
+
+    body.in-shell .shell {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto 1fr;
+    }
+
+    body.in-shell nav {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 16px;
+      border-right: 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    body.in-shell .brand {
+      font-size: 18px;
+      margin: 0 10px 0 0;
+    }
+
+    body.in-shell .nav-btn {
+      width: auto;
+      margin: 0;
+    }
+
+    body.in-shell .nav-fold {
+      margin: 0 0 0 auto;
+    }
+
+    body.in-shell #moreNav {
+      display: flex;
+      gap: 6px;
+    }
+
+    body.in-shell #moreNav[hidden] {
+      display: none;
+    }
+
+    body.in-shell {
+      overflow-x: hidden;
+    }
+
+    body.in-shell main {
+      padding: 8px 10px 14px;
+      overflow-x: hidden;
+    }
+
+    body.in-shell #panel-experiments>h1 {
+      display: none;
+    }
+
+    body.in-shell .toolbar {
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    body.in-shell .control-bar {
+      margin-bottom: 8px;
+    }
+
+    body.in-shell .run-btn {
+      padding: 7px 12px;
+      font-size: 12px;
+    }
+
+    body.in-shell button.action {
+      padding: 8px 12px;
+    }
+
+    body.in-shell .timeline {
+      padding: 8px 10px;
+    }
+
+    body.in-shell canvas.spark {
+      height: 36px;
+    }
+
+    body.in-shell .monitor-head {
+      margin-bottom: 6px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="shell">
+    <nav>
+      <p class="brand">Prism<span>.</span></p>
+      <button type="button" class="nav-btn active" data-panel="library">素材</button>
+      <button type="button" class="nav-btn" data-panel="experiments">实验</button>
+      <button type="button" class="nav-btn nav-fold" id="btnMore">更多</button>
+      <div id="moreNav" hidden>
+        <button type="button" class="nav-btn" data-panel="jobs">任务</button>
+        <button type="button" class="nav-btn" data-panel="system">系统</button>
+      </div>
+    </nav>
+    <main>
+      <div class="status-line">
+        <span class="dot" id="dot"></span>
+        <span id="conn">检查控制面…</span>
+      </div>
+
+      <section class="panel active" id="panel-library">
+        <h1>素材</h1>
+        <div class="toolbar">
+          <button type="button" class="action" id="btnBbb">导入 BBB</button>
+        </div>
+        <div id="homeMsg"></div>
+        <div id="libPubs"></div>
+        <details class="fold">
+          <summary>素材文件</summary>
+          <div class="fold-body" id="libAssets"></div>
+        </details>
+      </section>
+
+      <section class="panel" id="panel-experiments">
+        <h1>实验</h1>
+
+        <!-- A. 控制条 -->
+        <div class="control-bar">
+          <div class="run-controls" id="runControls" data-state="idle">
+            <button type="button" class="run-btn run-start" id="btnStartRun">开始</button>
+            <button type="button" class="run-btn run-stop" id="btnStopRun" disabled>停止</button>
+          </div>
+          <span class="run-status" id="runStatus">就绪</span>
+        </div>
+        <div id="runMsg"></div>
+
+        <!-- B. 配方 -->
+        <details class="sec" id="recipePanel" open>
+          <summary>
+            <span class="sec-title">配方</span>
+            <span class="sec-aside" id="recipeSummary">—</span>
+          </summary>
+          <div class="sec-body">
+            <div class="recipe-grid">
+              <div class="field span-2">
+                <label for="fldContent">内容</label>
+                <select id="fldContent"></select>
+              </div>
+              <div class="field">
+                <label for="fldNes">调度 / 增强策略</label>
+                <select id="fldNes"></select>
+              </div>
+              <div class="field">
+                <label for="fldEnhancer">增强器</label>
+                <select id="fldEnhancer"></select>
+              </div>
+              <div class="field">
+                <label for="fldNetMode">网络</label>
+                <select id="fldNetMode">
+                  <option value="none">不模拟（TCP）</option>
+                  <option value="trace">轨迹限速</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="fldRenderer">渲染</label>
+                <select id="fldRenderer"></select>
+              </div>
+              <div class="field" id="fldTraceDatasetWrap" hidden>
+                <label for="fldTraceDataset">网络数据集</label>
+                <select id="fldTraceDataset" disabled></select>
+              </div>
+              <div class="field span-2" id="fldTraceFileWrap" hidden>
+                <label for="fldTraceFile">轨迹文件</label>
+                <select id="fldTraceFile" disabled></select>
+                <div class="trace-tools">
+                  <input type="search" id="fldTraceSearch" placeholder="搜索文件名…" disabled autocomplete="off" />
+                  <button type="button" id="btnTraceRandom" disabled>随机一条</button>
+                </div>
+                <span class="field-hint" id="traceHint"></span>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <!-- C. 观测 -->
+        <div class="monitor" id="monitor">
+          <div class="monitor-head">
+            <span class="monitor-label">观测</span>
+          </div>
+
+          <div class="timeline" id="timeline">
+            <div class="tl-top">
+              <span class="quiet">时间轴</span>
+              <div class="tl-actions">
+                <button type="button" id="btnLive">直播</button>
+                <button type="button" id="btnKeepFrames">保留</button>
+              </div>
+            </div>
+            <input id="frameSlider" type="range" min="0" max="0" value="0" disabled />
+            <p class="quiet" id="frameMeta">—</p>
+          </div>
+
+          <div class="pipeline" id="pipeline">
+            <div class="meter">
+              <div class="meter-head"><span class="meter-name">下载缓冲</span><b class="meter-value" id="valDown">—</b>
+              </div>
+              <canvas class="spark" id="chartDown" width="480" height="64"></canvas>
+            </div>
+            <div class="meter">
+              <button type="button" class="meter-toggle" id="btnPendingInv" aria-expanded="false">
+                <span class="meter-name">待增强</span>
+                <b class="meter-value" id="valPending">—</b>
+              </button>
+              <div class="inv-panel" id="invPending" hidden></div>
+              <canvas class="spark" id="chartPending" width="480" height="64"></canvas>
+            </div>
+            <div class="meter">
+              <button type="button" class="meter-toggle" id="btnReadyInv" aria-expanded="false">
+                <span class="meter-name">已增强就绪</span>
+                <b class="meter-value" id="valReady">—</b>
+              </button>
+              <div class="inv-panel" id="invReady" hidden></div>
+              <canvas class="spark" id="chartReady" width="480" height="64"></canvas>
+            </div>
+            <div class="meter">
+              <div class="meter-head"><span class="meter-name">下载带宽</span><b class="meter-value" id="valBw">—</b></div>
+              <canvas class="spark" id="chartBw" width="480" height="64"></canvas>
+            </div>
+            <div class="meter">
+              <div class="meter-head"><span class="meter-name">CPU</span><b class="meter-value" id="valCpu">—</b></div>
+              <canvas class="spark" id="chartCpu" width="480" height="64"></canvas>
+            </div>
+            <div class="meter">
+              <div class="meter-head"><span class="meter-name">GPU</span><b class="meter-value" id="valGpu">—</b></div>
+              <canvas class="spark" id="chartGpu" width="480" height="64"></canvas>
+            </div>
+            <div class="pipeline-foot">
+              <span id="valRebuffer">重缓冲 —</span>
+              <span id="valSysExtra">整机 CPU —</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- D. 历史 -->
+        <details class="sec" id="historyPanel">
+          <summary>
+            <span class="sec-title">历史</span>
+            <span class="sec-aside" id="historySummary">—</span>
+          </summary>
+          <div class="sec-body">
+            <div id="runList"></div>
+            <div id="expList" style="margin-top:12px"></div>
+          </div>
+        </details>
+      </section>
+
+      <section class="panel" id="panel-jobs">
+        <h1>任务</h1>
+        <div id="jobList"></div>
+      </section>
+
+      <section class="panel" id="panel-system">
+        <h1>系统</h1>
+        <p class="hint" id="sysHint" hidden>控制面健康、路径与默认 Preset。</p>
+        <details class="fold" open>
+          <summary>状态</summary>
+          <div class="fold-body">
+            <pre id="sysPre">{}</pre>
+          </div>
+        </details>
+      </section>
+    </main>
+  </div>
+  <script src="/lab/static/metrics.js"></script>
+  <script>
+    const API = "/v1";
+    const M = globalThis.PrismLabMetrics || {};
+    const IN_SHELL = new URLSearchParams(location.search).get("shell") === "1";
+    const $ = (id) => document.getElementById(id);
+    if (IN_SHELL) {
+      document.body.classList.add("in-shell");
+      document.querySelectorAll(".nav-btn[data-panel]").forEach((b) => b.classList.remove("active"));
+      document.querySelectorAll(".panel").forEach((p) => p.classList.remove("active"));
+      document.querySelector('[data-panel="experiments"]').classList.add("active");
+      document.getElementById("panel-experiments").classList.add("active");
+    }
+
+    function setConn(ok, text) {
+      $("dot").className = "dot" + (ok ? " ok" : " bad");
+      $("conn").textContent = text;
+    }
+
+    async function api(path, opts) {
+      const res = await fetch(API + path, opts);
+      const text = await res.text();
+      let data;
+      try { data = text ? JSON.parse(text) : null; } catch { data = { raw: text }; }
+      if (!res.ok) {
+        const err = new Error((data && data.detail) || res.statusText || "request failed");
+        err.status = res.status;
+        err.data = data;
+        throw err;
+      }
+      return data;
+    }
+
+    function table(headers, rows) {
+      if (!rows.length) return '<p class="hint">暂无数据</p>';
+      const head = headers.map((h) => `<th>${h}</th>`).join("");
+      const body = rows.map((r) => `<tr>${r.map((c) => `<td>${c}</td>`).join("")}</tr>`).join("");
+      return `<table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table>`;
+    }
+
+    function esc(s) {
+      return String(s ?? "").replace(/[&<>"']/g, (ch) => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+      })[ch]);
+    }
+
+    async function loadLibrary() {
+      const [pubs, assets] = await Promise.all([api("/publications"), api("/assets")]);
+      $("libPubs").innerHTML = table(
+        ["id", "title", "mpd", ""],
+        (pubs || []).map((p) => [
+          `<span class="mono">${esc(p.id)}</span>`,
+          esc(p.title || ""),
+          esc(p.mpd_name || ""),
+          `<a href="/v1/publications/${esc(p.id)}/play" target="_blank">play</a>`,
+        ])
+      );
+      $("libAssets").innerHTML = table(
+        ["id", "name", "kind", "path"],
+        (assets || []).map((a) => [
+          `<span class="mono">${esc(a.id)}</span>`,
+          esc(a.name),
+          esc(a.kind),
+          `<span class="mono">${esc(a.source_path)}</span>`,
+        ])
+      );
+    }
+
+    let currentRunId = null;
+    let telemetryTimer = null;
+    let timeline = { runId: null, armId: null, arms: [], totals: {}, storage: "", timer: null };
+
+    function drawSpark(canvasId, values, color) {
+      const c = $(canvasId);
+      if (!c) return;
+      const ctx = c.getContext("2d");
+      const w = c.width, h = c.height;
+      ctx.clearRect(0, 0, w, h);
+      ctx.strokeStyle = "rgba(14,26,34,0.08)";
+      ctx.beginPath();
+      ctx.moveTo(0, h - 0.5);
+      ctx.lineTo(w, h - 0.5);
+      ctx.stroke();
+      if (!values.length) return;
+      const min = Math.min(...values);
+      const max = Math.max(...values);
+      const span = (max - min) || 1;
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      values.forEach((v, i) => {
+        const x = (i / Math.max(values.length - 1, 1)) * (w - 4) + 2;
+        const y = h - 4 - ((v - min) / span) * (h - 8);
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.stroke();
+    }
+
+    function renderInventory(panelId, rows, kind) {
+      const panel = $(panelId);
+      if (!panel) return;
+      const list = Array.isArray(rows) ? rows : [];
+      const head = kind === "ready"
+        ? "<tr><th>#</th><th>级别</th><th>耗时</th><th>模型</th></tr>"
+        : "<tr><th>#</th><th>级别</th><th>状态</th><th>模型</th></tr>";
+      const body = list.map((row) => {
+        const cls = row.status === "enhancing" ? ' class="is-enhancing"' : "";
+        if (kind === "ready") {
+          return `<tr${cls}><td>${row.index ?? "—"}</td><td>${row.enhance_level == null ? "—" : row.enhance_level}</td><td>${M.fmtInvNum(row.enhance_latency_s, 2)}s</td><td>${row.model || "—"}</td></tr>`;
+        }
+        return `<tr${cls}><td>${row.index ?? "—"}</td><td>${row.enhance_level == null ? "—" : row.enhance_level}</td><td>${M.statusLabel(row.status)}</td><td>${row.model || "—"}</td></tr>`;
+      }).join("");
+      panel.innerHTML = `<table class="inv-table"><thead>${head}</thead><tbody>${body}</tbody></table>`;
+    }
+
+    function bindInventoryToggle(btnId, panelId) {
+      const btn = $(btnId);
+      const panel = $(panelId);
+      if (!btn || !panel || btn.dataset.bound === "1") return;
+      btn.dataset.bound = "1";
+      btn.addEventListener("click", () => {
+        const open = btn.getAttribute("aria-expanded") === "true";
+        btn.setAttribute("aria-expanded", open ? "false" : "true");
+        panel.hidden = open;
+      });
+    }
+
+    async function refreshTelemetry() {
+      if (!currentRunId) return;
+      try {
+        const run = await api("/runs/" + currentRunId);
+        const armId = run.active_arm_id || (run.arms && run.arms[0] && run.arms[0].id);
+        const tel = await api(`/runs/${currentRunId}/telemetry?limit=120` + (armId ? `&arm_id=${armId}` : ""));
+        const samples = (tel.series && armId && tel.series[armId]) || [];
+        const last = samples.length ? samples[samples.length - 1] : null;
+        const readyInv = (last && Array.isArray(last.enhanced_ready_inventory)) ? last.enhanced_ready_inventory : [];
+        const pendingInv = (last && Array.isArray(last.enhance_pending_inventory)) ? last.enhance_pending_inventory : [];
+        $("valDown").textContent = M.formatSeconds(last ? Number(last.download_buffer_s || 0) : null);
+        $("valReady").textContent = M.formatSeconds(
+          last && last.enhanced_ready_s != null ? Number(last.enhanced_ready_s) : null,
+        );
+        $("valPending").textContent = M.formatSeconds(last ? M.pendingEnhanceS(last) : null);
+        $("valBw").textContent = M.formatBwMbps(last ? last.bandwidth_bps : null);
+        renderInventory("invReady", readyInv, "ready");
+        renderInventory("invPending", pendingInv, "pending");
+        drawSpark("chartDown", samples.map((s) => Number(s.download_buffer_s || 0)), "#0d6e6a");
+        drawSpark(
+          "chartReady",
+          samples.map((s) => Number(s.enhanced_ready_s != null ? s.enhanced_ready_s : 0)),
+          "#0a5552",
+        );
+        drawSpark(
+          "chartPending",
+          samples.map((s) => Number(M.pendingEnhanceS(s) || 0)),
+          "#b45309",
+        );
+        drawSpark("chartBw", samples.map((s) => Number(s.bandwidth_bps || 0) / 1e6), "#5a6b76");
+        const metrics = await api(`/runs/${currentRunId}/metrics`);
+        const arms = metrics.arms || {};
+        const first = arms[Object.keys(arms)[0]] || null;
+        const rebuffer = first ? Number(first.rebuffer_s || 0) : null;
+        $("valCpu").textContent = M.formatCpuLine(last);
+        $("valCpu").title = M.formatCpuTitle ? M.formatCpuTitle() : "CPU：进程算力% · 进程内存占整机% · RSS";
+        $("valGpu").textContent = M.formatGpuLine(last);
+        $("valGpu").title = M.formatGpuTitle(last);
+        $("valSysExtra").textContent = M.formatSysExtra(last);
+        drawSpark("chartCpu", samples.map((s) => Number(s.cpu_pct != null ? s.cpu_pct : 0)), "#0d6e6a");
+        drawSpark("chartGpu", samples.map((s) => Number(s.gpu_util_pct != null ? s.gpu_util_pct : 0)), "#b45309");
+        $("valRebuffer").textContent = M.formatRebuffer(rebuffer);
+        refreshTimeline(run);
+      } catch (e) { /* ignore transient */ }
+    }
+
+    function frameLine(row) {
+      if (!row) return "—";
+      const level = row.enhance_level == null ? "—" : row.enhance_level;
+      const enhanced = row.enhanced ? "已增强" : "未增强";
+      return `#${row.frame} · 段 ${row.segment} · ${row.representation} · 增强 ${level} · ${enhanced}`;
+    }
+
+    async function refreshTimeline(run) {
+      const slider = $("frameSlider");
+      const meta = $("frameMeta");
+      if (!slider || !meta) return;
+      if (!run) {
+        timeline = { runId: null, armId: null, arms: [], totals: {}, storage: "", timer: timeline.timer };
+        slider.disabled = true;
+        slider.value = "0";
+        slider.max = "0";
+        meta.textContent = "—";
+        return;
+      }
+      const arms = (run.arms || []).map((arm) => arm.id);
+      const same = timeline.runId === run.id && arms.join() === timeline.arms.join();
+      if (!same) {
+        timeline.runId = run.id;
+        timeline.arms = arms;
+        timeline.armId = timeline.armId && arms.includes(timeline.armId) ? timeline.armId : (arms[0] || null);
+        timeline.totals = {};
+      }
+      let max = 0;
+      for (const id of arms) {
+        try {
+          const page = await api(`/runs/${run.id}/frames?arm_id=${encodeURIComponent(id)}&limit=1`);
+          timeline.totals[id] = page.total || 0;
+          timeline.storage = page.storage || "";
+          max = Math.max(max, timeline.totals[id]);
+        } catch (e) { /* archive may still be empty */ }
+      }
+      const last = Math.max(0, max - 1);
+      slider.max = String(last);
+      slider.disabled = max < 1;
+      if (!timeline.scrubbing && Number(slider.value) > last) slider.value = String(last);
+      if (max < 1) meta.textContent = "—";
+      else if (!timeline.holding && !timeline.scrubbing) meta.textContent = max + " 帧";
+    }
+
+    async function scrubTo(frame) {
+      if (!timeline.runId || !timeline.armId) return;
+      timeline.scrubbing = true;
+      const total = timeline.totals[timeline.armId] || 0;
+      let line = "无此帧";
+      if (frame < total) {
+        try {
+          const row = await api(`/runs/${timeline.runId}/frames/${frame}?arm_id=${encodeURIComponent(timeline.armId)}`);
+          line = frameLine(row);
+        } catch (e) {
+          line = "无此帧";
+        }
+      }
+      timeline.holding = true;
+      $("frameMeta").textContent = line;
+      if (frame < total) {
+        await api("/system/picture", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ run_id: timeline.runId, arm_id: timeline.armId, frame }),
+        });
+      }
+      timeline.scrubbing = false;
+    }
+
+    function setTelemetryPolling(on) {
+      if (telemetryTimer) {
+        clearInterval(telemetryTimer);
+        telemetryTimer = null;
+      }
+      if (on) {
+        refreshTelemetry();
+        telemetryTimer = setInterval(refreshTelemetry, 1000);
+      }
+    }
+
+    const DEFAULT_SPEC = {
+      apiVersion: "prism.lab/v1",
+      kind: "ExperimentSpec",
+      metadata: { name: "bbb-play", notes: "Lab preset" },
+      spec: {
+        content: { source: "path:player/data/video_mp4box" },
+        arms: [
+          {
+            id: "play",
+            publish: { plugin: "identity" },
+            session: { policy: { allowed_representation_ids: [0, 1, 2], mpd_type: "static" } },
+            player: {
+              mod_nes: "always_greedy",
+              mod_enhancer: "imdn_always",
+              mod_renderer: "opencv",
+              mod_downloader: "tcp",
+              mod_status: "status",
+              trace: "",
+            },
+          },
+        ],
+        execution: { arm_mode: "serial" },
+      },
+    };
+
+    let recipeOpts = null;
+    let contentChoices = [];
+    let suppressFormSync = false;
+    let traceSearchTimer = null;
+    let recipeInitialized = false;
+
+    function setRecipeExpanded(open) {
+      const panel = $("recipePanel");
+      if (!panel) return;
+      panel.open = !!open;
+    }
+
+    const RUN_STATUS_LABEL = {
+      idle: "就绪",
+      preparing: "准备中…",
+      running: "运行中",
+      stopped: "已停止",
+      failed: "失败",
+    };
+
+    function setRunControls(state) {
+      const bar = $("runControls");
+      const start = $("btnStartRun");
+      const stop = $("btnStopRun");
+      const status = $("runStatus");
+      if (!bar || !start || !stop) return;
+      const s = state || "idle";
+      bar.dataset.state = s;
+      const live = s === "running" || s === "preparing";
+      start.disabled = live;
+      stop.disabled = !live;
+      if (status) status.textContent = RUN_STATUS_LABEL[s] || s;
+    }
+
+    function optLabel(sel) {
+      if (!sel || sel.selectedIndex < 0) return "—";
+      const t = (sel.options[sel.selectedIndex].textContent || sel.value || "—").trim();
+      return t || "—";
+    }
+
+    function clipLabel(text, max) {
+      const t = String(text || "—").trim();
+      if (t.length <= max) return t;
+      return t.slice(0, Math.max(1, max - 1)) + "…";
+    }
+
+    function updateRecipeSummary() {
+      const el = $("recipeSummary");
+      if (!el) return;
+      const content = clipLabel(optLabel($("fldContent")), 16);
+      const nes = optLabel($("fldNes"));
+      const enh = optLabel($("fldEnhancer"));
+      const net = $("fldNetMode") && $("fldNetMode").value === "trace" ? "轨迹" : "TCP";
+      const ren = optLabel($("fldRenderer"));
+      const line = [content, nes, enh, net, ren].join(" · ");
+      el.textContent = line;
+      el.title = line;
+    }
+
+    function updateHistorySummary(runs) {
+      const el = $("historySummary");
+      if (!el) return;
+      const list = runs || [];
+      if (!list.length) {
+        el.textContent = "暂无";
+        el.title = "";
+        return;
+      }
+      const latest = list[0];
+      const line = (latest.status || "—") + " · " + (latest.name || latest.id || "—");
+      el.textContent = line;
+      el.title = list.length + " 条 Run · " + line;
+    }
+
+    function clearRunMsg() {
+      const box = $("runMsg");
+      if (!box) return;
+      box.className = "msg";
+      box.textContent = "";
+    }
+
+    function showRunErr(text) {
+      const box = $("runMsg");
+      if (!box) return;
+      box.className = "msg err";
+      box.textContent = String(text || "");
+    }
+
+    function setTraceControlsEnabled(on) {
+      $("fldTraceDataset").disabled = !on;
+      $("fldTraceFile").disabled = !on;
+      $("fldTraceSearch").disabled = !on;
+      $("btnTraceRandom").disabled = !on;
+      if ($("fldTraceDatasetWrap")) $("fldTraceDatasetWrap").hidden = !on;
+      if ($("fldTraceFileWrap")) $("fldTraceFileWrap").hidden = !on;
+    }
+
+    function fillSelect(sel, items, valueKey, labelKey) {
+      if (!sel) return;
+      const prev = sel.value;
+      sel.innerHTML = (items || []).map((it) => {
+        const v = typeof it === "string" ? it : it[valueKey];
+        const lab = typeof it === "string" ? it : (it[labelKey] || it[valueKey]);
+        return `<option value="${esc(v)}">${esc(lab)}</option>`;
+      }).join("");
+      if (prev && [...sel.options].some((o) => o.value === prev)) sel.value = prev;
+    }
+
+    function armPlayer(spec) {
+      const arm = spec && spec.spec && spec.spec.arms && spec.spec.arms[0];
+      return (arm && arm.player) || {};
+    }
+
+    function buildSpecFromForm() {
+      const base = JSON.parse(JSON.stringify(DEFAULT_SPEC));
+      const arm = base.spec.arms[0];
+      base.spec.content = { source: $("fldContent").value || DEFAULT_SPEC.spec.content.source };
+      arm.player.mod_nes = $("fldNes").value || "always_greedy";
+      arm.player.mod_enhancer = $("fldEnhancer").value || "imdn_always";
+      arm.player.mod_renderer = $("fldRenderer").value || "opencv";
+      arm.player.mod_status = arm.player.mod_status || "status";
+      if ($("fldNetMode").value === "trace") {
+        const path = $("fldTraceFile").value || "";
+        arm.player.trace = path;
+        arm.player.mod_downloader = path ? "trace" : "tcp";
+      } else {
+        arm.player.trace = "";
+        arm.player.mod_downloader = "tcp";
+      }
+      return base;
+    }
+
+    function parseTracePath(path) {
+      const m = String(path || "").replace(/\\/g, "/").match(/(?:^|\/)data\/([^/]+)\/(.+)$/);
+      if (!m) return { dataset: "", file: "" };
+      return { dataset: m[1], file: m[2] };
+    }
+
+    async function loadTraceFiles(dataset, preferPath, qOverride) {
+      const sel = $("fldTraceFile");
+      const hint = $("traceHint");
+      if (!dataset) {
+        sel.innerHTML = "";
+        hint.textContent = "";
+        return;
+      }
+      let q = qOverride != null ? String(qOverride) : ($("fldTraceSearch").value || "").trim();
+      // Ensure a preferred path appears even if outside the first page.
+      if (preferPath && !q) {
+        const parsed = parseTracePath(preferPath);
+        if (parsed.file) q = parsed.file;
+      }
+      let url = `/specs/traces?dataset=${encodeURIComponent(dataset)}&limit=80`;
+      if (q) url += `&q=${encodeURIComponent(q)}`;
+      let data = await api(url);
+      let items = data.items || [];
+      if (preferPath && !items.some((it) => it.path === preferPath)) {
+        const parsed = parseTracePath(preferPath);
+        if (parsed.file) {
+          const one = await api(
+            `/specs/traces?dataset=${encodeURIComponent(dataset)}&limit=5&q=${encodeURIComponent(parsed.file)}`
+          );
+          const hit = (one.items || []).find((it) => it.path === preferPath) || (one.items || [])[0];
+          if (hit) items = [hit, ...items.filter((it) => it.path !== hit.path)];
+          data = { ...data, total: one.total != null ? one.total : data.total };
+        }
+      }
+      fillSelect(sel, items, "path", "label");
+      const shown = items.length;
+      const total = data.total || 0;
+      const qNote = q ? ` · 过滤「${q}」` : "";
+      hint.textContent = total
+        ? (total > shown ? `共 ${total} 条，下列 ${shown} 条${qNote}` : `${total} 条${qNote}`)
+        : (q ? `无匹配「${q}」` : "该数据集无轨迹");
+      if (preferPath && [...sel.options].some((o) => o.value === preferPath)) {
+        sel.value = preferPath;
+      } else if (sel.options.length) {
+        sel.selectedIndex = 0;
+      }
+    }
+
+    async function pickRandomTrace() {
+      const dataset = $("fldTraceDataset").value;
+      if (!dataset) throw new Error("请先选择网络数据集");
+      const q = ($("fldTraceSearch").value || "").trim();
+      let url = `/specs/traces?dataset=${encodeURIComponent(dataset)}&random=1`;
+      if (q) url += `&q=${encodeURIComponent(q)}`;
+      const data = await api(url);
+      const item = (data.items || [])[0];
+      if (!item) throw new Error(q ? `过滤「${q}」下没有轨迹` : "该数据集无轨迹");
+      await loadTraceFiles(dataset, item.path, q);
+      onRecipeFormChange();
+      return item;
+    }
+
+    async function applySpecToForm(spec) {
+      suppressFormSync = true;
+      try {
+        const src = (spec.spec && spec.spec.content && spec.spec.content.source) || "";
+        if (src && ![...$("fldContent").options].some((o) => o.value === src)) {
+          const opt = document.createElement("option");
+          opt.value = src;
+          opt.textContent = src;
+          $("fldContent").appendChild(opt);
+        }
+        if (src) $("fldContent").value = src;
+        const p = armPlayer(spec);
+        if (p.mod_nes && [...$("fldNes").options].some((o) => o.value === p.mod_nes)) {
+          $("fldNes").value = p.mod_nes;
+        }
+        if (p.mod_enhancer && [...$("fldEnhancer").options].some((o) => o.value === p.mod_enhancer)) {
+          $("fldEnhancer").value = p.mod_enhancer;
+        }
+        if (p.mod_renderer && [...$("fldRenderer").options].some((o) => o.value === p.mod_renderer)) {
+          $("fldRenderer").value = p.mod_renderer;
+        }
+        const trace = (p.trace || "").trim();
+        if (trace || p.mod_downloader === "trace") {
+          $("fldNetMode").value = "trace";
+          setTraceControlsEnabled(true);
+          const parsed = parseTracePath(trace);
+          const ds = parsed.dataset || ($("fldTraceDataset").options[0] && $("fldTraceDataset").options[0].value) || "";
+          if (ds) {
+            $("fldTraceDataset").value = ds;
+            $("fldTraceSearch").value = "";
+            await loadTraceFiles(ds, trace || undefined, "");
+          }
+        } else {
+          $("fldNetMode").value = "none";
+          setTraceControlsEnabled(false);
+          $("fldTraceSearch").value = "";
+          $("traceHint").textContent = "";
+        }
+      } finally {
+        suppressFormSync = false;
+        updateRecipeSummary();
+      }
+    }
+
+    async function ensureRecipeOptions() {
+      if (recipeOpts) return recipeOpts;
+      recipeOpts = await api("/specs/options");
+      fillSelect($("fldNes"), recipeOpts.nes, "id", "label");
+      fillSelect($("fldEnhancer"), recipeOpts.enhancer, "id", "label");
+      fillSelect($("fldRenderer"), recipeOpts.renderer, "id", "label");
+      fillSelect($("fldTraceDataset"), recipeOpts.trace_datasets || [], "id", "id");
+      return recipeOpts;
+    }
+
+    async function refreshContentChoices() {
+      const pubs = await api("/publications");
+      contentChoices = [
+        { value: "path:player/data/video_mp4box", label: "本地 BBB DASH（path）" },
+        ...(pubs || []).map((p) => ({
+          value: "publication:" + p.id,
+          label: (p.title || p.id) + " · " + p.id,
+        })),
+      ];
+      fillSelect($("fldContent"), contentChoices, "value", "label");
+    }
+
+    function onRecipeFormChange() {
+      updateRecipeSummary();
+    }
+
+    function renderRun(run) {
+      if (!run) {
+        setTelemetryPolling(false);
+        refreshTimeline(null);
+        setRunControls("idle");
+        setRecipeExpanded(true);
+        return;
+      }
+      currentRunId = run.id;
+      setTelemetryPolling(run.status === "running");
+      refreshTimeline(run);
+      setRunControls(run.status || "idle");
+      if (run.status === "running" || run.status === "preparing") {
+        setRecipeExpanded(false);
+      } else if (run.status === "stopped" || run.status === "failed") {
+        setRecipeExpanded(true);
+      }
+      if (run.error) showRunErr(run.error);
+    }
+
+    async function loadExperiments() {
+      await ensureRecipeOptions();
+      await refreshContentChoices();
+      if (!recipeInitialized) {
+        await applySpecToForm(DEFAULT_SPEC);
+        recipeInitialized = true;
+      }
+      const [exps, runs] = await Promise.all([api("/experiments"), api("/runs")]);
+      const sortedRuns = (runs || []).slice().reverse();
+      $("runList").innerHTML = table(
+        ["id", "name", "status", ""],
+        sortedRuns.slice(0, 12).map((r) => [
+          `<span class="mono">${esc(r.id)}</span>`,
+          esc(r.name),
+          esc(r.status),
+          `<button type="button" class="action ghost" data-open-run="${esc(r.id)}">打开</button>`
+          + ` <a href="/v1/runs/${esc(r.id)}/export?format=csv">CSV</a>`,
+        ])
+      );
+      $("runList").querySelectorAll("[data-open-run]").forEach((btn) => {
+        btn.onclick = async () => {
+          const r = await api("/runs/" + btn.dataset.openRun);
+          renderRun(r);
+        };
+      });
+      $("expList").innerHTML = table(
+        ["id", "name", "runs"],
+        (exps || []).slice().reverse().slice(0, 12).map((e) => [
+          `<span class="mono">${esc(e.id)}</span>`,
+          esc(e.name),
+          esc((e.run_ids || []).length),
+        ])
+      );
+      updateHistorySummary(sortedRuns);
+      updateRecipeSummary();
+      if (currentRunId) {
+        const live = sortedRuns.find((r) => r.id === currentRunId);
+        if (live) renderRun(live);
+      }
+    }
+
+    async function loadJobs() {
+      const jobs = await api("/jobs");
+      const sorted = (jobs || []).slice().reverse();
+      $("jobList").innerHTML = table(
+        ["id", "plugin", "status", "steps"],
+        sorted.map((j) => [
+          `<span class="mono">${esc(j.id)}</span>`,
+          esc(j.plugin),
+          esc(j.status),
+          esc((j.steps || []).join(" → ")),
+        ])
+      );
+    }
+
+    async function loadSystem() {
+      const [health, sys] = await Promise.all([api("/health"), api("/system")]);
+      $("sysPre").textContent = JSON.stringify({ health, system: sys }, null, 2);
+    }
+
+    async function refreshAll() {
+      try {
+        await api("/health");
+        setConn(true, "控制面已连接 · Prism");
+        const panel = document.querySelector(".panel.active")?.id?.replace("panel-", "") || "library";
+        await loadPanel(panel);
+      } catch (e) {
+        setConn(false, "控制面不可用：" + e.message);
+      }
+    }
+
+    async function loadPanel(name) {
+      if (name === "library") await loadLibrary();
+      else if (name === "experiments") await loadExperiments();
+      else if (name === "jobs") await loadJobs();
+      else if (name === "system") await loadSystem();
+    }
+
+    $("btnMore").onclick = () => {
+      $("moreNav").hidden = !$("moreNav").hidden;
+    };
+    document.querySelectorAll(".nav-btn[data-panel]").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        document.querySelectorAll(".nav-btn[data-panel]").forEach((b) => b.classList.remove("active"));
+        document.querySelectorAll(".panel").forEach((p) => p.classList.remove("active"));
+        btn.classList.add("active");
+        const name = btn.dataset.panel;
+        $("panel-" + name).classList.add("active");
+        try { await loadPanel(name); } catch (e) { setConn(false, e.message); }
+      });
+    });
+
+    function resolveSpecFromEditor() {
+      return buildSpecFromForm();
+    }
+
+    async function waitRunReady(runId) {
+      for (let i = 0; i < 120; i++) {
+        const run = await api("/runs/" + runId);
+        if (run.status !== "preparing" && run.status !== "queued") return run;
+        await new Promise((r) => setTimeout(r, 100));
+      }
+      return api("/runs/" + runId);
+    }
+
+    bindInventoryToggle("btnReadyInv", "invReady");
+    bindInventoryToggle("btnPendingInv", "invPending");
+
+    $("frameSlider").oninput = () => {
+      const frame = Number($("frameSlider").value);
+      if (timeline.timer) clearTimeout(timeline.timer);
+      timeline.timer = setTimeout(() => scrubTo(frame), 60);
+    };
+    $("btnKeepFrames").onclick = async () => {
+      if (!timeline.runId || !timeline.armId) {
+        $("frameMeta").textContent = "还没有可保留的画面";
+        return;
+      }
+      try {
+        await api(`/runs/${timeline.runId}/frames/save?arm_id=${encodeURIComponent(timeline.armId)}`, { method: "POST" });
+        $("frameMeta").textContent = "已保留";
+      } catch (e) {
+        $("frameMeta").textContent = String(e.message || e);
+      }
+    };
+    $("btnLive").onclick = async () => {
+      timeline.holding = false;
+      try {
+        await api("/system/picture", { method: "DELETE" });
+      } catch (e) { /* ignore */ }
+      if (timeline.totals && Object.values(timeline.totals).some((n) => n > 0)) {
+        const max = Math.max(...Object.values(timeline.totals));
+        $("frameMeta").textContent = max + " 帧";
+      }
+    };
+    ["fldContent", "fldNes", "fldEnhancer", "fldRenderer", "fldTraceFile"].forEach((id) => {
+      const el = $(id);
+      if (el) el.addEventListener("change", onRecipeFormChange);
+    });
+    $("fldNetMode").addEventListener("change", async () => {
+      const on = $("fldNetMode").value === "trace";
+      setTraceControlsEnabled(on);
+      if (on) {
+        const ds = $("fldTraceDataset").value
+          || (recipeOpts && recipeOpts.trace_datasets && recipeOpts.trace_datasets[0] && recipeOpts.trace_datasets[0].id)
+          || "";
+        if (ds) {
+          $("fldTraceDataset").value = ds;
+          await loadTraceFiles(ds);
+        }
+      } else {
+        $("fldTraceSearch").value = "";
+        $("traceHint").textContent = "";
+      }
+      onRecipeFormChange();
+    });
+    $("fldTraceDataset").addEventListener("change", async () => {
+      $("fldTraceSearch").value = "";
+      await loadTraceFiles($("fldTraceDataset").value);
+      onRecipeFormChange();
+    });
+    $("fldTraceSearch").addEventListener("input", () => {
+      if (traceSearchTimer) clearTimeout(traceSearchTimer);
+      traceSearchTimer = setTimeout(async () => {
+        const ds = $("fldTraceDataset").value;
+        if (!ds || $("fldNetMode").value !== "trace") return;
+        try {
+          await loadTraceFiles(ds);
+          onRecipeFormChange();
+        } catch (e) {
+          $("traceHint").textContent = String(e.message || e);
+        }
+      }, 250);
+    });
+    $("btnTraceRandom").onclick = async () => {
+      try {
+        await pickRandomTrace();
+        clearRunMsg();
+      } catch (e) {
+        showRunErr(e.message || e);
+      }
+    };
+    $("btnStartRun").onclick = async () => {
+      try {
+        const spec = resolveSpecFromEditor();
+        if ($("fldNetMode").value === "trace" && !(armPlayer(spec).trace || "").trim()) {
+          throw new Error("已选轨迹限速，但未选择轨迹文件");
+        }
+        clearRunMsg();
+        setRunControls("preparing");
+        let run = await api("/runs", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            spec,
+            attach_players: true,
+            wait: false,
+          }),
+        });
+        run = await waitRunReady(run.id);
+        if (run.status === "failed") throw new Error(run.error || "preparation failed");
+        const armFail = (run.arms || []).find((a) => a.status === "failed");
+        if (armFail) {
+          throw new Error(armFail.error || ("播放器启动失败：" + armFail.id));
+        }
+        clearRunMsg();
+        setRecipeExpanded(false);
+        renderRun(run);
+        await loadExperiments();
+      } catch (e) {
+        showRunErr(e.message || e);
+        setRunControls(currentRunId ? "stopped" : "idle");
+        setRecipeExpanded(true);
+      }
+    };
+    $("btnStopRun").onclick = async () => {
+      if (!currentRunId) return;
+      try {
+        const run = await api("/runs/" + currentRunId + "/stop", { method: "POST" });
+        clearRunMsg();
+        setRecipeExpanded(true);
+        renderRun(run);
+        await loadExperiments();
+      } catch (e) {
+        showRunErr(e.message || e);
+      }
+    };
+
+    $("btnBbb").onclick = async () => {
+      const box = $("homeMsg");
+      const btn = $("btnBbb");
+      btn.disabled = true;
+      box.className = "msg";
+      box.textContent = "读取 System preset…";
+      try {
+        const sys = await api("/system");
+        const preset = sys.presets?.bbb_dash;
+        if (!preset?.exists) {
+          box.className = "msg err";
+          box.textContent = "未找到 BBB DASH 树：" + (preset?.path || "");
+          return;
+        }
+        box.textContent = "导入中…";
+        const boot = await api("/bootstrap/import-dash", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: "bbb",
+            path: preset.path,
+            experiment_name: "prism-bbb",
+          }),
+        });
+        const jobId = boot.job?.id;
+        box.textContent = "等待 job " + jobId + " …";
+        let job = boot.job;
+        for (let i = 0; i < 80; i++) {
+          await new Promise((r) => setTimeout(r, 200));
+          job = await api("/jobs/" + jobId);
+          if (["succeeded", "failed", "skipped"].includes(job.status)) break;
+        }
+        if (job.status !== "succeeded") {
+          box.className = "msg err";
+          box.textContent = "导入失败：" + (job.error || job.status);
+          return;
+        }
+        const pubId = job.publication_id;
+        box.className = "msg ok";
+        box.textContent = "已导入 " + pubId;
+        await loadLibrary();
+      } catch (e) {
+        box.className = "msg err";
+        box.textContent = String(e.message || e);
+      } finally {
+        btn.disabled = false;
+      }
+    };
+
+    setRunControls("idle");
+    refreshAll();
+    setInterval(() => {
+      api("/health").then(() => setConn(true, "控制面已连接 · Prism"))
+        .catch((e) => setConn(false, "控制面不可用：" + e.message));
+    }, 5000);
+  </script>
+</body>
+
+</html>

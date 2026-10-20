@@ -1,0 +1,10 @@
+fastapi>=0.110
+uvicorn>=0.27
+pydantic>=2.0
+python-multipart>=0.0.9
+aiofiles>=23.0
+httpx>=0.27
+pyyaml>=6.0
+# optional multi-machine queue
+redis>=5.0
+pytest>=8.0

@@ -1,0 +1,33 @@
+apiVersion: prism.lab/v1
+kind: ExperimentSpec
+metadata:
+  name: bbb-play
+  notes: "Import BBB DASH and play"
+spec:
+  content:
+    source: path:player/data/video_mp4box
+  arms:
+    - id: play
+      publish:
+        plugin: identity
+      session:
+        policy:
+          allowed_representation_ids: [0, 1, 2]
+          mpd_type: static
+      player:
+        mod_nes: always_greedy
+        mod_enhancer: imdn_always
+        mod_renderer: opencv
+        mod_downloader: tcp
+        # Set mod_downloader: trace and a path under player/data to simulate network:
+        # trace: data/3Glogs/report.2010-09-13_1003CEST.json
+        trace: ""
+  execution:
+    arm_mode: serial
+  collect:
+    client_metrics: true
+    interval_ms: 500
+  # Enqueued on Stop Run (noop is safe without libvmaf). Swap plugin: vmaf when ready.
+  measure:
+    - plugin: noop
+      params: {}

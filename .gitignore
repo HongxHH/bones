@@ -42,6 +42,14 @@ enhance/IMDN/data/
 *.log
 output/
 logs/
+prism/var/
+prism/var_*/
+server/var/
+server/var_*/
+
+# Electron 壳
+desktop/node_modules/
+desktop/dist/
 
 # IDE 配置
 .idea/
