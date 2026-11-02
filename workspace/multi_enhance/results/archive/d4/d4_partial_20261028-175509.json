@@ -1,0 +1,29 @@
+[
+  {
+    "arm": "tool_greedy",
+    "video": "tos",
+    "trace": "0913",
+    "returncode": 2,
+    "duration_s": 5.3,
+    "ok": false,
+    "result_file": null
+  },
+  {
+    "arm": "fixed_sr_high",
+    "video": "tos",
+    "trace": "0913",
+    "returncode": 2,
+    "duration_s": 4.6,
+    "ok": false,
+    "result_file": null
+  },
+  {
+    "arm": "none",
+    "video": "tos",
+    "trace": "0913",
+    "returncode": 2,
+    "duration_s": 4.6,
+    "ok": false,
+    "result_file": null
+  }
+]

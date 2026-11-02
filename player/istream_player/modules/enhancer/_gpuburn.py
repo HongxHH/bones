@@ -18,6 +18,19 @@ _state = {"inited": False, "k": 1.0, "extra": 0.0,
           "single": 0.5, "a": None, "b": None}
 
 
+def enabled() -> bool:
+    _ensure()
+    return _state["k"] > 1.0 or _state["extra"] > 0
+
+
+def describe() -> dict:
+    """Recorded on experiment facts when env burn is active so it cannot stay silent."""
+    _ensure()
+    if not enabled():
+        return {"enabled": False}
+    return {"enabled": True, "k": _state["k"], "extra_ms": _state["extra"]}
+
+
 def _ensure():
     global _state
     if _state["inited"]:

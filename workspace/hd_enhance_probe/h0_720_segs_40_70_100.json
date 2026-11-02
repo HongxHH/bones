@@ -1,0 +1,197 @@
+{
+  "probe": "H0_720",
+  "note": "seg0 片头白场无效；默认/冒烟用 seg>=40",
+  "segs": [
+    40,
+    70,
+    100
+  ],
+  "n_frames_per_seg": 120,
+  "wall_s": 99.8,
+  "mean_delta_vs_bicubic": {
+    "bicubic": 0.0,
+    "restore_unsharp": 5.6393,
+    "sr_x2_low": 1.4664,
+    "sr_x2_medium": 2.6564
+  },
+  "gate": {
+    "go_threshold_delta": 1.0,
+    "go_arms_by_mean_delta": [
+      "restore_unsharp",
+      "sr_x2_low",
+      "sr_x2_medium"
+    ]
+  },
+  "per_seg": [
+    {
+      "probe": "H0_720",
+      "seg": 40,
+      "start_frame": 4800,
+      "n_frames": 120,
+      "measured_at": "2026-10-27T19:22:33",
+      "ref_video": "data\\video_mp4box\\output_1080p.mp4",
+      "input_video": "data\\video_mp4box\\output_720p.mp4",
+      "input_size": [
+        1280,
+        720
+      ],
+      "target_size": [
+        1920,
+        1080
+      ],
+      "ffmpeg": "E:\\dev\\tool\\ffmpeg-6.1.1-full_build-shared\\bin\\ffmpeg.exe",
+      "unsharp": "unsharp=5:5:0.8:5:5:0.0",
+      "means": {
+        "bicubic": 88.4329,
+        "restore_unsharp": 94.9315,
+        "sr_x2_low": 90.7586,
+        "sr_x2_medium": 91.8308
+      },
+      "delta_vs_bicubic": {
+        "bicubic": 0.0,
+        "restore_unsharp": 6.4986,
+        "sr_x2_low": 2.3257,
+        "sr_x2_medium": 3.3979
+      },
+      "gate": {
+        "go_threshold_delta": 1.0,
+        "go_arms": [
+          "restore_unsharp",
+          "sr_x2_low",
+          "sr_x2_medium"
+        ]
+      },
+      "methods": {
+        "bicubic": {
+          "kind": "ffmpeg_scale_bicubic_yuv"
+        },
+        "restore_unsharp": {
+          "kind": "bicubic+unsharp=5:5:0.8:5:5:0.0"
+        },
+        "sr_x2_low": {
+          "kind": "IMDN_RTC_low_x2_then_bicubic_1080",
+          "weights": "player\\istream_player\\modules\\enhancer\\imdn_weight\\IMDN_low_bbb_x2.pth",
+          "weights_md5": "d50fc08af67481e7a5b4a1d3a7244188"
+        },
+        "sr_x2_medium": {
+          "kind": "IMDN_RTC_medium_x2_then_bicubic_1080",
+          "weights": "player\\istream_player\\modules\\enhancer\\imdn_weight\\IMDN_medium_bbb_x2.pth",
+          "weights_md5": "9efe9e5ac3a17f60ebd98bf7aec122c0"
+        }
+      }
+    },
+    {
+      "probe": "H0_720",
+      "seg": 70,
+      "start_frame": 8400,
+      "n_frames": 120,
+      "measured_at": "2026-10-27T19:23:06",
+      "ref_video": "data\\video_mp4box\\output_1080p.mp4",
+      "input_video": "data\\video_mp4box\\output_720p.mp4",
+      "input_size": [
+        1280,
+        720
+      ],
+      "target_size": [
+        1920,
+        1080
+      ],
+      "ffmpeg": "E:\\dev\\tool\\ffmpeg-6.1.1-full_build-shared\\bin\\ffmpeg.exe",
+      "unsharp": "unsharp=5:5:0.8:5:5:0.0",
+      "means": {
+        "bicubic": 90.5027,
+        "restore_unsharp": 96.2313,
+        "sr_x2_low": 91.8061,
+        "sr_x2_medium": 93.1409
+      },
+      "delta_vs_bicubic": {
+        "bicubic": 0.0,
+        "restore_unsharp": 5.7285,
+        "sr_x2_low": 1.3033,
+        "sr_x2_medium": 2.6381
+      },
+      "gate": {
+        "go_threshold_delta": 1.0,
+        "go_arms": [
+          "restore_unsharp",
+          "sr_x2_low",
+          "sr_x2_medium"
+        ]
+      },
+      "methods": {
+        "bicubic": {
+          "kind": "ffmpeg_scale_bicubic_yuv"
+        },
+        "restore_unsharp": {
+          "kind": "bicubic+unsharp=5:5:0.8:5:5:0.0"
+        },
+        "sr_x2_low": {
+          "kind": "IMDN_RTC_low_x2_then_bicubic_1080",
+          "weights": "player\\istream_player\\modules\\enhancer\\imdn_weight\\IMDN_low_bbb_x2.pth",
+          "weights_md5": "d50fc08af67481e7a5b4a1d3a7244188"
+        },
+        "sr_x2_medium": {
+          "kind": "IMDN_RTC_medium_x2_then_bicubic_1080",
+          "weights": "player\\istream_player\\modules\\enhancer\\imdn_weight\\IMDN_medium_bbb_x2.pth",
+          "weights_md5": "9efe9e5ac3a17f60ebd98bf7aec122c0"
+        }
+      }
+    },
+    {
+      "probe": "H0_720",
+      "seg": 100,
+      "start_frame": 12000,
+      "n_frames": 120,
+      "measured_at": "2026-10-27T19:23:50",
+      "ref_video": "data\\video_mp4box\\output_1080p.mp4",
+      "input_video": "data\\video_mp4box\\output_720p.mp4",
+      "input_size": [
+        1280,
+        720
+      ],
+      "target_size": [
+        1920,
+        1080
+      ],
+      "ffmpeg": "E:\\dev\\tool\\ffmpeg-6.1.1-full_build-shared\\bin\\ffmpeg.exe",
+      "unsharp": "unsharp=5:5:0.8:5:5:0.0",
+      "means": {
+        "bicubic": 90.5321,
+        "restore_unsharp": 95.2228,
+        "sr_x2_low": 91.3024,
+        "sr_x2_medium": 92.4653
+      },
+      "delta_vs_bicubic": {
+        "bicubic": 0.0,
+        "restore_unsharp": 4.6907,
+        "sr_x2_low": 0.7703,
+        "sr_x2_medium": 1.9332
+      },
+      "gate": {
+        "go_threshold_delta": 1.0,
+        "go_arms": [
+          "restore_unsharp",
+          "sr_x2_medium"
+        ]
+      },
+      "methods": {
+        "bicubic": {
+          "kind": "ffmpeg_scale_bicubic_yuv"
+        },
+        "restore_unsharp": {
+          "kind": "bicubic+unsharp=5:5:0.8:5:5:0.0"
+        },
+        "sr_x2_low": {
+          "kind": "IMDN_RTC_low_x2_then_bicubic_1080",
+          "weights": "player\\istream_player\\modules\\enhancer\\imdn_weight\\IMDN_low_bbb_x2.pth",
+          "weights_md5": "d50fc08af67481e7a5b4a1d3a7244188"
+        },
+        "sr_x2_medium": {
+          "kind": "IMDN_RTC_medium_x2_then_bicubic_1080",
+          "weights": "player\\istream_player\\modules\\enhancer\\imdn_weight\\IMDN_medium_bbb_x2.pth",
+          "weights_md5": "9efe9e5ac3a17f60ebd98bf7aec122c0"
+        }
+      }
+    }
+  ]
+}

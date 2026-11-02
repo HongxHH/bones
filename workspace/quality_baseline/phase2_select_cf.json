@@ -1,0 +1,540 @@
+{
+  "measured_at": "2026-10-27T13:06:17",
+  "device": "NVIDIA GeForce RTX 5080",
+  "seg_frames": 120,
+  "seg_s": 4.0,
+  "warmup": 5,
+  "measure": 30,
+  "path": "fwd + interpolate1080 + uint8 + cpu; burn on fwd only",
+  "primary_q": 1,
+  "primary_label": "360p",
+  "quality_gaps": {
+    "0": {
+      "label": "240p",
+      "means": {
+        "bicubic": 39.296217548190555,
+        "sr_low": 51.73578748358632,
+        "sr_medium": 56.07927758285625,
+        "sr_high": 61.492968375439894
+      },
+      "low_minus_bic": 12.439569935395767,
+      "med_minus_bic": 16.783060034665695,
+      "high_minus_bic": 22.19675082724934
+    },
+    "1": {
+      "label": "360p",
+      "means": {
+        "bicubic": 64.03564814853722,
+        "sr_low": 72.4829337465203,
+        "sr_medium": 75.91265052786386,
+        "sr_high": 79.91956598035611
+      },
+      "low_minus_bic": 8.447285597983083,
+      "med_minus_bic": 11.87700237932664,
+      "high_minus_bic": 15.883917831818891
+    },
+    "2": {
+      "label": "480p",
+      "means": {
+        "bicubic": 76.82336485634751,
+        "sr_low": 83.36303167183151,
+        "sr_medium": 86.08841993802196,
+        "sr_high": 87.64549024633648
+      },
+      "low_minus_bic": 6.539666815483997,
+      "med_minus_bic": 9.265055081674447,
+      "high_minus_bic": 10.822125389988969
+    }
+  },
+  "cells_k1": {
+    "240p_L1": {
+      "fwd_ms": 1.3898333301767707,
+      "post_ms": 0.7777500043933591,
+      "total_ms": 2.16758333457013,
+      "std_total_ms": 0.3054517023637969,
+      "p50_total_ms": 2.152149914763868,
+      "n": 30,
+      "seg_s_k1": 0.26011000014841557,
+      "realtime_ratio_k1": 0.06502750003710389
+    },
+    "240p_L2": {
+      "fwd_ms": 2.016229993508508,
+      "post_ms": 0.7848000037483871,
+      "total_ms": 2.801029997256895,
+      "std_total_ms": 0.4275699277143159,
+      "p50_total_ms": 2.805149939376861,
+      "n": 30,
+      "seg_s_k1": 0.3361235996708274,
+      "realtime_ratio_k1": 0.08403089991770685
+    },
+    "240p_L3": {
+      "fwd_ms": 49.91934666565309,
+      "post_ms": 1.0706700035370886,
+      "total_ms": 50.990016669190176,
+      "std_total_ms": 5.875606300397098,
+      "p50_total_ms": 49.47649996029213,
+      "n": 30,
+      "seg_s_k1": 6.118802000302821,
+      "realtime_ratio_k1": 1.5297005000757053
+    },
+    "360p_L1": {
+      "fwd_ms": 1.2400866718962789,
+      "post_ms": 0.7547599806760749,
+      "total_ms": 1.9948466525723536,
+      "std_total_ms": 0.3096600421684291,
+      "p50_total_ms": 1.942849950864911,
+      "n": 30,
+      "seg_s_k1": 0.23938159830868244,
+      "realtime_ratio_k1": 0.05984539957717061
+    },
+    "360p_L2": {
+      "fwd_ms": 2.5434233248233795,
+      "post_ms": 0.8203366848950585,
+      "total_ms": 3.363760009718438,
+      "std_total_ms": 0.20655263623548722,
+      "p50_total_ms": 3.451000025961548,
+      "n": 30,
+      "seg_s_k1": 0.40365120116621256,
+      "realtime_ratio_k1": 0.10091280029155314
+    },
+    "360p_L3": {
+      "fwd_ms": 7.7028200185547275,
+      "post_ms": 0.8089466563736399,
+      "total_ms": 8.511766674928367,
+      "std_total_ms": 0.32531670481559466,
+      "p50_total_ms": 8.470350003335625,
+      "n": 30,
+      "seg_s_k1": 1.021412000991404,
+      "realtime_ratio_k1": 0.255353000247851
+    },
+    "480p_L1": {
+      "fwd_ms": 1.5146133218271036,
+      "post_ms": 0.841776681287835,
+      "total_ms": 2.3563900031149387,
+      "std_total_ms": 0.20350110359180096,
+      "p50_total_ms": 2.296100021339953,
+      "n": 30,
+      "seg_s_k1": 0.28276680037379265,
+      "realtime_ratio_k1": 0.07069170009344816
+    },
+    "480p_L2": {
+      "fwd_ms": 4.288020004363109,
+      "post_ms": 0.8824866730719805,
+      "total_ms": 5.17050667743509,
+      "std_total_ms": 0.2741703825115288,
+      "p50_total_ms": 5.045099998824298,
+      "n": 30,
+      "seg_s_k1": 0.6204608012922108,
+      "realtime_ratio_k1": 0.1551152003230527
+    },
+    "480p_L3": {
+      "fwd_ms": 18.976486664420616,
+      "post_ms": 0.8811200076403717,
+      "total_ms": 19.857606672060985,
+      "std_total_ms": 0.7604211188276788,
+      "p50_total_ms": 19.704050035215914,
+      "n": 30,
+      "seg_s_k1": 2.3829128006473184,
+      "realtime_ratio_k1": 0.5957282001618296
+    }
+  },
+  "burn_probe": {
+    "K": 1.5,
+    "measured_total_ms": 4.310596672197183,
+    "predicted_total_ms": 4.6354716721301275,
+    "meas_over_pred": 0.9299154384037783,
+    "note": "reset_burn once per session (fixed)"
+  },
+  "selection": {
+    "K": 5.0,
+    "C": 3,
+    "F": 1,
+    "reason": "C=2(medium) needs K>=8..20 on 5080; C=3(high)+K=5 overloads 240/360/480 while F=low stays under 4s; VMAF F-bicubic >=6.5 all res",
+    "always_greedy_note": "default enhance_action was 2; phase3 must set enhance_action=3 (C)",
+    "primary_trace": "3G 0913; download_action historically mixed (360-dominant or 480-dominant across runs)",
+    "covers": {
+      "240p": true,
+      "360p": true,
+      "480p": true
+    },
+    "vmaf_gaps_F_minus_bic": {
+      "0": 12.439569935395767,
+      "1": 8.447285597983083,
+      "2": 6.539666815483997
+    }
+  },
+  "alt_selection_by_res": {
+    "240p": {
+      "K": 1.0,
+      "C": 3,
+      "F": 1,
+      "primary_q": 0,
+      "primary_label": "240p",
+      "C_ms": 50.99,
+      "F_ms": 2.168,
+      "C_seg_s": 6.119,
+      "F_seg_s": 0.26,
+      "F_minus_bic_vmaf": 12.44,
+      "ok_time": true,
+      "ok_vmaf": true,
+      "ok": true
+    },
+    "480p": {
+      "K": 1.8,
+      "C": 3,
+      "F": 1,
+      "primary_q": 2,
+      "primary_label": "480p",
+      "C_ms": 35.039,
+      "F_ms": 3.568,
+      "C_seg_s": 4.205,
+      "F_seg_s": 0.428,
+      "F_minus_bic_vmaf": 6.54,
+      "ok_time": true,
+      "ok_vmaf": true,
+      "ok": true
+    }
+  },
+  "candidates_primary": [
+    {
+      "K": 1.0,
+      "C": 2,
+      "F": 1,
+      "primary_q": 1,
+      "primary_label": "360p",
+      "C_ms": 3.364,
+      "F_ms": 1.995,
+      "C_seg_s": 0.404,
+      "F_seg_s": 0.239,
+      "F_minus_bic_vmaf": 8.447,
+      "ok_time": false,
+      "ok_vmaf": true,
+      "ok": false
+    },
+    {
+      "K": 1.0,
+      "C": 3,
+      "F": 1,
+      "primary_q": 1,
+      "primary_label": "360p",
+      "C_ms": 8.512,
+      "F_ms": 1.995,
+      "C_seg_s": 1.021,
+      "F_seg_s": 0.239,
+      "F_minus_bic_vmaf": 8.447,
+      "ok_time": false,
+      "ok_vmaf": true,
+      "ok": false
+    },
+    {
+      "K": 1.2,
+      "C": 2,
+      "F": 1,
+      "primary_q": 1,
+      "primary_label": "360p",
+      "C_ms": 3.872,
+      "F_ms": 2.243,
+      "C_seg_s": 0.465,
+      "F_seg_s": 0.269,
+      "F_minus_bic_vmaf": 8.447,
+      "ok_time": false,
+      "ok_vmaf": true,
+      "ok": false
+    },
+    {
+      "K": 1.2,
+      "C": 3,
+      "F": 1,
+      "primary_q": 1,
+      "primary_label": "360p",
+      "C_ms": 10.052,
+      "F_ms": 2.243,
+      "C_seg_s": 1.206,
+      "F_seg_s": 0.269,
+      "F_minus_bic_vmaf": 8.447,
+      "ok_time": false,
+      "ok_vmaf": true,
+      "ok": false
+    },
+    {
+      "K": 1.5,
+      "C": 2,
+      "F": 1,
+      "primary_q": 1,
+      "primary_label": "360p",
+      "C_ms": 4.635,
+      "F_ms": 2.615,
+      "C_seg_s": 0.556,
+      "F_seg_s": 0.314,
+      "F_minus_bic_vmaf": 8.447,
+      "ok_time": false,
+      "ok_vmaf": true,
+      "ok": false
+    },
+    {
+      "K": 1.5,
+      "C": 3,
+      "F": 1,
+      "primary_q": 1,
+      "primary_label": "360p",
+      "C_ms": 12.363,
+      "F_ms": 2.615,
+      "C_seg_s": 1.484,
+      "F_seg_s": 0.314,
+      "F_minus_bic_vmaf": 8.447,
+      "ok_time": false,
+      "ok_vmaf": true,
+      "ok": false
+    },
+    {
+      "K": 1.8,
+      "C": 2,
+      "F": 1,
+      "primary_q": 1,
+      "primary_label": "360p",
+      "C_ms": 5.398,
+      "F_ms": 2.987,
+      "C_seg_s": 0.648,
+      "F_seg_s": 0.358,
+      "F_minus_bic_vmaf": 8.447,
+      "ok_time": false,
+      "ok_vmaf": true,
+      "ok": false
+    },
+    {
+      "K": 1.8,
+      "C": 3,
+      "F": 1,
+      "primary_q": 1,
+      "primary_label": "360p",
+      "C_ms": 14.674,
+      "F_ms": 2.987,
+      "C_seg_s": 1.761,
+      "F_seg_s": 0.358,
+      "F_minus_bic_vmaf": 8.447,
+      "ok_time": false,
+      "ok_vmaf": true,
+      "ok": false
+    },
+    {
+      "K": 2.0,
+      "C": 2,
+      "F": 1,
+      "primary_q": 1,
+      "primary_label": "360p",
+      "C_ms": 5.907,
+      "F_ms": 3.235,
+      "C_seg_s": 0.709,
+      "F_seg_s": 0.388,
+      "F_minus_bic_vmaf": 8.447,
+      "ok_time": false,
+      "ok_vmaf": true,
+      "ok": false
+    },
+    {
+      "K": 2.0,
+      "C": 3,
+      "F": 1,
+      "primary_q": 1,
+      "primary_label": "360p",
+      "C_ms": 16.215,
+      "F_ms": 3.235,
+      "C_seg_s": 1.946,
+      "F_seg_s": 0.388,
+      "F_minus_bic_vmaf": 8.447,
+      "ok_time": false,
+      "ok_vmaf": true,
+      "ok": false
+    },
+    {
+      "K": 2.5,
+      "C": 2,
+      "F": 1,
+      "primary_q": 1,
+      "primary_label": "360p",
+      "C_ms": 7.179,
+      "F_ms": 3.855,
+      "C_seg_s": 0.861,
+      "F_seg_s": 0.463,
+      "F_minus_bic_vmaf": 8.447,
+      "ok_time": false,
+      "ok_vmaf": true,
+      "ok": false
+    },
+    {
+      "K": 2.5,
+      "C": 3,
+      "F": 1,
+      "primary_q": 1,
+      "primary_label": "360p",
+      "C_ms": 20.066,
+      "F_ms": 3.855,
+      "C_seg_s": 2.408,
+      "F_seg_s": 0.463,
+      "F_minus_bic_vmaf": 8.447,
+      "ok_time": false,
+      "ok_vmaf": true,
+      "ok": false
+    },
+    {
+      "K": 3.0,
+      "C": 2,
+      "F": 1,
+      "primary_q": 1,
+      "primary_label": "360p",
+      "C_ms": 8.451,
+      "F_ms": 4.475,
+      "C_seg_s": 1.014,
+      "F_seg_s": 0.537,
+      "F_minus_bic_vmaf": 8.447,
+      "ok_time": false,
+      "ok_vmaf": true,
+      "ok": false
+    },
+    {
+      "K": 3.0,
+      "C": 3,
+      "F": 1,
+      "primary_q": 1,
+      "primary_label": "360p",
+      "C_ms": 23.917,
+      "F_ms": 4.475,
+      "C_seg_s": 2.87,
+      "F_seg_s": 0.537,
+      "F_minus_bic_vmaf": 8.447,
+      "ok_time": false,
+      "ok_vmaf": true,
+      "ok": false
+    },
+    {
+      "K": 4.0,
+      "C": 2,
+      "F": 1,
+      "primary_q": 1,
+      "primary_label": "360p",
+      "C_ms": 10.994,
+      "F_ms": 5.715,
+      "C_seg_s": 1.319,
+      "F_seg_s": 0.686,
+      "F_minus_bic_vmaf": 8.447,
+      "ok_time": false,
+      "ok_vmaf": true,
+      "ok": false
+    },
+    {
+      "K": 4.0,
+      "C": 3,
+      "F": 1,
+      "primary_q": 1,
+      "primary_label": "360p",
+      "C_ms": 31.62,
+      "F_ms": 5.715,
+      "C_seg_s": 3.794,
+      "F_seg_s": 0.686,
+      "F_minus_bic_vmaf": 8.447,
+      "ok_time": false,
+      "ok_vmaf": true,
+      "ok": false
+    },
+    {
+      "K": 5.0,
+      "C": 2,
+      "F": 1,
+      "primary_q": 1,
+      "primary_label": "360p",
+      "C_ms": 13.537,
+      "F_ms": 6.955,
+      "C_seg_s": 1.624,
+      "F_seg_s": 0.835,
+      "F_minus_bic_vmaf": 8.447,
+      "ok_time": false,
+      "ok_vmaf": true,
+      "ok": false
+    },
+    {
+      "K": 5.0,
+      "C": 3,
+      "F": 1,
+      "primary_q": 1,
+      "primary_label": "360p",
+      "C_ms": 39.323,
+      "F_ms": 6.955,
+      "C_seg_s": 4.719,
+      "F_seg_s": 0.835,
+      "F_minus_bic_vmaf": 8.447,
+      "ok_time": true,
+      "ok_vmaf": true,
+      "ok": true
+    }
+  ],
+  "verdict": "GO",
+  "recommendation": {
+    "K": 5.0,
+    "C": 3,
+    "F": 1,
+    "reason": "C=2(medium) needs K>=8..20 on 5080; C=3(high)+K=5 overloads 240/360/480 while F=low stays under 4s; VMAF F-bicubic >=6.5 all res",
+    "always_greedy_note": "default enhance_action was 2; phase3 must set enhance_action=3 (C)",
+    "primary_trace": "3G 0913; download_action historically mixed (360-dominant or 480-dominant across runs)",
+    "covers": {
+      "240p": true,
+      "360p": true,
+      "480p": true
+    },
+    "vmaf_gaps_F_minus_bic": {
+      "0": 12.439569935395767,
+      "1": 8.447285597983083,
+      "2": 6.539666815483997
+    }
+  },
+  "feasible_grid": null,
+  "feasible_picks": [
+    {
+      "res": "240p",
+      "C": 2,
+      "F": 1,
+      "K": 20,
+      "minK_C": 16.143,
+      "maxK_F": 23.424
+    },
+    {
+      "res": "240p",
+      "C": 3,
+      "F": 1,
+      "K": 1,
+      "minK_C": 0.646,
+      "maxK_F": 23.424
+    },
+    {
+      "res": "360p",
+      "C": 2,
+      "F": 1,
+      "K": 13,
+      "minK_C": 12.783,
+      "maxK_F": 26.271
+    },
+    {
+      "res": "360p",
+      "C": 3,
+      "F": 1,
+      "K": 5,
+      "minK_C": 4.222,
+      "maxK_F": 26.271
+    },
+    {
+      "res": "480p",
+      "C": 2,
+      "F": 1,
+      "K": 8,
+      "minK_C": 7.568,
+      "maxK_F": 21.452
+    },
+    {
+      "res": "480p",
+      "C": 3,
+      "F": 1,
+      "K": 1.8,
+      "minK_C": 1.71,
+      "maxK_F": 21.452
+    }
+  ]
+}

@@ -43,7 +43,7 @@ BONES 与传统 ABR 都假设服务端提供 CBR（固定码率、逐段同质�
 | `ablation_cmin_cmax.py`、`run_sim_baseline.py`、`run_sim_comparison_v4.py`、`run_stage_a_sim.py` | **CA-BONES 时期的 c_min/c_max 消融与基线仿真，错放于本目录** | 不属 VBR 线，属 8 月中内容感知 Lyapunov 线，总索引 #16 时认领 |
 | 结果 json | `post_decision_vbr_full_traces.json`(36KB)、`sqrt_vbr_full_traces_results.json`(36KB)、`4stair_vbr_full_traces_results.json`(32KB)、`full_vbr_comparison_fixed.json`(174KB)、`cbr_vs_vbr_results.json`、`cbr_vs_pure_vbr_results.json`、`cmin_cmax_ablation.json`、`stage_a_sim_results.json`、`sim_comparison_v4.json` | 前 4 者为 E1/E2 污染产物，数字不可引用 |
 | 全片连续测量日志 | `vbr_720p_cbr_vmaf.txt`、`vbr_720p_vbr_vmaf.txt`（各 19037 帧） | E3 复核证据：93.706 / 94.661 |
-| 数据产物（未跟踪、不入库） | `data/bbb_vbr_integrated/`、`data/bbb_vbr_sqrt/`、`data/bbb_vbr_4stair/`、`data/bbb_vbr*/`、`data/{continuous,sigmoid,staircase}_bitrate_test/` | 含 intermediate 逐段 json 与全部 mp4 |
+| 数据产物（未跟踪、不入库） | 原 `data/bbb_vbr_*`、`data/vbr_*`、`data/*_bitrate_test/` | 含 intermediate 与 mp4；**2026-10-27 本地已清空（约 23.5GB）**，结论以本 README 为准，需复查只能重跑编码脚本 |
 
 ## 4. 复现方式
 

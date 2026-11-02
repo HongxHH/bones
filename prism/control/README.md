@@ -60,7 +60,10 @@ python -m prism serve --port 8080
 
 ## 测量 / 实验档案
 
-- VMAF：`POST /v1/jobs` 且 `plugin=vmaf`，params 含 `reference` 与 `distorted`
+- 停跑后控制面用本地质量表算 `bones_qoe_v1`（`avg_vmaf − oscillation − stall/段数/10`），写入 `metrics_bundle.json`
+- 质量分按 content + 分辨率档 + 模型 + 增强级别查找；没有表时 Bundle 标 `unavailable`，播放照常归档
+- 配方里 `quality.prefer` 可加上 `remote_catalog`（拉 `{url}/{content}.json`）和 `compute`（参考片 + 失真片 libvmaf，结果回写目录）
+- VMAF 作业：`POST /v1/jobs` 且 `plugin=vmaf`，params 含 `reference` 与 `distorted`；带 `run_id` 时结果并入该 Run 的 Bundle
 - Experiment：job 结束后 `archive` hook 写入 `prism/var/experiments/{id}/`（fingerprint + manifest + metrics）
 
 ## Lab / 仪器控制台
@@ -82,6 +85,17 @@ python -m prism run prism/experiments/bbb_play.yaml
 python prism/scripts/accept_prism.py
 pytest prism/control/tests -q
 ```
+
+## 精确实验清单
+
+- 推荐 workspace：`baseline`（fast-complete 关、OpenCV 出画）。只要段计时、不要画面时用 `headless`。
+- `opengl` 渲染器只按段时长 `sleep`，不是 GPU 出画。跨次对比不要把它和 `opencv` 混用。
+- 默认可复现项：`use_fast_complete=false`、`latency_adapt=false`、`collect_system_metrics=false`。需要在线改延迟表时显式打开 `latency_adapt`。
+- Lab 运行中轮询 `GET /v1/runs/{id}/live`（尾部样本 + 标量摘要）。完整 Bundle 在停跑或 `GET /metrics` 时计算，不要挂在 1Hz 上。
+- `prefer: compute` 会跑 ffmpeg，只走完整 metrics，不走 live。
+- 声明式 Spec 只有一个 arm。`POST /runs/{id}/advance` 与 `arm_mode=parallel` 不是 Lab 路径。
+- 带宽：默认 `bw_meter`（段级）。可选 `bw_cont`（连续窗口），类名 `ContinuousBandwidthMeter`。
+- NES 里论文主路径是 BONES / always_greedy / IMDN always；PACNet、DRL、multitask 是实验性模块。
 
 ## 测试
 

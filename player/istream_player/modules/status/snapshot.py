@@ -6,6 +6,7 @@ StatusExporter remains the event/HTTP shell and calls ``build()``.
 
 from __future__ import annotations
 
+import time
 from dataclasses import asdict, is_dataclass
 from enum import Enum
 from pathlib import Path
@@ -131,7 +132,59 @@ class StatusSnapshot:
     def note_enhancement_start(self, segments: Dict[int, Segment]) -> None:
         self.enhancing_segments = dict(segments) if segments else {}
 
+    def _playing_segment(self) -> Optional[int]:
+        """Segment the player is currently on (on-screen / being rendered).
+
+        Prefer ``player._current_index``: it is set *before* listener fan-out, so
+        it stays correct for the whole segment even while OpenCV is inside
+        ``on_segment_playback_start``. Renderer index is only a fallback — if
+        StatusExporter runs before Renderer, the renderer's index is still the
+        previous segment until that handler starts.
+        """
+        if self.player is not None:
+            cur = getattr(self.player, "_current_index", None)
+            if cur is not None:
+                try:
+                    return int(cur)
+                except (TypeError, ValueError):
+                    pass
+        renderer = self.renderer
+        if renderer is not None:
+            getter = getattr(renderer, "get_current_render_segment_index", None)
+            if callable(getter):
+                live = getter()
+                if live is not None:
+                    try:
+                        return int(live)
+                    except (TypeError, ValueError):
+                        pass
+        return self.segment_index
+
+    def _playing_picture(self) -> tuple[Optional[bool], Optional[int], Optional[int], Optional[int]]:
+        """Enhanced flag / level / WxH for the segment currently being rendered."""
+        enhanced = self.playing_enhanced
+        level = self.playing_enhance_level
+        width = self.playing_width
+        height = self.playing_height
+        renderer = self.renderer
+        if renderer is not None and bool(getattr(renderer, "is_playing", False)):
+            has_frames = bool(getattr(renderer, "_frame_enhanced", None))
+            is_enh = bool(getattr(renderer, "is_enhance", False) or has_frames)
+            enhanced = is_enh
+            raw_level = getattr(renderer, "current_segment_enhance_action", None)
+            level = raw_level if is_enh else 0
+            size = getattr(renderer, "display_size", None)
+            if callable(size):
+                try:
+                    wh = size()
+                    if wh and len(wh) >= 2:
+                        width, height = int(wh[0]), int(wh[1])
+                except Exception:
+                    pass
+        return enhanced, level, width, height
+
     def build(self) -> dict[str, Any]:
+        t0 = time.perf_counter()
         download_level = 0.0
         enhance_level = 0.0
         enhance_queue = 0.0
@@ -163,6 +216,8 @@ class StatusSnapshot:
         ready_inv = self._enhanced_ready_inventory()
         pending_inv = self._enhance_pending_inventory(enhancing)
         enhanced_ready = sum(float(row.get("duration_s") or 0.0) for row in ready_inv)
+        playing_seg = self._playing_segment()
+        playing_enhanced, playing_level, playing_w, playing_h = self._playing_picture()
         playing_download = None
         if self.download_action:
             try:
@@ -172,21 +227,23 @@ class StatusSnapshot:
         state_name = state.name if isinstance(state, Enum) else str(state)
         stall_active = state == State.BUFFERING or state_name == "BUFFERING"
         runtime: dict[str, Any] = {}
+        t_rt = time.perf_counter()
         try:
             runtime = self.runtime.sample()
         except Exception:
             runtime = {}
-        return {
+        runtime_ms = (time.perf_counter() - t_rt) * 1000.0
+        payload = {
             "state": state_name,
             "paused": bool(getattr(self.player, "_paused", state == State.PAUSED)),
             "position": getattr(self.player, "_position", 0.0) if self.player else 0.0,
-            "segment_index": self.segment_index,
-            "playing_segment": self.segment_index,
+            "segment_index": playing_seg,
+            "playing_segment": playing_seg,
             "enhancing_segment": enhancing,
             "enhance_busy": self.enhance_busy,
             "downloading_segment": downloading,
-            "playing_width": self.playing_width,
-            "playing_height": self.playing_height,
+            "playing_width": playing_w,
+            "playing_height": playing_h,
             "playing_download_action": playing_download,
             "download_buffer_s": download_level,
             "enhance_pending_s": enhance_level,
@@ -198,6 +255,7 @@ class StatusSnapshot:
             "render_fps": self._render_fps(),
             "stall_active": stall_active,
             "stall_s_total": round(self.stalls.total_s(), 3),
+            "frame_archive_dropped": self._archive_dropped(),
             "cpu_pct": runtime.get("cpu_pct"),
             "cpu_pct_raw": runtime.get("cpu_pct_raw"),
             "cpu_system_pct": runtime.get("cpu_system_pct"),
@@ -214,11 +272,36 @@ class StatusSnapshot:
             "bandwidth_bps": getattr(self.bw_meter, "bandwidth", 0) if self.bw_meter else 0,
             "download_action": jsonable(actions.get("download") or {}),
             "enhance_action": jsonable(actions.get("enhance") or {}),
-            "playing_enhanced": self.playing_enhanced,
-            "playing_enhance_level": self.playing_enhance_level,
+            "playing_enhanced": playing_enhanced,
+            "playing_enhance_level": playing_level,
             "compare_view": bool(getattr(self.config, "compare_view", False)) if self.config is not None else False,
+            "facts": self._experiment_facts(),
             "config": cfg,
         }
+        total_ms = (time.perf_counter() - t0) * 1000.0
+        if total_ms >= 8.0 or runtime_ms >= 1.0:
+            note = getattr(self.renderer, "note_loop_block", None) if self.renderer is not None else None
+            if callable(note):
+                note({
+                    "kind": "loop",
+                    "part": "snapshot",
+                    "total_ms": round(total_ms, 2),
+                    "runtime_ms": round(runtime_ms, 2),
+                    "buf_s": round(float(download_level), 3),
+                    "seg": playing_seg,
+                })
+        return payload
+
+    def _experiment_facts(self) -> Optional[dict]:
+        enhancer = self.enhancer
+        report = getattr(enhancer, "experiment_facts", None) if enhancer is not None else None
+        if not callable(report):
+            return None
+        try:
+            facts = report()
+        except Exception:
+            return None
+        return facts if isinstance(facts, dict) else None
 
     def _refresh_enhancing(self) -> Optional[int]:
         """Return the in-flight enhance index, or None when idle.
@@ -233,6 +316,16 @@ class StatusSnapshot:
             return self.last_enhanced_segment
         self.enhancing_segments = {}
         return None
+
+    def _archive_dropped(self) -> int:
+        renderer = self.renderer
+        archive = getattr(renderer, "frame_archive", None) if renderer is not None else None
+        if archive is None:
+            return 0
+        try:
+            return int(getattr(archive, "dropped", 0) or 0)
+        except (TypeError, ValueError):
+            return 0
 
     def _render_fps(self) -> Optional[float]:
         renderer = self.renderer

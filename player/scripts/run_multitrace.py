@@ -54,7 +54,7 @@ def run_experiment(method: dict, trace: dict, args) -> dict:
         sys.executable, "play.py",
         "--mod_nes", method["mod_nes"],
         "--mod_enhancer", "imdn_always",
-        "--mod_renderer", "opengl",
+        "--mod_renderer", "headless",
         "--mod_analyzer", "data_collector",
         "--input", args.input,
         "--trace", trace["path"],

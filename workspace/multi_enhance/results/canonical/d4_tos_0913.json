@@ -1,0 +1,39 @@
+{
+  "built_at": "2026-10-28T19:55:00",
+  "video": "tos",
+  "trace": "0913",
+  "note": "QOE 对齐：imdn_tos_quality 已用全片 tos_*.json 重写；tool_greedy 用 multitask_tos_quality。首次跑因 play.py 覆盖 input 误用 BBB（已作废）；第二次对照臂用旧虚高表（已作废）。",
+  "rows": [
+    {
+      "arm": "tool_greedy",
+      "QOE": 71.43362956086663,
+      "avg_vmaf": 81.79708047145733,
+      "dur_stall": 0.10351705551147461,
+      "n_segments": 184,
+      "result_file": "player/output/data/d4/0913_tool_greedy/tool_greedy_multitask_fast-True_video-tos_trace-report.2010-09-13_1003CEST_20261028-185127.json",
+      "tool_or_level_hist": {
+        "None": 15,
+        "1": 1,
+        "2": 32,
+        "3": 117,
+        "5": 19
+      }
+    },
+    {
+      "arm": "fixed_sr_high",
+      "QOE": 73.06915820087171,
+      "avg_vmaf": 82.11,
+      "dur_stall": 0.0760347843170166,
+      "n_segments": 184,
+      "result_file": "player/output/data/d4/0913_fixed_sr_high/always_greedy_imdn_fast-True_video-tos_trace-report.2010-09-13_1003CEST_20261028-193827.json"
+    },
+    {
+      "arm": "none",
+      "QOE": 56.243927336616515,
+      "avg_vmaf": 69.77,
+      "dur_stall": 4.619763135910034,
+      "n_segments": 184,
+      "result_file": "player/output/data/d4/0913_none/always_greedy_imdn_fast-True_video-tos_trace-report.2010-09-13_1003CEST_20261028-195403.json"
+    }
+  ]
+}

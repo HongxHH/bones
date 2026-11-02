@@ -1,0 +1,122 @@
+{
+  "quality": {
+    "built_at": "2026-10-27T20:43:44",
+    "script": "workspace/multi_enhance/build_priors.py",
+    "shape": [
+      5,
+      6
+    ],
+    "cols": [
+      "none",
+      "sr_low",
+      "sr_med",
+      "sr_high",
+      "sr_x2_med",
+      "restore_sharp"
+    ],
+    "rows": [
+      "240p",
+      "360p",
+      "480p",
+      "720p",
+      "1080p"
+    ],
+    "sources": {
+      "240_360_480": "data/quality/bbb_{240,360,480}.json (Phase1 frame-mean VMAF)",
+      "720": "workspace\\hd_enhance_probe\\h0_720_segs_20_30_40_50_60_80_90_100_120_140.json",
+      "1080_none": "convention 100.0",
+      "1080_restore": "unmeasured → -1"
+    },
+    "phase1_means": {
+      "240": {
+        "bicubic": 39.29621754819038,
+        "sr_low": 51.73578748358609,
+        "sr_medium": 56.0792775828561,
+        "sr_high": 61.492968375440014
+      },
+      "360": {
+        "bicubic": 64.03564814853692,
+        "sr_low": 72.48293374652054,
+        "sr_medium": 75.9126505278633,
+        "sr_high": 79.91956598035702
+      },
+      "480": {
+        "bicubic": 76.82336485634742,
+        "sr_low": 83.36303167183216,
+        "sr_medium": 86.08841993802234,
+        "sr_high": 87.64549024633718
+      }
+    },
+    "h0_means": {
+      "bicubic": 91.2988,
+      "restore_unsharp": 96.43334000000002,
+      "sr_x2_medium": 93.67979
+    },
+    "h0_mean_delta_vs_bicubic": {
+      "restore_sharp": 5.134540000000015,
+      "sr_x2_med": 2.380989999999997
+    },
+    "invalid_sentinel": -1.0
+  },
+  "latency": {
+    "built_at": "2026-10-27T20:43:48",
+    "script": "workspace/multi_enhance/build_priors.py",
+    "device": "NVIDIA GeForce RTX 5080",
+    "path": "enhance_one_frame-aligned: model|unsharp + bicubic1080 + uint8 + cpu",
+    "warmup": 5,
+    "measure": 30,
+    "unit": "seconds_per_frame",
+    "illegal_sentinel": 1000000.0,
+    "cells": {
+      "240p_tool1": {
+        "s_per_frame": 0.0018107366670543949,
+        "ms": 1.810736667054395
+      },
+      "240p_tool2": {
+        "s_per_frame": 0.0027846666673819226,
+        "ms": 2.7846666673819227
+      },
+      "240p_tool3": {
+        "s_per_frame": 0.047082043334376066,
+        "ms": 47.08204333437607
+      },
+      "360p_tool1": {
+        "s_per_frame": 0.001727893331553787,
+        "ms": 1.727893331553787
+      },
+      "360p_tool2": {
+        "s_per_frame": 0.0030335500021465124,
+        "ms": 3.0335500021465123
+      },
+      "360p_tool3": {
+        "s_per_frame": 0.0077172566670924425,
+        "ms": 7.7172566670924425
+      },
+      "480p_tool1": {
+        "s_per_frame": 0.0021167999987180036,
+        "ms": 2.1167999987180037
+      },
+      "480p_tool2": {
+        "s_per_frame": 0.004684626664190243,
+        "ms": 4.684626664190243
+      },
+      "480p_tool3": {
+        "s_per_frame": 0.018515483332642666,
+        "ms": 18.515483332642667
+      },
+      "720p_sr_x2_med": {
+        "s_per_frame": 0.010155146666026365,
+        "ms": 10.155146666026365
+      },
+      "720p_restore_sharp": {
+        "s_per_frame": 0.001255553332157433,
+        "ms": 1.255553332157433
+      },
+      "1080p_restore_sharp": {
+        "s_per_frame": 0.0012595800023215513,
+        "ms": 1.2595800023215513
+      }
+    },
+    "note_1080_restore": "T measured for scheduling completeness; Q stays invalid until quality probe"
+  }
+}

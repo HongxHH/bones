@@ -24,16 +24,15 @@ NES_OPTIONS: list[dict[str, str]] = [
 ]
 
 ENHANCER_OPTIONS: list[dict[str, str]] = [
-    {"id": "imdn_always", "label": "IMDN always"},
     {"id": "imdn", "label": "IMDN"},
     {"id": "multitask", "label": "Multi-task"},
     {"id": "pacnet", "label": "PACNet"},
 ]
 
 RENDERER_OPTIONS: list[dict[str, str]] = [
-    {"id": "opencv", "label": "OpenCV（窗口/壳画面）"},
+    {"id": "opencv", "label": "OpenCV"},
     {"id": "opengl", "label": "OpenGL"},
-    {"id": "headless", "label": "Headless（无画面）"},
+    {"id": "headless", "label": "Headless"},
 ]
 
 DOWNLOADER_OPTIONS: list[dict[str, str]] = [

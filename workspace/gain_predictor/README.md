@@ -49,7 +49,7 @@ BONES 用全局平均增益表（每档码率×增强方法一个常数 VMAF）�
 | `control/bones_selective.py`（177 行，仓库 control/） | SelectiveBONES：static/oracle/pred 三质量源 + alpha 收缩/解耦/gating/budget 四种保护 | 报告统一用真值 `vmaf_enh_seg` 计分（`simulation/simulator.py:203`），对照受控；解耦结构缺陷见 D3 |
 | 数据产物 | dataset_seg.csv、dataset_frame.csv、**dataset_sim_seg.csv（142KB，生成脚本全仓 grep 0 命中，孤儿）**、3 个 pkl、3 个 npy、13 个 json、figures/ 9 图 | pkl/npy 为大二进制，不入库 |
 
-**第三个 pkl 不在本目录**：`workspace/vmaf_gain_predictor.pkl`（4.9MB）是 8 月 CA-BONES 的 RandomForest（训练脚本 `workspace/vbr_sims/_misc/train_vmaf_predictor.py`，标签为 3060ti 段表、5 特征、同样 shuffle 80/20），由 `player/istream_player/modules/nes/ca_bones.py:108`、`control/bones_ca.py:159`、`player/ca_predicted_config.json` 加载——历史"真实播放器 QoE −6.92"出自它，**不是**本档案两个 pkl，引用时勿张冠李戴。
+**第三个 pkl 不在本目录**：`workspace/vmaf_gain_predictor.pkl`（4.9MB）是 8 月 CA-BONES 的 RandomForest（训练脚本 `workspace/vbr_sims/_misc/train_vmaf_predictor.py`，标签为 3060ti 段表、5 特征、同样 shuffle 80/20），由 `player/istream_player/modules/nes/ca_bones.py:108`、`control/bones_ca.py:159`、`player/legacy_experiments/ca_predicted_config.json` 加载——历史"真实播放器 QoE −6.92"出自它，**不是**本档案两个 pkl，引用时勿张冠李戴。
 
 ## 4. 复现方式
 

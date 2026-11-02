@@ -14,7 +14,8 @@ def test_recipe_options_payload_lists_modules(tmp_path: Path):
     repo = Path(__file__).resolve().parents[3]
     payload = recipe_options_payload(repo)
     assert any(x["id"] == "always_greedy" for x in payload["nes"])
-    assert any(x["id"] == "imdn_always" for x in payload["enhancer"])
+    assert any(x["id"] == "imdn" and x["label"] == "IMDN" for x in payload["enhancer"])
+    assert all(x["id"] != "imdn_always" for x in payload["enhancer"])
     assert any(x["id"] == "opencv" for x in payload["renderer"])
     datasets = list_trace_datasets(repo)
     assert any(d["id"] == "3Glogs" for d in datasets)
@@ -53,6 +54,33 @@ def test_specs_options_and_traces_api(tmp_path: Path):
         assert bad.status_code == 400
 
 
+def test_player_cmd_forwards_fast_complete_and_metric_output():
+    cmd = player_cmd(
+        "http://x/m.mpd",
+        {"use_fast_complete": False, "metric_output": "E:/runs/analyzer"},
+        8765,
+    )
+    assert "--use_fast_complete" in cmd
+    assert cmd[cmd.index("--use_fast_complete") + 1] == "false"
+    assert cmd[cmd.index("--metric_output") + 1] == "E:/runs/analyzer"
+
+
+def test_player_cmd_forwards_recovery_knobs():
+    cmd = player_cmd(
+        "http://x/m.mpd",
+        {
+            "use_fast_complete": True,
+            "fixed_enhance_action": 3,
+            "recovery_mode": "fallback",
+            "fallback_enhance_action": 1,
+        },
+        8765,
+    )
+    assert cmd[cmd.index("--fixed_enhance_action") + 1] == "3"
+    assert cmd[cmd.index("--recovery_mode") + 1] == "fallback"
+    assert cmd[cmd.index("--fallback_enhance_action") + 1] == "1"
+
+
 def test_player_cmd_passes_enhancer_and_trace():
     cmd = player_cmd(
         "http://x/m.mpd",
@@ -81,4 +109,4 @@ def test_player_cmd_no_trace_keeps_tcp():
     )
     assert cmd[cmd.index("--mod_downloader") + 1] == "tcp"
     assert "--trace" not in cmd
-    assert cmd[cmd.index("--mod_enhancer") + 1] == "imdn_always"
+    assert cmd[cmd.index("--mod_enhancer") + 1] == "imdn"

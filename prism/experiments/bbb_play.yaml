@@ -16,7 +16,7 @@ spec:
           mpd_type: static
       player:
         mod_nes: always_greedy
-        mod_enhancer: imdn_always
+        mod_enhancer: imdn
         mod_renderer: opencv
         mod_downloader: tcp
         # Set mod_downloader: trace and a path under player/data to simulate network:
@@ -31,3 +31,10 @@ spec:
   measure:
     - plugin: noop
       params: {}
+  # QoE is derived on the control plane. Default is the local VMAF table.
+  # Add remote_catalog / compute to prefer when a catalog URL or reference video exists.
+  metrics:
+    recipes: [bones_qoe_v1]
+    quality:
+      prefer: [local_catalog]
+      catalog_ref: content:bbb

@@ -1,0 +1,76 @@
+{
+  "built_at": "2026-10-28T17:55:23",
+  "video": "tos",
+  "traces": [
+    "0913"
+  ],
+  "arms": [
+    "tool_greedy",
+    "fixed_sr_high",
+    "none"
+  ],
+  "rows": [
+    {
+      "arm": "tool_greedy",
+      "video": "tos",
+      "trace": "0913",
+      "returncode": 2,
+      "duration_s": 5.3,
+      "ok": false,
+      "result_file": null
+    },
+    {
+      "arm": "fixed_sr_high",
+      "video": "tos",
+      "trace": "0913",
+      "returncode": 2,
+      "duration_s": 4.6,
+      "ok": false,
+      "result_file": null
+    },
+    {
+      "arm": "none",
+      "video": "tos",
+      "trace": "0913",
+      "returncode": 2,
+      "duration_s": 4.6,
+      "ok": false,
+      "result_file": null
+    }
+  ],
+  "rows_with_logs": [
+    {
+      "arm": "tool_greedy",
+      "video": "tos",
+      "trace": "0913",
+      "returncode": 2,
+      "duration_s": 5.3,
+      "ok": false,
+      "result_file": null,
+      "stdout_tail": "",
+      "stderr_tail": "usage: play.py [-h] [--config CONFIG] [-i INPUT] [-t TRACE] [-v] [-l LOG]\n               [-r RUN_DIR] [-aw] [--status_port STATUS_PORT]\n               [--status_server_url STATUS_SERVER_URL]\n               [--telemetry_run_id TELEMETRY_RUN_ID]\n               [--telemetry_arm_id TELEMETRY_ARM_ID]\n               [--telemetry_session_id TELEMETRY_SESSION_ID]\n               [--telemetry_experiment_id TELEMETRY_EXPERIMENT_ID]\n               [--telemetry_interval_ms TELEMETRY_INTERVAL_MS]\n               [--collect_system_metrics COLLECT_SYSTEM_METRICS]\n               [--frame_shm FRAME_SHM] [--frame_archive FRAME_ARCHIVE]\n               [--metric_output METRIC_OUTPUT]\n               [--use_fast_complete USE_FAST_COMPLETE]\n               [--latency_adapt LATENCY_ADAPT]\n               [--fixed_enhance_action FIXED_ENHANCE_ACTION]\n               [--recovery_mode {none,bicubic,fallback}]\n               [--fallback_enhance_action FALLBACK_ENHANCE_ACTION]\n               [--compare_view COMPARE_VIEW] [--mod_mpd {mpd}]\n               [--mod_downloader {local,tcp,quic,trace}]\n               [--mod_bw {bw_meter,bw_cont}]\n               [--mod_nes {bones,dynamic_greedy,bola_greedy,buffer_greedy,tput_greedy,nas,always_greedy,content_aware_bones,conservative_ca_bones,ca_bones,mt_bones,drl_nes,tool_greedy}]\n               [--mod_scheduler {scheduler}]\n               [--mod_download_buffer {download_buffer}]\n               [--mod_enhance_buffer {enhance_buffer}]\n               [--mod_enhancer {imdn,multitask,multitask_legacy,pacnet,imdn_tools,imdn_always}]\n               [--mod_player {dash}]\n               [--mod_analyzer {data_collector,file_saver,playback,progress_logger}]\n               [--mod_renderer {opengl,headless,opencv}]\n               [--mod_status {status,off}]\nplay.py: error: unrecognized arguments: --video_dataset tos\n"
+    },
+    {
+      "arm": "fixed_sr_high",
+      "video": "tos",
+      "trace": "0913",
+      "returncode": 2,
+      "duration_s": 4.6,
+      "ok": false,
+      "result_file": null,
+      "stdout_tail": "",
+      "stderr_tail": "usage: play.py [-h] [--config CONFIG] [-i INPUT] [-t TRACE] [-v] [-l LOG]\n               [-r RUN_DIR] [-aw] [--status_port STATUS_PORT]\n               [--status_server_url STATUS_SERVER_URL]\n               [--telemetry_run_id TELEMETRY_RUN_ID]\n               [--telemetry_arm_id TELEMETRY_ARM_ID]\n               [--telemetry_session_id TELEMETRY_SESSION_ID]\n               [--telemetry_experiment_id TELEMETRY_EXPERIMENT_ID]\n               [--telemetry_interval_ms TELEMETRY_INTERVAL_MS]\n               [--collect_system_metrics COLLECT_SYSTEM_METRICS]\n               [--frame_shm FRAME_SHM] [--frame_archive FRAME_ARCHIVE]\n               [--metric_output METRIC_OUTPUT]\n               [--use_fast_complete USE_FAST_COMPLETE]\n               [--latency_adapt LATENCY_ADAPT]\n               [--fixed_enhance_action FIXED_ENHANCE_ACTION]\n               [--recovery_mode {none,bicubic,fallback}]\n               [--fallback_enhance_action FALLBACK_ENHANCE_ACTION]\n               [--compare_view COMPARE_VIEW] [--mod_mpd {mpd}]\n               [--mod_downloader {local,tcp,quic,trace}]\n               [--mod_bw {bw_meter,bw_cont}]\n               [--mod_nes {bones,dynamic_greedy,bola_greedy,buffer_greedy,tput_greedy,nas,always_greedy,content_aware_bones,conservative_ca_bones,ca_bones,mt_bones,drl_nes,tool_greedy}]\n               [--mod_scheduler {scheduler}]\n               [--mod_download_buffer {download_buffer}]\n               [--mod_enhance_buffer {enhance_buffer}]\n               [--mod_enhancer {imdn,multitask,multitask_legacy,pacnet,imdn_tools,imdn_always}]\n               [--mod_player {dash}]\n               [--mod_analyzer {data_collector,file_saver,playback,progress_logger}]\n               [--mod_renderer {opengl,headless,opencv}]\n               [--mod_status {status,off}]\nplay.py: error: unrecognized arguments: --video_dataset tos\n"
+    },
+    {
+      "arm": "none",
+      "video": "tos",
+      "trace": "0913",
+      "returncode": 2,
+      "duration_s": 4.6,
+      "ok": false,
+      "result_file": null,
+      "stdout_tail": "",
+      "stderr_tail": "usage: play.py [-h] [--config CONFIG] [-i INPUT] [-t TRACE] [-v] [-l LOG]\n               [-r RUN_DIR] [-aw] [--status_port STATUS_PORT]\n               [--status_server_url STATUS_SERVER_URL]\n               [--telemetry_run_id TELEMETRY_RUN_ID]\n               [--telemetry_arm_id TELEMETRY_ARM_ID]\n               [--telemetry_session_id TELEMETRY_SESSION_ID]\n               [--telemetry_experiment_id TELEMETRY_EXPERIMENT_ID]\n               [--telemetry_interval_ms TELEMETRY_INTERVAL_MS]\n               [--collect_system_metrics COLLECT_SYSTEM_METRICS]\n               [--frame_shm FRAME_SHM] [--frame_archive FRAME_ARCHIVE]\n               [--metric_output METRIC_OUTPUT]\n               [--use_fast_complete USE_FAST_COMPLETE]\n               [--latency_adapt LATENCY_ADAPT]\n               [--fixed_enhance_action FIXED_ENHANCE_ACTION]\n               [--recovery_mode {none,bicubic,fallback}]\n               [--fallback_enhance_action FALLBACK_ENHANCE_ACTION]\n               [--compare_view COMPARE_VIEW] [--mod_mpd {mpd}]\n               [--mod_downloader {local,tcp,quic,trace}]\n               [--mod_bw {bw_meter,bw_cont}]\n               [--mod_nes {bones,dynamic_greedy,bola_greedy,buffer_greedy,tput_greedy,nas,always_greedy,content_aware_bones,conservative_ca_bones,ca_bones,mt_bones,drl_nes,tool_greedy}]\n               [--mod_scheduler {scheduler}]\n               [--mod_download_buffer {download_buffer}]\n               [--mod_enhance_buffer {enhance_buffer}]\n               [--mod_enhancer {imdn,multitask,multitask_legacy,pacnet,imdn_tools,imdn_always}]\n               [--mod_player {dash}]\n               [--mod_analyzer {data_collector,file_saver,playback,progress_logger}]\n               [--mod_renderer {opengl,headless,opencv}]\n               [--mod_status {status,off}]\nplay.py: error: unrecognized arguments: --video_dataset tos\n"
+    }
+  ]
+}

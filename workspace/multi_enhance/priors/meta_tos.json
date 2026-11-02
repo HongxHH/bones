@@ -1,0 +1,173 @@
+{
+  "quality": {
+    "dataset": "tos",
+    "built_at": "2026-10-28T16:32:48",
+    "script": "workspace/multi_enhance/build_priors.py",
+    "shape": [
+      5,
+      6
+    ],
+    "cols": [
+      "none",
+      "sr_low",
+      "sr_med",
+      "sr_high",
+      "sr_x2_med",
+      "restore_sharp"
+    ],
+    "rows": [
+      "240p",
+      "360p",
+      "480p",
+      "720p",
+      "1080p"
+    ],
+    "display_hw": [
+      800,
+      1920
+    ],
+    "sources": {
+      "240_360_480": "data/quality/tos_{240,360,480}.json",
+      "720": "workspace\\hd_enhance_probe\\h0_tos_segs_20_30_40_50_60_80_90_100_120_140.json",
+      "1080_none": "convention 100.0",
+      "1080_restore": "unmeasured → -1"
+    },
+    "phase1_means": {
+      "240": {
+        "bicubic": 48.25571402951159,
+        "sr_low": 62.64189077185053,
+        "sr_medium": 66.18539256526743,
+        "sr_high": 69.00974762769643
+      },
+      "360": {
+        "bicubic": 72.43392892735599,
+        "sr_low": 81.81454332009145,
+        "sr_medium": 83.75331018161205,
+        "sr_high": 85.3835128547117
+      },
+      "480": {
+        "bicubic": 83.59014653802556,
+        "sr_low": 89.50619525539213,
+        "sr_medium": 90.99865695232715,
+        "sr_high": 91.909071390466
+      }
+    },
+    "h0_means": {
+      "bicubic": 93.29044,
+      "restore_unsharp": 97.45285000000001,
+      "sr_x2_medium": 95.04727
+    },
+    "h0_mean_delta_vs_bicubic": {
+      "restore_sharp": 4.162410000000008,
+      "sr_x2_med": 1.7568299999999937
+    },
+    "invalid_sentinel": -1.0
+  },
+  "latency": {
+    "dataset": "tos",
+    "built_at": "2026-10-28T16:32:51",
+    "script": "workspace/multi_enhance/build_priors.py",
+    "device": "NVIDIA GeForce RTX 5080",
+    "display_hw": [
+      800,
+      1920
+    ],
+    "res_hw": {
+      "0": {
+        "label": "240p",
+        "hw": [
+          176,
+          426
+        ],
+        "scale": 4
+      },
+      "1": {
+        "label": "360p",
+        "hw": [
+          268,
+          640
+        ],
+        "scale": 2
+      },
+      "2": {
+        "label": "480p",
+        "hw": [
+          356,
+          854
+        ],
+        "scale": 2
+      },
+      "3": {
+        "label": "720p",
+        "hw": [
+          532,
+          1280
+        ],
+        "scale": 1
+      },
+      "4": {
+        "label": "1080p",
+        "hw": [
+          800,
+          1920
+        ],
+        "scale": 1
+      }
+    },
+    "path": "enhance_one_frame-aligned: model|unsharp + bicubic(display) + uint8 + cpu",
+    "warmup": 5,
+    "measure": 30,
+    "unit": "seconds_per_frame",
+    "illegal_sentinel": 1000000.0,
+    "cells": {
+      "240p_tool1": {
+        "s_per_frame": 0.0017228266689926386,
+        "ms": 1.7228266689926386
+      },
+      "240p_tool2": {
+        "s_per_frame": 0.0024317299985947708,
+        "ms": 2.4317299985947707
+      },
+      "240p_tool3": {
+        "s_per_frame": 0.03652069333475083,
+        "ms": 36.52069333475083
+      },
+      "360p_tool1": {
+        "s_per_frame": 0.001740183332003653,
+        "ms": 1.740183332003653
+      },
+      "360p_tool2": {
+        "s_per_frame": 0.002772920000522087,
+        "ms": 2.772920000522087
+      },
+      "360p_tool3": {
+        "s_per_frame": 0.006742023335148891,
+        "ms": 6.742023335148891
+      },
+      "480p_tool1": {
+        "s_per_frame": 0.0019569833336087563,
+        "ms": 1.9569833336087563
+      },
+      "480p_tool2": {
+        "s_per_frame": 0.0037789866677485407,
+        "ms": 3.7789866677485406
+      },
+      "480p_tool3": {
+        "s_per_frame": 0.01217658333092307,
+        "ms": 12.17658333092307
+      },
+      "720p_sr_x2_med": {
+        "s_per_frame": 0.007704146664279202,
+        "ms": 7.704146664279202
+      },
+      "720p_restore_sharp": {
+        "s_per_frame": 0.0010772866662591696,
+        "ms": 1.0772866662591696
+      },
+      "1080p_restore_sharp": {
+        "s_per_frame": 0.0009958733338862658,
+        "ms": 0.9958733338862659
+      }
+    }
+  }
+}

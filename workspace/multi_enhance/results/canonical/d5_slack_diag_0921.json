@@ -1,0 +1,324 @@
+{
+  "seg_duration_median_s": 3.945171594619751,
+  "latency_table_shape": [
+    5,
+    6
+  ],
+  "latency_row0_s": [
+    0.0,
+    0.0018107366670543949,
+    0.0027846666673819226,
+    0.047082043334376066,
+    1000000.0,
+    1000000.0
+  ],
+  "arms": {
+    "ours": {
+      "QOE": 55.81277058590516,
+      "dur_stall": 20.548146724700928,
+      "num_stall": 4,
+      "fc_segments": 3,
+      "fc_count_segments_flag": 3,
+      "tools": {
+        "none": 26,
+        "sr_low": 1,
+        "sr_med": 45,
+        "sr_high": 65,
+        "restore": 22
+      },
+      "download": {
+        "0": 70,
+        "1": 42,
+        "2": 23,
+        "3": 22,
+        "4": 2
+      },
+      "dec_buf_mean": 10.964,
+      "dec_buf_p10": 6.1,
+      "dec_buf_p50": 11.72,
+      "dec_buf_p90": 15.258,
+      "enhance_latency_by_tool": {
+        "sr_low": {
+          "n": 1,
+          "mean": 0.303,
+          "p90": 0.303,
+          "max": 0.303
+        },
+        "sr_med": {
+          "n": 45,
+          "mean": 0.454,
+          "p90": 0.602,
+          "max": 0.857
+        },
+        "sr_high": {
+          "n": 63,
+          "mean": 1.556,
+          "p90": 2.429,
+          "max": 2.543
+        },
+        "restore": {
+          "n": 21,
+          "mean": 0.463,
+          "p90": 0.615,
+          "max": 0.634
+        }
+      },
+      "stalls": [
+        {
+          "start": 0.3600471019744873,
+          "end": 0.9817781448364258,
+          "dur": 0.6217310428619385
+        },
+        {
+          "start": 5.951443195343018,
+          "end": 6.697442054748535,
+          "dur": 0.7459988594055176
+        },
+        {
+          "start": 538.0133721828461,
+          "end": 554.9537169933319,
+          "dur": 16.94034481048584
+        },
+        {
+          "start": 560.0431530475616,
+          "end": 562.2832250595093,
+          "dur": 2.240072011947632
+        }
+      ],
+      "file": "player/output/data/d5/bbb_0921_ours/tool_greedy_multitask_fast-True_video-bbb_trace-report.2010-09-21_0742CEST_20261028-234014.json"
+    },
+    "no_slack": {
+      "QOE": 61.82785821301794,
+      "dur_stall": 11.848481178283691,
+      "num_stall": 4,
+      "fc_segments": 41,
+      "fc_count_segments_flag": 41,
+      "tools": {
+        "none": 3,
+        "sr_high": 136,
+        "restore": 20
+      },
+      "download": {
+        "0": 70,
+        "1": 42,
+        "2": 25,
+        "3": 20,
+        "4": 2
+      },
+      "dec_buf_mean": 11.176,
+      "dec_buf_p10": 7.36,
+      "dec_buf_p50": 11.654,
+      "dec_buf_p90": 14.488,
+      "enhance_latency_by_tool": {
+        "sr_high": {
+          "n": 131,
+          "mean": 3.003,
+          "p90": 5.196,
+          "max": 5.338
+        },
+        "restore": {
+          "n": 19,
+          "mean": 0.439,
+          "p90": 0.581,
+          "max": 0.61
+        }
+      },
+      "stalls": [
+        {
+          "start": 0.3867950439453125,
+          "end": 1.0076639652252197,
+          "dur": 0.6208689212799072
+        },
+        {
+          "start": 5.997606039047241,
+          "end": 6.706963062286377,
+          "dur": 0.7093570232391357
+        },
+        {
+          "start": 547.6613869667053,
+          "end": 557.469565153122,
+          "dur": 9.808178186416626
+        },
+        {
+          "start": 562.57435297966,
+          "end": 563.284430027008,
+          "dur": 0.7100770473480225
+        }
+      ],
+      "file": "player/output/data/d5/bbb_0921_no_slack/tool_greedy_multitask_fast-True_video-bbb_trace-report.2010-09-21_0742CEST_20261029-003351.json"
+    },
+    "fixed_high": {
+      "QOE": 62.327687705854146,
+      "dur_stall": 20.664705991744995,
+      "num_stall": 4,
+      "fc_segments": 48,
+      "fc_count_segments_flag": 48,
+      "tools": {
+        "none": 1,
+        "sr_high": 158
+      },
+      "download": {
+        "0": 70,
+        "1": 45,
+        "2": 16,
+        "3": 26,
+        "4": 2
+      },
+      "dec_buf_mean": 11.055,
+      "dec_buf_p10": 6.809,
+      "dec_buf_p50": 11.871,
+      "dec_buf_p90": 14.899,
+      "enhance_latency_by_tool": {
+        "sr_high": {
+          "n": 126,
+          "mean": 2.961,
+          "p90": 5.184,
+          "max": 5.457
+        }
+      },
+      "stalls": [
+        {
+          "start": 0.35933995246887207,
+          "end": 0.9737560749053955,
+          "dur": 0.6144161224365234
+        },
+        {
+          "start": 6.012606143951416,
+          "end": 6.659337043762207,
+          "dur": 0.646730899810791
+        },
+        {
+          "start": 537.7832469940186,
+          "end": 554.9500031471252,
+          "dur": 17.16675615310669
+        },
+        {
+          "start": 560.0503461360931,
+          "end": 562.2871489524841,
+          "dur": 2.236802816390991
+        }
+      ],
+      "file": "player/output/data/d5/bbb_0921_fixed_high/always_greedy_multitask_fast-True_video-bbb_trace-report.2010-09-21_0742CEST_20261029-000734.json"
+    }
+  },
+  "tool_diff_patterns": {
+    "sr_med->sr_high": 42,
+    "none->sr_high": 23,
+    "restore->sr_high": 9,
+    "sr_high->restore": 4,
+    "sr_med->restore": 3,
+    "sr_low->sr_high": 1
+  },
+  "findings": [
+    "no_slack 用「段前激进 + 段中 FC」组合在差网取得更低 stall/更高 QOE；ours 的 slack 按「必须完整跑完 T」计，与 FC 能力不一致 → 过保守。",
+    "存在下载耦合：增强策略会改写 ABR 路径，固定「同下载轨迹比工具」不成立；评价 slack 时应接受系统级闭环差异。",
+    "部分差异段在 enh0 上界下本可选重工具却选了轻工具，说明真实 buff_enh 或其它门仍在起作用；诊断需在日志中加 buff_enh/slack 快照（建议）。",
+    "表内若干（档,工具）的 T/0.9 ≥ 段长，**无论缓冲多满都会被 `t >= seg_time` 永久拒绝**；slack 消融等于同时关掉了这道硬门，这比「缓冲阈值」更致命。"
+  ],
+  "n_tool_diff": 82,
+  "n_download_diff": 66,
+  "recon": {
+    "ours_segments_sr_high_allowed_if_enh0": 134,
+    "ours_segments_sr_high_blocked_if_enh0": 25,
+    "ours_none_segments_sr_high_gate": {
+      "slack<0.05s": 1,
+      "ok": 23,
+      "illegal_or_inf": 2
+    },
+    "tool_diff_light_to_heavy_blocked": 3,
+    "tool_diff_light_to_heavy_would_allow_enh0": 66,
+    "noslack_fc_tools": {
+      "sr_high": 41
+    },
+    "ours_fc_tools": {
+      "restore": 1,
+      "sr_high": 1,
+      "sr_med": 1
+    },
+    "committed_work_table_s_actual_s": {
+      "ours": [
+        1.0,
+        128.5
+      ],
+      "no_slack": [
+        4.5,
+        401.7
+      ],
+      "fixed_high": [
+        31111115.4,
+        373.1
+      ]
+    },
+    "tool_diff_vmaf_delta_noslack_minus_ours_mean": 11.603,
+    "bufs_ours_when_none_mean": 7.04,
+    "bufs_ours_when_sr_high_mean": 12.528,
+    "bufs_noslack_when_sr_high_mean": 10.488
+  },
+  "hard_blocked_by_t_ge_seg": [
+    {
+      "down": 0,
+      "tool": "x2",
+      "t_eff_s": 1111111.111
+    },
+    {
+      "down": 0,
+      "tool": "restore",
+      "t_eff_s": 1111111.111
+    },
+    {
+      "down": 1,
+      "tool": "x2",
+      "t_eff_s": 1111111.111
+    },
+    {
+      "down": 1,
+      "tool": "restore",
+      "t_eff_s": 1111111.111
+    },
+    {
+      "down": 2,
+      "tool": "x2",
+      "t_eff_s": 1111111.111
+    },
+    {
+      "down": 2,
+      "tool": "restore",
+      "t_eff_s": 1111111.111
+    },
+    {
+      "down": 3,
+      "tool": "sr_low",
+      "t_eff_s": 1111111.111
+    },
+    {
+      "down": 3,
+      "tool": "sr_med",
+      "t_eff_s": 1111111.111
+    },
+    {
+      "down": 3,
+      "tool": "sr_high",
+      "t_eff_s": 1111111.111
+    },
+    {
+      "down": 4,
+      "tool": "sr_low",
+      "t_eff_s": 1111111.111
+    },
+    {
+      "down": 4,
+      "tool": "sr_med",
+      "t_eff_s": 1111111.111
+    },
+    {
+      "down": 4,
+      "tool": "sr_high",
+      "t_eff_s": 1111111.111
+    },
+    {
+      "down": 4,
+      "tool": "x2",
+      "t_eff_s": 1111111.111
+    }
+  ]
+}

@@ -125,6 +125,17 @@ class StatusExporter(
     async def on_state_change(self, position: float, old_state: State, new_state: State):
         self._snap.note_state(new_state)
         if new_state == State.END:
+            # Write the analysis file before END telemetry. Prism may stop the
+            # process as soon as it sees END, and cleanup() would then be skipped.
+            try:
+                from istream_player.modules.analyzer.analyzer import flush_analyzers
+                flush_analyzers()
+            except Exception as exc:
+                self.log.warning("analysis flush before END failed: %s", exc)
+            try:
+                await self._telemetry.force_report()
+            except Exception as exc:
+                self.log.warning("final telemetry on END failed: %s", exc)
             self._closed.set()
         await self._broadcast(urgent=True)
 

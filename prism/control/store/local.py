@@ -82,14 +82,14 @@ class LocalAssetStore:
         items: list[T] = []
         for path in sorted(directory.glob("*.json")):
             try:
-                items.append(model.model_validate(json.loads(path.read_text(encoding="utf-8"))))
+                items.append(model.model_validate(json.loads(path.read_text(encoding="utf-8-sig"))))
             except Exception:
                 continue
         if items:
             return items
         legacy = self.meta_path(name)
         if legacy.exists():
-            raw = json.loads(legacy.read_text(encoding="utf-8"))
+            raw = json.loads(legacy.read_text(encoding="utf-8-sig"))
             migrated = [model.model_validate(item) for item in raw]
             for item in migrated:
                 self.save_entity(name, item)

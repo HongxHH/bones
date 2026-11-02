@@ -1,0 +1,134 @@
+{
+  "built_at": "2026-10-28T19:22:11",
+  "video": "tos",
+  "traces": [
+    "0913"
+  ],
+  "arms": [
+    "tool_greedy",
+    "fixed_sr_high",
+    "none"
+  ],
+  "rows": [
+    {
+      "arm": "tool_greedy",
+      "video": "tos",
+      "trace": "0913",
+      "returncode": 0,
+      "duration_s": 900.2,
+      "ok": true,
+      "result_file": "player/output/data/d4/0913_tool_greedy/tool_greedy_multitask_fast-True_video-tos_trace-report.2010-09-13_1003CEST_20261028-185127.json",
+      "QOE": 71.43362956086663,
+      "avg_vmaf": 81.79708047145733,
+      "dur_stall": 0.10351705551147461,
+      "num_stall": 1,
+      "n_segments": 184,
+      "tool_or_level_hist": {
+        "None": 15,
+        "3": 117,
+        "5": 19,
+        "2": 32,
+        "1": 1
+      }
+    },
+    {
+      "arm": "fixed_sr_high",
+      "video": "tos",
+      "trace": "0913",
+      "returncode": 0,
+      "duration_s": 907.4,
+      "ok": true,
+      "result_file": "player/output/data/d4/0913_fixed_sr_high/always_greedy_imdn_fast-True_video-tos_trace-report.2010-09-13_1003CEST_20261028-190635.json",
+      "QOE": 92.1859080964664,
+      "avg_vmaf": 95.70869915675925,
+      "dur_stall": 1.0743649005889893,
+      "num_stall": 2,
+      "n_segments": 184,
+      "tool_or_level_hist": {
+        "None": 2,
+        "3": 182
+      }
+    },
+    {
+      "arm": "none",
+      "video": "tos",
+      "trace": "0913",
+      "returncode": 0,
+      "duration_s": 935.8,
+      "ok": true,
+      "result_file": "player/output/data/d4/0913_none/always_greedy_imdn_fast-True_video-tos_trace-report.2010-09-13_1003CEST_20261028-192211.json",
+      "QOE": 85.81978890312494,
+      "avg_vmaf": 91.47995033695659,
+      "dur_stall": 5.129370927810669,
+      "num_stall": 3,
+      "n_segments": 184,
+      "tool_or_level_hist": {
+        "None": 184
+      }
+    }
+  ],
+  "rows_with_logs": [
+    {
+      "arm": "tool_greedy",
+      "video": "tos",
+      "trace": "0913",
+      "returncode": 0,
+      "duration_s": 900.2,
+      "ok": true,
+      "result_file": "player/output/data/d4/0913_tool_greedy/tool_greedy_multitask_fast-True_video-tos_trace-report.2010-09-13_1003CEST_20261028-185127.json",
+      "QOE": 71.43362956086663,
+      "avg_vmaf": 81.79708047145733,
+      "dur_stall": 0.10351705551147461,
+      "num_stall": 1,
+      "n_segments": 184,
+      "tool_or_level_hist": {
+        "None": 15,
+        "3": 117,
+        "5": 19,
+        "2": 32,
+        "1": 1
+      },
+      "stdout_tail": "start=0, end=0\nWriting results in file E:\\dev\\Code\\Python\\bones\\player\\output\\data\\d4\\0913_tool_greedy\\tool_greedy_multitask_fast-True_video-tos_trace-report.2010-09-13_1003CEST_20261028-185127.json\n",
+      "stderr_tail": "y: 1.306s, enhanced frames: 96, interpolated frames: 0, enhance FPS: 73.490fps, enhance frame interval: 0, threshold: 0.549s, enhance end to play time: 9.177s\n2026-10-28 18:51:01,840           DASHPlayer     INFO:\tPlaying index: 180\n2026-10-28 18:51:02,913        SchedulerImpl     INFO:\tCompleted downloading from urls dict_keys(['data/tears_of_steel/stream3/segment_183.m4s'])\n2026-10-28 18:51:02,914 ToolGreedyController     INFO:\ttool_greedy seg=184 down=3 tool=5(restore_sharp)\n2026-10-28 18:51:02,914        SchedulerImpl     INFO:\tIndex 184, download actions {0: 3}, enhance actions {0: 5}\n2026-10-28 18:51:02,914        SchedulerImpl     INFO:\tWaiting for completion urls dict_keys(['data/tears_of_steel/stream3/segment_184.m4s'])\n2026-10-28 18:51:02,914    MultiTaskEnhancer     INFO:\tEnhancing segment index: 183,download action: 3, enhance action: 5, enhance start to play time: 10.956s\n2026-10-28 18:51:02,975        SchedulerImpl     INFO:\tCompleted downloading from urls dict_keys(['data/tears_of_steel/stream3/segment_184.m4s'])\n2026-10-28 18:51:02,975 ToolGreedyController     INFO:\ttool_greedy seg=185 down=4 tool=0(none)\n2026-10-28 18:51:02,976        SchedulerImpl     INFO:\tIndex 185, download actions {0: 4}, enhance actions {0: 0}\n2026-10-28 18:51:02,976        SchedulerImpl     INFO:\tNo more segments left\n2026-10-28 18:51:03,178    MultiTaskEnhancer     INFO:\tComplete enhancing segment index: 183,download action: 3, enhance action: 5, recovery=none, fallback=False, enhance start to play time: 10.956s, latency: 0.263s, enhanced frames: 96, interpolated frames: 0, enhance FPS: 364.855fps, enhance frame interval: 0, threshold: 0.549s, enhance end to play time: 10.693s\n2026-10-28 18:51:03,178    MultiTaskEnhancer     INFO:\tEnhancer closed\n2026-10-28 18:51:06,875           DASHPlayer     INFO:\tPlaying index: 181\n2026-10-28 18:51:11,993           DASHPlayer     INFO:\tPlaying index: 182\n2026-10-28 18:51:17,128           DASHPlayer     INFO:\tPlaying index: 183\n2026-10-28 18:51:22,281           DASHPlayer     INFO:\tPlaying index: 184\n2026-10-28 18:51:27,406           DASHPlayer     INFO:\tPlayer closed\n2026-10-28 18:51:27,408           GPUMonitor     INFO:\tGPUMonitor stopped: {'avg_power_w': 64.25, 'peak_power_w': 330.0, 'total_energy_kj': 57.4995, 'avg_temp_c': 38.81, 'peak_temp_c': 59.0, 'avg_util_pct': 12.1, 'peak_util_pct': 100.0, 'avg_mem_used_mb': 3941.1, 'peak_mem_used_mb': 4021.4, 'total_mem_mb': 16303.0, 'sample_count': 1771, 'duration_seconds': 894.93}\n"
+    },
+    {
+      "arm": "fixed_sr_high",
+      "video": "tos",
+      "trace": "0913",
+      "returncode": 0,
+      "duration_s": 907.4,
+      "ok": true,
+      "result_file": "player/output/data/d4/0913_fixed_sr_high/always_greedy_imdn_fast-True_video-tos_trace-report.2010-09-13_1003CEST_20261028-190635.json",
+      "QOE": 92.1859080964664,
+      "avg_vmaf": 95.70869915675925,
+      "dur_stall": 1.0743649005889893,
+      "num_stall": 2,
+      "n_segments": 184,
+      "tool_or_level_hist": {
+        "None": 2,
+        "3": 182
+      },
+      "stdout_tail": "start=0, end=0\nWriting results in file E:\\dev\\Code\\Python\\bones\\player\\output\\data\\d4\\0913_fixed_sr_high\\always_greedy_imdn_fast-True_video-tos_trace-report.2010-09-13_1003CEST_20261028-190635.json\n",
+      "stderr_tail": "ed frames: 96, interpolated frames: 0, enhance FPS: 143.988fps, enhance frame interval: 0, threshold: 0.571s, enhance end to play time: 9.828s\n2026-10-28 19:06:09,363           DASHPlayer     INFO:\tPlaying index: 180\n2026-10-28 19:06:11,429        SchedulerImpl     INFO:\tCompleted downloading from urls dict_keys(['data/tears_of_steel/stream3/segment_183.m4s'])\n2026-10-28 19:06:11,430 AlwaysBufferGreedyController     INFO:\tDownload buffer level: 13933.256200049073\n2026-10-28 19:06:11,430 AlwaysBufferGreedyController     INFO:\tEnhance buffer level: 4000.0\n2026-10-28 19:06:11,430        SchedulerImpl     INFO:\tIndex 184, download actions {0: 2}, enhance actions {0: 3}\n2026-10-28 19:06:11,430        SchedulerImpl     INFO:\tWaiting for completion urls dict_keys(['data/tears_of_steel/stream2/segment_184.m4s'])\n2026-10-28 19:06:11,430   IMDNEnhancerAlways     INFO:\tEnhancing segment index: 183,download action: 3, enhance action: 3, enhance start to play time: 9.932s\n2026-10-28 19:06:11,431   IMDNEnhancerAlways     INFO:\tAbort enhancing segment index: 183, download action: 3, enhance action: 3, reason: Max resolution, enhance start to play time: 9.932s\n2026-10-28 19:06:11,444        SchedulerImpl     INFO:\tCompleted downloading from urls dict_keys(['data/tears_of_steel/stream2/segment_184.m4s'])\n2026-10-28 19:06:11,444 AlwaysBufferGreedyController     INFO:\tDownload buffer level: 17918.559800018556\n2026-10-28 19:06:11,444 AlwaysBufferGreedyController     INFO:\tEnhance buffer level: 4000.0\n2026-10-28 19:06:11,444        SchedulerImpl     INFO:\tIndex 185, download actions {0: 3}, enhance actions {0: 3}\n2026-10-28 19:06:11,444        SchedulerImpl     INFO:\tNo more segments left\n2026-10-28 19:06:11,445   IMDNEnhancerAlways     INFO:\tEnhancer closed\n2026-10-28 19:06:14,318           DASHPlayer     INFO:\tPlaying index: 181\n2026-10-28 19:06:19,428           DASHPlayer     INFO:\tPlaying index: 182\n2026-10-28 19:06:24,560           DASHPlayer     INFO:\tPlaying index: 183\n2026-10-28 19:06:29,680           DASHPlayer     INFO:\tPlaying index: 184\n2026-10-28 19:06:34,789           DASHPlayer     INFO:\tPlayer closed\n2026-10-28 19:06:34,791           GPUMonitor     INFO:\tGPUMonitor stopped: {'avg_power_w': 67.0, 'peak_power_w': 328.85, 'total_energy_kj': 60.5952, 'avg_temp_c': 38.88, 'peak_temp_c': 58.0, 'avg_util_pct': 18.7, 'peak_util_pct': 100.0, 'avg_mem_used_mb': 3934.0, 'peak_mem_used_mb': 3972.8, 'total_mem_mb': 16303.0, 'sample_count': 1790, 'duration_seconds': 904.43}\n"
+    },
+    {
+      "arm": "none",
+      "video": "tos",
+      "trace": "0913",
+      "returncode": 0,
+      "duration_s": 935.8,
+      "ok": true,
+      "result_file": "player/output/data/d4/0913_none/always_greedy_imdn_fast-True_video-tos_trace-report.2010-09-13_1003CEST_20261028-192211.json",
+      "QOE": 85.81978890312494,
+      "avg_vmaf": 91.47995033695659,
+      "dur_stall": 5.129370927810669,
+      "num_stall": 3,
+      "n_segments": 184,
+      "tool_or_level_hist": {
+        "None": 184
+      },
+      "stdout_tail": "start=0, end=0\nWriting results in file E:\\dev\\Code\\Python\\bones\\player\\output\\data\\d4\\0913_none\\always_greedy_imdn_fast-True_video-tos_trace-report.2010-09-13_1003CEST_20261028-192211.json\n",
+      "stderr_tail": "026-10-28 19:21:41,936 AlwaysBufferGreedyController     INFO:\tDownload buffer level: 14213.29780004453\n2026-10-28 19:21:41,936 AlwaysBufferGreedyController     INFO:\tEnhance buffer level: 0\n2026-10-28 19:21:41,936        SchedulerImpl     INFO:\tIndex 183, download actions {0: 3}, enhance actions {0: 0}\n2026-10-28 19:21:41,936        SchedulerImpl     INFO:\tWaiting for completion urls dict_keys(['data/tears_of_steel/stream3/segment_183.m4s'])\n2026-10-28 19:21:45,239           DASHPlayer     INFO:\tPlaying index: 180\n2026-10-28 19:21:49,971        SchedulerImpl     INFO:\tCompleted downloading from urls dict_keys(['data/tears_of_steel/stream3/segment_183.m4s'])\n2026-10-28 19:21:49,972 AlwaysBufferGreedyController     INFO:\tDownload buffer level: 12000.0\n2026-10-28 19:21:49,972 AlwaysBufferGreedyController     INFO:\tEnhance buffer level: 0\n2026-10-28 19:21:49,972        SchedulerImpl     INFO:\tIndex 184, download actions {0: 1}, enhance actions {0: 0}\n2026-10-28 19:21:49,972        SchedulerImpl     INFO:\tWaiting for completion urls dict_keys(['data/tears_of_steel/stream1/segment_184.m4s'])\n2026-10-28 19:21:50,003        SchedulerImpl     INFO:\tCompleted downloading from urls dict_keys(['data/tears_of_steel/stream1/segment_184.m4s'])\n2026-10-28 19:21:50,003 AlwaysBufferGreedyController     INFO:\tDownload buffer level: 16000.0\n2026-10-28 19:21:50,004 AlwaysBufferGreedyController     INFO:\tEnhance buffer level: 0\n2026-10-28 19:21:50,004        SchedulerImpl     INFO:\tIndex 185, download actions {0: 3}, enhance actions {0: 0}\n2026-10-28 19:21:50,004        SchedulerImpl     INFO:\tNo more segments left\n2026-10-28 19:21:50,287           DASHPlayer     INFO:\tPlaying index: 181\n2026-10-28 19:21:55,403           DASHPlayer     INFO:\tPlaying index: 182\n2026-10-28 19:22:00,528           DASHPlayer     INFO:\tPlaying index: 183\n2026-10-28 19:22:05,655           DASHPlayer     INFO:\tPlaying index: 184\n2026-10-28 19:22:10,756           DASHPlayer     INFO:\tPlayer closed\n2026-10-28 19:22:10,756        EnhanceBuffer     INFO:\tEnhance buffer closed.\n2026-10-28 19:22:10,756   IMDNEnhancerAlways     INFO:\tEnhancer closed\n2026-10-28 19:22:10,758           GPUMonitor     INFO:\tGPUMonitor stopped: {'avg_power_w': 21.36, 'peak_power_w': 40.64, 'total_energy_kj': 19.8742, 'avg_temp_c': 34.97, 'peak_temp_c': 36.0, 'avg_util_pct': 2.9, 'peak_util_pct': 11.0, 'avg_mem_used_mb': 2886.1, 'peak_mem_used_mb': 2887.7, 'total_mem_mb': 16303.0, 'sample_count': 1841, 'duration_seconds': 930.59}\n"
+    }
+  ]
+}

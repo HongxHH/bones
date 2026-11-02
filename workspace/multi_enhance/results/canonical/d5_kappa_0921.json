@@ -1,0 +1,46 @@
+{
+  "video": "bbb",
+  "trace": "0921",
+  "built_at": "2026-10-29T09:49:48",
+  "note": "tool_slack_kappa sweep; baselines from d5_bbb_0921",
+  "source": "workspace/multi_enhance/results/runs/d5_kappa_20261029-092309.json",
+  "rows": [
+    {
+      "arm": "ours_kappa_1.0",
+      "kappa": 1.0,
+      "QOE": 55.81277058590516,
+      "dur_stall": 20.548146724700928,
+      "fast_complete_segments": 3,
+      "tools": {"none": 26, "sr_low": 1, "sr_med": 45, "sr_high": 65, "restore": 22},
+      "source": "d5_bbb_0921.json ours"
+    },
+    {
+      "arm": "ours_kappa_0.5",
+      "kappa": 0.5,
+      "QOE": 58.38368623639102,
+      "dur_stall": 24.899346113204956,
+      "fast_complete_segments": 4,
+      "tools": {"none": 12, "sr_low": 1, "sr_med": 65, "sr_high": 56, "restore": 25},
+      "result_dir": "player/output/data/d5/bbb_0921_kappa_0p5"
+    },
+    {
+      "arm": "ours_kappa_0.0",
+      "kappa": 0.0,
+      "QOE": 60.82255328343035,
+      "dur_stall": 26.388990879058838,
+      "fast_complete_segments": 1,
+      "tools": {"none": 9, "sr_med": 63, "sr_high": 64, "restore": 23},
+      "result_dir": "player/output/data/d5/bbb_0921_kappa_0p0"
+    },
+    {
+      "arm": "no_slack",
+      "kappa": null,
+      "QOE": 61.82785821301794,
+      "dur_stall": 11.848481178283691,
+      "fast_complete_segments": 41,
+      "tools": {"none": 3, "sr_high": 136, "restore": 20},
+      "source": "d5_bbb_0921.json no_slack"
+    }
+  ],
+  "verdict": "Lower kappa raises QOE but worsens stall; only full ignore_slack (always heavy + FC x41) improves stall. Partial kappa is not the fix."
+}

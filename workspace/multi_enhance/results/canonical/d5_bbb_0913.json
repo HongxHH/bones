@@ -1,0 +1,148 @@
+{
+  "video": "bbb",
+  "trace": "0913",
+  "built_at": "2026-10-28T23:13:52",
+  "note": "all arms multitask Q-table for fair lookup QoE",
+  "source": "workspace\\multi_enhance\\results\\runs\\d5_summary_20261028-215632.json",
+  "rows": [
+    {
+      "arm": "ours",
+      "QOE": 59.6672144351817,
+      "avg_vmaf": 73.80427035102181,
+      "dur_stall": 0.6604230403900146,
+      "num_stall": 1,
+      "n_segments": 159,
+      "tool_or_level_hist": {
+        "0": 14,
+        "2": 45,
+        "3": 79,
+        "5": 21
+      },
+      "download_hist": {
+        "0": 57,
+        "1": 51,
+        "2": 28,
+        "3": 21,
+        "4": 2
+      },
+      "fast_complete_segments": 1,
+      "result_file": "player/output/data/d5/bbb_0913_ours/tool_greedy_multitask_fast-True_video-bbb_trace-report.2010-09-13_1003CEST_20261028-220921.json",
+      "ok": true
+    },
+    {
+      "arm": "none",
+      "QOE": 47.04814789572023,
+      "avg_vmaf": 63.19833667929532,
+      "dur_stall": 3.718662977218628,
+      "num_stall": 2,
+      "n_segments": 159,
+      "tool_or_level_hist": {
+        "0": 159
+      },
+      "download_hist": {
+        "0": 50,
+        "1": 58,
+        "2": 21,
+        "3": 28,
+        "4": 2
+      },
+      "fast_complete_segments": 0,
+      "result_file": "player/output/data/d5/bbb_0913_none/always_greedy_multitask_fast-True_video-bbb_trace-report.2010-09-13_1003CEST_20261028-222246.json",
+      "ok": true
+    },
+    {
+      "arm": "fixed_high",
+      "QOE": 63.62627801712677,
+      "avg_vmaf": 74.16685514329124,
+      "dur_stall": 5.329599142074585,
+      "num_stall": 2,
+      "n_segments": 159,
+      "tool_or_level_hist": {
+        "0": 1,
+        "3": 158
+      },
+      "download_hist": {
+        "0": 60,
+        "2": 19,
+        "3": 23,
+        "1": 55,
+        "4": 2
+      },
+      "fast_complete_segments": 37,
+      "result_file": "player/output/data/d5/bbb_0913_fixed_high/always_greedy_multitask_fast-True_video-bbb_trace-report.2010-09-13_1003CEST_20261028-223521.json",
+      "ok": true
+    },
+    {
+      "arm": "no_hd",
+      "QOE": 61.91228108996371,
+      "avg_vmaf": 73.76506192941972,
+      "dur_stall": 0.6464331150054932,
+      "num_stall": 2,
+      "n_segments": 159,
+      "tool_or_level_hist": {
+        "0": 37,
+        "2": 38,
+        "3": 83,
+        "1": 1
+      },
+      "download_hist": {
+        "0": 52,
+        "1": 58,
+        "2": 25,
+        "3": 22,
+        "4": 2
+      },
+      "fast_complete_segments": 0,
+      "result_file": "player/output/data/d5/bbb_0913_no_hd/tool_greedy_multitask_fast-True_video-bbb_trace-report.2010-09-13_1003CEST_20261028-224812.json",
+      "ok": true
+    },
+    {
+      "arm": "no_slack",
+      "QOE": 64.54483655547948,
+      "avg_vmaf": 75.92166659944161,
+      "dur_stall": 1.7846579551696777,
+      "num_stall": 2,
+      "n_segments": 159,
+      "tool_or_level_hist": {
+        "0": 3,
+        "3": 132,
+        "5": 24
+      },
+      "download_hist": {
+        "0": 62,
+        "2": 25,
+        "3": 24,
+        "1": 46,
+        "4": 2
+      },
+      "fast_complete_segments": 28,
+      "result_file": "player/output/data/d5/bbb_0913_no_slack/tool_greedy_multitask_fast-True_video-bbb_trace-report.2010-09-13_1003CEST_20261028-230100.json",
+      "ok": true
+    },
+    {
+      "arm": "no_fc",
+      "QOE": 56.13369391456517,
+      "avg_vmaf": 72.38682300807938,
+      "dur_stall": 0.6425578594207764,
+      "num_stall": 1,
+      "n_segments": 159,
+      "tool_or_level_hist": {
+        "0": 19,
+        "2": 44,
+        "3": 70,
+        "5": 24,
+        "1": 2
+      },
+      "download_hist": {
+        "0": 63,
+        "1": 47,
+        "2": 23,
+        "3": 24,
+        "4": 2
+      },
+      "fast_complete_segments": 0,
+      "result_file": "player/output/data/d5/bbb_0913_no_fc/tool_greedy_multitask_fast-False_video-bbb_trace-report.2010-09-13_1003CEST_20261028-231351.json",
+      "ok": true
+    }
+  ]
+}

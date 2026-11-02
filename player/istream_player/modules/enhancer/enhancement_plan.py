@@ -15,7 +15,8 @@ class EnhancementDecision:
     
     Attributes:
         should_enhance: 是否需要进行模型增强（True=增强，False=跳过或插值）
-        enhance_level: 增强级别（1=低，2=中，3=高），仅在should_enhance=True时有效
+        enhance_level: 增强级别或 tool_id（经典 1/2/3 SR；多类型还可为 4=sr_x2、5=restore 等），
+                       仅在 should_enhance=True 时有效
         use_interpolation: 是否使用插值（True=插值，False=跳过处理），仅在should_enhance=False时有效
         frame_index: 帧索引（可选，用于调试和日志）
     """
@@ -26,8 +27,10 @@ class EnhancementDecision:
     
     def __post_init__(self):
         """验证决策的有效性"""
-        if self.should_enhance and self.enhance_level not in [1, 2, 3]:
-            raise ValueError(f"Invalid enhance_level: {self.enhance_level}, must be 1, 2, or 3")
+        if self.should_enhance and int(self.enhance_level) < 1:
+            raise ValueError(
+                f"Invalid enhance_level: {self.enhance_level}, must be >= 1 when should_enhance"
+            )
 
 
 class FrameEnhancementPlan(Protocol):

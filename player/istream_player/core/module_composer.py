@@ -27,7 +27,9 @@ from istream_player.modules.nes import (BONESController,
                                         ConservativeContentAwareBONESController,
                                         CABONESController,
                                         MTBONESController,
-                                        DRLNESController)
+                                        DRLNESController,
+                                        ToolGreedyController,
+                                        PrefJointController)
 
 from istream_player.modules.analyzer.analyzer import PlaybackAnalyzer
 from istream_player.modules.analyzer.event_logger import EventLogger
@@ -40,6 +42,7 @@ from istream_player.modules.download_buffer import DownloadBufferImpl
 
 
 from istream_player.modules.bw_meter.bandwidth import BandwidthMeterImpl
+from istream_player.modules.bw_meter.bandwidth_cont import ContinuousBandwidthMeter
 from istream_player.modules.downloader.quic.client import QuicClientImpl
 from istream_player.modules.downloader import LocalClient, TCPClientImpl, TraceClient
 from istream_player.modules.mpd.mpd_provider_impl import MPDProviderImpl
@@ -47,7 +50,13 @@ from istream_player.modules.player.player_dash import DASHPlayer
 from istream_player.modules.scheduler.scheduler import SchedulerImpl
 
 from istream_player.modules.renderer import OpenGLRenderer, HeadlessRenderer, OpenCVRenderer
-from istream_player.modules.enhancer import IMDNEnhancer, IMDNEnhancerAlways, MultiTaskEnhancer, PACNetEnhancer
+from istream_player.modules.enhancer import (
+    IMDNEnhancerAlways,
+    MultiTaskEnhancer,
+    MultiTaskEnhancerLegacy,
+    PACNetEnhancer,
+    ToolEnhancer,
+)
 from istream_player.modules.status import StatusExporter, StatusOff
 
 # 模块初始化函数类型定义 - 用于创建模块实例的函数签名
@@ -318,6 +327,76 @@ class PlayerComposer:
         )
         parser.add_argument("--frame_shm", type=str, required=False)
         parser.add_argument("--frame_archive", type=str, required=False)
+        parser.add_argument("--metric_output", type=str, required=False, help="Directory for the end-of-run analyzer JSON")
+        parser.add_argument(
+            "--use_fast_complete",
+            type=_parse_bool_arg,
+            required=False,
+            help="Enable fast-complete early exit (true/false)",
+        )
+        parser.add_argument(
+            "--latency_adapt",
+            type=_parse_bool_arg,
+            required=False,
+            help="Online EWMA latency / safe-factor updates (true/false, default false)",
+        )
+        parser.add_argument(
+            "--fixed_enhance_action",
+            type=int,
+            required=False,
+            help="Pin enhance level for always_greedy (e.g. 3=high, 1=low); omit for controller default",
+        )
+        parser.add_argument(
+            "--tool_ignore_slack",
+            type=_parse_bool_arg,
+            required=False,
+            help="D5 no_slack: tool_greedy ignores buffer slack / seg wall (true/false)",
+        )
+        parser.add_argument(
+            "--tool_mask_hd",
+            type=_parse_bool_arg,
+            required=False,
+            help="D5 no_hd: hide restore/x2 from tool_greedy via -inf Q (true/false)",
+        )
+        parser.add_argument(
+            "--tool_slack_kappa",
+            type=float,
+            required=False,
+            help="tool_greedy: slack = buff_down - buff_enh - kappa*seg (default 1.0)",
+        )
+        parser.add_argument(
+            "--user_courage",
+            type=str,
+            choices=["conservative", "balanced", "aggressive"],
+            required=False,
+            help="pref_joint: courage knob (conservative|balanced|aggressive)",
+        )
+        parser.add_argument(
+            "--user_taste",
+            type=str,
+            choices=["balanced", "sharp", "clean"],
+            required=False,
+            help="pref_joint: taste knob (balanced|sharp|clean)",
+        )
+        parser.add_argument(
+            "--joint_params_path",
+            type=str,
+            required=False,
+            help="pref_joint: path to joint_v1_params.json (optional)",
+        )
+        parser.add_argument(
+            "--recovery_mode",
+            type=str,
+            choices=["none", "bicubic", "fallback"],
+            required=False,
+            help="Segment recovery: none|bicubic|fallback (phase-3)",
+        )
+        parser.add_argument(
+            "--fallback_enhance_action",
+            type=int,
+            required=False,
+            help="Fallback enhance level when recovery_mode=fallback (default 1)",
+        )
         parser.add_argument(
             "--compare_view",
             type=_parse_bool_arg,
@@ -468,11 +547,18 @@ class PlayerComposer:
             "downloader", [LocalClient, TCPClientImpl, QuicClientImpl, TraceClient], downloader_initializer, "Downloader", False, "trace"
         )
         # 注册带宽测量模块
-        self.register_module("bw", [BandwidthMeterImpl], single_initializer, "Bandwidth Estimation", False, "bw_meter")
+        self.register_module(
+            "bw",
+            [BandwidthMeterImpl, ContinuousBandwidthMeter],
+            single_initializer,
+            "Bandwidth Estimation",
+            False,
+            "bw_meter",
+        )
         # 注册网络感知调度器模块（支持多种算法）
         self.register_module(
             "nes",
-            [BONESController, DynamicGreedyController, BOLAGreedyController, BufferGreedyController, ThroughputGreedyController, NASController, AlwaysGreedyController, ContentAwareBONESController, ConservativeContentAwareBONESController, CABONESController, MTBONESController, DRLNESController],
+            [BONESController, DynamicGreedyController, BOLAGreedyController, BufferGreedyController, ThroughputGreedyController, NASController, AlwaysGreedyController, ContentAwareBONESController, ConservativeContentAwareBONESController, CABONESController, MTBONESController, DRLNESController, ToolGreedyController, PrefJointController],
             single_initializer,
             "Neural-Enhanced Streaming Controller",
             False,
@@ -491,12 +577,17 @@ class PlayerComposer:
 
         # 注册视频增强器模块
         self.register_module("enhancer",
-                             [IMDNEnhancer, IMDNEnhancerAlways, MultiTaskEnhancer, PACNetEnhancer],
+                             [IMDNEnhancerAlways, MultiTaskEnhancer, MultiTaskEnhancerLegacy, PACNetEnhancer, ToolEnhancer],
                              single_initializer,
                              "Enhancer",
                              False,
-                             "imdn_always"
+                             "imdn"
                              )
+        # Older specs and scripts say imdn_always. Same implementation.
+        self.module_options["enhancer"]["imdn_always"] = IMDNEnhancerAlways
+        # multi_enhance 探索线：multitask（新）；imdn_tools 为别名；旧五动作 USM 版为 multitask_legacy
+        self.module_options["enhancer"]["imdn_tools"] = ToolEnhancer
+        self.module_options["enhancer"]["multitask_legacy"] = MultiTaskEnhancerLegacy
 
         # 注册DASH播放器模块
         self.register_module("player", [DASHPlayer], single_initializer, "DASH Player", False, "dash")
@@ -512,8 +603,10 @@ class PlayerComposer:
             mod_allow_multi=True,
         )
         # 注册渲染器模块（支持多种渲染方式）
-        self.register_module("renderer", [OpenGLRenderer, HeadlessRenderer, OpenCVRenderer], single_initializer, "Renderer", False, "headless")
+        # Status before renderer so on_segment_playback_start records the live
+        # index before OpenCV/OpenGL block on the full segment render.
         self.register_module("status", [StatusExporter, StatusOff], single_initializer, "Status exporter / local console", False, "off")
+        self.register_module("renderer", [OpenGLRenderer, HeadlessRenderer, OpenCVRenderer], single_initializer, "Renderer", False, "headless")
 
 
 def single_initializer(mod_type, mod_name, composer: PlayerComposer) -> Dict[str, Module]:

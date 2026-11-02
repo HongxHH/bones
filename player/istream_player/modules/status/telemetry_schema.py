@@ -53,6 +53,10 @@ SAMPLE_VALUE_KEYS: tuple[str, ...] = (
     "gpu_proc_mem_pct",
     # "nvml" = driver per-PID; "torch" = CUDA allocator reserved (may under-count).
     "gpu_proc_mem_src",
+    # Optional mechanism bag. Null when this player has nothing extra to report.
+    "facts",
+    # Frames the JPEG archive dropped because its writer fell behind.
+    "frame_archive_dropped",
 )
 
 

@@ -11,6 +11,7 @@ import urllib.request
 
 from prism.cli.launcher import ensure_control_plane, lab_url
 from prism.desk.picture import PicturePane
+from prism.desk.scrub import split_left
 from prism.frame_sink import NAME
 
 from PySide6.QtCore import Qt, QThread, QTimer, QUrl, Signal
@@ -48,7 +49,7 @@ class PrismWindow(QMainWindow):
         self.setWindowTitle("Prism")
         self.resize(*_initial_window_size())
         self._owned: subprocess.Popen | None = None
-        self._playing = False
+        self._review = False
         self._user_resized = False
         self._applying_split = False
 
@@ -101,12 +102,20 @@ class PrismWindow(QMainWindow):
         self._user_resized = True
 
     def _sync_split(self) -> None:
-        playing = _run_is_playing(self._host, self._port)
-        if playing is None or playing == self._playing:
+        page = self._web.page()
+        if page is None:
             return
-        self._playing = playing
-        # Play/stop is a new layout context; drop the previous drag so the
-        # preview stays large while a run is on screen.
+        page.runJavaScript(
+            "(document.body && document.body.dataset.review) || ''",
+            self._apply_review,
+        )
+
+    def _apply_review(self, value) -> None:
+        review = value == "compare"
+        if review == self._review:
+            return
+        self._review = review
+        # Entering or leaving compare overrides a manual drag.
         self._user_resized = False
         self._layout_split()
 
@@ -116,12 +125,7 @@ class PrismWindow(QMainWindow):
         total = self._split.width()
         if total < 200:
             return
-        # Picture stays the majority. Left is wide enough for a 2-column meter grid.
-        if self._playing:
-            left = min(440, max(360, int(total * 0.28)))
-        else:
-            left = min(480, max(360, int(total * 0.30)))
-        left = min(left, max(360, total - 160))
+        left = split_left(total, review=self._review)
         self._applying_split = True
         try:
             self._split.setSizes([left, max(1, total - left)])
@@ -143,15 +147,6 @@ def _initial_window_size() -> tuple[int, int]:
         return 1920, 1080
     avail = screen.availableGeometry()
     return min(1920, max(1280, avail.width())), min(1080, max(800, avail.height()))
-
-
-def _run_is_playing(host: str, port: int) -> bool | None:
-    try:
-        with urllib.request.urlopen(f"http://{host}:{port}/v1/runs", timeout=0.4) as resp:
-            runs = json.loads(resp.read().decode("utf-8"))
-    except Exception:
-        return None
-    return any(item.get("status") == "running" for item in runs)
 
 
 def _register_frame_sink(host: str, port: int) -> None:
@@ -222,6 +217,33 @@ def _stylesheet() -> str:
     }
     #hud QPushButton#hudOn { background: #0d6e6a; }
     #hud QPushButton:hover, #hudChip:hover { background: rgba(13, 110, 106, 0.55); }
+    #scrub {
+      background: rgba(14, 26, 34, 0.92);
+      border-top: 1px solid rgba(238, 243, 245, 0.12);
+    }
+    #scrubMeta {
+      color: rgba(238, 243, 245, 0.82);
+      background: transparent;
+      font-size: 12px;
+    }
+    #scrub QPushButton {
+      color: #eef3f5;
+      background: rgba(238, 243, 245, 0.12);
+      border: 0;
+      padding: 4px 10px;
+    }
+    #scrub QPushButton:hover { background: rgba(13, 110, 106, 0.55); }
+    #scrub QSlider::groove:horizontal {
+      height: 4px;
+      background: rgba(238, 243, 245, 0.22);
+      border-radius: 2px;
+    }
+    #scrub QSlider::handle:horizontal {
+      width: 12px;
+      margin: -5px 0;
+      background: #8fe0da;
+      border-radius: 6px;
+    }
     """
 
 

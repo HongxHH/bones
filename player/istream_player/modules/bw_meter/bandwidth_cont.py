@@ -1,6 +1,6 @@
 import logging
-import operator
 import time
+from collections import deque
 
 from istream_player.config.config import PlayerConfig
 from istream_player.core.bw_meter import (BandwidthMeter,
@@ -13,9 +13,9 @@ from istream_player.core.module import Module, ModuleOption
 # 连续带宽测量器实现类 - 继承自Module、BandwidthMeter和DownloadEventListener接口
 # 负责实时测量和更新网络带宽，提供连续带宽更新功能
 @ModuleOption("bw_cont", requires=["segment_downloader"])
-class BandwidthMeterImpl(Module, BandwidthMeter, DownloadEventListener):
+class ContinuousBandwidthMeter(Module, BandwidthMeter, DownloadEventListener):
     # 获取日志记录器实例，用于记录带宽测量相关的日志信息
-    log = logging.getLogger("BandwidthMeterImpl")
+    log = logging.getLogger("ContinuousBandwidthMeter")
 
     def __init__(self):
         # 调用父类构造函数，初始化模块基础功能
@@ -34,9 +34,8 @@ class BandwidthMeterImpl(Module, BandwidthMeter, DownloadEventListener):
         # 标志位：是否为当前段中的第一个字节
         # 用于区分段开始和段内连续传输
         self.first_byte_in_segment = True
-        # 连续带宽测量数据列表，存储(开始时间, 结束时间, 字节数)元组
-        # 用于滑动窗口带宽计算
-        self._cont_bw = []
+        # 滑动窗口样本：(开始时间, 结束时间, 字节数)。窗口以外的旧样本会丢掉。
+        self._cont_bw: deque = deque()
         # 最新的连续带宽估计值（bps），用于实时带宽更新
         self.last_cont_bw = None
         # 当前正在下载的URL，用于跟踪下载状态
@@ -118,42 +117,20 @@ class BandwidthMeterImpl(Module, BandwidthMeter, DownloadEventListener):
             # 因为需要至少两个时间点才能计算带宽
             self.first_byte_in_segment = False
         else:
-            # 注释掉的带宽估算代码 - 原始的单次测量方法
-            # est_bw = 8*bytes_transferred/(time_at - self.last_byte_at)
-            # 注释掉的带宽过滤条件 - 用于过滤异常测量值
-            # if est_bw < 10000000000:
-            # 注释掉的延迟检查 - 用于过滤延迟过大的测量值
-            # if self.max_packet_delay > (time_at - self.last_byte_at) > 0.001:
-            # 当前无条件添加测量数据到连续带宽列表
-            if True:
-                # 将(开始时间, 结束时间, 字节数)元组添加到连续带宽数据列表
-                self._cont_bw.append((self.last_byte_at, time_at, bytes_transferred))
-                # 检查是否有足够的测量值进行带宽计算
-                if len(self._cont_bw) >= min_values:
-                    # 计算滑动窗口的起始时间点
-                    window_start = time_at - self.cont_bw_window
-                    # 初始化窗口内的测量值列表
-                    window_values = []
-                    # 从最新的测量值开始，逆序遍历连续带宽数据
-                    for bw in self._cont_bw[::-1]:
-                        # 如果测量值的时间早于窗口起始时间且已有足够数据，则停止
-                        if bw[1] < window_start and len(window_values) >= min_values:
-                            break
-                        # 将测量值添加到窗口列表
-                        window_values.append(bw)
-                    # 注释掉的固定窗口方法 - 使用固定数量的最新测量值
-                    # window = self._cont_bw[max(0, len(self._cont_bw)-self.rolling_mean_window):]
-                    # 计算窗口内所有测量值的总字节数
-                    # 使用operator.itemgetter(2)提取每个元组的第3个元素（字节数）
-                    total_bytes = sum(list(map(operator.itemgetter(2), window_values)))
-                    # 计算窗口内所有测量值的总时间跨度
-                    # 使用lambda函数计算每个测量值的时间差
-                    total_time = sum(list(map(lambda bw: (bw[1] - bw[0]), window_values)))
-                    # 计算窗口内的平均带宽（bps）
-                    # 乘以8将字节转换为位，除以总时间得到每秒位数
-                    window_mean = int(8 * total_bytes / total_time)
-                    # 更新最新的连续带宽估计值
-                    self.last_cont_bw = window_mean
+            self._cont_bw.append((self.last_byte_at, time_at, bytes_transferred))
+            if len(self._cont_bw) >= min_values:
+                window_start = time_at - self.cont_bw_window
+                # Drop samples that fell out of the window. Keep at least
+                # min_values so a sparse download still has a mean.
+                while len(self._cont_bw) > min_values and self._cont_bw[0][1] < window_start:
+                    self._cont_bw.popleft()
+                total_bytes = 0
+                total_time = 0.0
+                for start, end, nbytes in self._cont_bw:
+                    total_bytes += nbytes
+                    total_time += end - start
+                if total_time > 0:
+                    self.last_cont_bw = int(8 * total_bytes / total_time)
         # 如果存在连续带宽估计值，通知所有监听器
         if self.last_cont_bw is not None:
             for listener in self.listeners:

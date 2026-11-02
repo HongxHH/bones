@@ -3,8 +3,8 @@
 按 `docs/frame_quality_measurement.md` 规范，测量 BBB 根本方法（bicubic、IMDN 三档）的逐帧 VMAF，产出权威数据集 `data/quality/`，替换各线自测口径。
 
 - 建立：2026-10-11，分支 dev/experiments
-- 状态：冒烟通过（2026-10-11）→ 全量待启动 → 消费方迁移
-- 规范依据：`docs/frame_quality_measurement.md`
+- 状态：**全量完成（2026-10-26）** → 消费方迁移待办
+- 规范依据：`docs/frame_quality_measurement.md`（若缺文件以本 README + 脚本 docstring 为准）
 
 ## 测量对象
 
@@ -50,27 +50,48 @@
 
 测量前帧数断言：LR 与所有 vmaf 日志帧数等于目标帧数（冒烟 120 / 全量 19039）。
 
+**帧数锁（2026-10-26）**：双输入 libvmaf 上，输出侧 `-frames:v N` 在本机 `ffmpeg-6.1.1-full_build-shared` 会多打分（冒烟出现 137≠120）。脚本改为两端 `trim=end_frame=N,setpts=PTS-STARTPTS`。验收脚本：`_scratch/_accept_one.py <240|360|480|720>`。
+
 ## 工具链（重要）
 
-PATH 首位 ffmpeg `E:\dev\tool\ffmpeg-6.1.1-full_build-shared\bin\ffmpeg.exe` 为残缺构建：bin 下仅 8 个核心 DLL、无第三方 DLL；conda-forge Windows ffmpeg（9.0.2）不编 libvmaf，官方 apt/Alpine 源同样不编（仅 deb-multimedia.org 提供，Linux 容器已验证）。
+本机实测可用：`E:\dev\tool\ffmpeg-6.1.1-full_build-shared\bin\ffmpeg.exe`（过滤器列表含 `libvmaf`；须配合上述 trim）。运行显式传 `--ffmpeg <path>` 或环境变量 `BONES_FFMPEG`。
 
-替换：gyan.dev release-full 9.0.2（含 libvmaf），解压于 `workspace/ffmpeg_gyan/ffmpeg-9.0.2-full_build/`，运行脚本显式指定 `--ffmpeg <path>\ffmpeg.exe`（或环境变量 BONES_FFMPEG）。
+`workspace/ffmpeg_gyan/` 在本机可不存在；若换构建，先 `--smoke --only 240` 核对均值与墙钟。
 
-排障记录：冒烟曾测得 libvmaf 慢 20 余倍并跨 Windows/Linux 复现，根因是计时命令只对第一输入限 `-t`，参考流在失真流结束后被排空全片（19039 帧）；输出位置统一加 `-frames:v N` 后速率正常（bicubic 120 帧 n_threads=8 墙钟 0.69s）。非构建、非 VBS/HVCI 问题。
+排障记录：曾出现「libvmaf 慢 20 余倍」假象，根因是只对第一输入限 `-t`、参考流被排空全片；与「`-frames:v` 多打分」是两类问题，勿混用旧修复当唯一手段。
 
 ## 输出
 
-`data/quality/bbb_240.json`、`bbb_360.json`、`bbb_480.json`、`bbb_720.json`，schema 见 `docs/frame_quality_measurement.md` 第 4 节。脚本：`workspace/quality_baseline/measure_quality_baseline.py`（支持 `--smoke/--only/--ffmpeg`、断点续跑）。
+`data/quality/bbb_240.json`、`bbb_360.json`、`bbb_480.json`、`bbb_720.json`。脚本：`workspace/quality_baseline/measure_quality_baseline.py`（`--smoke/--only/--ffmpeg`、断点续跑）。
 
 ## 资源约束
 
 单 worker；`OMP_NUM_THREADS=OPENBLAS_NUM_THREADS=MKL_NUM_THREADS=4`；libvmaf 每实例 n_threads=1（4 实例共 4 线程）；开跑前告知。
 
-## 耗时估算
+## 结果（2026-10-26，RTX 5080，SR env）
 
-冒烟实测（2026-10-11，240p 首段 120 帧四臂，墙钟 16.6s）：bicubic 均值 51.48、sr_low 51.89、sr_medium 57.08、sr_high 63.81。
+冒烟（240p 首段 120 帧，墙钟 22.5s）：bicubic 51.479、sr_low 51.892、sr_medium 57.081、sr_high 63.809（与 2026-10-11 冒烟同向）。
 
-全量外推：单 SR 输入档约 44 min（16.6s×19039/120），240/360/480 三档串行约 131 min；720p 单 bicubic 臂单线程约 6 min；合计约 2.3 h。实际值完成后回填。
+全片均值（19039 帧，相对 `output_1080p.mp4`）：
+
+| 输入 | bicubic | sr_low | sr_medium | sr_high | 墙钟 |
+|---|---:|---:|---:|---:|---:|
+| 240p | 39.296 | 51.736 | 56.079 | 61.493 | 54.4 min |
+| 360p | 64.036 | 72.483 | 75.913 | 79.920 | ≈41 min |
+| 480p | 76.823 | 83.363 | 86.088 | 87.645 | 44.8 min |
+| 720p | 90.132 | — | — | — | 11.4 min |
+
+四档均单调 `bicubic ≤ low ≤ medium ≤ high`；720 仅 bicubic。合计墙钟约 2.5 h。
+
+阶段 2 提示：全片 240p 上 `sr_low − bicubic ≈ +12.4`（冒烟首段几乎打平），专用低档尾巴在 240p 主路径上**不是空档**。
+
+## 阶段 2（2026-10-27）
+
+见 `PHASE2.md` / `phase2_select_cf.json`。**GO**：推荐 `K=5`、`C=3`（high）、`F=1`（low）；5080 上 medium 过快，C=2 需 K≥8–20 不采用。
+
+## 阶段 3（2026-10-27）
+
+见 `PHASE3.md` / `phase3_summary_all.json`：三轨迹×四臂已跑完。**判决 NO-GO**（F 尾不宜作默认；机制可清浪费，稳健默认偏 `whole_F`）。一次性帮手在 `_scratch/`。
 
 ## 消费方迁移清单
 

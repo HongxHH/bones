@@ -1,3 +1,9 @@
+"""OpenGL renderer.
+
+The path that actually runs sleeps for the segment duration. It does not
+present GPU frames. Use ``opencv`` for a real picture, or ``headless`` when
+the experiment only needs segment timing.
+"""
 import asyncio
 import logging
 import sys

@@ -42,12 +42,15 @@ class AlwaysGreedyController(Module, NESController):
                     scheduler: Scheduler,
                     bw_meter: BandwidthMeter,
                     **kwargs):
+        self.config = config
         self.buffer_size = config.buffer_duration * 1000
         self.download_buffer = download_buffer
         self.enhance_buffer = enhance_buffer
         self.enhancer = enhancer
         self.scheduler = scheduler
         self.bw_meter = bw_meter
+        fixed = getattr(config, "fixed_enhance_action", None)
+        self.fixed_enhance_action = 2 if fixed is None else int(fixed)
 
 
     def update_selection(self, adaptation_sets: Dict[int, AdaptationSet], index: int) -> Tuple[Dict[int, int], Dict[int, int]]:
@@ -90,7 +93,7 @@ class AlwaysGreedyController(Module, NESController):
         self.log.info(f"Enhance buffer level: {self.buff_enh}")
 
         action_down = self._buffer_control()
-        action_enh = 2
+        action_enh = self.fixed_enhance_action
         return action_down, action_enh
 
 

@@ -68,7 +68,12 @@ def test_publisher_posts_projected_sample():
         server_base=lambda: "http://ctrl:8080",
     )
     assert pub.enabled()
-    asyncio.run(pub.maybe_report())
+
+    async def _post_once():
+        await pub.maybe_report()
+        await pub.flush()
+
+    asyncio.run(_post_once())
     assert len(session.posts) == 1
     body = session.posts[0]["json"]
     assert body["run_id"] == "r1"
@@ -82,6 +87,62 @@ def test_publisher_posts_projected_sample():
     assert sample["enhance_pending_inventory"] == []
     for key in SAMPLE_VALUE_KEYS:
         assert key in sample
+
+
+def test_force_report_waits_for_inflight_post():
+    gate = {"entered": None, "release": None, "posts": []}
+
+    class _HoldResp:
+        def __init__(self) -> None:
+            self.status = 200
+
+        async def __aenter__(self):
+            gate["entered"].set()
+            await gate["release"].wait()
+            return self
+
+        async def __aexit__(self, *args):
+            return False
+
+        async def text(self) -> str:
+            return "ok"
+
+    class _HoldSession:
+        def post(self, url: str, json: Optional[dict] = None):
+            gate["posts"].append(json)
+            return _HoldResp()
+
+    session = _HoldSession()
+    snap = {"state": "PLAYING", "stall_s_total": 0.0}
+    config = SimpleNamespace(
+        telemetry_run_id="r1",
+        telemetry_arm_id="a",
+        telemetry_session_id="",
+        telemetry_interval_ms=1,
+    )
+    pub = TelemetryPublisher(
+        get_snapshot=lambda: dict(snap),
+        get_config=lambda: config,  # type: ignore[arg-type]
+        get_session=lambda: _async_return(session),
+        server_base=lambda: "http://ctrl:8080",
+    )
+
+    async def _run() -> None:
+        gate["entered"] = asyncio.Event()
+        gate["release"] = asyncio.Event()
+        await pub.maybe_report()
+        await gate["entered"].wait()
+        assert [item["sample"]["state"] for item in gate["posts"]] == ["PLAYING"]
+        snap["state"] = "END"
+        ending = asyncio.create_task(pub.force_report())
+        await asyncio.sleep(0)
+        assert not ending.done()
+        assert [item["sample"]["state"] for item in gate["posts"]] == ["PLAYING"]
+        gate["release"].set()
+        await ending
+        assert [item["sample"]["state"] for item in gate["posts"]] == ["PLAYING", "END"]
+
+    asyncio.run(_run())
 
 
 def test_publisher_disabled_without_ids():

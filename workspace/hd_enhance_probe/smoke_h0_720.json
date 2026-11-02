@@ -1,0 +1,6 @@
+{
+  "probe": "H0_720",
+  "note": "旧 seg0 冒烟作废（片头白场）。本文件改为指向内容段结果：见 h0_720_segs_40_70_100.json",
+  "superseded_by": "h0_720_segs_40_70_100.json",
+  "default_smoke_seg": 40
+}

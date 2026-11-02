@@ -178,17 +178,21 @@ class PACNetEnhancer(IMDNEnhancerAlways):
         keep_input(compare_segment, tensor)
         await asyncio_sleep()
         with torch.no_grad():
-            import time as _time
-            torch.cuda.synchronize()
-            _t0 = _time.perf_counter()
-            tensor = model(tensor, exit_idx=exit_idx)
-            torch.cuda.synchronize()
-            fwd_ms = (_time.perf_counter() - _t0) * 1000.0
+            from ._gpuburn import burn as _burn
+            from ._gpuburn import enabled as _burn_enabled
+            if _burn_enabled():
+                import time as _time
+                torch.cuda.synchronize()
+                _t0 = _time.perf_counter()
+                tensor = model(tensor, exit_idx=exit_idx)
+                torch.cuda.synchronize()
+                _burn((_time.perf_counter() - _t0) * 1000.0)
+            else:
+                tensor = model(tensor, exit_idx=exit_idx)
             await asyncio_sleep()
             tensor = F.interpolate(tensor, size=(self.display_H, self.display_W),
                                    mode="bicubic", align_corners=False)
             await asyncio_sleep()
-            from ._gpuburn import burn as _burn; _burn(fwd_ms)
         tensor = tensor.cpu()
         await asyncio_sleep()
         return tensor

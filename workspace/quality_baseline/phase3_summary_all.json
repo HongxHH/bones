@@ -1,0 +1,136 @@
+{
+  "runs": [
+    {
+      "arm": "bicubic_tail_C3",
+      "trace": "2010-09-13_1003CEST",
+      "QOE": 51.979804493347174,
+      "avg_vmaf": 67.74764616981301,
+      "dur_stall": 10.760773181915283,
+      "num_stall": 3,
+      "fc": 81,
+      "waste": 0,
+      "path": "E:\\dev\\Code\\Python\\bones\\player\\output\\data\\phase3\\phase3_bicubic_tail_C3__2010-09-13_1003CEST.json"
+    },
+    {
+      "arm": "bicubic_tail_C3",
+      "trace": "2010-09-14_2303CEST",
+      "QOE": 48.704358061093735,
+      "avg_vmaf": 60.44153818989954,
+      "dur_stall": 473.6836688518524,
+      "num_stall": 42,
+      "fc": 59,
+      "waste": 0,
+      "path": "E:\\dev\\Code\\Python\\bones\\player\\output\\data\\phase3\\phase3_bicubic_tail_C3__2010-09-14_2303CEST.json"
+    },
+    {
+      "arm": "bicubic_tail_C3",
+      "trace": "2010-09-21_0742CEST",
+      "QOE": 49.24090372390133,
+      "avg_vmaf": 64.87061967736773,
+      "dur_stall": 19.962265729904175,
+      "num_stall": 9,
+      "fc": 85,
+      "waste": 0,
+      "path": "E:\\dev\\Code\\Python\\bones\\player\\output\\data\\phase3\\phase3_bicubic_tail_C3__2010-09-21_0742CEST.json"
+    },
+    {
+      "arm": "brute_C3",
+      "trace": "2010-09-13_1003CEST",
+      "QOE": 60.485274730447856,
+      "avg_vmaf": 73.5470574603852,
+      "dur_stall": 5.855699777603149,
+      "num_stall": 4,
+      "fc": 0,
+      "waste": 3487,
+      "path": "E:\\dev\\Code\\Python\\bones\\player\\output\\data\\phase3\\phase3_brute_C3__2010-09-13_1003CEST.json"
+    },
+    {
+      "arm": "brute_C3",
+      "trace": "2010-09-14_2303CEST",
+      "QOE": 49.45813575796136,
+      "avg_vmaf": 59.14537378596567,
+      "dur_stall": 927.2137720584869,
+      "num_stall": 59,
+      "fc": 0,
+      "waste": 3095,
+      "path": "E:\\dev\\Code\\Python\\bones\\player\\output\\data\\phase3\\phase3_brute_C3__2010-09-14_2303CEST.json"
+    },
+    {
+      "arm": "brute_C3",
+      "trace": "2010-09-21_0742CEST",
+      "QOE": 55.28072507340595,
+      "avg_vmaf": 68.42889627898415,
+      "dur_stall": 88.65577054023743,
+      "num_stall": 19,
+      "fc": 0,
+      "waste": 2942,
+      "path": "E:\\dev\\Code\\Python\\bones\\player\\output\\data\\phase3\\phase3_brute_C3__2010-09-21_0742CEST.json"
+    },
+    {
+      "arm": "fallback_F1_C3",
+      "trace": "2010-09-13_1003CEST",
+      "QOE": 54.52266741991661,
+      "avg_vmaf": 68.89423166473303,
+      "dur_stall": 21.158800840377808,
+      "num_stall": 8,
+      "fc": 76,
+      "waste": 0,
+      "path": "E:\\dev\\Code\\Python\\bones\\player\\output\\data\\phase3\\phase3_fallback_F1_C3__2010-09-13_1003CEST.json"
+    },
+    {
+      "arm": "fallback_F1_C3",
+      "trace": "2010-09-14_2303CEST",
+      "QOE": 50.14193862414175,
+      "avg_vmaf": 60.613365318183945,
+      "dur_stall": 522.2077491283417,
+      "num_stall": 35,
+      "fc": 53,
+      "waste": 0,
+      "path": "E:\\dev\\Code\\Python\\bones\\player\\output\\data\\phase3\\phase3_fallback_F1_C3__2010-09-14_2303CEST.json"
+    },
+    {
+      "arm": "fallback_F1_C3",
+      "trace": "2010-09-21_0742CEST",
+      "QOE": 53.58539277042537,
+      "avg_vmaf": 67.83189243106978,
+      "dur_stall": 16.189144134521484,
+      "num_stall": 6,
+      "fc": 80,
+      "waste": 0,
+      "path": "E:\\dev\\Code\\Python\\bones\\player\\output\\data\\phase3\\phase3_fallback_F1_C3__2010-09-21_0742CEST.json"
+    },
+    {
+      "arm": "whole_F1",
+      "trace": "2010-09-13_1003CEST",
+      "QOE": 53.99641472743412,
+      "avg_vmaf": 66.70870456955822,
+      "dur_stall": 1.8983511924743652,
+      "num_stall": 2,
+      "fc": 0,
+      "waste": 74,
+      "path": "E:\\dev\\Code\\Python\\bones\\player\\output\\data\\phase3\\phase3_whole_F1__2010-09-13_1003CEST.json"
+    },
+    {
+      "arm": "whole_F1",
+      "trace": "2010-09-14_2303CEST",
+      "QOE": 51.84029187256535,
+      "avg_vmaf": 60.85342690569998,
+      "dur_stall": 495.86405420303345,
+      "num_stall": 37,
+      "fc": 0,
+      "waste": 51,
+      "path": "E:\\dev\\Code\\Python\\bones\\player\\output\\data\\phase3\\phase3_whole_F1__2010-09-14_2303CEST.json"
+    },
+    {
+      "arm": "whole_F1",
+      "trace": "2010-09-21_0742CEST",
+      "QOE": 51.39681933147751,
+      "avg_vmaf": 63.35368305727624,
+      "dur_stall": 20.300665855407715,
+      "num_stall": 4,
+      "fc": 0,
+      "waste": 86,
+      "path": "E:\\dev\\Code\\Python\\bones\\player\\output\\data\\phase3\\phase3_whole_F1__2010-09-21_0742CEST.json"
+    }
+  ]
+}

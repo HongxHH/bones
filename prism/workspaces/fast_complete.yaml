@@ -1,0 +1,52 @@
+id: fast_complete
+label: fast-complete
+player:
+  mod_nes: always_greedy
+  mod_enhancer: imdn
+  mod_renderer: opencv
+  use_fast_complete: true
+metrics:
+  recipes:
+    - bones_qoe_v1
+    - fast_complete_v1
+  quality:
+    prefer:
+      - local_catalog
+    catalog_ref: content:bbb
+cards:
+  - key: qoe
+    label: QoE
+    digits: 2
+    group: 播放质量
+    hint: 平均画质减去振荡，再减去卡顿
+  - key: avg_vmaf
+    label: VMAF
+    digits: 2
+    group: 播放质量
+    hint: 已评分段的平均画质
+  - key: oscillation_vmaf
+    label: 振荡
+    digits: 2
+    group: 播放质量
+    hint: 相邻段画质差的平均
+  - key: avg_freeze
+    label: 均卡顿
+    digits: 2
+    suffix: " s"
+    group: 播放质量
+    hint: 总卡顿秒数除以播放段数
+  - key: fc_segments
+    label: 触发段数
+    digits: 0
+    group: fast-complete
+    hint: 提前结束增强的段
+  - key: fc_saved_frames
+    label: 未跑模型帧
+    digits: 0
+    group: fast-complete
+    hint: 这些段里没有送进模型的帧
+  - key: fc_quality_drop_avg
+    label: 质量下降
+    digits: 2
+    group: fast-complete
+    hint: 相对完整增强少掉的 VMAF

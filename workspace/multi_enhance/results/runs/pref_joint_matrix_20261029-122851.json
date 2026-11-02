@@ -1,0 +1,190 @@
+{
+  "built_at": "2026-10-29T13:22:36",
+  "video": "bbb",
+  "trace": "0921",
+  "note": "pref_joint matrix; refs from d5_bbb_0921",
+  "rows": [
+    {
+      "tag": "A",
+      "courage": "balanced",
+      "taste": "balanced",
+      "returncode": 0,
+      "ok": true,
+      "duration_s": null,
+      "reused_smoke": true,
+      "QOE": 53.47768568450544,
+      "dur_stall": 29.124656200408936,
+      "avg_vmaf": 69.71137554324952,
+      "fast_complete_segments": 0,
+      "tools": {
+        "none": 43,
+        "L2": 57,
+        "L3": 34,
+        "L1": 14,
+        "rst": 11
+      },
+      "download": {
+        "0": 60,
+        "2": 56,
+        "1": 29,
+        "3": 13,
+        "4": 1
+      },
+      "result_file": "player/output/data/pref_joint/smoke_balanced/pref_joint_multitask_fast-True_video-bbb_trace-report.2010-09-21_0742CEST_20261029-122636.json"
+    },
+    {
+      "tag": "B",
+      "courage": "conservative",
+      "taste": "balanced",
+      "returncode": 0,
+      "ok": true,
+      "duration_s": 800.5,
+      "QOE": 49.15464562267681,
+      "dur_stall": 19.50728702545166,
+      "avg_vmaf": 67.09516538554259,
+      "fast_complete_segments": 0,
+      "tools": {
+        "none": 53,
+        "rst": 13,
+        "L2": 66,
+        "L3": 10,
+        "L1": 17
+      },
+      "download": {
+        "0": 64,
+        "1": 34,
+        "3": 14,
+        "2": 47
+      },
+      "result_file": "player/output/data/pref_joint/0921_B_conservative_balanced/pref_joint_multitask_fast-True_video-bbb_trace-report.2010-09-21_0742CEST_20261029-124211.json"
+    },
+    {
+      "tag": "C",
+      "courage": "aggressive",
+      "taste": "balanced",
+      "returncode": 0,
+      "ok": true,
+      "duration_s": 815.0,
+      "QOE": 54.60925050441906,
+      "dur_stall": 42.51483416557312,
+      "avg_vmaf": 70.9210089763424,
+      "fast_complete_segments": 2,
+      "tools": {
+        "none": 31,
+        "L2": 70,
+        "L3": 26,
+        "L1": 17,
+        "rst": 15
+      },
+      "download": {
+        "0": 56,
+        "1": 41,
+        "2": 44,
+        "3": 16,
+        "4": 2
+      },
+      "result_file": "player/output/data/pref_joint/0921_C_aggressive_balanced/pref_joint_multitask_fast-True_video-bbb_trace-report.2010-09-21_0742CEST_20261029-125545.json"
+    },
+    {
+      "tag": "D",
+      "courage": "balanced",
+      "taste": "sharp",
+      "returncode": 0,
+      "ok": true,
+      "duration_s": 794.5,
+      "QOE": 53.53369896484932,
+      "dur_stall": 26.66500973701477,
+      "avg_vmaf": 69.41001988383425,
+      "fast_complete_segments": 2,
+      "tools": {
+        "none": 41,
+        "L2": 58,
+        "L3": 37,
+        "L1": 12,
+        "rst": 11
+      },
+      "download": {
+        "0": 59,
+        "2": 56,
+        "1": 33,
+        "3": 11
+      },
+      "result_file": "player/output/data/pref_joint/0921_D_balanced_sharp/pref_joint_multitask_fast-True_video-bbb_trace-report.2010-09-21_0742CEST_20261029-130900.json"
+    },
+    {
+      "tag": "E",
+      "courage": "balanced",
+      "taste": "clean",
+      "returncode": 0,
+      "ok": true,
+      "duration_s": 815.3,
+      "QOE": 52.32437780298366,
+      "dur_stall": 39.9545156955719,
+      "avg_vmaf": 69.24918243106347,
+      "fast_complete_segments": 1,
+      "tools": {
+        "none": 45,
+        "L2": 54,
+        "L3": 32,
+        "L1": 16,
+        "rst": 12
+      },
+      "download": {
+        "0": 58,
+        "2": 55,
+        "1": 33,
+        "3": 13
+      },
+      "result_file": "player/output/data/pref_joint/0921_E_balanced_clean/pref_joint_multitask_fast-True_video-bbb_trace-report.2010-09-21_0742CEST_20261029-132235.json"
+    }
+  ],
+  "refs": [
+    {
+      "tag": "ref_ours",
+      "arm": "ours",
+      "QOE": 55.81277058590516,
+      "dur_stall": 20.548146724700928,
+      "fast_complete_segments": 3,
+      "tools": {
+        "0": 26,
+        "1": 1,
+        "2": 45,
+        "3": 65,
+        "5": 22
+      }
+    },
+    {
+      "tag": "ref_none",
+      "arm": "none",
+      "QOE": 47.89626782225883,
+      "dur_stall": 44.611053228378296,
+      "fast_complete_segments": 0,
+      "tools": {
+        "0": 159
+      }
+    },
+    {
+      "tag": "ref_fixed_high",
+      "arm": "fixed_high",
+      "QOE": 62.327687705854146,
+      "dur_stall": 20.664705991744995,
+      "fast_complete_segments": 48,
+      "tools": {
+        "0": 1,
+        "3": 158
+      }
+    },
+    {
+      "tag": "ref_no_slack",
+      "arm": "no_slack",
+      "QOE": 61.82785821301794,
+      "dur_stall": 11.848481178283691,
+      "fast_complete_segments": 41,
+      "tools": {
+        "0": 3,
+        "3": 136,
+        "5": 20
+      }
+    }
+  ]
+}

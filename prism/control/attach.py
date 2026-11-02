@@ -61,7 +61,9 @@ def player_cmd(
     if not nes or nes == "none":
         nes = "always_greedy"
     args.extend(["--mod_nes", str(nes)])
-    enhancer = str(player.get("mod_enhancer") or "imdn_always").strip() or "imdn_always"
+    enhancer = str(player.get("mod_enhancer") or "imdn").strip() or "imdn"
+    if enhancer == "imdn_always":
+        enhancer = "imdn"
     args.extend(["--mod_enhancer", enhancer])
     if trace:
         args.extend(["--trace", trace])
@@ -76,8 +78,22 @@ def player_cmd(
     if experiment_id:
         args.extend(["--telemetry_experiment_id", experiment_id])
     args.extend(["--telemetry_interval_ms", str(player.get("telemetry_interval_ms") or 500)])
-    sys_metrics = player.get("collect_system_metrics", True)
+    sys_metrics = player.get("collect_system_metrics", False)
     args.extend(["--collect_system_metrics", "true" if sys_metrics else "false"])
+    args.extend(["--use_fast_complete", "true" if player.get("use_fast_complete") else "false"])
+    args.extend(["--latency_adapt", "true" if player.get("latency_adapt") else "false"])
+    fixed_enh = player.get("fixed_enhance_action", None)
+    if fixed_enh is not None:
+        args.extend(["--fixed_enhance_action", str(int(fixed_enh))])
+    recovery_mode = str(player.get("recovery_mode") or "none").strip().lower()
+    if recovery_mode and recovery_mode != "none":
+        args.extend(["--recovery_mode", recovery_mode])
+    fb = player.get("fallback_enhance_action", None)
+    if fb is not None:
+        args.extend(["--fallback_enhance_action", str(int(fb))])
+    metric_output = str(player.get("metric_output") or "").strip()
+    if metric_output:
+        args.extend(["--metric_output", metric_output])
     shm = (frame_shm or os.environ.get("PRISM_FRAME_SHM") or "").strip()
     if shm:
         args.extend(["--frame_shm", shm])
@@ -125,6 +141,42 @@ def pid_alive(pid: int) -> bool:
         return True
     except Exception:
         return False
+
+
+def process_command_line(pid: int) -> str:
+    """Best-effort command line. Empty when it cannot be read."""
+    if pid <= 0:
+        return ""
+    try:
+        if sys.platform == "win32":
+            out = subprocess.run(
+                [
+                    "powershell",
+                    "-NoProfile",
+                    "-Command",
+                    f"(Get-CimInstance Win32_Process -Filter \"ProcessId={int(pid)}\").CommandLine",
+                ],
+                capture_output=True,
+                text=True,
+                check=False,
+                timeout=5,
+            )
+            return out.stdout or ""
+        raw = Path(f"/proc/{int(pid)}/cmdline").read_bytes()
+        return raw.replace(b"\x00", b" ").decode("utf-8", errors="replace")
+    except Exception:
+        return ""
+
+
+def pid_is_player(pid: int, run_id: str) -> bool:
+    """True only when this pid is still the player process for that run.
+
+    A recycled pid belongs to some other program and must not block deletion.
+    """
+    if not run_id or not pid_alive(pid):
+        return False
+    command = process_command_line(pid).replace("\\", "/")
+    return "play.py" in command and run_id in command
 
 
 def tail_log(path: Path | None, *, max_chars: int = 1200) -> str:

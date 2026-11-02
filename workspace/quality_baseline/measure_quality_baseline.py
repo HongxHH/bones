@@ -8,6 +8,7 @@
   - sr_low/medium/high 臂：BBB 训练权重，模型 forward 后 bicubic 对齐 1920x1080，
     每臂一个 ffmpeg（rawvideo stdin + 参考第二输入 + 单 libvmaf，n_threads=1，
     log_fmt=json 出逐帧分）；各臂由独立 feeder 线程喂帧，互不阻塞。
+  - 帧数锁：两端 trim=end_frame=N（勿依赖输出 -frames:v；ffmpeg-6.1.1 双输入会多打分）。
 不使用多臂堆叠单图（4 臂堆叠+split+多 map 的 filtergraph 在本机调度死锁）。
 输出 data/quality/bbb_{240,360,480,720}.json。
 
@@ -92,7 +93,7 @@ def build_models(scale):
 
 
 def infer_rgb(model, rgb):
-    t = torch.from_numpy(rgb).permute(2, 0, 1).float().unsqueeze(0).to(DEVICE) / 255.0
+    t = torch.from_numpy(np.array(rgb, copy=True)).permute(2, 0, 1).float().unsqueeze(0).to(DEVICE) / 255.0
     with torch.no_grad():
         o = model(t)
         o = torch.nn.functional.interpolate(o, size=(H, W), mode="bicubic",
@@ -118,12 +119,16 @@ def start_bic_consumer(lr_path, tag, n_frames):
     p = os.path.join(TMP, log_name)
     if os.path.exists(p):
         os.remove(p)
-    lavfi = (f"[0:v]scale={W}:{H}:flags=bicubic,format=yuv420p[d];"
-             f"[d][1:v]libvmaf=n_threads=1:log_path={log_name}:log_fmt=json")
-    # -frames:v 作为输出选项同时终止两路输入的解码；缺失时参考流会被排空全片
+    # 双输入 libvmaf：本机 ffmpeg-6.1.1 上输出侧 -frames:v 会多打分（冒烟 137≠120）。
+    # 两端 trim=end_frame 才能锁死帧数；setpts 避免 trim 后时间戳空洞。
+    lavfi = (
+        f"[0:v]trim=end_frame={n_frames},setpts=PTS-STARTPTS,"
+        f"scale={W}:{H}:flags=bicubic,format=yuv420p[d];"
+        f"[1:v]trim=end_frame={n_frames},setpts=PTS-STARTPTS[r];"
+        f"[d][r]libvmaf=n_threads=1:log_path={log_name}:log_fmt=json"
+    )
     cmd = [FFMPEG, "-v", "error", "-i", lr_path, "-i", REF_VIDEO,
-           "-lavfi", lavfi, "-frames:v", str(n_frames),
-           "-f", "null", "-"]
+           "-lavfi", lavfi, "-f", "null", "-"]
     return subprocess.Popen(cmd, cwd=TMP, stdout=subprocess.DEVNULL,
                             stderr=err_file(f"{tag}_bicubic")), log_name
 
@@ -133,13 +138,15 @@ def start_sr_consumer(tag, arm, n_frames):
     p = os.path.join(TMP, log_name)
     if os.path.exists(p):
         os.remove(p)
-    lavfi = (f"[0:v]format=yuv420p[d];"
-             f"[d][1:v]libvmaf=n_threads=1:log_path={log_name}:log_fmt=json")
+    lavfi = (
+        f"[0:v]format=yuv420p,trim=end_frame={n_frames},setpts=PTS-STARTPTS[d];"
+        f"[1:v]trim=end_frame={n_frames},setpts=PTS-STARTPTS[r];"
+        f"[d][r]libvmaf=n_threads=1:log_path={log_name}:log_fmt=json"
+    )
     cmd = [FFMPEG, "-v", "error",
            "-f", "rawvideo", "-pixel_format", "rgb24",
            "-video_size", f"{W}x{H}", "-framerate", str(FPS), "-i", "-",
-           "-i", REF_VIDEO, "-lavfi", lavfi,
-           "-frames:v", str(n_frames), "-f", "null", "-"]
+           "-i", REF_VIDEO, "-lavfi", lavfi, "-f", "null", "-"]
     proc = subprocess.Popen(cmd, cwd=TMP, stdin=subprocess.PIPE,
                             stdout=subprocess.DEVNULL, stderr=err_file(f"{tag}_{arm}"))
     q = queue.Queue(maxsize=4)

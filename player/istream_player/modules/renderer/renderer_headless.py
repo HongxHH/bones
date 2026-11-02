@@ -43,7 +43,7 @@ class HeadlessRenderer(Module, Renderer, PlayerEventListener):
                 self.current_segment_index = int(segment.url.split('segment_')[1].split('.')[0])
             except (IndexError, ValueError):
                 pass
-            self.task_start = time.time()
+            self.task_start = time.perf_counter()
             self.task_total = segment.duration
             await self._sleep_playback(segment.duration)
 
@@ -56,7 +56,7 @@ class HeadlessRenderer(Module, Renderer, PlayerEventListener):
                 return
             if player is not None and (player.state == State.PAUSED or getattr(player, "_paused", False)):
                 await asyncio.sleep(step)
-                self.task_start = time.time() - elapsed
+                self.task_start = time.perf_counter() - elapsed
                 continue
             await asyncio.sleep(step)
             elapsed += step
@@ -64,7 +64,7 @@ class HeadlessRenderer(Module, Renderer, PlayerEventListener):
     def remain_task(self):
         if self.task_start is None:
             return 0
-        return max(self.task_total - (time.time() - self.task_start), 0)
+        return max(self.task_total - (time.perf_counter() - self.task_start), 0)
 
     def render_fps(self) -> float:
         # Headless sleeps by duration; no real frame presentation clock.

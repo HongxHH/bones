@@ -245,7 +245,7 @@ class IMDNEnhancer(Module, Enhancer, PlayerEventListener):
                 self.log.info(f"Enhancing segment index: {index}, download action: {segment.download_action}, enhance action: {level}")
 
                 # 记录增强开始时间
-                start_time = time.time()
+                start_time = time.perf_counter()
                 self.task_start = start_time
                 # 获取该增强级别的预期延迟
                 self.task_total = self.get_latency_table()[segment.download_action, segment.enhance_action]
@@ -326,7 +326,7 @@ class IMDNEnhancer(Module, Enhancer, PlayerEventListener):
                 await self.download_buffer.replace(index, {as_idx: segment})
 
                 # 记录增强结束时间
-                end_time = time.time()
+                end_time = time.perf_counter()
 
                 # 更新延迟表，计算实际增强时间因子
                 self.latency_table[segment.download_action, segment.enhance_action] = (end_time - start_time) / (self.seg_time * self.frame_rate)
@@ -463,7 +463,7 @@ class IMDNEnhancer(Module, Enhancer, PlayerEventListener):
                     # 同步CUDA操作
                     torch.cuda.synchronize()
                     # 开始测量
-                    start_time = time.time()
+                    start_time = time.perf_counter()
                     for i in range(self.measure_epoch):
                         tensor = data_pool[i + self.warmup_epoch]
                         model(tensor)
@@ -472,7 +472,7 @@ class IMDNEnhancer(Module, Enhancer, PlayerEventListener):
                     # 同步CUDA操作
                     torch.cuda.synchronize()
                     # 结束测量
-                    end_time = time.time()
+                    end_time = time.perf_counter()
                     # 计算平均延迟
                     latency_set[(scale, level)] = (end_time - start_time) / self.measure_epoch
 
@@ -529,7 +529,7 @@ class IMDNEnhancer(Module, Enhancer, PlayerEventListener):
         if self.task_start is None:
             return 0
         # 返回剩余任务时间（总时间 - 已用时间）
-        return max(self.task_total - (time.time() - self.task_start), 0)
+        return max(self.task_total - (time.perf_counter() - self.task_start), 0)
 
     # 段播放开始事件处理器
     async def on_segment_playback_start(self, segments: Dict[int, Segment]):

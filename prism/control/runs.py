@@ -4,6 +4,7 @@ import asyncio
 import hashlib
 import json
 import logging
+import shutil
 import time
 from pathlib import Path
 from typing import Any, Optional
@@ -250,6 +251,9 @@ async def _materialize_arms(
         collect = spec.spec.collect
         player["telemetry_interval_ms"] = int(collect.interval_ms)
         player["collect_system_metrics"] = bool(collect.system_metrics)
+        from .telemetry import telemetry_dir
+
+        player["metric_output"] = str(telemetry_dir(state, run).parent / "analyzer")
         port = STATUS_PORT_BASE + i
         cmd = player_cmd(
             mpd_url,
@@ -344,13 +348,24 @@ async def create_run_from_spec(
     else:
         exp = await ensure_experiment_for_spec(state, spec)
 
+    dumped = spec.model_dump(mode="json")
+    arm_player = spec.spec.arms[0].player if spec.spec.arms else None
+    from .plugins.hooks import _git_rev
+
+    dumped["provenance"] = {
+        "git_sha": _git_rev() or "",
+        "renderer": arm_player.mod_renderer if arm_player else "",
+        "latency_adapt": bool(arm_player.latency_adapt) if arm_player else False,
+        "use_fast_complete": bool(arm_player.use_fast_complete) if arm_player else False,
+        "collect_system_metrics": bool(spec.spec.collect.system_metrics),
+    }
     run = ExperimentRun(
         id=new_id("run"),
         experiment_id=exp.id,
         name=spec.name(),
         status=RunStatus.PREPARING,
         arm_mode=spec.spec.execution.arm_mode,
-        spec=spec.model_dump(mode="json"),
+        spec=dumped,
         arms=[],
     )
     await state.add_run(run)
@@ -412,9 +427,13 @@ async def attach_arm(
         kill_pid(arm.pid)
         arm.pid = None
     port = arm.status_port or STATUS_PORT_BASE
+    player = dict(arm.player or {})
+    from .telemetry import telemetry_dir
+
+    player["metric_output"] = str(telemetry_dir(state, run).parent / "analyzer")
     cmd = player_cmd(
         arm.mpd_url,
-        arm.player,
+        player,
         port,
         run_id=run.id,
         arm_id=arm.id,
@@ -501,6 +520,13 @@ async def _enqueue_measure_jobs(state: PlatformState, run: ExperimentRun) -> lis
         plugin = (item or {}).get("plugin") or "noop"
         params = dict((item or {}).get("params") or {})
         params.setdefault("run_id", run.id)
+        quality = ((spec_root.get("metrics") or {}).get("quality") or {}).get("compute") or {}
+        if plugin == "vmaf":
+            if quality.get("reference") and not params.get("reference"):
+                params["reference"] = quality["reference"]
+            distorted = quality.get("distorted") or ""
+            if distorted and distorted != "playback_frames" and not params.get("distorted"):
+                params["distorted"] = distorted
         try:
             steps, labels = state.registry.pipeline_for(plugin, JobKind.CONTENT)
         except Exception:
@@ -524,36 +550,77 @@ async def _enqueue_measure_jobs(state: PlatformState, run: ExperimentRun) -> lis
     return job_ids
 
 
-async def stop_run(state: PlatformState, run_id: str, *, request=None) -> ExperimentRun:
+# How long to let the player finish writing analyzer JSON before a forced kill.
+FINISH_WAIT_S = 8.0
+_finalizers: dict[str, asyncio.Task] = {}
+
+
+async def _ask_player_stop(port: int) -> None:
+    """Ask the player to stop itself so analysis can flush before we kill it."""
+    def _post() -> None:
+        import urllib.request
+
+        req = urllib.request.Request(
+            f"http://127.0.0.1:{int(port)}/api/stop",
+            data=b"{}",
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=1.5):
+                return
+        except Exception:
+            return
+
+    await asyncio.to_thread(_post)
+
+
+def schedule_finalize(state: PlatformState, run_id: str, *, ask_stop: bool) -> asyncio.Task:
+    """One finisher per run. END telemetry must not await it (the player is inside that POST)."""
+    current = _finalizers.get(run_id)
+    if current is not None and not current.done():
+        return current
+    task = asyncio.create_task(finalize_run(state, run_id, ask_stop=ask_stop), name=f"finish-{run_id}")
+    _finalizers[run_id] = task
+    return task
+
+
+async def finalize_run(state: PlatformState, run_id: str, *, ask_stop: bool) -> None:
+    """Wait for the player to exit and write analyzer JSON, then mark the run stopped."""
+    from .attach import pid_alive
     from .telemetry import persist_run_metrics
 
-    if request is not None:
-        # stopping may kill local pids
-        from .security import assert_attach_allowed
-
-        try:
-            assert_attach_allowed(request)
-        except PermissionError:
-            # Still allow stop metrics / session close without kill if remote — kill best-effort
-            pass
-
     run = state.runs.get(run_id)
-    if run is None:
-        raise ValueError("run not found")
+    if run is None or run.status == RunStatus.STOPPED:
+        return
+    if ask_stop:
+        for arm in run.arms:
+            if arm.pid and arm.status_port:
+                await _ask_player_stop(int(arm.status_port))
+    deadline = time.monotonic() + FINISH_WAIT_S
+    while time.monotonic() < deadline:
+        if not any(arm.pid and pid_alive(arm.pid) for arm in run.arms):
+            break
+        await asyncio.sleep(0.25)
+    else:
+        for arm in run.arms:
+            if arm.pid and pid_alive(arm.pid):
+                try:
+                    kill_pid(arm.pid)
+                except Exception as exc:
+                    log.warning("kill pid %s: %s", arm.pid, exc)
+    run = state.runs.get(run_id)
+    if run is None or run.status == RunStatus.STOPPED:
+        return
     for arm in run.arms:
-        if arm.pid:
-            try:
-                kill_pid(arm.pid)
-            except Exception as exc:
-                log.warning("kill pid %s: %s", arm.pid, exc)
-            arm.pid = None
+        arm.pid = None
         if arm.status == "attached":
             arm.status = "stopped"
         if arm.session_id and arm.session_id in state.sessions:
             sess = state.sessions[arm.session_id]
             sess.status = SessionStatus.CLOSED
             await state.update_session(sess)
-    metrics = persist_run_metrics(state, run)
+    metrics = await asyncio.to_thread(persist_run_metrics, state, run)
     measure_jobs = await _enqueue_measure_jobs(state, run)
     if measure_jobs:
         metrics["measure_job_ids"] = measure_jobs
@@ -564,4 +631,151 @@ async def stop_run(state: PlatformState, run_id: str, *, request=None) -> Experi
     run.stopped_at = utcnow()
     run.updated_at = utcnow()
     await state.update_run(run)
-    return run
+
+
+def _remove_tree(path: Path) -> None:
+    if path.exists():
+        shutil.rmtree(path, ignore_errors=True)
+
+
+def _player_alive(run: ExperimentRun) -> bool:
+    from .attach import pid_is_player
+
+    return any(arm.pid and pid_is_player(int(arm.pid), run.id) for arm in run.arms)
+
+
+def reconcile_dead_runs(state: PlatformState) -> None:
+    """Runs left at 'running' after the player is gone should not stay locked."""
+    now = time.time()
+    for run in list(state.runs.values()):
+        if run.status not in (RunStatus.RUNNING, RunStatus.PREPARING):
+            continue
+        if _player_alive(run):
+            continue
+        started = run.started_at or run.created_at
+        age_s = now - started.timestamp() if started is not None else 0.0
+        had_pid = any(arm.pid for arm in run.arms)
+        if run.status == RunStatus.PREPARING or (not had_pid and age_s < 120):
+            continue
+        for arm in run.arms:
+            arm.pid = None
+            if arm.status == "attached":
+                arm.status = "stopped"
+        run.status = RunStatus.STOPPED
+        if run.stopped_at is None:
+            run.stopped_at = utcnow()
+        run.updated_at = utcnow()
+        state.store.save_entity("runs", run)
+
+
+async def delete_runs(state: PlatformState, run_ids: list[str]) -> dict[str, Any]:
+    """Drop stopped runs and the files that belong to them."""
+    from .frames import current_frames_dir, read_owner
+    from .telemetry import run_archive_dir
+
+    deleted: list[str] = []
+    skipped: list[dict[str, str]] = []
+    seen: set[str] = set()
+    for run_id in run_ids:
+        if run_id in seen:
+            continue
+        seen.add(run_id)
+        run = state.runs.get(run_id)
+        if run is None:
+            skipped.append({"id": run_id, "reason": "not found"})
+            continue
+        if _player_alive(run):
+            skipped.append({"id": run_id, "reason": "running"})
+            continue
+        paths = {
+            run_archive_dir(state, run),
+            state.store.experiment_dir(run.experiment_id) / "runs" / run.id,
+        }
+        exp = state.experiments.get(run.experiment_id)
+        if exp is not None and exp.artifact_dir:
+            paths.add(Path(exp.artifact_dir) / "runs" / run.id)
+        for path in paths:
+            _remove_tree(path)
+        saved = (run.saved_frame_dir or "").strip()
+        if saved:
+            _remove_tree(Path(saved))
+        shared = current_frames_dir(state)
+        owner = read_owner(shared)
+        if owner is not None and owner[0] == run.id:
+            _remove_tree(shared)
+        if exp is not None and run.id in exp.run_ids:
+            exp.run_ids = [item for item in exp.run_ids if item != run.id]
+            await state.add_experiment(exp)
+        task = _finalizers.pop(run_id, None)
+        if task is not None and not task.done():
+            task.cancel()
+        async with state._lock:
+            state.runs.pop(run_id, None)
+        state.store.delete_entity("runs", run_id)
+        deleted.append(run_id)
+    return {"deleted": deleted, "skipped": skipped}
+
+
+async def stop_run(state: PlatformState, run_id: str, *, request=None) -> ExperimentRun:
+    if request is not None:
+        from .security import assert_attach_allowed
+
+        try:
+            assert_attach_allowed(request)
+        except PermissionError:
+            pass
+
+    run = state.runs.get(run_id)
+    if run is None:
+        raise ValueError("run not found")
+    if run.status == RunStatus.STOPPED:
+        return run
+    await schedule_finalize(state, run_id, ask_stop=True)
+    current = state.runs.get(run_id)
+    if current is None:
+        raise ValueError("run not found")
+    return current
+
+
+def samples_show_playback_end(samples: list[dict]) -> bool:
+    """True when the player reported END (or a transition into END)."""
+    for sample in samples:
+        state = str(sample.get("state") or "").upper()
+        if state == "END":
+            return True
+        event = str(sample.get("event") or "")
+        if event.endswith("->END") or event.endswith(":END"):
+            return True
+    return False
+
+
+def run_player_exited(run: ExperimentRun) -> bool:
+    """True when every arm that had a player pid is no longer alive."""
+    from .attach import pid_alive
+
+    watched = False
+    for arm in run.arms:
+        pid = arm.pid
+        if not pid:
+            continue
+        watched = True
+        if pid_alive(int(pid)):
+            return False
+    return watched
+
+
+async def reap_finished_runs(state: PlatformState) -> list[str]:
+    """Stop runs whose player already exited. Returns stopped run ids."""
+    stopped: list[str] = []
+    for run in list(state.runs.values()):
+        if run.status != RunStatus.RUNNING:
+            continue
+        if not run_player_exited(run):
+            continue
+        try:
+            await stop_run(state, run.id)
+            stopped.append(run.id)
+            log.info("reaped finished run %s (player exited)", run.id)
+        except Exception as exc:
+            log.warning("reap run %s failed: %s", run.id, exc)
+    return stopped

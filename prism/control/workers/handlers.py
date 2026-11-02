@@ -122,6 +122,9 @@ async def finish_job(state: PlatformState, task: WorkerTask, result: dict, error
         job.status = JobStatus.SUCCEEDED
     await state.update_job(job)
     await _run_hooks(state, job)
+    from ..metrics.bundle import ingest_measure_job
+
+    ingest_measure_job(state, job)
 
 
 async def _run_hooks(state: PlatformState, job) -> None:

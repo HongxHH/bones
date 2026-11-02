@@ -1,3 +1,4 @@
+import argparse
 import asyncio
 import json
 import logging
@@ -31,10 +32,10 @@ def load_from_dict(d: Dict, config: PlayerConfig):
 
 def load_from_config_file(config_path: str, config: PlayerConfig):
     if config_path.endswith(".yaml") or config_path.endswith(".yml"):
-        with open(config_path) as f:
+        with open(config_path, encoding="utf-8") as f:
             return load_from_dict(yaml.safe_load(f), config)
     elif config_path.endswith(".json"):
-        with open(config_path) as f:
+        with open(config_path, encoding="utf-8") as f:
             return load_from_dict(json.load(f), config)
     else:
         raise Exception(f"Config file format not supported. Use JSON or YAML. Used : {config_path}")
@@ -54,15 +55,21 @@ def main():
     config = PlayerConfig()
     # 创建命令行参数解析器，传入config实例以使用config.py中的默认值
     parser = composer.create_arg_parser(config)
+    # 使用 --config 时：勿让 argparse 默认值覆盖 yaml（曾导致 tos.yaml 的 input 被打回 bbb.mpd）
+    if any(a == "--config" or a.startswith("--config=") for a in sys.argv[1:]):
+        for action in parser._actions:
+            if action.dest in ("help",):
+                continue
+            action.default = argparse.SUPPRESS
     args = vars(parser.parse_args())
 
     # First load from config file
-    if args["config"] is not None:
-        load_from_config_file(args["config"], config)
-        del args["config"]
+    cfg_path = args.pop("config", None)
+    if cfg_path is not None:
+        load_from_config_file(cfg_path, config)
     verbose_flag = args.pop("verbose", False)
 
-    # Then override from arguments
+    # Then override from arguments that were explicitly provided
     load_from_dict(args, config)
 
     # Configure logging to file and console

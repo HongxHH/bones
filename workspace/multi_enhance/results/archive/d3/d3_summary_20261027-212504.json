@@ -1,0 +1,133 @@
+{
+  "built_at": "2026-10-27T22:05:59",
+  "traces": [
+    "0921"
+  ],
+  "arms": [
+    "tool_greedy",
+    "fixed_sr_high",
+    "none"
+  ],
+  "rows": [
+    {
+      "arm": "tool_greedy",
+      "trace": "0921",
+      "trace_path": "data/3Glogs/report.2010-09-21_0742CEST.json",
+      "returncode": 0,
+      "duration_s": 798.4,
+      "ok": true,
+      "result_file": "player/output/data/d3/0921_tool_greedy/tool_greedy_multitask_fast-True_video-bbb_trace-report.2010-09-21_0742CEST_20261027-213822.json",
+      "QOE": 54.091955211876844,
+      "avg_vmaf": 70.05086249150395,
+      "dur_stall": 25.15850305557251,
+      "num_stall": 6,
+      "n_segments": 159,
+      "tool_or_level_hist": {
+        "None": 26,
+        "2": 48,
+        "5": 22,
+        "3": 62,
+        "1": 1
+      }
+    },
+    {
+      "arm": "fixed_sr_high",
+      "trace": "0921",
+      "trace_path": "data/3Glogs/report.2010-09-21_0742CEST.json",
+      "returncode": 0,
+      "duration_s": 812.0,
+      "ok": true,
+      "result_file": "player/output/data/d3/0921_fixed_sr_high/always_greedy_imdn_fast-True_video-bbb_trace-report.2010-09-21_0742CEST_20261027-215154.json",
+      "QOE": 54.10301173297356,
+      "avg_vmaf": 67.01445013118547,
+      "dur_stall": 21.15349817276001,
+      "num_stall": 4,
+      "n_segments": 159,
+      "tool_or_level_hist": {
+        "None": 2,
+        "3": 157
+      }
+    },
+    {
+      "arm": "none",
+      "trace": "0921",
+      "trace_path": "data/3Glogs/report.2010-09-21_0742CEST.json",
+      "returncode": 0,
+      "duration_s": 844.8,
+      "ok": true,
+      "result_file": "player/output/data/d3/0921_none/always_greedy_imdn_fast-True_video-bbb_trace-report.2010-09-21_0742CEST_20261027-220559.json",
+      "QOE": 47.74770085667207,
+      "avg_vmaf": 61.84348714489139,
+      "dur_stall": 44.25472807884216,
+      "num_stall": 4,
+      "n_segments": 159,
+      "tool_or_level_hist": {
+        "None": 159
+      }
+    }
+  ],
+  "rows_with_logs": [
+    {
+      "arm": "tool_greedy",
+      "trace": "0921",
+      "trace_path": "data/3Glogs/report.2010-09-21_0742CEST.json",
+      "returncode": 0,
+      "duration_s": 798.4,
+      "ok": true,
+      "result_file": "player/output/data/d3/0921_tool_greedy/tool_greedy_multitask_fast-True_video-bbb_trace-report.2010-09-21_0742CEST_20261027-213822.json",
+      "QOE": 54.091955211876844,
+      "avg_vmaf": 70.05086249150395,
+      "dur_stall": 25.15850305557251,
+      "num_stall": 6,
+      "n_segments": 159,
+      "tool_or_level_hist": {
+        "None": 26,
+        "2": 48,
+        "5": 22,
+        "3": 62,
+        "1": 1
+      },
+      "stdout_tail": "start=0, end=0\nWriting results in file E:\\dev\\Code\\Python\\bones\\player\\output\\data\\d3\\0921_tool_greedy\\tool_greedy_multitask_fast-True_video-bbb_trace-report.2010-09-21_0742CEST_20261027-213822.json\n",
+      "stderr_tail": "}, enhance actions {0: 5}\n2026-10-27 21:37:53,959        SchedulerImpl     INFO:\tWaiting for completion urls dict_keys(['data/video_mp4box/stream3/segment_159.m4s'])\n2026-10-27 21:37:53,959    MultiTaskEnhancer     INFO:\tEnhancing segment index: 158,download action: 3, enhance action: 5, enhance start to play time: 13.652s\n2026-10-27 21:37:54,325    MultiTaskEnhancer     INFO:\tComplete enhancing segment index: 158,download action: 3, enhance action: 5, recovery=none, fallback=False, enhance start to play time: 13.652s, latency: 0.366s, enhanced frames: 120, interpolated frames: 0, enhance FPS: 328.292fps, enhance frame interval: 0, threshold: 0.400s, enhance end to play time: 13.287s\n2026-10-27 21:37:56,543           DASHPlayer     INFO:\tPlaying index: 155\n2026-10-27 21:37:57,744        SchedulerImpl     INFO:\tCompleted downloading from urls dict_keys(['data/video_mp4box/stream3/segment_159.m4s'])\n2026-10-27 21:37:57,745 ToolGreedyController     INFO:\ttool_greedy seg=160 down=4 tool=0(none)\n2026-10-27 21:37:57,745        SchedulerImpl     INFO:\tIndex 160, download actions {0: 4}, enhance actions {0: 0}\n2026-10-27 21:37:57,745        SchedulerImpl     INFO:\tNo more segments left\n2026-10-27 21:37:57,745    MultiTaskEnhancer     INFO:\tEnhancer closed\n2026-10-27 21:38:01,619           DASHPlayer     INFO:\tPlaying index: 156\n2026-10-27 21:38:06,713           DASHPlayer     INFO:\tPlaying index: 157\n2026-10-27 21:38:11,786           DASHPlayer     INFO:\tPlaying index: 158\n2026-10-27 21:38:16,896           DASHPlayer     INFO:\tPlaying index: 159\n2026-10-27 21:38:21,995           DASHPlayer     INFO:\tPlayer closed\n2026-10-27 21:38:21,997           GPUMonitor     INFO:\tGPUMonitor stopped: {'avg_power_w': 64.33, 'peak_power_w': 315.49, 'total_energy_kj': 51.0186, 'avg_temp_c': 37.2, 'peak_temp_c': 57.0, 'avg_util_pct': 13.3, 'peak_util_pct': 100.0, 'avg_mem_used_mb': 4514.7, 'peak_mem_used_mb': 4623.6, 'total_mem_mb': 16303.0, 'sample_count': 1567, 'duration_seconds': 793.11}\n"
+    },
+    {
+      "arm": "fixed_sr_high",
+      "trace": "0921",
+      "trace_path": "data/3Glogs/report.2010-09-21_0742CEST.json",
+      "returncode": 0,
+      "duration_s": 812.0,
+      "ok": true,
+      "result_file": "player/output/data/d3/0921_fixed_sr_high/always_greedy_imdn_fast-True_video-bbb_trace-report.2010-09-21_0742CEST_20261027-215154.json",
+      "QOE": 54.10301173297356,
+      "avg_vmaf": 67.01445013118547,
+      "dur_stall": 21.15349817276001,
+      "num_stall": 4,
+      "n_segments": 159,
+      "tool_or_level_hist": {
+        "None": 2,
+        "3": 157
+      },
+      "stdout_tail": "start=0, end=0\nWriting results in file E:\\dev\\Code\\Python\\bones\\player\\output\\data\\d3\\0921_fixed_sr_high\\always_greedy_imdn_fast-True_video-bbb_trace-report.2010-09-21_0742CEST_20261027-215154.json\n",
+      "stderr_tail": "486 AlwaysBufferGreedyController     INFO:\tEnhance buffer level: 4000.0\n2026-10-27 21:51:29,486        SchedulerImpl     INFO:\tIndex 159, download actions {0: 3}, enhance actions {0: 3}\n2026-10-27 21:51:29,486        SchedulerImpl     INFO:\tWaiting for completion urls dict_keys(['data/video_mp4box/stream3/segment_159.m4s'])\n2026-10-27 21:51:29,486   IMDNEnhancerAlways     INFO:\tEnhancing segment index: 158,download action: 4, enhance action: 3, enhance start to play time: 11.152s\n2026-10-27 21:51:29,486   IMDNEnhancerAlways     INFO:\tAbort enhancing segment index: 158, download action: 4, enhance action: 3, reason: Max resolution, enhance start to play time: 11.152s\n2026-10-27 21:51:33,348        SchedulerImpl     INFO:\tCompleted downloading from urls dict_keys(['data/video_mp4box/stream3/segment_159.m4s'])\n2026-10-27 21:51:33,349 AlwaysBufferGreedyController     INFO:\tDownload buffer level: 16000.0\n2026-10-27 21:51:33,349 AlwaysBufferGreedyController     INFO:\tEnhance buffer level: 4000.0\n2026-10-27 21:51:33,349        SchedulerImpl     INFO:\tIndex 160, download actions {0: 3}, enhance actions {0: 3}\n2026-10-27 21:51:33,349        SchedulerImpl     INFO:\tNo more segments left\n2026-10-27 21:51:33,349   IMDNEnhancerAlways     INFO:\tEnhancer closed\n2026-10-27 21:51:33,660           DASHPlayer     INFO:\tPlaying index: 156\n2026-10-27 21:51:38,758           DASHPlayer     INFO:\tPlaying index: 157\n2026-10-27 21:51:43,832           DASHPlayer     INFO:\tPlaying index: 158\n2026-10-27 21:51:48,902           DASHPlayer     INFO:\tPlaying index: 159\n2026-10-27 21:51:54,001           DASHPlayer     INFO:\tPlayer closed\n2026-10-27 21:51:54,003           GPUMonitor     INFO:\tGPUMonitor stopped: {'avg_power_w': 80.63, 'peak_power_w': 316.33, 'total_energy_kj': 65.0488, 'avg_temp_c': 38.67, 'peak_temp_c': 56.0, 'avg_util_pct': 28.9, 'peak_util_pct': 100.0, 'avg_mem_used_mb': 4575.2, 'peak_mem_used_mb': 4653.1, 'total_mem_mb': 16303.0, 'sample_count': 1594, 'duration_seconds': 806.77}\n"
+    },
+    {
+      "arm": "none",
+      "trace": "0921",
+      "trace_path": "data/3Glogs/report.2010-09-21_0742CEST.json",
+      "returncode": 0,
+      "duration_s": 844.8,
+      "ok": true,
+      "result_file": "player/output/data/d3/0921_none/always_greedy_imdn_fast-True_video-bbb_trace-report.2010-09-21_0742CEST_20261027-220559.json",
+      "QOE": 47.74770085667207,
+      "avg_vmaf": 61.84348714489139,
+      "dur_stall": 44.25472807884216,
+      "num_stall": 4,
+      "n_segments": 159,
+      "tool_or_level_hist": {
+        "None": 159
+      },
+      "stdout_tail": "start=0, end=0\nWriting results in file E:\\dev\\Code\\Python\\bones\\player\\output\\data\\d3\\0921_none\\always_greedy_imdn_fast-True_video-bbb_trace-report.2010-09-21_0742CEST_20261027-220559.json\n",
+      "stderr_tail": "downloading from urls dict_keys(['data/video_mp4box/stream3/segment_158.m4s'])\n2026-10-27 22:05:30,789 AlwaysBufferGreedyController     INFO:\tDownload buffer level: 18007.19949998893\n2026-10-27 22:05:30,789 AlwaysBufferGreedyController     INFO:\tEnhance buffer level: 0\n2026-10-27 22:05:30,789        SchedulerImpl     INFO:\tIndex 159, download actions {0: 3}, enhance actions {0: 0}\n2026-10-27 22:05:30,789        SchedulerImpl     INFO:\tWaiting for completion urls dict_keys(['data/video_mp4box/stream3/segment_159.m4s'])\n2026-10-27 22:05:33,723           DASHPlayer     INFO:\tPlaying index: 155\n2026-10-27 22:05:34,780        SchedulerImpl     INFO:\tCompleted downloading from urls dict_keys(['data/video_mp4box/stream3/segment_159.m4s'])\n2026-10-27 22:05:34,781 AlwaysBufferGreedyController     INFO:\tDownload buffer level: 18941.81959994603\n2026-10-27 22:05:34,781 AlwaysBufferGreedyController     INFO:\tEnhance buffer level: 0\n2026-10-27 22:05:34,781        SchedulerImpl     INFO:\tIndex 160, download actions {0: 4}, enhance actions {0: 0}\n2026-10-27 22:05:34,781        SchedulerImpl     INFO:\tNo more segments left\n2026-10-27 22:05:38,725           DASHPlayer     INFO:\tPlaying index: 156\n2026-10-27 22:05:43,796           DASHPlayer     INFO:\tPlaying index: 157\n2026-10-27 22:05:48,887           DASHPlayer     INFO:\tPlaying index: 158\n2026-10-27 22:05:53,960           DASHPlayer     INFO:\tPlaying index: 159\n2026-10-27 22:05:59,025           DASHPlayer     INFO:\tPlayer closed\n2026-10-27 22:05:59,025        EnhanceBuffer     INFO:\tEnhance buffer closed.\n2026-10-27 22:05:59,025   IMDNEnhancerAlways     INFO:\tEnhancer closed\n2026-10-27 22:05:59,027           GPUMonitor     INFO:\tGPUMonitor stopped: {'avg_power_w': 14.9, 'peak_power_w': 38.15, 'total_energy_kj': 12.5116, 'avg_temp_c': 32.9, 'peak_temp_c': 34.0, 'avg_util_pct': 0.0, 'peak_util_pct': 3.0, 'avg_mem_used_mb': 3109.3, 'peak_mem_used_mb': 3164.8, 'total_mem_mb': 16303.0, 'sample_count': 1660, 'duration_seconds': 839.88}\n"
+    }
+  ]
+}

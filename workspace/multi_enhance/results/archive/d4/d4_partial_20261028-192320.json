@@ -1,0 +1,37 @@
+[
+  {
+    "arm": "fixed_sr_high",
+    "video": "tos",
+    "trace": "0913",
+    "returncode": 0,
+    "duration_s": 907.1,
+    "ok": true,
+    "result_file": "player/output/data/d4/0913_fixed_sr_high/always_greedy_imdn_fast-True_video-tos_trace-report.2010-09-13_1003CEST_20261028-193827.json",
+    "QOE": 73.06915820087171,
+    "avg_vmaf": 82.11191241180136,
+    "dur_stall": 0.0760347843170166,
+    "num_stall": 1,
+    "n_segments": 184,
+    "tool_or_level_hist": {
+      "None": 2,
+      "3": 182
+    }
+  },
+  {
+    "arm": "none",
+    "video": "tos",
+    "trace": "0913",
+    "returncode": 0,
+    "duration_s": 935.8,
+    "ok": true,
+    "result_file": "player/output/data/d4/0913_none/always_greedy_imdn_fast-True_video-tos_trace-report.2010-09-13_1003CEST_20261028-195403.json",
+    "QOE": 56.243927336616515,
+    "avg_vmaf": 69.77062923277674,
+    "dur_stall": 4.619763135910034,
+    "num_stall": 2,
+    "n_segments": 184,
+    "tool_or_level_hist": {
+      "None": 184
+    }
+  }
+]

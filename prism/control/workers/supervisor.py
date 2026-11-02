@@ -66,7 +66,13 @@ class WorkerSupervisor:
     async def _reaper(self) -> None:
         while not self._stop.is_set():
             self.state.mark_stale_workers()
-            await asyncio.sleep(5)
+            try:
+                from ..runs import reap_finished_runs
+
+                await reap_finished_runs(self.state)
+            except Exception as exc:
+                log.warning("run reaper failed: %s", exc)
+            await asyncio.sleep(1)
 
 
 async def claim_and_run_remote(state: PlatformState, worker_id: str) -> dict | None:

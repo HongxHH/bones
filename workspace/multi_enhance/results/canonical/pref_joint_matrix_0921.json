@@ -1,0 +1,61 @@
+{
+  "video": "bbb",
+  "trace": "0921",
+  "built_at": "2026-10-29T13:22:36",
+  "source": "workspace/multi_enhance/results/runs/pref_joint_matrix_20261029-122851.json",
+  "note": "pref_joint courage/taste matrix; refs from d5_bbb_0921",
+  "rows": [
+    {
+      "tag": "A",
+      "courage": "balanced",
+      "taste": "balanced",
+      "QOE": 53.47768568450544,
+      "dur_stall": 29.124656200408936,
+      "fast_complete_segments": 0,
+      "tools": {"none": 43, "L1": 14, "L2": 57, "L3": 34, "rst": 11}
+    },
+    {
+      "tag": "B",
+      "courage": "conservative",
+      "taste": "balanced",
+      "QOE": 49.15464562267681,
+      "dur_stall": 19.50728702545166,
+      "fast_complete_segments": 0,
+      "tools": {"none": 53, "L1": 17, "L2": 66, "L3": 10, "rst": 13}
+    },
+    {
+      "tag": "C",
+      "courage": "aggressive",
+      "taste": "balanced",
+      "QOE": 54.60925050441906,
+      "dur_stall": 42.51483416557312,
+      "fast_complete_segments": 2,
+      "tools": {"none": 31, "L1": 17, "L2": 70, "L3": 26, "rst": 15}
+    },
+    {
+      "tag": "D",
+      "courage": "balanced",
+      "taste": "sharp",
+      "QOE": 53.53369896484932,
+      "dur_stall": 26.66500973701477,
+      "fast_complete_segments": 2,
+      "tools": {"none": 41, "L1": 12, "L2": 58, "L3": 37, "rst": 11}
+    },
+    {
+      "tag": "E",
+      "courage": "balanced",
+      "taste": "clean",
+      "QOE": 52.32437780298366,
+      "dur_stall": 39.9545156955719,
+      "fast_complete_segments": 1,
+      "tools": {"none": 45, "L1": 16, "L2": 54, "L3": 32, "rst": 12}
+    }
+  ],
+  "refs_d5": {
+    "ours_tool_greedy": {"QOE": 55.81, "dur_stall": 20.55, "FC": 3},
+    "none": {"QOE": 47.9, "dur_stall": 44.61, "FC": 0},
+    "no_slack": {"QOE": 61.83, "dur_stall": 11.85, "FC": 41},
+    "fixed_high": {"QOE": 62.33, "dur_stall": 20.66, "FC": 48}
+  },
+  "verdict_zh": "胆量旋钮方向对（保守更稳、激进更卡）；口味几乎没拉开；默认联合全面未赢旧 tool_greedy。需下调 plan_floor 或改预算，再复测。"
+}

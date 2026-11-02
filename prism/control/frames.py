@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import shutil
+import threading
 from pathlib import Path
 from typing import Any, Optional
 
@@ -68,6 +69,18 @@ def claim_current_frames(state: PlatformState, run_id: str, arm_id: str) -> Path
     return root
 
 
+def frame_count_hint(state: PlatformState, run: ExperimentRun, arm_id: str) -> int:
+    """Cheap frame total from count.txt. Does not parse frames.jsonl."""
+    _storage, root = locate_frames(state, run, arm_id)
+    count_path = root / "count.txt"
+    if not count_path.is_file():
+        return 0
+    try:
+        return max(0, int(count_path.read_text(encoding="ascii").strip() or "0"))
+    except (OSError, ValueError):
+        return 0
+
+
 def locate_frames(state: PlatformState, run: ExperimentRun, arm_id: str) -> tuple[str, Path]:
     """Return (storage, directory). storage is current, saved, archive, or none."""
     shared = current_frames_dir(state)
@@ -121,6 +134,71 @@ def _image_path(root: Path, frame: int) -> Path:
 
 def _base_image_path(root: Path, frame: int) -> Path:
     return root / "frames" / f"{frame:06d}.base.jpg"
+
+
+# Live Lab polls metrics about once a second. Re-reading a multi-megabyte
+# index from byte 0 each time fights the player's JPEG writer.
+_ROW_CACHE: dict[str, dict[str, Any]] = {}
+_ROW_LOCK = threading.Lock()
+
+
+def iter_frame_rows(root: Path) -> list[dict[str, Any]]:
+    """Every index row. Metrics use this; the paged reader stays capped.
+
+    A growing index is parsed from the previous byte offset. A shorter or
+    replaced file is read again from the start.
+    """
+    path = _index_path(root)
+    if not path.is_file():
+        return []
+    try:
+        stat = path.stat()
+    except OSError:
+        return []
+    key = str(path.resolve())
+    size = int(stat.st_size)
+    mtime = int(getattr(stat, "st_mtime_ns", int(stat.st_mtime * 1e9)))
+    ident = (getattr(stat, "st_dev", 0), getattr(stat, "st_ino", 0))
+    with _ROW_LOCK:
+        slot = _ROW_CACHE.get(key)
+        same_file = slot is not None and slot.get("ident") == ident
+        if same_file and slot["size"] == size and slot["mtime"] == mtime:
+            return list(slot["rows"])
+        offset = 0
+        rows: list[dict[str, Any]] = []
+        if same_file and size > int(slot["size"]):
+            offset = int(slot["size"])
+            rows = list(slot["rows"])
+        try:
+            with path.open("rb") as handle:
+                handle.seek(offset)
+                blob = handle.read()
+        except OSError:
+            return rows
+        if blob and not blob.endswith(b"\n"):
+            cut = blob.rfind(b"\n")
+            if cut < 0:
+                return rows
+            blob = blob[: cut + 1]
+        new_rows: list[dict[str, Any]] = []
+        for line in blob.splitlines():
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                row = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            if isinstance(row, dict):
+                new_rows.append(row)
+        stored = rows + new_rows
+        _ROW_CACHE[key] = {
+            "size": offset + len(blob),
+            "mtime": mtime,
+            "ident": ident,
+            "rows": stored,
+        }
+        return list(stored)
 
 
 def read_frames(root: Path, *, offset: int = 0, limit: int = 50) -> dict[str, Any]:

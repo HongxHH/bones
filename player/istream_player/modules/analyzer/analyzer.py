@@ -61,7 +61,9 @@ class AnalyzerSegment:
 
     # 动作信息
     download_action: Optional[int] = 0     # 下载动作
-    enhance_action: Optional[int] = 0      # 增强动作
+    enhance_action: Optional[int] = 0      # 增强动作（多类型下即 tool_id）
+    tool_id: Optional[int] = None          # multi_enhance：工具 ID（与 enhance_action 同值时冗余便于检索）
+    tool_mode: Optional[str] = None        # sr | sr_x2 | restore | ...
 
     # BONES / IMDN 相关增强与决策信息（per-segment）
     enhance_start_time: Optional[float] = None          # 段增强开始时间戳
@@ -144,6 +146,18 @@ class GPUUsage:
 class CPUUsage:
     time: float   # 时间戳
     usage: float # CPU使用率
+
+
+_OPEN_ANALYZERS = []
+
+
+def flush_analyzers() -> None:
+    """Write analysis JSON for every live analyzer. Used before END telemetry."""
+    for analyzer in list(_OPEN_ANALYZERS):
+        try:
+            analyzer.flush()
+        except Exception:
+            analyzer.log.exception("analysis flush failed")
 
 
 # 播放分析器实现类 - 继承多个接口，实现全面的播放数据分析
@@ -271,6 +285,8 @@ class PlaybackAnalyzer(
         bandwidth_meter.add_listener(self)      # 带宽更新监听器
         scheduler.add_listener(self)            # 调度器事件监听器
         player.add_listener(self)               # 播放器事件监听器
+        if self not in _OPEN_ANALYZERS:
+            _OPEN_ANALYZERS.append(self)
         download_buffer.add_listener(self)      # 下载缓冲区监听器
         enhance_buffer.add_listener(self)       # 增强缓冲区监听器
 
@@ -379,12 +395,18 @@ class PlaybackAnalyzer(
             except Exception as e:
                 self.log.debug(f"Failed to stop GPU monitor: {e}")
 
-            # 保存分析结果到标准输出
-            self.save(sys.stdout)
+            self.flush()
         except Exception as e:
             # 打印异常堆栈并记录错误
             traceback.print_exc()
             self.log.error(f"Failed to save analysis : {e}")
+        finally:
+            if self in _OPEN_ANALYZERS:
+                _OPEN_ANALYZERS.remove(self)
+
+    def flush(self) -> None:
+        """Write the analysis JSON now. cleanup() calls this again after GPU totals."""
+        self.save(sys.stdout)
 
     @staticmethod
     def _seconds_since(start_time: float):
@@ -558,6 +580,9 @@ class PlaybackAnalyzer(
 
         # ===== 统计质量切换次数 =====
         for segment in sorted(self._segments_by_url.values(), key=lambda s: s.index):
+            rate = getattr(segment, "bitrate", None)
+            if isinstance(rate, (int, float)) and rate > 0:
+                bitrates.append(float(rate))
             if last_quality is None:
                 # 第一个段
                 last_quality = segment.quality
@@ -578,7 +603,7 @@ class PlaybackAnalyzer(
         average_bitrate = sum(bitrates) / len(bitrates) if len(bitrates) > 0 else 0
         
         # ===== 统计所有段的增强信息和计算VMAF值 =====
-        seg_stats = self._enhancer.segment_stats
+        seg_stats = getattr(self._enhancer, "segment_stats", None) or {}
         for analyzer_segment in self._segments_by_url.values():
             stats = seg_stats.get(analyzer_segment.url)
             if stats is not None:
@@ -598,6 +623,11 @@ class PlaybackAnalyzer(
                 analyzer_segment.exit_frame_counts = stats.get("exit_frame_counts")
                 analyzer_segment.enhance_start_to_play_time = stats.get("enhance_start_to_play_time")
                 analyzer_segment.enhance_end_to_play_time = stats.get("enhance_end_to_play_time")
+                if stats.get("tool_id") is not None:
+                    analyzer_segment.tool_id = int(stats["tool_id"])
+                elif analyzer_segment.enhance_action is not None:
+                    analyzer_segment.tool_id = int(analyzer_segment.enhance_action)
+                analyzer_segment.tool_mode = stats.get("tool_mode")
 
         # ===== 任务3.1：计算首段增强完成时间（启动延迟）=====
         if not self._first_enhance_done:
@@ -709,18 +739,9 @@ class PlaybackAnalyzer(
                     lvl = int(seg.enhance_action)
                     abort_wasted_frames_by_level[lvl] = abort_wasted_frames_by_level.get(lvl, 0) + int(seg.wasted_enhanced_cnt)
 
-            # 统计 fast_complete 节省的帧数（fast_complete=True 且 is_enhance=True，且 enhance_end_to_play_time < fast_complete_threshold）
-            # fast_complete 后模型增强的帧数就是节省的模型增强帧数
-            if (
-                seg.fast_complete
-                and seg.is_enhance
-                and seg.enhanced_cnt is not None
-                and seg.enhance_end_to_play_time is not None
-                and seg.fast_complete_threshold is not None
-                and seg.enhance_end_to_play_time < seg.fast_complete_threshold
-            ):
-                
-                saved_frames = int(seg.enhanced_cnt)
+            # 未送进模型的帧（含 fast-complete 截断的尾部）。
+            if seg.fast_complete and seg.is_enhance and seg.interpolated_cnt is not None:
+                saved_frames = int(seg.interpolated_cnt)
                 fast_complete_saved_frames_total += saved_frames
                 lvl = int(seg.enhance_action)
                 fast_complete_saved_frames_by_level[lvl] = fast_complete_saved_frames_by_level.get(lvl, 0) + saved_frames
@@ -772,8 +793,8 @@ class PlaybackAnalyzer(
             del stats["_latency_sum"], stats["_latency_cnt"], stats["_fps_sum"], stats["_fps_cnt"]
 
         # 从增强器读取全局统计
-        abort_total = self._enhancer.abort_total
-        use_fast_complete = self._enhancer.use_fast_complete
+        abort_total = getattr(self._enhancer, "abort_total", 0)
+        use_fast_complete = getattr(self._enhancer, "use_fast_complete", None)
 
         # ===== 质量与 QoE 相关指标计算 =====
         # 1) 计算整体评价 VMAF（对所有有 vmaf 的段取简单平均）

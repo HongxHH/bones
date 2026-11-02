@@ -1,0 +1,43 @@
+id: recovery_four_arm
+label: 段内恢复四臂
+# 实际跑臂时在 Lab 里复制并改 player；此处给出默认（F 尾）。
+# 四臂对照见 workspace/quality_baseline/PHASE3.md；需环境变量 PACNET_BURN_K=5。
+player:
+  mod_nes: always_greedy
+  mod_enhancer: imdn
+  mod_renderer: opencv
+  fixed_enhance_action: 3
+  recovery_mode: fallback
+  fallback_enhance_action: 1
+  use_fast_complete: true
+  latency_adapt: false
+metrics:
+  recipes:
+    - bones_qoe_v1
+    - fast_complete_v1
+  quality:
+    prefer:
+      - local_catalog
+    catalog_ref: content:bbb
+cards:
+  - key: qoe
+    label: QoE
+    digits: 2
+    group: 播放质量
+  - key: avg_vmaf
+    label: VMAF
+    digits: 2
+    group: 播放质量
+  - key: avg_freeze
+    label: 均卡顿
+    digits: 2
+    suffix: " s"
+    group: 播放质量
+  - key: fc_segments
+    label: 触发段数
+    digits: 0
+    group: recovery
+  - key: fc_saved_frames
+    label: 未跑模型帧
+    digits: 0
+    group: recovery

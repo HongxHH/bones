@@ -99,9 +99,9 @@ class PlayerConfig:
     # 播放器模块 - 核心播放引擎，支持DASH协议
     mod_player: str = "dash"
     # 视频增强器模块 - 使用IMDN进行视频超分辨率增强
-    mod_enhancer: str = "imdn_always"
+    mod_enhancer: str = "imdn"
     # 渲染器模块 - 视频显示渲染，"headless"表示无头模式
-    mod_renderer: str = "opengl"  # 可选的OpenCV渲染器 opencv、opengl、headless
+    mod_renderer: str = "headless"  # opencv=真出画；opengl=段时长 sleep（非 GPU 出画）；headless=无画面计时
     # 分析器模块列表 - 数据收集和分析组件，使用工厂函数创建默认列表
     mod_analyzer: list[str] = field(default_factory=lambda: ["data_collector"])
     # 状态导出 / 本机控制台。默认 off，避免批量实验占端口；UI 用 --mod_status status
@@ -117,7 +117,7 @@ class PlayerConfig:
     telemetry_experiment_id: str = ""
     telemetry_interval_ms: int = 500
     # Host CPU/GPU/RSS into status/telemetry. Map from ExperimentSpec collect.system_metrics.
-    collect_system_metrics: bool = True
+    collect_system_metrics: bool = False
     # When set, full-resolution frames go to the Prism window instead of a player window.
     frame_shm: str = ""
     # Right-hand wipe: same-frame LR bicubic baseline vs the enhanced picture.
@@ -132,8 +132,32 @@ class PlayerConfig:
     enhance_frame_interval = 0 # 0:每帧都增强
 
 
-    # 是否启用提前检测
-    use_fast_complete = True
+    # 是否启用 fast-complete。命令行 --use_fast_complete true/false 可覆盖。
+    use_fast_complete: bool = False
+    # 在线更新延迟表和 safe_factor。精确对比实验保持关闭，避免同配置跑出不同决策。
+    latency_adapt: bool = False
+
+    # D5 消融（tool_greedy）：忽略缓冲 slack / 段墙钟门 → no_slack 臂
+    tool_ignore_slack: bool = False
+    # D5 消融：将 restore / sr_x2 的 Q 视为 −inf → no_hd 臂
+    tool_mask_hd: bool = False
+    # slack = buff_down - buff_enh - kappa*seg_time（默认 1.0=现行；0=不扣整段）
+    tool_slack_kappa: float = 1.0
+
+    # pref_joint：用户旋钮（胆量 / 口味）；参数文件可选覆盖
+    user_courage: str = "balanced"  # conservative|balanced|aggressive
+    user_taste: str = "balanced"  # balanced|sharp|clean
+    joint_params_path: Optional[str] = None
+
+    # 阶段3恢复实验：固定增强档（always_greedy 等）。None=控制器默认。
+    # C=3 / F=1 见 workspace/quality_baseline/PHASE2.md
+    fixed_enhance_action: Optional[int] = None
+    # 段内恢复：none=蛮干（可 abort 丢前缀）；bicubic=尾巴 DecoderWrapper；
+    # fallback=先降到 fallback_enhance_action，仍来不及再 bicubic。
+    recovery_mode: str = "none"
+    fallback_enhance_action: int = 1
+    # 剩余工作量判定裕量（秒），默认约一帧
+    recovery_work_margin_s: float = 1.0 / 30.0
 
     # ======================
     # 缓冲区配置

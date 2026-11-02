@@ -1,0 +1,595 @@
+{
+  "probe": "H0_TOS_532",
+  "note": "TOS 1280x532→1920x800; 默认/冒烟用 seg>=40",
+  "segs": [
+    20,
+    30,
+    40,
+    50,
+    60,
+    80,
+    90,
+    100,
+    120,
+    140
+  ],
+  "n_frames_per_seg": 96,
+  "wall_s": 216.5,
+  "mean_delta_vs_bicubic": {
+    "bicubic": 0.0,
+    "restore_unsharp": 4.1624,
+    "sr_x2_low": 0.9927,
+    "sr_x2_medium": 1.7568
+  },
+  "gate": {
+    "go_threshold_delta": 1.0,
+    "go_arms_by_mean_delta": [
+      "restore_unsharp",
+      "sr_x2_medium"
+    ]
+  },
+  "per_seg": [
+    {
+      "probe": "H0_TOS_532",
+      "seg": 20,
+      "start_frame": 1920,
+      "n_frames": 96,
+      "measured_at": "2026-10-28T16:29:07",
+      "ref_video": "data\\tears_of_steel\\output_1080p.mp4",
+      "input_video": "data\\tears_of_steel\\output_720p.mp4",
+      "input_size": [
+        1280,
+        532
+      ],
+      "target_size": [
+        1920,
+        800
+      ],
+      "ffmpeg": "E:\\dev\\tool\\ffmpeg-6.1.1-full_build-shared\\bin\\ffmpeg.exe",
+      "unsharp": "unsharp=5:5:0.8:5:5:0.0",
+      "means": {
+        "bicubic": 91.2998,
+        "restore_unsharp": 97.2149,
+        "sr_x2_low": 93.4361,
+        "sr_x2_medium": 94.5489
+      },
+      "delta_vs_bicubic": {
+        "bicubic": 0.0,
+        "restore_unsharp": 5.9151,
+        "sr_x2_low": 2.1363,
+        "sr_x2_medium": 3.2491
+      },
+      "gate": {
+        "go_threshold_delta": 1.0,
+        "go_arms": [
+          "restore_unsharp",
+          "sr_x2_low",
+          "sr_x2_medium"
+        ]
+      },
+      "methods": {
+        "bicubic": {
+          "kind": "ffmpeg_scale_bicubic_yuv"
+        },
+        "restore_unsharp": {
+          "kind": "bicubic+unsharp=5:5:0.8:5:5:0.0"
+        },
+        "sr_x2_low": {
+          "kind": "IMDN_RTC_low_x2_then_bicubic_800",
+          "weights": "player\\istream_player\\modules\\enhancer\\imdn_weight\\IMDN_low_bbb_x2.pth",
+          "weights_md5": "d50fc08af67481e7a5b4a1d3a7244188"
+        },
+        "sr_x2_medium": {
+          "kind": "IMDN_RTC_medium_x2_then_bicubic_800",
+          "weights": "player\\istream_player\\modules\\enhancer\\imdn_weight\\IMDN_medium_bbb_x2.pth",
+          "weights_md5": "9efe9e5ac3a17f60ebd98bf7aec122c0"
+        }
+      }
+    },
+    {
+      "probe": "H0_TOS_532",
+      "seg": 30,
+      "start_frame": 2880,
+      "n_frames": 96,
+      "measured_at": "2026-10-28T16:29:20",
+      "ref_video": "data\\tears_of_steel\\output_1080p.mp4",
+      "input_video": "data\\tears_of_steel\\output_720p.mp4",
+      "input_size": [
+        1280,
+        532
+      ],
+      "target_size": [
+        1920,
+        800
+      ],
+      "ffmpeg": "E:\\dev\\tool\\ffmpeg-6.1.1-full_build-shared\\bin\\ffmpeg.exe",
+      "unsharp": "unsharp=5:5:0.8:5:5:0.0",
+      "means": {
+        "bicubic": 94.2361,
+        "restore_unsharp": 99.0699,
+        "sr_x2_low": 95.7681,
+        "sr_x2_medium": 96.5425
+      },
+      "delta_vs_bicubic": {
+        "bicubic": 0.0,
+        "restore_unsharp": 4.8338,
+        "sr_x2_low": 1.5319,
+        "sr_x2_medium": 2.3064
+      },
+      "gate": {
+        "go_threshold_delta": 1.0,
+        "go_arms": [
+          "restore_unsharp",
+          "sr_x2_low",
+          "sr_x2_medium"
+        ]
+      },
+      "methods": {
+        "bicubic": {
+          "kind": "ffmpeg_scale_bicubic_yuv"
+        },
+        "restore_unsharp": {
+          "kind": "bicubic+unsharp=5:5:0.8:5:5:0.0"
+        },
+        "sr_x2_low": {
+          "kind": "IMDN_RTC_low_x2_then_bicubic_800",
+          "weights": "player\\istream_player\\modules\\enhancer\\imdn_weight\\IMDN_low_bbb_x2.pth",
+          "weights_md5": "d50fc08af67481e7a5b4a1d3a7244188"
+        },
+        "sr_x2_medium": {
+          "kind": "IMDN_RTC_medium_x2_then_bicubic_800",
+          "weights": "player\\istream_player\\modules\\enhancer\\imdn_weight\\IMDN_medium_bbb_x2.pth",
+          "weights_md5": "9efe9e5ac3a17f60ebd98bf7aec122c0"
+        }
+      }
+    },
+    {
+      "probe": "H0_TOS_532",
+      "seg": 40,
+      "start_frame": 3840,
+      "n_frames": 96,
+      "measured_at": "2026-10-28T16:29:34",
+      "ref_video": "data\\tears_of_steel\\output_1080p.mp4",
+      "input_video": "data\\tears_of_steel\\output_720p.mp4",
+      "input_size": [
+        1280,
+        532
+      ],
+      "target_size": [
+        1920,
+        800
+      ],
+      "ffmpeg": "E:\\dev\\tool\\ffmpeg-6.1.1-full_build-shared\\bin\\ffmpeg.exe",
+      "unsharp": "unsharp=5:5:0.8:5:5:0.0",
+      "means": {
+        "bicubic": 99.8571,
+        "restore_unsharp": 99.9285,
+        "sr_x2_low": 99.8243,
+        "sr_x2_medium": 99.8249
+      },
+      "delta_vs_bicubic": {
+        "bicubic": 0.0,
+        "restore_unsharp": 0.0713,
+        "sr_x2_low": -0.0329,
+        "sr_x2_medium": -0.0322
+      },
+      "gate": {
+        "go_threshold_delta": 1.0,
+        "go_arms": []
+      },
+      "methods": {
+        "bicubic": {
+          "kind": "ffmpeg_scale_bicubic_yuv"
+        },
+        "restore_unsharp": {
+          "kind": "bicubic+unsharp=5:5:0.8:5:5:0.0"
+        },
+        "sr_x2_low": {
+          "kind": "IMDN_RTC_low_x2_then_bicubic_800",
+          "weights": "player\\istream_player\\modules\\enhancer\\imdn_weight\\IMDN_low_bbb_x2.pth",
+          "weights_md5": "d50fc08af67481e7a5b4a1d3a7244188"
+        },
+        "sr_x2_medium": {
+          "kind": "IMDN_RTC_medium_x2_then_bicubic_800",
+          "weights": "player\\istream_player\\modules\\enhancer\\imdn_weight\\IMDN_medium_bbb_x2.pth",
+          "weights_md5": "9efe9e5ac3a17f60ebd98bf7aec122c0"
+        }
+      }
+    },
+    {
+      "probe": "H0_TOS_532",
+      "seg": 50,
+      "start_frame": 4800,
+      "n_frames": 96,
+      "measured_at": "2026-10-28T16:29:51",
+      "ref_video": "data\\tears_of_steel\\output_1080p.mp4",
+      "input_video": "data\\tears_of_steel\\output_720p.mp4",
+      "input_size": [
+        1280,
+        532
+      ],
+      "target_size": [
+        1920,
+        800
+      ],
+      "ffmpeg": "E:\\dev\\tool\\ffmpeg-6.1.1-full_build-shared\\bin\\ffmpeg.exe",
+      "unsharp": "unsharp=5:5:0.8:5:5:0.0",
+      "means": {
+        "bicubic": 92.5255,
+        "restore_unsharp": 97.3675,
+        "sr_x2_low": 93.6005,
+        "sr_x2_medium": 94.4874
+      },
+      "delta_vs_bicubic": {
+        "bicubic": 0.0,
+        "restore_unsharp": 4.842,
+        "sr_x2_low": 1.075,
+        "sr_x2_medium": 1.9619
+      },
+      "gate": {
+        "go_threshold_delta": 1.0,
+        "go_arms": [
+          "restore_unsharp",
+          "sr_x2_low",
+          "sr_x2_medium"
+        ]
+      },
+      "methods": {
+        "bicubic": {
+          "kind": "ffmpeg_scale_bicubic_yuv"
+        },
+        "restore_unsharp": {
+          "kind": "bicubic+unsharp=5:5:0.8:5:5:0.0"
+        },
+        "sr_x2_low": {
+          "kind": "IMDN_RTC_low_x2_then_bicubic_800",
+          "weights": "player\\istream_player\\modules\\enhancer\\imdn_weight\\IMDN_low_bbb_x2.pth",
+          "weights_md5": "d50fc08af67481e7a5b4a1d3a7244188"
+        },
+        "sr_x2_medium": {
+          "kind": "IMDN_RTC_medium_x2_then_bicubic_800",
+          "weights": "player\\istream_player\\modules\\enhancer\\imdn_weight\\IMDN_medium_bbb_x2.pth",
+          "weights_md5": "9efe9e5ac3a17f60ebd98bf7aec122c0"
+        }
+      }
+    },
+    {
+      "probe": "H0_TOS_532",
+      "seg": 60,
+      "start_frame": 5760,
+      "n_frames": 96,
+      "measured_at": "2026-10-28T16:30:10",
+      "ref_video": "data\\tears_of_steel\\output_1080p.mp4",
+      "input_video": "data\\tears_of_steel\\output_720p.mp4",
+      "input_size": [
+        1280,
+        532
+      ],
+      "target_size": [
+        1920,
+        800
+      ],
+      "ffmpeg": "E:\\dev\\tool\\ffmpeg-6.1.1-full_build-shared\\bin\\ffmpeg.exe",
+      "unsharp": "unsharp=5:5:0.8:5:5:0.0",
+      "means": {
+        "bicubic": 89.4946,
+        "restore_unsharp": 94.429,
+        "sr_x2_low": 90.6356,
+        "sr_x2_medium": 91.7678
+      },
+      "delta_vs_bicubic": {
+        "bicubic": 0.0,
+        "restore_unsharp": 4.9344,
+        "sr_x2_low": 1.141,
+        "sr_x2_medium": 2.2732
+      },
+      "gate": {
+        "go_threshold_delta": 1.0,
+        "go_arms": [
+          "restore_unsharp",
+          "sr_x2_low",
+          "sr_x2_medium"
+        ]
+      },
+      "methods": {
+        "bicubic": {
+          "kind": "ffmpeg_scale_bicubic_yuv"
+        },
+        "restore_unsharp": {
+          "kind": "bicubic+unsharp=5:5:0.8:5:5:0.0"
+        },
+        "sr_x2_low": {
+          "kind": "IMDN_RTC_low_x2_then_bicubic_800",
+          "weights": "player\\istream_player\\modules\\enhancer\\imdn_weight\\IMDN_low_bbb_x2.pth",
+          "weights_md5": "d50fc08af67481e7a5b4a1d3a7244188"
+        },
+        "sr_x2_medium": {
+          "kind": "IMDN_RTC_medium_x2_then_bicubic_800",
+          "weights": "player\\istream_player\\modules\\enhancer\\imdn_weight\\IMDN_medium_bbb_x2.pth",
+          "weights_md5": "9efe9e5ac3a17f60ebd98bf7aec122c0"
+        }
+      }
+    },
+    {
+      "probe": "H0_TOS_532",
+      "seg": 80,
+      "start_frame": 7680,
+      "n_frames": 96,
+      "measured_at": "2026-10-28T16:30:34",
+      "ref_video": "data\\tears_of_steel\\output_1080p.mp4",
+      "input_video": "data\\tears_of_steel\\output_720p.mp4",
+      "input_size": [
+        1280,
+        532
+      ],
+      "target_size": [
+        1920,
+        800
+      ],
+      "ffmpeg": "E:\\dev\\tool\\ffmpeg-6.1.1-full_build-shared\\bin\\ffmpeg.exe",
+      "unsharp": "unsharp=5:5:0.8:5:5:0.0",
+      "means": {
+        "bicubic": 91.8278,
+        "restore_unsharp": 96.5402,
+        "sr_x2_low": 92.7446,
+        "sr_x2_medium": 93.44
+      },
+      "delta_vs_bicubic": {
+        "bicubic": 0.0,
+        "restore_unsharp": 4.7124,
+        "sr_x2_low": 0.9168,
+        "sr_x2_medium": 1.6122
+      },
+      "gate": {
+        "go_threshold_delta": 1.0,
+        "go_arms": [
+          "restore_unsharp",
+          "sr_x2_medium"
+        ]
+      },
+      "methods": {
+        "bicubic": {
+          "kind": "ffmpeg_scale_bicubic_yuv"
+        },
+        "restore_unsharp": {
+          "kind": "bicubic+unsharp=5:5:0.8:5:5:0.0"
+        },
+        "sr_x2_low": {
+          "kind": "IMDN_RTC_low_x2_then_bicubic_800",
+          "weights": "player\\istream_player\\modules\\enhancer\\imdn_weight\\IMDN_low_bbb_x2.pth",
+          "weights_md5": "d50fc08af67481e7a5b4a1d3a7244188"
+        },
+        "sr_x2_medium": {
+          "kind": "IMDN_RTC_medium_x2_then_bicubic_800",
+          "weights": "player\\istream_player\\modules\\enhancer\\imdn_weight\\IMDN_medium_bbb_x2.pth",
+          "weights_md5": "9efe9e5ac3a17f60ebd98bf7aec122c0"
+        }
+      }
+    },
+    {
+      "probe": "H0_TOS_532",
+      "seg": 90,
+      "start_frame": 8640,
+      "n_frames": 96,
+      "measured_at": "2026-10-28T16:30:59",
+      "ref_video": "data\\tears_of_steel\\output_1080p.mp4",
+      "input_video": "data\\tears_of_steel\\output_720p.mp4",
+      "input_size": [
+        1280,
+        532
+      ],
+      "target_size": [
+        1920,
+        800
+      ],
+      "ffmpeg": "E:\\dev\\tool\\ffmpeg-6.1.1-full_build-shared\\bin\\ffmpeg.exe",
+      "unsharp": "unsharp=5:5:0.8:5:5:0.0",
+      "means": {
+        "bicubic": 92.3805,
+        "restore_unsharp": 96.7508,
+        "sr_x2_low": 93.3379,
+        "sr_x2_medium": 94.0131
+      },
+      "delta_vs_bicubic": {
+        "bicubic": 0.0,
+        "restore_unsharp": 4.3703,
+        "sr_x2_low": 0.9575,
+        "sr_x2_medium": 1.6326
+      },
+      "gate": {
+        "go_threshold_delta": 1.0,
+        "go_arms": [
+          "restore_unsharp",
+          "sr_x2_medium"
+        ]
+      },
+      "methods": {
+        "bicubic": {
+          "kind": "ffmpeg_scale_bicubic_yuv"
+        },
+        "restore_unsharp": {
+          "kind": "bicubic+unsharp=5:5:0.8:5:5:0.0"
+        },
+        "sr_x2_low": {
+          "kind": "IMDN_RTC_low_x2_then_bicubic_800",
+          "weights": "player\\istream_player\\modules\\enhancer\\imdn_weight\\IMDN_low_bbb_x2.pth",
+          "weights_md5": "d50fc08af67481e7a5b4a1d3a7244188"
+        },
+        "sr_x2_medium": {
+          "kind": "IMDN_RTC_medium_x2_then_bicubic_800",
+          "weights": "player\\istream_player\\modules\\enhancer\\imdn_weight\\IMDN_medium_bbb_x2.pth",
+          "weights_md5": "9efe9e5ac3a17f60ebd98bf7aec122c0"
+        }
+      }
+    },
+    {
+      "probe": "H0_TOS_532",
+      "seg": 100,
+      "start_frame": 9600,
+      "n_frames": 96,
+      "measured_at": "2026-10-28T16:31:26",
+      "ref_video": "data\\tears_of_steel\\output_1080p.mp4",
+      "input_video": "data\\tears_of_steel\\output_720p.mp4",
+      "input_size": [
+        1280,
+        532
+      ],
+      "target_size": [
+        1920,
+        800
+      ],
+      "ffmpeg": "E:\\dev\\tool\\ffmpeg-6.1.1-full_build-shared\\bin\\ffmpeg.exe",
+      "unsharp": "unsharp=5:5:0.8:5:5:0.0",
+      "means": {
+        "bicubic": 94.415,
+        "restore_unsharp": 99.0385,
+        "sr_x2_low": 95.3461,
+        "sr_x2_medium": 96.2429
+      },
+      "delta_vs_bicubic": {
+        "bicubic": 0.0,
+        "restore_unsharp": 4.6236,
+        "sr_x2_low": 0.9311,
+        "sr_x2_medium": 1.828
+      },
+      "gate": {
+        "go_threshold_delta": 1.0,
+        "go_arms": [
+          "restore_unsharp",
+          "sr_x2_medium"
+        ]
+      },
+      "methods": {
+        "bicubic": {
+          "kind": "ffmpeg_scale_bicubic_yuv"
+        },
+        "restore_unsharp": {
+          "kind": "bicubic+unsharp=5:5:0.8:5:5:0.0"
+        },
+        "sr_x2_low": {
+          "kind": "IMDN_RTC_low_x2_then_bicubic_800",
+          "weights": "player\\istream_player\\modules\\enhancer\\imdn_weight\\IMDN_low_bbb_x2.pth",
+          "weights_md5": "d50fc08af67481e7a5b4a1d3a7244188"
+        },
+        "sr_x2_medium": {
+          "kind": "IMDN_RTC_medium_x2_then_bicubic_800",
+          "weights": "player\\istream_player\\modules\\enhancer\\imdn_weight\\IMDN_medium_bbb_x2.pth",
+          "weights_md5": "9efe9e5ac3a17f60ebd98bf7aec122c0"
+        }
+      }
+    },
+    {
+      "probe": "H0_TOS_532",
+      "seg": 120,
+      "start_frame": 11520,
+      "n_frames": 96,
+      "measured_at": "2026-10-28T16:31:58",
+      "ref_video": "data\\tears_of_steel\\output_1080p.mp4",
+      "input_video": "data\\tears_of_steel\\output_720p.mp4",
+      "input_size": [
+        1280,
+        532
+      ],
+      "target_size": [
+        1920,
+        800
+      ],
+      "ffmpeg": "E:\\dev\\tool\\ffmpeg-6.1.1-full_build-shared\\bin\\ffmpeg.exe",
+      "unsharp": "unsharp=5:5:0.8:5:5:0.0",
+      "means": {
+        "bicubic": 94.5022,
+        "restore_unsharp": 97.6228,
+        "sr_x2_low": 95.6271,
+        "sr_x2_medium": 96.1133
+      },
+      "delta_vs_bicubic": {
+        "bicubic": 0.0,
+        "restore_unsharp": 3.1206,
+        "sr_x2_low": 1.1249,
+        "sr_x2_medium": 1.6111
+      },
+      "gate": {
+        "go_threshold_delta": 1.0,
+        "go_arms": [
+          "restore_unsharp",
+          "sr_x2_low",
+          "sr_x2_medium"
+        ]
+      },
+      "methods": {
+        "bicubic": {
+          "kind": "ffmpeg_scale_bicubic_yuv"
+        },
+        "restore_unsharp": {
+          "kind": "bicubic+unsharp=5:5:0.8:5:5:0.0"
+        },
+        "sr_x2_low": {
+          "kind": "IMDN_RTC_low_x2_then_bicubic_800",
+          "weights": "player\\istream_player\\modules\\enhancer\\imdn_weight\\IMDN_low_bbb_x2.pth",
+          "weights_md5": "d50fc08af67481e7a5b4a1d3a7244188"
+        },
+        "sr_x2_medium": {
+          "kind": "IMDN_RTC_medium_x2_then_bicubic_800",
+          "weights": "player\\istream_player\\modules\\enhancer\\imdn_weight\\IMDN_medium_bbb_x2.pth",
+          "weights_md5": "9efe9e5ac3a17f60ebd98bf7aec122c0"
+        }
+      }
+    },
+    {
+      "probe": "H0_TOS_532",
+      "seg": 140,
+      "start_frame": 13440,
+      "n_frames": 96,
+      "measured_at": "2026-10-28T16:32:33",
+      "ref_video": "data\\tears_of_steel\\output_1080p.mp4",
+      "input_video": "data\\tears_of_steel\\output_720p.mp4",
+      "input_size": [
+        1280,
+        532
+      ],
+      "target_size": [
+        1920,
+        800
+      ],
+      "ffmpeg": "E:\\dev\\tool\\ffmpeg-6.1.1-full_build-shared\\bin\\ffmpeg.exe",
+      "unsharp": "unsharp=5:5:0.8:5:5:0.0",
+      "means": {
+        "bicubic": 92.3658,
+        "restore_unsharp": 96.5664,
+        "sr_x2_low": 92.5108,
+        "sr_x2_medium": 93.4919
+      },
+      "delta_vs_bicubic": {
+        "bicubic": 0.0,
+        "restore_unsharp": 4.2006,
+        "sr_x2_low": 0.1449,
+        "sr_x2_medium": 1.126
+      },
+      "gate": {
+        "go_threshold_delta": 1.0,
+        "go_arms": [
+          "restore_unsharp",
+          "sr_x2_medium"
+        ]
+      },
+      "methods": {
+        "bicubic": {
+          "kind": "ffmpeg_scale_bicubic_yuv"
+        },
+        "restore_unsharp": {
+          "kind": "bicubic+unsharp=5:5:0.8:5:5:0.0"
+        },
+        "sr_x2_low": {
+          "kind": "IMDN_RTC_low_x2_then_bicubic_800",
+          "weights": "player\\istream_player\\modules\\enhancer\\imdn_weight\\IMDN_low_bbb_x2.pth",
+          "weights_md5": "d50fc08af67481e7a5b4a1d3a7244188"
+        },
+        "sr_x2_medium": {
+          "kind": "IMDN_RTC_medium_x2_then_bicubic_800",
+          "weights": "player\\istream_player\\modules\\enhancer\\imdn_weight\\IMDN_medium_bbb_x2.pth",
+          "weights_md5": "9efe9e5ac3a17f60ebd98bf7aec122c0"
+        }
+      }
+    }
+  ]
+}

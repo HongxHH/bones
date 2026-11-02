@@ -225,6 +225,8 @@ class OpenCVRenderer(Module, Renderer, PlayerEventListener):
         self.frame_sink = None
         self.base_sink = None
         self.frame_archive = None
+        self.frame_clock = None
+        self._clock_prev = None
         self._frame_in_segment = 0
         self._compare_lr = None
         self._compare_segment = None
@@ -427,10 +429,25 @@ class OpenCVRenderer(Module, Renderer, PlayerEventListener):
             await asyncio.sleep(sleep_time)
             self.last_render_time = next_render_time
 
+    def note_loop_block(self, row: dict) -> None:
+        clock = self.frame_clock
+        if clock is not None:
+            clock.write(row)
+
     async def _render_one_frame(self, surf):
         """渲染单帧"""
+        t_enter = time.perf_counter()
+        gap_ms = 0.0 if self._clock_prev is None else (t_enter - self._clock_prev) * 1000.0
+        t_wake = t_enter
+        t_conv = t_enter
+        t_base = t_enter
+        t_arch = t_enter
+        t_sink = t_enter
+        frame = None
+        shown_i = -1
         try:
             await self._wait_if_paused()
+            t_wake = time.perf_counter()
 
             # 将GPU表面数据下载到CPU
             if isinstance(surf, nvc.Surface):
@@ -464,18 +481,23 @@ class OpenCVRenderer(Module, Renderer, PlayerEventListener):
                 self.log.warning(f"Unknown surface type: {type(surf)}")
                 return
 
+            t_conv = time.perf_counter()
             # if self.frame_recorder:
             #     self.frame_recorder.submit(frame)
             index = self._frame_in_segment
+            shown_i = index
             baseline = self._baseline_bgr(index)
+            t_base = time.perf_counter()
             self._archive_frame(frame, baseline)
+            t_arch = time.perf_counter()
             if self.frame_sink is not None:
                 if compare_enabled(self.config) and self.base_sink is not None and baseline is not None:
                     # Only a real bicubic original goes to the left side.
                     # Repeating this frame made the wipe look unchanged.
                     self.base_sink.submit(baseline)
                 self.frame_sink.submit(frame)
-            elif getattr(self.config, "display_overlay", True):
+            t_sink = time.perf_counter()
+            if self.frame_sink is None and getattr(self.config, "display_overlay", True):
                 frame = self._add_overlay(frame)
             # if self.frame_recorder:
             #     self.frame_recorder.submit(frame)
@@ -502,8 +524,21 @@ class OpenCVRenderer(Module, Renderer, PlayerEventListener):
         except Exception as e:
             self.log.error(f"Error rendering frame: {e}")
         finally:
+            t_end = time.perf_counter()
+            self._clock_prev = t_end
+            self._write_frame_time(
+                shown_i,
+                gap_ms=gap_ms,
+                wait_ms=(t_wake - t_enter) * 1000.0,
+                convert_ms=(t_conv - t_wake) * 1000.0,
+                baseline_ms=(t_base - t_conv) * 1000.0,
+                archive_ms=(t_arch - t_base) * 1000.0,
+                sink_ms=(t_sink - t_arch) * 1000.0,
+                tail_ms=(t_end - t_sink) * 1000.0,
+            )
             # 清理临时变量，释放内存
-            del frame
+            if frame is not None:
+                del frame
 
     # 添加监听器方法 - 将监听器添加到监听器列表
     def add_listener(self, listener: PlayerEventListener):
@@ -769,6 +804,11 @@ class OpenCVRenderer(Module, Renderer, PlayerEventListener):
         fps = float(self.fps or 30)
         duration = float(self.task_total or 0)
         pts = max(segment - 1, 0) * duration + index / fps
+        scale = self._plain(getattr(self, "enhance_scale", None))
+        scale_label = f"x{int(scale)}" if isinstance(scale, (int, float)) and not isinstance(scale, bool) and scale > 0 else ""
+        model = ""
+        if self.config is not None:
+            model = str(getattr(self.config, "mod_enhancer", "") or "")
         archive.submit(
             frame,
             {
@@ -778,6 +818,9 @@ class OpenCVRenderer(Module, Renderer, PlayerEventListener):
                 "representation": self._plain(getattr(self, "current_segment_download_action", None)),
                 "enhance_level": self._plain(getattr(self, "current_segment_enhance_action", None)),
                 "enhanced": self._frame_was_enhanced(index),
+                "model": model,
+                "scale": scale_label,
+                "enhance_scale": scale if isinstance(scale, (int, float)) and not isinstance(scale, bool) else 0,
                 "has_baseline": baseline is not None,
                 "download_buffer_s": self._buffer_seconds(self.download_buffer),
                 "enhanced_ready_s": self._enhanced_ready_seconds(),
@@ -799,6 +842,33 @@ class OpenCVRenderer(Module, Renderer, PlayerEventListener):
             self.log.info("Frame archive -> %s", directory)
         except Exception as exc:
             self.log.warning("frame archive unavailable: %s", exc)
+        self._init_frame_clock(directory)
+
+    def _init_frame_clock(self, directory: str) -> None:
+        try:
+            from pathlib import Path
+
+            from .frame_clock import FrameClock
+
+            path = Path(directory) / "frame_times.jsonl"
+            self.frame_clock = FrameClock(path)
+            self.log.info("Frame clock -> %s", path)
+        except Exception as exc:
+            self.log.warning("frame clock unavailable: %s", exc)
+
+    def _write_frame_time(self, shown_i: int, **fields: float) -> None:
+        clock = self.frame_clock
+        if clock is None:
+            return
+        row = {
+            "kind": "frame",
+            "seg": int(getattr(self, "current_segment_index", 0) or 0),
+            "i": int(shown_i),
+            "buf_s": self._buffer_seconds(self.download_buffer),
+        }
+        for key, value in fields.items():
+            row[key] = round(float(value), 2)
+        clock.write(row)
 
     def _init_preview(self) -> None:
         if self.config is None or self.frame_sink is not None:
@@ -852,6 +922,9 @@ class OpenCVRenderer(Module, Renderer, PlayerEventListener):
         if self.frame_archive is not None:
             self.frame_archive.close()
             self.frame_archive = None
+        if self.frame_clock is not None:
+            self.frame_clock.close()
+            self.frame_clock = None
         if self.window_ok:
             cv2.destroyAllWindows()
 

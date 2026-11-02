@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import os
 import shutil
 from pathlib import Path
@@ -16,7 +17,11 @@ from ..runs import (
     attach_arm,
     create_run_from_spec,
     detach_arm,
+    delete_runs,
+    reconcile_dead_runs,
     prepare_run,
+    samples_show_playback_end,
+    schedule_finalize,
     stop_run,
 )
 from ..frames import (
@@ -30,6 +35,8 @@ from ..frames import (
 from ..preview import get_preview, put_preview
 from ..telemetry import (
     append_samples,
+    analyzer_report,
+    build_live_view,
     build_run_metrics,
     export_run_csv,
     iter_samples,
@@ -461,9 +468,22 @@ async def create_run(body: RunCreateBody, request: Request, background_tasks: Ba
     return run
 
 
+class RunDeleteBody(BaseModel):
+    ids: list[str]
+
+
+@router.post("/runs/delete")
+async def delete_runs_route(body: RunDeleteBody, request: Request) -> dict:
+    if not body.ids:
+        raise HTTPException(400, "ids required")
+    return await delete_runs(_state(request), body.ids)
+
+
 @router.get("/runs", response_model=list[ExperimentRun])
 async def list_runs(request: Request) -> list[ExperimentRun]:
-    return list(_state(request).runs.values())
+    state = _state(request)
+    reconcile_dead_runs(state)
+    return list(state.runs.values())
 
 
 @router.get("/runs/{run_id}", response_model=ExperimentRun)
@@ -502,7 +522,12 @@ async def run_detach_arm(run_id: str, arm_id: str, request: Request) -> Experime
         raise HTTPException(400, str(exc)) from exc
 
 
-@router.post("/runs/{run_id}/advance", response_model=ExperimentRun)
+@router.post(
+    "/runs/{run_id}/advance",
+    response_model=ExperimentRun,
+    deprecated=True,
+    summary="Unsupported: specs are single-arm; advance/parallel is not a Lab path",
+)
 async def run_advance(run_id: str, request: Request) -> ExperimentRun:
     try:
         return await advance_serial(_state(request), run_id, request=request)
@@ -530,7 +555,7 @@ async def post_telemetry(body: TelemetryBody, request: Request) -> dict:
     if not samples:
         raise HTTPException(400, "samples or sample required")
     try:
-        return append_samples(
+        result = append_samples(
             state,
             run_id=body.run_id,
             arm_id=body.arm_id,
@@ -539,6 +564,15 @@ async def post_telemetry(body: TelemetryBody, request: Request) -> dict:
         )
     except ValueError as exc:
         raise HTTPException(400, str(exc)) from exc
+    # Player finished the video. Do not wait or kill here: this POST is the
+    # player's own request, and it still has to leave cleanup and write the file.
+    if samples_show_playback_end(samples):
+        run = state.runs.get(body.run_id)
+        if run is not None and run.status == RunStatus.RUNNING:
+            schedule_finalize(state, body.run_id, ask_stop=False)
+            result = dict(result)
+            result["run_status"] = "finishing"
+    return result
 
 
 @router.post("/preview")
@@ -617,7 +651,9 @@ async def get_frame(run_id: str, frame: int, request: Request, arm_id: str) -> d
     row = None if storage == "none" else read_frame(root, frame)
     if row is None:
         raise HTTPException(404, "frame not found")
-    return row
+    from ..metrics.bundle import annotate_frame_quality
+
+    return annotate_frame_quality(state, run, row)
 
 
 @router.get("/runs/{run_id}/frames/{frame}/image")
@@ -659,17 +695,52 @@ async def get_run_telemetry(run_id: str, request: Request, arm_id: Optional[str]
     return {"run_id": run_id, "series": series}
 
 
+@router.get("/runs/{run_id}/live")
+async def get_run_live(
+    run_id: str,
+    request: Request,
+    arm_id: Optional[str] = None,
+    limit: int = 120,
+) -> dict:
+    """Tail samples and scalar summary. Does not assemble a metrics bundle or write the run."""
+    state = _state(request)
+    run = state.runs.get(run_id)
+    if run is None:
+        raise HTTPException(404, "run not found")
+    if limit < 1:
+        limit = 1
+    if limit > 500:
+        limit = 500
+    try:
+        return build_live_view(state, run, arm_id=arm_id, limit=limit)
+    except ValueError as exc:
+        raise HTTPException(404, str(exc)) from exc
+
+
+@router.get("/runs/{run_id}/analyzer")
+async def get_run_analyzer(run_id: str, request: Request) -> dict:
+    """Player end-of-run report, without the raw segment trace."""
+    state = _state(request)
+    run = state.runs.get(run_id)
+    if run is None:
+        raise HTTPException(404, "run not found")
+    return analyzer_report(state, run)
+
+
 @router.get("/runs/{run_id}/metrics")
 async def get_run_metrics(run_id: str, request: Request, persist: bool = False) -> dict:
     state = _state(request)
     run = state.runs.get(run_id)
     if run is None:
         raise HTTPException(404, "run not found")
-    metrics = persist_run_metrics(state, run) if persist else build_run_metrics(state, run)
-    run.metrics = metrics
-    for arm in run.arms:
-        arm.metrics = (metrics.get("arms") or {}).get(arm.id) or {}
-    await state.update_run(run)
+    # Full bundle (catalog / optional compute) stays off the event loop.
+    builder = persist_run_metrics if persist else build_run_metrics
+    metrics = await asyncio.to_thread(builder, state, run)
+    if persist:
+        run.metrics = metrics
+        for arm in run.arms:
+            arm.metrics = (metrics.get("arms") or {}).get(arm.id) or {}
+        await state.update_run(run)
     return metrics
 
 
@@ -694,6 +765,13 @@ async def export_run(run_id: str, request: Request, format: str = "csv") -> Resp
 async def create_run_for_experiment(experiment_id: str, body: RunCreateBody, request: Request) -> ExperimentRun:
     body.experiment_id = experiment_id
     return await create_run(body, request)
+
+
+@router.get("/workspaces")
+async def get_workspaces() -> dict:
+    from ..workspaces import list_workspaces
+
+    return {"workspaces": list_workspaces()}
 
 
 @router.get("/specs/options")

@@ -1,0 +1,30 @@
+{
+  "built_at": "2026-10-29T09:49:47",
+  "video": "bbb",
+  "trace": "0921",
+  "note": "kappa sweep; compare to canonical d5_bbb_0921 ours/no_slack",
+  "rows": [
+    {
+      "kappa": 0.0,
+      "returncode": 0,
+      "duration_s": 799.8,
+      "ok": true,
+      "QOE": 60.82255328343035,
+      "dur_stall": 26.388990879058838,
+      "avg_vmaf": 71.77048082949344,
+      "fast_complete_segments": 1,
+      "result_file": "player/output/data/d5/bbb_0921_kappa_0p0/tool_greedy_multitask_fast-True_video-bbb_trace-report.2010-09-21_0742CEST_20261029-093628.json"
+    },
+    {
+      "kappa": 0.5,
+      "returncode": 0,
+      "duration_s": 798.3,
+      "ok": true,
+      "QOE": 58.38368623639102,
+      "dur_stall": 24.899346113204956,
+      "avg_vmaf": 70.72954452508709,
+      "fast_complete_segments": 4,
+      "result_file": "player/output/data/d5/bbb_0921_kappa_0p5/tool_greedy_multitask_fast-True_video-bbb_trace-report.2010-09-21_0742CEST_20261029-094947.json"
+    }
+  ]
+}

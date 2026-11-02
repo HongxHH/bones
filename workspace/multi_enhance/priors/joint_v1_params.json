@@ -1,0 +1,79 @@
+{
+  "_metadata": {
+    "title": "pref_joint v1 default parameters",
+    "date": "2026-10-29",
+    "doc": "workspace/multi_enhance/docs/PARAMS_JOINT_V1.md",
+    "note": "Enumerated joint score; FC not in planner; floors are interim until latency table is honest"
+  },
+  "defaults": {
+    "user_courage": "balanced",
+    "user_taste": "balanced"
+  },
+  "constants": {
+    "enhance_safety": 0.9,
+    "enhance_max_seg": 1.5,
+    "bw_floor_bps": 50000,
+    "risk_scale": 10.0,
+    "first_segment_force_none": true
+  },
+  "courage": {
+    "conservative": {
+      "danger_seg": 2.0,
+      "relax_seg": 0.0,
+      "risk_weight": 1.0
+    },
+    "balanced": {
+      "danger_seg": 1.0,
+      "relax_seg": 0.25,
+      "risk_weight": 0.5
+    },
+    "aggressive": {
+      "danger_seg": 0.5,
+      "relax_seg": 0.5,
+      "risk_weight": 0.2
+    }
+  },
+  "taste_bonus": {
+    "balanced": {
+      "sr": 0.0,
+      "restore": 0.0,
+      "none": 0.0
+    },
+    "sharp": {
+      "sr": 3.0,
+      "restore": 0.0,
+      "none": 0.0
+    },
+    "clean": {
+      "sr": 0.0,
+      "restore": 4.0,
+      "none": 0.0
+    }
+  },
+  "tool_kind": {
+    "0": "none",
+    "1": "sr",
+    "2": "sr",
+    "3": "sr",
+    "4": "sr",
+    "5": "restore"
+  },
+  "plan_floor_s": {
+    "0": 0.0,
+    "1": 0.4,
+    "2": 0.8,
+    "3": 2.0,
+    "4": 1.2,
+    "5": 0.3
+  },
+  "score": {
+    "formula": "Q[d,t] + taste_bonus(kind[t]) - risk_weight * tightness * risk_scale",
+    "tightness": "(download_s + enhance_s) / max(budget_s, 1e-3)",
+    "budget_s": "(buff_down_s - buff_enh_s) - danger_seg*T_seg + relax_seg*T_seg",
+    "enhance_s": "max(T[d,t]/enhance_safety, plan_floor_s[t])",
+    "tie_break": [
+      "lower_download",
+      "lighter_tool"
+    ]
+  }
+}

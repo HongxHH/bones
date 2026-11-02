@@ -119,42 +119,6 @@
       font-size: 14px;
     }
 
-    .toolbar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 16px;
-    }
-
-    button.action {
-      font: inherit;
-      font-weight: 600;
-      border: 0;
-      background: var(--accent);
-      color: #fff;
-      padding: 10px 16px;
-      cursor: pointer;
-    }
-
-    button.action:hover {
-      background: var(--accent-2);
-    }
-
-    button.action.ghost {
-      background: transparent;
-      color: var(--ink);
-      outline: 1px solid var(--line);
-    }
-
-    button.action.ghost:hover {
-      background: rgba(13, 110, 106, 0.08);
-    }
-
-    button.action:disabled {
-      opacity: 0.5;
-      cursor: wait;
-    }
-
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -233,6 +197,14 @@
       font-size: 14px;
     }
 
+    .status-line.is-ok {
+      margin-bottom: 10px;
+    }
+
+    .status-line.is-ok #conn {
+      display: none;
+    }
+
     .dot {
       width: 9px;
       height: 9px;
@@ -298,22 +270,27 @@
 
     details.sec>summary {
       list-style: none;
+      display: block;
+      padding: 0;
+      cursor: pointer;
+      user-select: none;
+      color: var(--ink);
+    }
+
+    details.sec>summary .sec-row {
       display: flex;
       align-items: center;
       gap: 10px;
       padding: 9px 12px;
-      cursor: pointer;
-      user-select: none;
       font-weight: 650;
       font-size: 13px;
-      color: var(--ink);
     }
 
     details.sec>summary::-webkit-details-marker {
       display: none;
     }
 
-    details.sec>summary::before {
+    details.sec>summary .sec-row::before {
       content: "";
       flex: 0 0 auto;
       width: 0;
@@ -324,7 +301,7 @@
       opacity: 0.75;
     }
 
-    details.sec[open]>summary::before {
+    details.sec[open]>summary .sec-row::before {
       border-left: 4px solid transparent;
       border-right: 4px solid transparent;
       border-top: 5px solid var(--muted);
@@ -349,6 +326,291 @@
 
     details.sec[open]>summary .sec-aside {
       display: none;
+    }
+
+    .report {
+      margin-top: 12px;
+    }
+
+    .report h2 {
+      margin: 14px 0 8px;
+      font-size: 13px;
+      font-weight: 650;
+    }
+
+    .report table {
+      margin-bottom: 8px;
+    }
+
+    details.report-fold {
+      margin: 10px 0 0;
+    }
+
+    details.report-fold>.sec-body.report {
+      margin-top: 0;
+      padding-top: 10px;
+    }
+
+    #playbackReport:empty,
+    #playbackReport[hidden] {
+      display: none;
+    }
+
+    .seg-open {
+      font: inherit;
+      font-size: 13px;
+      font-weight: 650;
+      margin: 4px 0 10px;
+      padding: 6px 12px;
+      border: 1px solid var(--line);
+      background: transparent;
+      color: var(--ink);
+      cursor: pointer;
+    }
+
+    .seg-open:hover {
+      background: rgba(13, 110, 106, 0.08);
+    }
+
+    #segmentDialog {
+      width: min(1080px, calc(100vw - 24px));
+      max-height: calc(100vh - 24px);
+      padding: 0;
+      border: 1px solid var(--line);
+      background: var(--paper, #f7fafb);
+      color: var(--ink);
+    }
+
+    #segmentDialog::backdrop {
+      background: rgba(14, 26, 34, 0.45);
+    }
+
+    .seg-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .seg-head strong {
+      font-size: 15px;
+    }
+
+    .seg-head button {
+      margin-left: auto;
+      font: inherit;
+      font-size: 13px;
+      border: 1px solid var(--line);
+      background: transparent;
+      padding: 4px 10px;
+      cursor: pointer;
+    }
+
+    .seg-filters {
+      display: flex;
+      gap: 6px;
+      padding: 10px 14px;
+    }
+
+    .seg-filters button {
+      font: inherit;
+      font-size: 12px;
+      border: 1px solid var(--line);
+      background: transparent;
+      padding: 4px 8px;
+      cursor: pointer;
+    }
+
+    .seg-filters button.is-on {
+      background: var(--accent, #0d6e6a);
+      color: #fff;
+      border-color: transparent;
+    }
+
+    .seg-scroll {
+      overflow: auto;
+      max-height: calc(100vh - 140px);
+      padding: 0 14px 14px;
+    }
+
+    .seg-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    .seg-table th,
+    .seg-table td {
+      padding: 6px 8px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    .seg-table th {
+      position: sticky;
+      top: 0;
+      background: var(--paper, #f7fafb);
+      color: var(--muted);
+      font-weight: 650;
+    }
+
+    .hist-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 0 0 8px;
+      font-size: 13px;
+      flex-wrap: wrap;
+    }
+
+    .hist-bar button {
+      font: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      border: 0;
+      background: transparent;
+      padding: 4px 0;
+      cursor: pointer;
+    }
+
+    #histCompare {
+      color: var(--accent-2);
+    }
+
+    #histCompare:disabled {
+      opacity: 0.4;
+      cursor: default;
+    }
+
+    #histDelete,
+    #histConfirmYes {
+      color: var(--bad);
+    }
+
+    #histConfirmNo {
+      color: var(--muted);
+      margin-left: 8px;
+    }
+
+    #comparePanel {
+      margin: 0 0 12px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+    }
+
+    #comparePanel[hidden] {
+      display: none;
+    }
+
+    .compare-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .compare-head strong {
+      font-size: 13px;
+      font-weight: 650;
+    }
+
+    .compare-head button {
+      font: inherit;
+      font-size: 12px;
+      font-weight: 650;
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .compare-head button:hover {
+      color: var(--ink);
+    }
+
+    #compareBody {
+      padding: 8px 12px 12px;
+      overflow: auto;
+    }
+
+    table.compare {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      background: transparent;
+      border: 0;
+    }
+
+    table.compare th,
+    table.compare td {
+      text-align: left;
+      padding: 6px 8px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+
+    table.compare th {
+      font-size: 11px;
+      font-weight: 650;
+      color: var(--muted);
+      text-transform: none;
+      letter-spacing: 0;
+    }
+
+    table.compare th.mono,
+    table.compare td.mono {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 11px;
+    }
+
+    table.compare tr.is-section td {
+      padding-top: 12px;
+      font-weight: 650;
+      color: var(--muted);
+      border-bottom: 0;
+      font-size: 11px;
+      letter-spacing: 0.04em;
+    }
+
+    table.compare td.is-diff {
+      background: rgba(180, 83, 9, 0.1);
+      color: var(--warn);
+      font-weight: 650;
+    }
+
+    #compareMsg {
+      margin: 0;
+      padding: 0 12px 10px;
+    }
+
+    #compareMsg:empty {
+      display: none;
+    }
+
+    tr.hist-row {
+      cursor: pointer;
+    }
+
+    td.hist-pick {
+      width: 28px;
+      cursor: default;
+    }
+
+    tr.hist-row.is-open td {
+      background: rgba(13, 110, 106, 0.06);
+    }
+
+    tr.hist-row.is-observing td {
+      box-shadow: inset 3px 0 0 var(--accent);
+    }
+
+    .hist-report {
+      padding: 4px 0 8px;
     }
 
     .sec-body {
@@ -425,6 +687,16 @@
       color: var(--bad);
     }
 
+    #telemWarn[hidden] {
+      display: none;
+    }
+
+    #telemWarn {
+      font-size: 12px;
+      color: var(--warn);
+      font-weight: 600;
+    }
+
     .monitor {
       margin: 0 0 10px;
     }
@@ -441,6 +713,38 @@
       font-weight: 650;
       font-size: 13px;
       color: var(--ink);
+    }
+
+    #monitorContext {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      text-align: right;
+      font-size: 12px;
+    }
+
+    .hist-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0 0 10px;
+    }
+
+    .hist-actions button {
+      font: inherit;
+      font-size: 12px;
+      font-weight: 650;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+
+    .hist-actions button:hover {
+      background: rgba(13, 110, 106, 0.08);
+      border-color: rgba(13, 110, 106, 0.35);
     }
 
     .timeline {
@@ -499,6 +803,15 @@
       margin: 0;
     }
 
+    #frameMeta[hidden] {
+      display: none;
+    }
+
+    .meter.is-sys[hidden],
+    #valSysExtra[hidden] {
+      display: none;
+    }
+
     .pipeline {
       display: flex;
       flex-direction: column;
@@ -526,6 +839,111 @@
       border-top: 1px solid var(--line);
       font-size: 12px;
       color: var(--muted);
+    }
+
+    .scoreboard {
+      margin: 0 0 10px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      padding: 14px 14px 12px;
+    }
+
+    .score-groups {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .score-group-label {
+      margin: 0 0 8px;
+      font-size: 12px;
+      font-weight: 650;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+    }
+
+    .score-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(168px, 1fr));
+      gap: 10px;
+    }
+
+    .score-card {
+      min-height: 78px;
+      padding: 10px 14px 12px;
+      border: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .score-card .k {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 12px;
+      font-weight: 650;
+      color: var(--muted);
+    }
+
+    .score-card .v {
+      display: block;
+      font-family: "Cascadia Mono", "JetBrains Mono", "Segoe UI", sans-serif;
+      font-variant-numeric: tabular-nums;
+      font-size: 28px;
+      font-weight: 560;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      color: var(--ink);
+    }
+
+    .score-card .u {
+      margin-left: 4px;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0;
+      color: var(--muted);
+    }
+
+    .score-card.is-empty .v {
+      color: var(--muted);
+    }
+
+    .score-lead {
+      border-color: rgba(13, 110, 106, 0.45);
+      box-shadow: inset 3px 0 0 var(--accent);
+    }
+
+    .score-lead .v {
+      color: var(--accent-2);
+    }
+
+    .scoreboard .quiet {
+      margin: 12px 0 0;
+    }
+
+    .scoreboard.is-pending {
+      padding: 10px 14px;
+    }
+
+    .score-pending {
+      margin: 0;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    body.in-shell .scoreboard {
+      padding: 10px 10px 8px;
+    }
+
+    body.in-shell .scoreboard.is-pending {
+      padding: 8px 10px;
+    }
+
+    body.in-shell .score-card {
+      min-height: 64px;
+      padding: 8px 10px;
+    }
+
+    body.in-shell .score-card .v {
+      font-size: 22px;
     }
 
     .meter-head {
@@ -640,18 +1058,6 @@
       width: 100%;
       height: 44px;
       display: block;
-    }
-
-    .nav-fold {
-      margin-top: 18px;
-      color: var(--muted);
-      font-weight: 600;
-      font-size: 12px;
-      letter-spacing: 0.06em;
-    }
-
-    #moreNav[hidden] {
-      display: none;
     }
 
     .quiet {
@@ -834,38 +1240,10 @@
 
     body.in-shell .shell {
       grid-template-columns: 1fr;
-      grid-template-rows: auto 1fr;
+      grid-template-rows: 1fr;
     }
 
     body.in-shell nav {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 10px 16px;
-      border-right: 0;
-      border-bottom: 1px solid var(--line);
-    }
-
-    body.in-shell .brand {
-      font-size: 18px;
-      margin: 0 10px 0 0;
-    }
-
-    body.in-shell .nav-btn {
-      width: auto;
-      margin: 0;
-    }
-
-    body.in-shell .nav-fold {
-      margin: 0 0 0 auto;
-    }
-
-    body.in-shell #moreNav {
-      display: flex;
-      gap: 6px;
-    }
-
-    body.in-shell #moreNav[hidden] {
       display: none;
     }
 
@@ -882,11 +1260,6 @@
       display: none;
     }
 
-    body.in-shell .toolbar {
-      gap: 6px;
-      margin-bottom: 10px;
-    }
-
     body.in-shell .control-bar {
       margin-bottom: 8px;
     }
@@ -894,10 +1267,6 @@
     body.in-shell .run-btn {
       padding: 7px 12px;
       font-size: 12px;
-    }
-
-    body.in-shell button.action {
-      padding: 8px 12px;
     }
 
     body.in-shell .timeline {
@@ -911,6 +1280,17 @@
     body.in-shell .monitor-head {
       margin-bottom: 6px;
     }
+
+    body.in-shell #timeline {
+      display: none;
+    }
+
+    body.in-shell[data-state="idle"] .scoreboard,
+    body.in-shell[data-state="idle"] .monitor-head,
+    body.in-shell[data-state="idle"] #pipeline .meter:not(.is-sys),
+    body.in-shell[data-state="idle"] #valRebuffer {
+      display: none;
+    }
   </style>
 </head>
 
@@ -918,13 +1298,7 @@
   <div class="shell">
     <nav>
       <p class="brand">Prism<span>.</span></p>
-      <button type="button" class="nav-btn active" data-panel="library">素材</button>
-      <button type="button" class="nav-btn" data-panel="experiments">实验</button>
-      <button type="button" class="nav-btn nav-fold" id="btnMore">更多</button>
-      <div id="moreNav" hidden>
-        <button type="button" class="nav-btn" data-panel="jobs">任务</button>
-        <button type="button" class="nav-btn" data-panel="system">系统</button>
-      </div>
+      <button type="button" class="nav-btn active" data-panel="experiments">实验</button>
     </nav>
     <main>
       <div class="status-line">
@@ -932,20 +1306,7 @@
         <span id="conn">检查控制面…</span>
       </div>
 
-      <section class="panel active" id="panel-library">
-        <h1>素材</h1>
-        <div class="toolbar">
-          <button type="button" class="action" id="btnBbb">导入 BBB</button>
-        </div>
-        <div id="homeMsg"></div>
-        <div id="libPubs"></div>
-        <details class="fold">
-          <summary>素材文件</summary>
-          <div class="fold-body" id="libAssets"></div>
-        </details>
-      </section>
-
-      <section class="panel" id="panel-experiments">
+      <section class="panel active" id="panel-experiments">
         <h1>实验</h1>
 
         <!-- A. 控制条 -->
@@ -954,18 +1315,26 @@
             <button type="button" class="run-btn run-start" id="btnStartRun">开始</button>
             <button type="button" class="run-btn run-stop" id="btnStopRun" disabled>停止</button>
           </div>
-          <span class="run-status" id="runStatus">就绪</span>
+          <span class="run-status" id="runStatus" title="">就绪</span>
+          <span id="telemWarn" hidden>遥测暂时中断</span>
         </div>
         <div id="runMsg"></div>
 
         <!-- B. 配方 -->
         <details class="sec" id="recipePanel" open>
           <summary>
-            <span class="sec-title">配方</span>
-            <span class="sec-aside" id="recipeSummary">—</span>
+            <span class="sec-row">
+              <span class="sec-title" id="recipeTitle">配方</span>
+              <span class="sec-aside" id="recipeSummary">—</span>
+            </span>
           </summary>
           <div class="sec-body">
             <div class="recipe-grid">
+              <div class="field span-2">
+                <label for="fldWorkspace">工作区</label>
+                <select id="fldWorkspace"></select>
+                <span class="field-hint" id="workspaceHint" hidden></span>
+              </div>
               <div class="field span-2">
                 <label for="fldContent">内容</label>
                 <select id="fldContent"></select>
@@ -1010,22 +1379,29 @@
         <div class="monitor" id="monitor">
           <div class="monitor-head">
             <span class="monitor-label">观测</span>
+            <span class="quiet" id="monitorContext" title=""></span>
           </div>
+
+          <section class="scoreboard" aria-label="本次指标" hidden>
+            <div id="qualityFoot"></div>
+            <p class="quiet" id="qualityNote" hidden></p>
+            <div class="report" id="playbackReport" hidden></div>
+          </section>
 
           <div class="timeline" id="timeline">
             <div class="tl-top">
               <span class="quiet">时间轴</span>
               <div class="tl-actions">
                 <button type="button" id="btnLive">直播</button>
-                <button type="button" id="btnKeepFrames">保留</button>
+                <button type="button" id="btnKeepFrames" title="把当前内存中的帧归档到磁盘，便于事后回看">保留</button>
               </div>
             </div>
             <input id="frameSlider" type="range" min="0" max="0" value="0" disabled />
-            <p class="quiet" id="frameMeta">—</p>
+            <p class="quiet" id="frameMeta" hidden>—</p>
           </div>
 
           <div class="pipeline" id="pipeline">
-            <div class="meter">
+            <div class="meter is-dup">
               <div class="meter-head"><span class="meter-name">下载缓冲</span><b class="meter-value" id="valDown">—</b>
               </div>
               <canvas class="spark" id="chartDown" width="480" height="64"></canvas>
@@ -1046,15 +1422,15 @@
               <div class="inv-panel" id="invReady" hidden></div>
               <canvas class="spark" id="chartReady" width="480" height="64"></canvas>
             </div>
-            <div class="meter">
+            <div class="meter is-dup">
               <div class="meter-head"><span class="meter-name">下载带宽</span><b class="meter-value" id="valBw">—</b></div>
               <canvas class="spark" id="chartBw" width="480" height="64"></canvas>
             </div>
-            <div class="meter">
+            <div class="meter is-sys" id="meterCpu">
               <div class="meter-head"><span class="meter-name">CPU</span><b class="meter-value" id="valCpu">—</b></div>
               <canvas class="spark" id="chartCpu" width="480" height="64"></canvas>
             </div>
-            <div class="meter">
+            <div class="meter is-sys" id="meterGpu">
               <div class="meter-head"><span class="meter-name">GPU</span><b class="meter-value" id="valGpu">—</b></div>
               <canvas class="spark" id="chartGpu" width="480" height="64"></canvas>
             </div>
@@ -1068,33 +1444,51 @@
         <!-- D. 历史 -->
         <details class="sec" id="historyPanel">
           <summary>
-            <span class="sec-title">历史</span>
-            <span class="sec-aside" id="historySummary">—</span>
+            <span class="sec-row">
+              <span class="sec-title">历史</span>
+            </span>
           </summary>
           <div class="sec-body">
+            <div class="hist-bar" id="histBar" hidden>
+              <span id="histCount">已选 0 项</span>
+              <button type="button" id="histCompare" disabled title="请选 2～4 项">对比</button>
+              <button type="button" id="histDelete">删除所选</button>
+              <span id="histConfirm" hidden>
+                <span id="histConfirmText"></span>
+                <button type="button" id="histConfirmYes">确认删除</button>
+                <button type="button" id="histConfirmNo">取消</button>
+              </span>
+              <span class="quiet" id="histMsg"></span>
+            </div>
+            <div id="comparePanel" hidden>
+              <div class="compare-head">
+                <strong>对比</strong>
+                <button type="button" id="compareClose">关闭</button>
+              </div>
+              <div id="compareBody"></div>
+              <p class="quiet" id="compareMsg"></p>
+            </div>
             <div id="runList"></div>
-            <div id="expList" style="margin-top:12px"></div>
           </div>
         </details>
       </section>
 
-      <section class="panel" id="panel-jobs">
-        <h1>任务</h1>
-        <div id="jobList"></div>
-      </section>
-
-      <section class="panel" id="panel-system">
-        <h1>系统</h1>
-        <p class="hint" id="sysHint" hidden>控制面健康、路径与默认 Preset。</p>
-        <details class="fold" open>
-          <summary>状态</summary>
-          <div class="fold-body">
-            <pre id="sysPre">{}</pre>
-          </div>
-        </details>
-      </section>
     </main>
   </div>
+  <dialog id="segmentDialog">
+    <div class="seg-head">
+      <strong>分段明细</strong>
+      <span class="quiet" id="segmentCount"></span>
+      <button type="button" id="segmentClose">关闭</button>
+    </div>
+    <div class="seg-filters">
+      <button type="button" data-seg-filter="all" class="is-on">全部</button>
+      <button type="button" data-seg-filter="abort">只看中止</button>
+      <button type="button" data-seg-filter="fast">只看 fast-complete</button>
+      <button type="button" data-seg-filter="incomplete">只看未完成</button>
+    </div>
+    <div class="seg-scroll" id="segmentTable"></div>
+  </dialog>
   <script src="/lab/static/metrics.js"></script>
   <script>
     const API = "/v1";
@@ -1103,6 +1497,7 @@
     const $ = (id) => document.getElementById(id);
     if (IN_SHELL) {
       document.body.classList.add("in-shell");
+      document.body.dataset.state = document.body.dataset.state || "idle";
       document.querySelectorAll(".nav-btn[data-panel]").forEach((b) => b.classList.remove("active"));
       document.querySelectorAll(".panel").forEach((p) => p.classList.remove("active"));
       document.querySelector('[data-panel="experiments"]').classList.add("active");
@@ -1111,7 +1506,29 @@
 
     function setConn(ok, text) {
       $("dot").className = "dot" + (ok ? " ok" : " bad");
-      $("conn").textContent = text;
+      const conn = $("conn");
+      const line = document.querySelector(".status-line");
+      if (conn) {
+        conn.textContent = ok ? "" : String(text || "控制面不可用");
+        conn.hidden = !!ok;
+      }
+      if (line) line.classList.toggle("is-ok", !!ok);
+    }
+
+    function setFrameMeta(text, title) {
+      const meta = $("frameMeta");
+      if (!meta) return;
+      const t = text == null ? "" : String(text).trim();
+      const empty = !t || t === "—";
+      meta.textContent = empty ? "—" : t;
+      meta.hidden = empty;
+      meta.title = title || (empty ? "" : t);
+    }
+
+    function setSysMetersVisible(_on) {
+      if ($("meterCpu")) $("meterCpu").hidden = false;
+      if ($("meterGpu")) $("meterGpu").hidden = false;
+      if ($("valSysExtra")) $("valSysExtra").hidden = false;
     }
 
     async function api(path, opts) {
@@ -1128,43 +1545,28 @@
       return data;
     }
 
-    function table(headers, rows) {
-      if (!rows.length) return '<p class="hint">暂无数据</p>';
-      const head = headers.map((h) => `<th>${h}</th>`).join("");
-      const body = rows.map((r) => `<tr>${r.map((c) => `<td>${c}</td>`).join("")}</tr>`).join("");
-      return `<table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table>`;
-    }
-
     function esc(s) {
       return String(s ?? "").replace(/[&<>"']/g, (ch) => ({
         "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
       })[ch]);
     }
 
-    async function loadLibrary() {
-      const [pubs, assets] = await Promise.all([api("/publications"), api("/assets")]);
-      $("libPubs").innerHTML = table(
-        ["id", "title", "mpd", ""],
-        (pubs || []).map((p) => [
-          `<span class="mono">${esc(p.id)}</span>`,
-          esc(p.title || ""),
-          esc(p.mpd_name || ""),
-          `<a href="/v1/publications/${esc(p.id)}/play" target="_blank">play</a>`,
-        ])
-      );
-      $("libAssets").innerHTML = table(
-        ["id", "name", "kind", "path"],
-        (assets || []).map((a) => [
-          `<span class="mono">${esc(a.id)}</span>`,
-          esc(a.name),
-          esc(a.kind),
-          `<span class="mono">${esc(a.source_path)}</span>`,
-        ])
-      );
-    }
-
     let currentRunId = null;
+    let currentRunSpec = null;
+    let currentRunCollectSys = false;
+    let lastStartedSpec = null;
+    let telemetryFailStreak = 0;
     let telemetryTimer = null;
+    let telemetryInFlight = false;
+    let sparkRunId = null;
+    let sparkSamples = [];
+    let sparkFullLoaded = false;
+    let sparkSealed = false;
+    let sparkLoad = null;
+    let qualityMetrics = null;
+    let qualityRunId = null;
+    let qualityInflight = null;
+    let lastFrameCount = -1;
     let timeline = { runId: null, armId: null, arms: [], totals: {}, storage: "", timer: null };
 
     function drawSpark(canvasId, values, color) {
@@ -1223,13 +1625,105 @@
       });
     }
 
+    async function loadFinalMetrics(runId) {
+      if (!runId) return qualityMetrics;
+      if (qualityRunId === runId && qualityMetrics) return qualityMetrics;
+      if (qualityInflight && qualityInflight.id === runId) return qualityInflight.promise;
+      const promise = api(`/runs/${runId}/metrics`).then((metrics) => {
+        if (currentRunId !== runId) return metrics;
+        qualityRunId = runId;
+        qualityMetrics = metrics;
+        return metrics;
+      }).finally(() => {
+        if (qualityInflight && qualityInflight.promise === promise) qualityInflight = null;
+      });
+      qualityInflight = { id: runId, promise };
+      return promise;
+    }
+
+    function drawSparks(samples) {
+      const rows = samples || [];
+      drawSpark("chartDown", rows.map((s) => Number(s.download_buffer_s || 0)), "#0d6e6a");
+      drawSpark(
+        "chartReady",
+        rows.map((s) => Number(s.enhanced_ready_s != null ? s.enhanced_ready_s : 0)),
+        "#0a5552",
+      );
+      drawSpark(
+        "chartPending",
+        rows.map((s) => Number(M.pendingEnhanceS(s) || 0)),
+        "#b45309",
+      );
+      drawSpark("chartBw", rows.map((s) => Number(s.bandwidth_bps || 0) / 1e6), "#5a6b76");
+      drawSpark("chartCpu", rows.map((s) => Number(s.cpu_pct != null ? s.cpu_pct : 0)), "#0d6e6a");
+      drawSpark("chartGpu", rows.map((s) => Number(s.gpu_util_pct != null ? s.gpu_util_pct : 0)), "#b45309");
+    }
+
+    function clearSparks() {
+      sparkRunId = null;
+      sparkSamples = [];
+      sparkFullLoaded = false;
+      sparkSealed = false;
+      sparkLoad = null;
+      drawSparks([]);
+    }
+
+    function adoptSparkRun(runId) {
+      if (sparkRunId === runId) return;
+      sparkRunId = runId;
+      sparkSamples = [];
+      sparkFullLoaded = false;
+      sparkSealed = false;
+      sparkLoad = null;
+    }
+
+    function mergeSparkSamples(rows) {
+      if (!rows || !rows.length) return;
+      const seen = new Set(sparkSamples.map((row) => row && row.ts));
+      let added = false;
+      for (const row of rows) {
+        if (!row || row.ts == null || seen.has(row.ts)) continue;
+        seen.add(row.ts);
+        sparkSamples.push(row);
+        added = true;
+      }
+      if (added) sparkSamples.sort((a, b) => Number(a.ts) - Number(b.ts));
+    }
+
+    async function loadFullSparks(runId, armId, seal) {
+      if (!runId) return;
+      adoptSparkRun(runId);
+      if (seal && sparkSealed) return;
+      if (!seal && sparkFullLoaded) return;
+      if (sparkLoad) return sparkLoad;
+      const q = armId ? `?arm_id=${encodeURIComponent(armId)}&limit=0` : "?limit=0";
+      sparkLoad = api(`/runs/${runId}/telemetry${q}`).then((page) => {
+        if (sparkRunId !== runId) return;
+        const series = (page && page.series) || {};
+        const rows = (armId && series[armId]) || series[Object.keys(series)[0]] || [];
+        const extra = sparkSamples.slice();
+        sparkSamples = [];
+        mergeSparkSamples(rows);
+        mergeSparkSamples(extra);
+        sparkFullLoaded = true;
+        if (seal) sparkSealed = true;
+        drawSparks(sparkSamples);
+      }).finally(() => {
+        sparkLoad = null;
+      });
+      return sparkLoad;
+    }
+
     async function refreshTelemetry() {
-      if (!currentRunId) return;
+      if (!currentRunId || telemetryInFlight) return;
+      telemetryInFlight = true;
       try {
-        const run = await api("/runs/" + currentRunId);
-        const armId = run.active_arm_id || (run.arms && run.arms[0] && run.arms[0].id);
-        const tel = await api(`/runs/${currentRunId}/telemetry?limit=120` + (armId ? `&arm_id=${armId}` : ""));
-        const samples = (tel.series && armId && tel.series[armId]) || [];
+        const live = await api(`/runs/${currentRunId}/live?limit=120`);
+        setRunControls(live.status || "idle");
+        const running = live.status === "running" || live.status === "preparing";
+        if (!running) setTelemetryPolling(false);
+        const armId = live.arm_id || live.active_arm_id || (live.arms && live.arms[0] && live.arms[0].id);
+        const samples = live.samples || [];
         const last = samples.length ? samples[samples.length - 1] : null;
         const readyInv = (last && Array.isArray(last.enhanced_ready_inventory)) ? last.enhanced_ready_inventory : [];
         const pendingInv = (last && Array.isArray(last.enhance_pending_inventory)) ? last.enhance_pending_inventory : [];
@@ -1241,51 +1735,164 @@
         $("valBw").textContent = M.formatBwMbps(last ? last.bandwidth_bps : null);
         renderInventory("invReady", readyInv, "ready");
         renderInventory("invPending", pendingInv, "pending");
-        drawSpark("chartDown", samples.map((s) => Number(s.download_buffer_s || 0)), "#0d6e6a");
-        drawSpark(
-          "chartReady",
-          samples.map((s) => Number(s.enhanced_ready_s != null ? s.enhanced_ready_s : 0)),
-          "#0a5552",
-        );
-        drawSpark(
-          "chartPending",
-          samples.map((s) => Number(M.pendingEnhanceS(s) || 0)),
-          "#b45309",
-        );
-        drawSpark("chartBw", samples.map((s) => Number(s.bandwidth_bps || 0) / 1e6), "#5a6b76");
-        const metrics = await api(`/runs/${currentRunId}/metrics`);
-        const arms = metrics.arms || {};
-        const first = arms[Object.keys(arms)[0]] || null;
-        const rebuffer = first ? Number(first.rebuffer_s || 0) : null;
-        $("valCpu").textContent = M.formatCpuLine(last);
-        $("valCpu").title = M.formatCpuTitle ? M.formatCpuTitle() : "CPU：进程算力% · 进程内存占整机% · RSS";
-        $("valGpu").textContent = M.formatGpuLine(last);
-        $("valGpu").title = M.formatGpuTitle(last);
-        $("valSysExtra").textContent = M.formatSysExtra(last);
-        drawSpark("chartCpu", samples.map((s) => Number(s.cpu_pct != null ? s.cpu_pct : 0)), "#0d6e6a");
-        drawSpark("chartGpu", samples.map((s) => Number(s.gpu_util_pct != null ? s.gpu_util_pct : 0)), "#b45309");
+        adoptSparkRun(currentRunId);
+        mergeSparkSamples(samples);
+        drawSparks(sparkSamples);
+        if (!running && !sparkSealed) loadFullSparks(currentRunId, armId, true).catch(() => { });
+        else if (!sparkFullLoaded) loadFullSparks(currentRunId, armId).catch(() => { });
+        const summary = live.summary || {};
+        setSysMetersVisible(currentRunCollectSys);
+        if (currentRunCollectSys) {
+          $("valCpu").textContent = M.formatCpuLine(last);
+          $("valCpu").title = M.formatCpuTitle ? M.formatCpuTitle() : "CPU：进程算力% · 进程内存占整机% · RSS";
+          $("valGpu").textContent = M.formatGpuLine(last);
+          $("valGpu").title = M.formatGpuTitle(last);
+          $("valSysExtra").textContent = M.formatSysExtra(last);
+        }
+        const rebuffer = summary.rebuffer_s != null ? Number(summary.rebuffer_s) : null;
         $("valRebuffer").textContent = M.formatRebuffer(rebuffer);
-        refreshTimeline(run);
-      } catch (e) { /* ignore transient */ }
+        let metrics = qualityMetrics;
+        if (!running) {
+          try {
+            metrics = await loadFinalMetrics(currentRunId);
+          } catch (e) { /* bundle can fail independently of live */ }
+          loadPlaybackReport(currentRunId);
+        } else if (!metrics) {
+          metrics = { arms: {}, cards: live.cards || [], workspace: live.workspace };
+        }
+        const arms = (metrics && metrics.arms) || {};
+        const first = (armId && arms[armId]) || arms[Object.keys(arms)[0]] || summary;
+        renderQualityCards(metrics, armId, first, { pendingFinal: running });
+        const frames = Number(live.frame_count || 0);
+        if (frames !== lastFrameCount) {
+          lastFrameCount = frames;
+          if (armId) {
+            timeline.totals[armId] = frames;
+            timeline.storage = "current";
+          }
+          refreshTimeline(live, { skipFetch: frames >= 0 });
+        }
+        telemetryFailStreak = 0;
+        setTelemWarn(false);
+      } catch (e) {
+        telemetryFailStreak += 1;
+        if (telemetryFailStreak >= 3) setTelemWarn(true, e && e.message);
+      } finally {
+        telemetryInFlight = false;
+      }
+    }
+
+    function setTelemWarn(on, detail) {
+      const el = $("telemWarn");
+      if (!el) return;
+      el.hidden = !on;
+      el.title = on && detail ? String(detail) : "";
+    }
+
+    function scoreboardEl() {
+      return document.querySelector("#monitor .scoreboard");
+    }
+
+    function setScoreboardVisible(on) {
+      const board = scoreboardEl();
+      if (board) board.hidden = !on;
+    }
+
+    function renderQualityCards(metrics, armId, first, opts) {
+      const foot = $("qualityFoot");
+      if (!foot) return;
+      const board = scoreboardEl();
+      const note = $("qualityNote");
+      if (opts && opts.pendingFinal) {
+        if (board) board.classList.add("is-pending");
+        setScoreboardVisible(true);
+        foot.innerHTML = '<p class="score-pending">播放中 · 停跑后计算 QoE / VMAF</p>';
+        if (note) {
+          note.textContent = "";
+          note.hidden = true;
+        }
+        return;
+      }
+      if (board) board.classList.remove("is-pending");
+      const arms = (metrics && metrics.arms) || {};
+      const armMetrics = (armId && arms[armId]) || first;
+      const cards = (metrics && metrics.cards && metrics.cards.length) ? metrics.cards : [
+        { key: "qoe", label: "QoE", digits: 2, group: "播放质量", hint: "平均画质减去振荡，再减去卡顿" },
+        { key: "avg_vmaf", label: "VMAF", digits: 2, group: "播放质量", hint: "已评分段的平均画质" },
+        { key: "oscillation_vmaf", label: "振荡", digits: 2, group: "播放质量", hint: "相邻段画质差的平均" },
+        { key: "avg_freeze", label: "均卡顿", digits: 2, suffix: " s", group: "播放质量", hint: "总卡顿秒数除以播放段数" },
+      ];
+      const groups = M.groupCards ? M.groupCards(cards) : [{ name: "播放质量", cards: cards }];
+      const showGroupLabel = groups.length > 1;
+      // Idle / cleared: keep the board out of the way.
+      if (!armMetrics && !metrics) {
+        foot.innerHTML = "";
+        if (note) {
+          note.textContent = "";
+          note.hidden = true;
+        }
+        setScoreboardVisible(false);
+        return;
+      }
+      const hasAnyValue = cards.some((card) => {
+        const value = armMetrics ? armMetrics[card.key] : null;
+        if (value == null || value === "") return false;
+        return !(typeof value === "number" && Number.isNaN(value));
+      });
+      foot.innerHTML = `<div class="score-groups">${groups.map((group) => {
+        const cells = group.cards.map((card) => {
+          const value = armMetrics ? armMetrics[card.key] : null;
+          const parts = M.formatCardParts
+            ? M.formatCardParts(card, value)
+            : { label: card.label || card.key, value: "—", suffix: "", empty: true };
+          const lead = card.key === "qoe" ? " score-lead" : "";
+          const empty = parts.empty ? " is-empty" : "";
+          const hint = card.hint ? ` title="${esc(card.hint)}"` : "";
+          const unit = parts.suffix ? `<span class="u">${esc(String(parts.suffix).trim())}</span>` : "";
+          return `<article class="score-card${lead}${empty}"${hint}><span class="k">${esc(parts.label)}</span><span class="v">${esc(parts.value)}${unit}</span></article>`;
+        }).join("");
+        const label = showGroupLabel
+          ? `<h2 class="score-group-label">${esc(group.name)}</h2>`
+          : "";
+        return `<section class="score-group">${label}<div class="score-grid">${cells}</div></section>`;
+      }).join("")}</div>`;
+      setScoreboardVisible(true);
+      if (!note) return;
+      let noteText = "";
+      const reason = armMetrics && armMetrics.metrics_reason;
+      const status = armMetrics && armMetrics.metrics_status;
+      const qSrc = metrics && metrics.provenance && metrics.provenance.quality_source;
+      if (status === "unavailable" || qSrc === "unavailable") {
+        noteText = reason || "画质指标不可用（质量表缺失或未评分）";
+      } else if (reason) {
+        noteText = reason;
+      } else if (!hasAnyValue) {
+        noteText = "正在汇总指标…";
+      }
+      note.textContent = noteText;
+      note.hidden = !noteText;
     }
 
     function frameLine(row) {
       if (!row) return "—";
       const level = row.enhance_level == null ? "—" : row.enhance_level;
       const enhanced = row.enhanced ? "已增强" : "未增强";
-      return `#${row.frame} · 段 ${row.segment} · ${row.representation} · 增强 ${level} · ${enhanced}`;
+      const model = row.model ? ` · ${row.model}` : "";
+      const scale = row.scale ? ` · ${row.scale}` : "";
+      const vmaf = row.vmaf == null || Number.isNaN(Number(row.vmaf)) ? "" : ` · VMAF ${Number(row.vmaf).toFixed(1)}`;
+      return `#${row.frame} · 段 ${row.segment} · ${row.representation} · 增强 ${level} · ${enhanced}${model}${scale}${vmaf}`;
     }
 
-    async function refreshTimeline(run) {
+    async function refreshTimeline(run, opts) {
       const slider = $("frameSlider");
-      const meta = $("frameMeta");
-      if (!slider || !meta) return;
+      if (!slider) return;
       if (!run) {
         timeline = { runId: null, armId: null, arms: [], totals: {}, storage: "", timer: timeline.timer };
+        lastFrameCount = -1;
         slider.disabled = true;
         slider.value = "0";
         slider.max = "0";
-        meta.textContent = "—";
+        setFrameMeta("");
         return;
       }
       const arms = (run.arms || []).map((arm) => arm.id);
@@ -1296,21 +1903,30 @@
         timeline.armId = timeline.armId && arms.includes(timeline.armId) ? timeline.armId : (arms[0] || null);
         timeline.totals = {};
       }
+      const skipFetch = opts && opts.skipFetch && timeline.runId === run.id;
       let max = 0;
-      for (const id of arms) {
-        try {
-          const page = await api(`/runs/${run.id}/frames?arm_id=${encodeURIComponent(id)}&limit=1`);
-          timeline.totals[id] = page.total || 0;
-          timeline.storage = page.storage || "";
-          max = Math.max(max, timeline.totals[id]);
-        } catch (e) { /* archive may still be empty */ }
+      if (skipFetch) {
+        for (const id of arms) max = Math.max(max, timeline.totals[id] || 0);
+        if (typeof run.frame_count === "number" && timeline.armId) {
+          timeline.totals[timeline.armId] = run.frame_count;
+          max = Math.max(max, run.frame_count);
+        }
+      } else {
+        for (const id of arms) {
+          try {
+            const page = await api(`/runs/${run.id}/frames?arm_id=${encodeURIComponent(id)}&limit=1`);
+            timeline.totals[id] = page.total || 0;
+            timeline.storage = page.storage || "";
+            max = Math.max(max, timeline.totals[id]);
+          } catch (e) { /* archive may still be empty */ }
+        }
       }
       const last = Math.max(0, max - 1);
       slider.max = String(last);
       slider.disabled = max < 1;
       if (!timeline.scrubbing && Number(slider.value) > last) slider.value = String(last);
-      if (max < 1) meta.textContent = "—";
-      else if (!timeline.holding && !timeline.scrubbing) meta.textContent = max + " 帧";
+      if (max < 1) setFrameMeta("");
+      else if (!timeline.holding && !timeline.scrubbing) setFrameMeta(max + " 帧");
     }
 
     async function scrubTo(frame) {
@@ -1327,7 +1943,7 @@
         }
       }
       timeline.holding = true;
-      $("frameMeta").textContent = line;
+      setFrameMeta(line);
       if (frame < total) {
         await api("/system/picture", {
           method: "PUT",
@@ -1362,19 +1978,28 @@
             session: { policy: { allowed_representation_ids: [0, 1, 2], mpd_type: "static" } },
             player: {
               mod_nes: "always_greedy",
-              mod_enhancer: "imdn_always",
+              mod_enhancer: "imdn",
               mod_renderer: "opencv",
               mod_downloader: "tcp",
               mod_status: "status",
               trace: "",
+              use_fast_complete: false,
+              latency_adapt: false,
+              collect_system_metrics: true,
             },
           },
         ],
         execution: { arm_mode: "serial" },
+        collect: { client_metrics: true, system_metrics: true, interval_ms: 500 },
+        metrics: {
+          recipes: ["bones_qoe_v1"],
+          quality: { prefer: ["local_catalog"], catalog_ref: "content:bbb" },
+        },
       },
     };
 
     let recipeOpts = null;
+    let workspaces = [];
     let contentChoices = [];
     let suppressFormSync = false;
     let traceSearchTimer = null;
@@ -1394,6 +2019,11 @@
       failed: "失败",
     };
 
+    function setReviewFlag(on) {
+      if (on) document.body.dataset.review = "compare";
+      else delete document.body.dataset.review;
+    }
+
     function setRunControls(state) {
       const bar = $("runControls");
       const start = $("btnStartRun");
@@ -1401,11 +2031,28 @@
       const status = $("runStatus");
       if (!bar || !start || !stop) return;
       const s = state || "idle";
+      const prev = bar.dataset.state || "idle";
       bar.dataset.state = s;
+      document.body.dataset.state = s;
       const live = s === "running" || s === "preparing";
       start.disabled = live;
       stop.disabled = !live;
-      if (status) status.textContent = RUN_STATUS_LABEL[s] || s;
+      if (status) {
+        status.hidden = false;
+        status.textContent = RUN_STATUS_LABEL[s] || s;
+      }
+      const title = $("recipeTitle");
+      const chrome = IN_SHELL && M.shellChrome ? M.shellChrome(s) : null;
+      if (title) title.textContent = chrome ? chrome.recipeTitle : (live ? "下次配方" : "配方");
+      if (chrome && prev !== s) {
+        if (chrome.collapseRecipe) setRecipeExpanded(false);
+        else if (chrome.expandRecipe) setRecipeExpanded(true);
+        if (chrome.collapseHistory) {
+          const hist = $("historyPanel");
+          if (hist) hist.open = false;
+        }
+      }
+      updateRecipeSummary();
     }
 
     function optLabel(sel) {
@@ -1415,6 +2062,7 @@
     }
 
     function clipLabel(text, max) {
+      if (M.clipText) return M.clipText(text, max) || "—";
       const t = String(text || "—").trim();
       if (t.length <= max) return t;
       return t.slice(0, Math.max(1, max - 1)) + "…";
@@ -1423,29 +2071,74 @@
     function updateRecipeSummary() {
       const el = $("recipeSummary");
       if (!el) return;
+      const live = ($("runControls") || {}).dataset &&
+        (["running", "preparing"].includes($("runControls").dataset.state));
+      try {
+        const summary = M.recipeSummaryFromSpec
+          ? M.recipeSummaryFromSpec(buildSpecFromForm(), { partMax: 14 })
+          : null;
+        if (summary) {
+          el.textContent = summary.line;
+          el.title = (live ? "仅影响下次开始\n" : "") + summary.title;
+          return;
+        }
+      } catch (e) { /* form may be mid-init */ }
       const content = clipLabel(optLabel($("fldContent")), 16);
+      const ws = clipLabel(optLabel($("fldWorkspace")), 16);
       const nes = optLabel($("fldNes"));
       const enh = optLabel($("fldEnhancer"));
-      const net = $("fldNetMode") && $("fldNetMode").value === "trace" ? "轨迹" : "TCP";
+      const net = $("fldNetMode") && $("fldNetMode").value === "trace"
+        ? (clipLabel(($("fldTraceFile") && $("fldTraceFile").value) || "轨迹", 18))
+        : "TCP";
       const ren = optLabel($("fldRenderer"));
-      const line = [content, nes, enh, net, ren].join(" · ");
+      const line = [ws, content, nes, enh, net, ren].filter((part) => part && part !== "—").join(" · ");
       el.textContent = line;
-      el.title = line;
+      el.title = (live ? "仅影响下次开始 · " : "") + line;
     }
 
-    function updateHistorySummary(runs) {
-      const el = $("historySummary");
-      if (!el) return;
-      const list = runs || [];
-      if (!list.length) {
-        el.textContent = "暂无";
-        el.title = "";
+    function syncRunChip(run) {
+      // Control bar stays a short verb (运行中 / 已停止). Recipe detail lives in
+      // 配方 / 观测悬停，不在按钮旁再跟一串条件摘要。
+      const status = $("runStatus");
+      if (!status) return;
+      if (!run || !run.id) {
+        status.title = "";
         return;
       }
-      const latest = list[0];
-      const line = (latest.status || "—") + " · " + (latest.name || latest.id || "—");
-      el.textContent = line;
-      el.title = list.length + " 条 Run · " + line;
+      const summary = M.recipeSummaryFromSpec
+        ? M.recipeSummaryFromSpec(run.spec || {})
+        : { title: run.id };
+      status.title = [run.id, summary.title].filter(Boolean).join("\n");
+    }
+
+    function rememberRunSpec(run) {
+      currentRunSpec = (run && run.spec) || null;
+      const parts = M.recipePartsFromSpec ? M.recipePartsFromSpec(currentRunSpec || {}) : null;
+      currentRunCollectSys = !!(parts && parts.systemMetrics);
+    }
+
+    function warnBeforeStart(spec) {
+      const player = armPlayer(spec);
+      const renderer = player.mod_renderer || "";
+      if (renderer === "opengl") {
+        const ok = window.confirm(
+          "OpenGL 渲染只按段时长 sleep，不是 GPU 出画。请勿与 OpenCV / Headless 的结果混用解读。仍要开始？",
+        );
+        if (!ok) return false;
+      }
+      if (lastStartedSpec) {
+        const prev = M.recipePartsFromSpec
+          ? M.recipePartsFromSpec(lastStartedSpec)
+          : null;
+        const next = M.recipePartsFromSpec ? M.recipePartsFromSpec(spec) : null;
+        if (prev && next && prev.renderer && next.renderer && prev.renderer !== next.renderer) {
+          const ok = window.confirm(
+            `渲染器已从「${prev.renderer}」改为「${next.renderer}」。跨次解读请勿混用不同渲染器。仍要开始？`,
+          );
+          if (!ok) return false;
+        }
+      }
+      return true;
     }
 
     function clearRunMsg() {
@@ -1487,14 +2180,55 @@
       return (arm && arm.player) || {};
     }
 
+    function selectedWorkspace() {
+      const id = $("fldWorkspace") && $("fldWorkspace").value;
+      return workspaces.find((ws) => ws.id === id) || workspaces[0] || null;
+    }
+
+    function updateWorkspaceHint() {
+      const el = $("workspaceHint");
+      const ws = selectedWorkspace();
+      if (!el || !ws) return;
+      const enhancer = $("fldEnhancer") && $("fldEnhancer").value;
+      const wantsFast = ws.player && ws.player.use_fast_complete;
+      const warn = wantsFast && enhancer && enhancer !== "imdn" && enhancer !== "imdn_always" && enhancer !== "pacnet";
+      el.hidden = !warn;
+      el.textContent = warn ? "当前增强器不会上报 fast-complete 统计，触发段数会一直是「—」。" : "";
+    }
+
+    function applyWorkspaceDefaults() {
+      const ws = selectedWorkspace();
+      if (!ws) return;
+      const player = ws.player || {};
+      if (player.mod_nes && $("fldNes")) $("fldNes").value = player.mod_nes;
+      if (player.mod_enhancer && $("fldEnhancer")) $("fldEnhancer").value = player.mod_enhancer;
+      if (player.mod_renderer && $("fldRenderer")) $("fldRenderer").value = player.mod_renderer;
+      updateWorkspaceHint();
+      updateRecipeSummary();
+    }
+
     function buildSpecFromForm() {
       const base = JSON.parse(JSON.stringify(DEFAULT_SPEC));
       const arm = base.spec.arms[0];
+      const ws = selectedWorkspace();
+      if (ws) {
+        base.spec.workspace = ws.id;
+        const player = ws.player || {};
+        if (player.mod_nes) arm.player.mod_nes = player.mod_nes;
+        if (player.mod_enhancer) arm.player.mod_enhancer = player.mod_enhancer;
+        if (player.mod_renderer) arm.player.mod_renderer = player.mod_renderer;
+        if (player.use_fast_complete != null) arm.player.use_fast_complete = !!player.use_fast_complete;
+        if (ws.metrics) base.spec.metrics = JSON.parse(JSON.stringify(ws.metrics));
+        if (ws.cards) base.spec.cards = JSON.parse(JSON.stringify(ws.cards));
+      }
       base.spec.content = { source: $("fldContent").value || DEFAULT_SPEC.spec.content.source };
-      arm.player.mod_nes = $("fldNes").value || "always_greedy";
-      arm.player.mod_enhancer = $("fldEnhancer").value || "imdn_always";
-      arm.player.mod_renderer = $("fldRenderer").value || "opencv";
+      arm.player.mod_nes = $("fldNes").value || arm.player.mod_nes || "always_greedy";
+      arm.player.mod_enhancer = $("fldEnhancer").value || arm.player.mod_enhancer || "imdn";
+      if (arm.player.mod_enhancer === "imdn_always") arm.player.mod_enhancer = "imdn";
+      arm.player.mod_renderer = $("fldRenderer").value || arm.player.mod_renderer || "opencv";
       arm.player.mod_status = arm.player.mod_status || "status";
+      arm.player.collect_system_metrics = true;
+      base.spec.collect.system_metrics = true;
       if ($("fldNetMode").value === "trace") {
         const path = $("fldTraceFile").value || "";
         arm.player.trace = path;
@@ -1572,7 +2306,13 @@
     async function applySpecToForm(spec) {
       suppressFormSync = true;
       try {
-        const src = (spec.spec && spec.spec.content && spec.spec.content.source) || "";
+        const body = (spec && spec.spec && typeof spec.spec === "object") ? spec.spec : (spec || {});
+        const wsId = String(body.workspace || "").trim();
+        if (wsId && $("fldWorkspace") && [...$("fldWorkspace").options].some((o) => o.value === wsId)) {
+          // Set workspace without applyWorkspaceDefaults — keep player fields from this spec.
+          $("fldWorkspace").value = wsId;
+        }
+        const src = (body.content && body.content.source) || "";
         if (src && ![...$("fldContent").options].some((o) => o.value === src)) {
           const opt = document.createElement("option");
           opt.value = src;
@@ -1584,8 +2324,9 @@
         if (p.mod_nes && [...$("fldNes").options].some((o) => o.value === p.mod_nes)) {
           $("fldNes").value = p.mod_nes;
         }
-        if (p.mod_enhancer && [...$("fldEnhancer").options].some((o) => o.value === p.mod_enhancer)) {
-          $("fldEnhancer").value = p.mod_enhancer;
+        const enhancerId = p.mod_enhancer === "imdn_always" ? "imdn" : p.mod_enhancer;
+        if (enhancerId && [...$("fldEnhancer").options].some((o) => o.value === enhancerId)) {
+          $("fldEnhancer").value = enhancerId;
         }
         if (p.mod_renderer && [...$("fldRenderer").options].some((o) => o.value === p.mod_renderer)) {
           $("fldRenderer").value = p.mod_renderer;
@@ -1609,6 +2350,7 @@
         }
       } finally {
         suppressFormSync = false;
+        updateWorkspaceHint();
         updateRecipeSummary();
       }
     }
@@ -1620,13 +2362,24 @@
       fillSelect($("fldEnhancer"), recipeOpts.enhancer, "id", "label");
       fillSelect($("fldRenderer"), recipeOpts.renderer, "id", "label");
       fillSelect($("fldTraceDataset"), recipeOpts.trace_datasets || [], "id", "id");
+      try {
+        const payload = await api("/workspaces");
+        workspaces = payload.workspaces || [];
+      } catch (e) {
+        workspaces = [];
+      }
+      fillSelect($("fldWorkspace"), workspaces.map((ws) => ({ id: ws.id, label: ws.label || ws.id })), "id", "label");
+      if ([...($("fldWorkspace").options || [])].some((opt) => opt.value === "baseline")) {
+        $("fldWorkspace").value = "baseline";
+      }
+      applyWorkspaceDefaults();
       return recipeOpts;
     }
 
     async function refreshContentChoices() {
       const pubs = await api("/publications");
       contentChoices = [
-        { value: "path:player/data/video_mp4box", label: "本地 BBB DASH（path）" },
+        { value: "path:player/data/video_mp4box", label: "BBB" },
         ...(pubs || []).map((p) => ({
           value: "publication:" + p.id,
           label: (p.title || p.id) + " · " + p.id,
@@ -1637,26 +2390,763 @@
 
     function onRecipeFormChange() {
       updateRecipeSummary();
+      updateWorkspaceHint();
+    }
+
+    const REPORT_LABELS = {
+      qoe: "QoE",
+      avg_vmaf: "VMAF",
+      oscillation_vmaf: "振荡",
+      avg_freeze: "均卡顿 (s)",
+      num_stall: "卡顿次数",
+      dur_stall: "卡顿总时长 (s)",
+      rebuffer_s: "重缓冲 (s)",
+      avg_bitrate: "平均码率 (bps)",
+      avg_render_fps: "渲染帧率",
+      frame_archive_dropped: "归档丢帧",
+      num_quality_switches: "码率切换",
+      enhancer_abort_total: "增强中止",
+      enhancer_use_fast_complete: "fast-complete",
+      fast_complete_segments_count: "fast-complete 段数",
+      fast_complete_saved_frames_total: "省下的帧",
+      fast_complete_quality_drop_avg: "fast-complete 画质下降",
+      segments: "播放段数",
+      time_to_first_download: "到首次下载 (s)",
+      time_to_first_enhance: "到首次增强 (s)",
+      time_to_first_play: "到首次播放 (s)",
+      peak_memory_mb: "GPU 峰值显存 (MB)",
+      model_pool_memory_mb: "模型显存 (MB)",
+    };
+
+    function reportValue(value) {
+      if (value == null || value === "") return "—";
+      if (typeof value === "number") {
+        return Number.isInteger(value) ? String(value) : String(Math.round(value * 1000) / 1000);
+      }
+      if (typeof value === "boolean") return value ? "开" : "关";
+      return String(value);
+    }
+
+    function reportTable(title, rows) {
+      if (!rows.length) return "";
+      const body = rows.map((row) => `<tr><td>${esc(row[0])}</td><td>${esc(row[1])}</td></tr>`).join("");
+      return `<h2>${esc(title)}</h2><table><tbody>${body}</tbody></table>`;
+    }
+
+    /** Analyzer tables wrapped in one collapsed block (整块一键展开). */
+    function reportHtml(report, opts) {
+      if (!report || !report.available) {
+        return `<p class="quiet">这次运行没有留下指标</p>`;
+      }
+      const summary = report.summary || {};
+      const summaryRows = Object.keys(REPORT_LABELS)
+        .filter((key) => summary[key] != null)
+        .map((key) => [REPORT_LABELS[key], reportValue(summary[key])]);
+      const startup = Object.entries(report.startup || {}).filter(([, value]) => value != null).map(([key, value]) => [REPORT_LABELS[key] || key, reportValue(value)]);
+      const gpu = Object.entries(report.gpu || {}).filter(([, value]) => value != null).map(([key, value]) => [REPORT_LABELS[key] || key, reportValue(value)]);
+      const aborts = Object.entries(report.abort_reasons || {}).map(([key, value]) => [key, reportValue(value)]);
+      const levels = (report.enhance_levels || []).map((row) => [
+        "级别 " + row.level,
+        `用了 ${reportValue(row.count)} 段，完成 ${reportValue(row.completed)}，完成率 ${reportValue(row.completion_rate)}，延迟 ${reportValue(row.avg_latency)} s，FPS ${reportValue(row.avg_fps)}`,
+      ]);
+      const segmentId = stashSegments(report.segments);
+      const blocks = [
+        ["整段结果", summaryRows],
+        ["启动", startup],
+        ["增强级别", levels],
+        ["中止原因", aborts],
+        ["GPU", gpu],
+      ];
+      const present = blocks.filter(([, rows]) => rows.length);
+      const body = present.map(([title, rows]) => reportTable(title, rows)).join("");
+      const title = report.file ? `播放器分析 · ${report.file}` : "这次运行的指标";
+      const missingFile = !report.file
+        ? `<p class="quiet">增强级别、中止原因、启动时间和 GPU 显存还没有写进这次运行。</p>`
+        : "";
+      if (!body && !missingFile) {
+        return `<p class="quiet">${esc(title)}</p><p class="quiet">没有可展示的明细</p>`;
+      }
+      const openAttr = opts && opts.open ? " open" : "";
+      const openSegments = segmentId
+        ? `<p><button type="button" class="seg-open" data-segments="${esc(segmentId)}">查看分段</button></p>`
+        : "";
+      return `<details class="sec report-fold"${openAttr}>`
+        + `<summary><span class="sec-row"><span class="sec-title">详细分析</span></span></summary>`
+        + `<div class="sec-body report"><p class="quiet">${esc(title)}</p>${openSegments}${body}${missingFile}</div>`
+        + `</details>`;
+    }
+
+    const segmentViews = {};
+    let segmentViewSeq = 0;
+    let segmentFilter = "all";
+    let segmentActiveId = "";
+
+    function stashSegments(rows) {
+      const list = Array.isArray(rows) ? rows : [];
+      if (!list.length) return "";
+      const id = "seg" + (++segmentViewSeq);
+      segmentViews[id] = list;
+      return id;
+    }
+
+    const ABORT_LABELS = {
+      "Remaining time less than min threshold": "剩余时间不足",
+      "Already played before enhance": "播放前已过",
+      "Already played in enhance": "增强中已开始播放",
+      "Max resolution": "已是最高分辨率",
+      "UnknownReason": "原因未记录",
+    };
+
+    function segmentNum(value, digits) {
+      if (value == null || value === "" || Number.isNaN(Number(value))) return "—";
+      const n = Number(value);
+      if (digits == null) return Number.isInteger(n) ? String(n) : String(Math.round(n * 1000) / 1000);
+      return n.toFixed(digits);
+    }
+
+    function segmentResult(row) {
+      if (row && row.abort_reason) return ABORT_LABELS[row.abort_reason] || String(row.abort_reason);
+      if (row && row.fast_complete) return "fast-complete";
+      if (row && row.is_enhance) return "完成";
+      if (row && row.enhance_action === 0) return "不增强";
+      return "未完成";
+    }
+
+    function segmentVisible(row, filter) {
+      if (filter === "abort") return !!(row && row.abort_reason);
+      if (filter === "fast") return !!(row && row.fast_complete);
+      if (filter === "incomplete") return !!(row && Number(row.enhance_action) > 0 && !row.is_enhance);
+      return true;
+    }
+
+    function renderSegmentTable() {
+      const host = $("segmentTable");
+      const count = $("segmentCount");
+      const rows = segmentViews[segmentActiveId] || [];
+      const shown = rows.filter((row) => segmentVisible(row, segmentFilter));
+      if (count) count.textContent = shown.length + " / " + rows.length + " 段";
+      if (!host) return;
+      const body = shown.map((row) => `<tr>`
+        + `<td>${esc(segmentNum(row.index))}</td>`
+        + `<td>${esc(segmentNum(row.download_action))}</td>`
+        + `<td>${esc(segmentNum(row.enhance_action))}</td>`
+        + `<td>${esc(segmentResult(row))}</td>`
+        + `<td>${esc(segmentNum(row.enhanced_cnt))} / ${esc(segmentNum(row.interpolated_cnt))}</td>`
+        + `<td>${esc(segmentNum(row.enhance_latency, 3))}</td>`
+        + `<td>${esc(segmentNum(row.real_vmaf, 1))}</td>`
+        + `<td>${esc(segmentNum(row.quality_drop_due_to_fast, 2))}</td>`
+        + `<td>${esc(segmentNum(row.enhance_start_to_play_time, 2))}</td>`
+        + `<td>${esc(segmentNum(row.enhance_end_to_play_time, 2))}</td>`
+        + `<td>${esc(segmentNum(row.fast_complete_threshold, 2))}</td>`
+        + `</tr>`).join("");
+      const empty = shown.length ? "" : `<tr><td colspan="11">没有符合的段</td></tr>`;
+      host.innerHTML = `<table class="seg-table"><thead><tr>`
+        + `<th>段</th><th>码率档</th><th>级别</th><th>结果</th><th>增强帧 / 未跑</th><th>延迟 s</th><th>VMAF</th><th>质量下降</th>`
+        + `<th>开始时剩余</th><th>结束时剩余</th><th>阈值</th>`
+        + `</tr></thead><tbody>${body}${empty}</tbody></table>`;
+    }
+
+    function openSegmentDialog(id) {
+      const dialog = $("segmentDialog");
+      if (!dialog || !segmentViews[id]) return;
+      segmentActiveId = id;
+      segmentFilter = "all";
+      document.querySelectorAll("#segmentDialog [data-seg-filter]").forEach((btn) => {
+        btn.classList.toggle("is-on", btn.dataset.segFilter === "all");
+      });
+      renderSegmentTable();
+      if (typeof dialog.showModal === "function" && !dialog.open) dialog.showModal();
+      else dialog.hidden = false;
+    }
+
+    document.addEventListener("click", (event) => {
+      const openBtn = event.target && event.target.closest && event.target.closest("[data-segments]");
+      if (openBtn) {
+        event.preventDefault();
+        openSegmentDialog(openBtn.dataset.segments);
+        return;
+      }
+      const filterBtn = event.target && event.target.closest && event.target.closest("#segmentDialog [data-seg-filter]");
+      if (filterBtn) {
+        segmentFilter = filterBtn.dataset.segFilter || "all";
+        document.querySelectorAll("#segmentDialog [data-seg-filter]").forEach((btn) => {
+          btn.classList.toggle("is-on", btn === filterBtn);
+        });
+        renderSegmentTable();
+      }
+    });
+    if ($("segmentClose")) {
+      $("segmentClose").onclick = () => {
+        const dialog = $("segmentDialog");
+        if (dialog && typeof dialog.close === "function" && dialog.open) dialog.close();
+        else if (dialog) dialog.hidden = true;
+      };
+    }
+
+    function renderPlaybackReport(report) {
+      const box = $("playbackReport");
+      if (!box) return;
+      const prev = box.querySelector("details.report-fold");
+      const keepOpen = !!(prev && prev.open);
+      box.hidden = false;
+      box.innerHTML = reportHtml(report, { open: keepOpen });
+    }
+
+    async function loadPlaybackReport(runId, attempt) {
+      if (!runId || currentRunId !== runId) return;
+      let report;
+      try {
+        report = await api("/runs/" + runId + "/analyzer");
+      } catch (e) {
+        report = { available: false, reason: String(e.message || e) };
+      }
+      if (currentRunId !== runId) return;
+      renderPlaybackReport(report);
+      if (report && !report.available && (attempt || 0) < 4) {
+        setTimeout(() => loadPlaybackReport(runId, (attempt || 0) + 1), 1000);
+      }
+    }
+
+    function updateMonitorContext(run) {
+      const el = $("monitorContext");
+      if (!el) return;
+      if (!run || !run.id) {
+        el.textContent = "";
+        el.title = "";
+        el.hidden = true;
+        return;
+      }
+      const summary = M.recipeSummaryFromSpec
+        ? M.recipeSummaryFromSpec(run.spec || {}, { partMax: 14 })
+        : { line: run.name || run.id, title: run.id };
+      const time = formatRunTime(run);
+      el.textContent = time && time !== "—" ? time : "";
+      el.hidden = !el.textContent;
+      el.title = (run.id || "") + (summary.title ? "\n" + summary.title : "");
     }
 
     function renderRun(run) {
       if (!run) {
         setTelemetryPolling(false);
         refreshTimeline(null);
+        currentRunId = null;
+        currentRunSpec = null;
+        currentRunCollectSys = false;
+        setSysMetersVisible(false);
         setRunControls("idle");
+        syncRunChip(null);
+        updateMonitorContext(null);
         setRecipeExpanded(true);
+        setTelemWarn(false);
+        clearSparks();
+        renderQualityCards(null, null, null);
         return;
       }
       currentRunId = run.id;
-      setTelemetryPolling(run.status === "running");
+      rememberRunSpec(run);
+      setSysMetersVisible(currentRunCollectSys);
+      syncRunChip(run);
+      updateMonitorContext(run);
+      const liveRun = run.status === "running" || run.status === "preparing";
+      if (liveRun) {
+        qualityMetrics = null;
+        qualityRunId = null;
+        lastFrameCount = -1;
+        telemetryFailStreak = 0;
+        setTelemWarn(false);
+      }
+      setTelemetryPolling(liveRun);
+      if (!liveRun) {
+        loadFinalMetrics(run.id).then((metrics) => {
+          const armId = run.active_arm_id || (run.arms && run.arms[0] && run.arms[0].id);
+          const arms = (metrics && metrics.arms) || {};
+          renderQualityCards(metrics, armId, arms[armId] || arms[Object.keys(arms)[0]] || null);
+        }).catch(() => { });
+        loadPlaybackReport(run.id);
+        setSysMetersVisible(currentRunCollectSys);
+      } else {
+        renderQualityCards(null, null, null, { pendingFinal: true });
+        const report = $("playbackReport");
+        if (report) {
+          report.hidden = true;
+          report.innerHTML = "";
+        }
+      }
       refreshTimeline(run);
       setRunControls(run.status || "idle");
-      if (run.status === "running" || run.status === "preparing") {
-        setRecipeExpanded(false);
-      } else if (run.status === "stopped" || run.status === "failed") {
-        setRecipeExpanded(true);
+      if (run.status !== "running" && run.status !== "preparing") {
+        const armId = run.active_arm_id || (run.arms && run.arms[0] && run.arms[0].id);
+        loadFullSparks(run.id, armId, true).catch(() => { });
+      }
+      if (!IN_SHELL) {
+        if (run.status === "running" || run.status === "preparing") {
+          setRecipeExpanded(false);
+        } else if (run.status === "stopped" || run.status === "failed") {
+          setRecipeExpanded(true);
+        }
       }
       if (run.error) showRunErr(run.error);
+    }
+
+    let openHistoryId = null;
+    let historyRuns = [];
+    const selectedRuns = new Set();
+
+    function getHistoryRun(runId) {
+      return historyRuns.find((run) => run.id === runId) || null;
+    }
+
+    function isRunLive(run) {
+      const s = run && run.status;
+      return s === "running" || s === "preparing";
+    }
+
+    function currentControlsLive() {
+      const s = ($("runControls") || {}).dataset && $("runControls").dataset.state;
+      return s === "running" || s === "preparing";
+    }
+
+    async function resolveHistoryRun(runId) {
+      return getHistoryRun(runId) || api("/runs/" + runId);
+    }
+
+    async function loadObservation(runId) {
+      if (currentControlsLive() && currentRunId && currentRunId !== runId) {
+        throw new Error("请先停止当前运行，再载入其它观测");
+      }
+      const run = await resolveHistoryRun(runId);
+      if (!run || !run.id) throw new Error("找不到该运行");
+      qualityMetrics = null;
+      qualityRunId = null;
+      lastFrameCount = -1;
+      clearRunMsg();
+      openHistoryId = runId;
+      renderRun(run);
+      const mon = $("monitor");
+      if (mon && mon.scrollIntoView) mon.scrollIntoView({ behavior: "smooth", block: "start" });
+      await loadExperiments();
+    }
+
+    async function loadNextRecipe(runId) {
+      const run = await resolveHistoryRun(runId);
+      if (!run || !run.spec) throw new Error("该运行没有保存配方");
+      await ensureRecipeOptions();
+      await refreshContentChoices();
+      await applySpecToForm(run.spec);
+      setRecipeExpanded(true);
+      clearRunMsg();
+      const box = $("runMsg");
+      if (box) {
+        box.className = "msg ok";
+        box.textContent = "已载入下次配方（尚未开始）";
+      }
+      const panel = $("recipePanel");
+      if (panel && panel.scrollIntoView) panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+
+    async function rerunFromHistory(runId) {
+      if (currentControlsLive()) {
+        throw new Error("请先停止当前运行，再按此重跑");
+      }
+      await loadNextRecipe(runId);
+      const summary = M.recipeSummaryFromSpec
+        ? M.recipeSummaryFromSpec(buildSpecFromForm())
+        : { title: runId, shortName: runId };
+      const ok = window.confirm("按此配方开始新运行？\n\n" + (summary.title || summary.shortName || ""));
+      if (!ok) return;
+      await startCurrentRecipe();
+    }
+
+    function runStamp(run) {
+      const raw = run && (run.started_at || run.created_at);
+      const t = Date.parse(raw || "");
+      return Number.isFinite(t) ? t : 0;
+    }
+
+    function formatRunTime(run) {
+      const t = runStamp(run);
+      if (!t) return "—";
+      const d = new Date(t);
+      const p = (n) => String(n).padStart(2, "0");
+      return `${p(d.getMonth() + 1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
+    }
+
+    function firstArmMetrics(run) {
+      const arms = (run && run.metrics && run.metrics.arms) || {};
+      const id = run && (run.active_arm_id || (run.arms && run.arms[0] && run.arms[0].id));
+      return (id && arms[id]) || arms[Object.keys(arms)[0]] || null;
+    }
+
+    function fmtRebuffer(arm) {
+      if (!arm) return "—";
+      const value = arm.rebuffer_s != null ? arm.rebuffer_s : arm.stall_s;
+      if (value == null || Number.isNaN(Number(value))) return "—";
+      return (Math.round(Number(value) * 10) / 10) + " s";
+    }
+
+    function fmtBandwidth(arm) {
+      if (!arm || arm.avg_bandwidth_bps == null) return "—";
+      const mbps = Number(arm.avg_bandwidth_bps) / 1e6;
+      if (!Number.isFinite(mbps)) return "—";
+      return (Math.round(mbps * 10) / 10) + " Mbps";
+    }
+
+    function fmtQoe(arm) {
+      if (!arm || arm.qoe == null || Number.isNaN(Number(arm.qoe))) return "—";
+      return String(Math.round(Number(arm.qoe) * 10) / 10);
+    }
+
+    function fmtCompareNum(value, digits, suffix) {
+      if (value == null || value === "" || Number.isNaN(Number(value))) return "—";
+      const n = Number(value);
+      const text = Number.isInteger(n) && digits === 0
+        ? String(n)
+        : String(Math.round(n * Math.pow(10, digits)) / Math.pow(10, digits));
+      return suffix ? text + suffix : text;
+    }
+
+    const COMPARE_CONDS = [
+      { key: "workspace", label: "工作区" },
+      { key: "nes", label: "NES" },
+      { key: "enhancer", label: "增强器" },
+      { key: "renderer", label: "渲染" },
+      { key: "net", label: "网络" },
+      {
+        key: "useFast",
+        label: "fast-complete",
+        format: (v) => (v ? "开" : "关"),
+      },
+    ];
+
+    const COMPARE_METRIC_GROUPS = [
+      {
+        title: "播放质量",
+        rows: [
+          { key: "qoe", label: "QoE", digits: 1 },
+          { key: "avg_vmaf", label: "VMAF", digits: 2 },
+          { key: "oscillation_vmaf", label: "振荡", digits: 2 },
+          { key: "avg_freeze", label: "均卡顿", digits: 2, suffix: " s" },
+          { key: "rebuffer_s", label: "重缓冲", digits: 1, suffix: " s", alt: "stall_s" },
+          { key: "num_stall", label: "卡顿次数", digits: 0 },
+          {
+            key: "avg_bitrate",
+            label: "均码率",
+            format: (v) => {
+              if (v == null || Number.isNaN(Number(v))) return "—";
+              return (Math.round((Number(v) / 1e3) * 10) / 10) + " kbps";
+            },
+          },
+          {
+            key: "avg_bandwidth_bps",
+            label: "带宽",
+            format: (v) => {
+              if (v == null || Number.isNaN(Number(v))) return "—";
+              return (Math.round((Number(v) / 1e6) * 10) / 10) + " Mbps";
+            },
+          },
+          { key: "num_quality_switches", label: "码率切换", digits: 0 },
+          { key: "segments", label: "段数", digits: 0 },
+        ],
+      },
+      {
+        title: "增强执行",
+        rows: [
+          { key: "enh_l0_count", label: "L0 选择", digits: 0 },
+          { key: "enh_l1_count", label: "L1 选择", digits: 0 },
+          { key: "enh_l1_completed", label: "L1 完成", digits: 0 },
+          {
+            key: "enh_l1_rate",
+            label: "L1 完成率",
+            format: (v) => fmtCompareRate(v),
+          },
+          { key: "enh_l2_count", label: "L2 选择", digits: 0 },
+          { key: "enh_l2_completed", label: "L2 完成", digits: 0 },
+          {
+            key: "enh_l2_rate",
+            label: "L2 完成率",
+            format: (v) => fmtCompareRate(v),
+          },
+          {
+            key: "enh_l2_latency",
+            label: "L2 均延迟",
+            digits: 2,
+            suffix: " s",
+          },
+          { key: "abort_total", label: "增强中止", digits: 0 },
+          { key: "abort_wasted_frames", label: "中止浪费帧", digits: 0 },
+          {
+            key: "abort_summary",
+            label: "中止原因",
+            format: (v) => (v == null || v === "" ? "—" : String(v)),
+          },
+        ],
+      },
+      {
+        title: "fast-complete",
+        rows: [
+          { key: "fc_segments", label: "触发段数", digits: 0 },
+          { key: "fc_saved_frames", label: "未跑模型帧", digits: 0 },
+          { key: "fc_quality_drop_avg", label: "质量下降", digits: 2 },
+        ],
+      },
+      {
+        title: "评分口径",
+        rows: [
+          {
+            key: "quality_source",
+            label: "画质来源",
+            format: (v) => (v == null || v === "" ? "—" : String(v)),
+          },
+          {
+            key: "outcome_source",
+            label: "结局来源",
+            format: (v) => (v == null || v === "" ? "—" : String(v)),
+          },
+          {
+            key: "metrics_status",
+            label: "指标状态",
+            format: (v) => (v == null || v === "" ? "—" : String(v)),
+          },
+        ],
+      },
+    ];
+
+    function armMetricValue(arm, spec) {
+      if (!arm) return null;
+      if (arm[spec.key] != null) return arm[spec.key];
+      if (spec.alt && arm[spec.alt] != null) return arm[spec.alt];
+      return null;
+    }
+
+    function fmtCompareRate(value) {
+      if (value == null || value === "" || Number.isNaN(Number(value))) return "—";
+      return String(Math.round(Number(value) * 1000) / 10) + "%";
+    }
+
+    function formatCompareMetric(spec, value) {
+      if (spec.format) return spec.format(value);
+      return fmtCompareNum(value, spec.digits == null ? 2 : spec.digits, spec.suffix || "");
+    }
+
+    function valuesDiffer(texts) {
+      const nonempty = texts.filter((t) => t && t !== "—");
+      if (nonempty.length < 2) return false;
+      return new Set(nonempty).size > 1;
+    }
+
+    async function loadArmMetricsForCompare(run) {
+      // Rebuild metrics + merge analyzer enhance/abort stats for mechanism compare.
+      let arm = firstArmMetrics(run);
+      try {
+        const metrics = await api("/runs/" + run.id + "/metrics");
+        run.metrics = metrics;
+        const cached = historyRuns.find((item) => item.id === run.id);
+        if (cached) cached.metrics = metrics;
+        arm = firstArmMetrics(run);
+      } catch (e) {
+        arm = firstArmMetrics(run);
+      }
+      try {
+        const report = await api("/runs/" + run.id + "/analyzer");
+        if (M.enrichArmFromAnalyzer) arm = M.enrichArmFromAnalyzer(arm, report);
+        else if (arm && report && report.abort_reasons && !arm.abort_summary) {
+          arm = Object.assign({}, arm, {
+            abort_summary: Object.entries(report.abort_reasons || {})
+              .map(([key, value]) => (ABORT_LABELS[key] || key) + ":" + value)
+              .join("；"),
+          });
+        }
+      } catch (e) {
+        /* analyzer optional */
+      }
+      if (arm && arm.abort_reasons && !arm.abort_summary && M.formatAbortSummary) {
+        arm.abort_summary = M.formatAbortSummary(arm.abort_reasons);
+      }
+      return arm;
+    }
+
+    function compareFairnessWarnings(cols) {
+      const notes = [];
+      const arms = cols.map((col) => col.arm || {});
+      if (arms.some((arm) => arm.qoe == null && arm.avg_vmaf == null)) {
+        notes.push("有的运行还没有画质/QoE，对比不完整");
+      }
+      const statuses = [...new Set(arms.map((arm) => arm.metrics_status || "").filter(Boolean))];
+      if (statuses.length > 1) {
+        notes.push("指标状态不一致：" + statuses.join(" / "));
+      }
+      const sources = [...new Set(arms.map((arm) => arm.quality_source || arm.outcome_source || "").filter(Boolean))];
+      if (sources.length > 1) {
+        notes.push("画质来源不一致：" + sources.join(" / ") + "（优先都用 analyzer 结局再比）");
+      }
+      const outcomes = [...new Set(arms.map((arm) => arm.outcome_source || "").filter(Boolean))];
+      if (outcomes.includes("telemetry_planned") && outcomes.some((item) => item !== "telemetry_planned")) {
+        notes.push("有的运行仍按计划增强档打分，abort 段可能虚高");
+      }
+      if (arms.some((arm) => arm.abort_total == null && arm.enh_l2_count == null)) {
+        notes.push("有的运行缺少增强执行统计（还没有 analyzer）");
+      }
+      return notes;
+    }
+
+    function hideComparePanel() {
+      const panel = $("comparePanel");
+      if (panel) panel.hidden = true;
+      const body = $("compareBody");
+      if (body) body.innerHTML = "";
+      const msg = $("compareMsg");
+      if (msg) msg.textContent = "";
+      setReviewFlag(false);
+    }
+
+    function renderCompareMetricGroup(cols, group) {
+      const rows = group.rows.map((spec) => {
+        const cells = cols.map((col) => formatCompareMetric(spec, armMetricValue(col.arm, spec)));
+        if (cells.every((cell) => cell === "—")) return "";
+        const diff = valuesDiffer(cells);
+        return `<tr><td>${esc(spec.label)}</td>${cells.map((cell) =>
+          `<td class="mono${diff ? " is-diff" : ""}">${esc(cell)}</td>`).join("")}</tr>`;
+      }).join("");
+      if (!rows) return "";
+      return `<tr class="is-section"><td colspan="${cols.length + 1}">${esc(group.title)}</td></tr>${rows}`;
+    }
+
+    function renderCompareTable(cols) {
+      const head = `<tr><th>项目</th>${cols.map((col) => {
+        const title = esc(col.fullTitle || col.header);
+        return `<th class="mono" title="${title}">${esc(col.header)}<div class="quiet">${esc(col.sub)}</div></th>`;
+      }).join("")}</tr>`;
+
+      const condRows = COMPARE_CONDS.map((spec) => {
+        const cells = cols.map((col) => {
+          const raw = col.parts[spec.key];
+          return spec.format ? spec.format(raw) : (raw == null || raw === "" ? "—" : String(raw));
+        });
+        const diff = valuesDiffer(cells);
+        return `<tr><td>${esc(spec.label)}</td>${cells.map((cell) =>
+          `<td class="mono${diff ? " is-diff" : ""}">${esc(cell)}</td>`).join("")}</tr>`;
+      }).join("");
+
+      const metricBlocks = COMPARE_METRIC_GROUPS.map((group) => renderCompareMetricGroup(cols, group)).join("");
+
+      return `<table class="compare"><thead>${head}</thead><tbody>`
+        + `<tr class="is-section"><td colspan="${cols.length + 1}">条件</td></tr>${condRows}`
+        + metricBlocks
+        + `</tbody></table>`;
+    }
+
+    async function openCompare() {
+      const ids = [...selectedRuns];
+      const msg = $("compareMsg");
+      const panel = $("comparePanel");
+      const body = $("compareBody");
+      const btn = $("histCompare");
+      if (!panel || !body) return;
+      if (ids.length < 2 || ids.length > 4) {
+        if (msg) msg.textContent = "请选择 2～4 次运行再对比";
+        panel.hidden = false;
+        body.innerHTML = "";
+        setReviewFlag(true);
+        return;
+      }
+      if (btn) btn.disabled = true;
+      panel.hidden = false;
+      setReviewFlag(true);
+      body.innerHTML = '<p class="quiet">读取指标…</p>';
+      if (msg) msg.textContent = "";
+      try {
+        const cols = [];
+        for (const id of ids) {
+          const run = getHistoryRun(id) || await api("/runs/" + id);
+          const arm = await loadArmMetricsForCompare(run);
+          const summary = M.recipeSummaryFromSpec
+            ? M.recipeSummaryFromSpec(run.spec || {}, { partMax: 14 })
+            : { line: run.name || id, title: id, parts: {} };
+          const parts = summary.parts || (M.recipePartsFromSpec
+            ? M.recipePartsFromSpec(run.spec || {})
+            : {});
+          cols.push({
+            id: run.id,
+            header: formatRunTime(run),
+            sub: summary.line,
+            fullTitle: (run.id || "") + "\n" + (summary.title || ""),
+            parts: parts,
+            arm: arm,
+          });
+        }
+        body.innerHTML = renderCompareTable(cols);
+        const warnings = compareFairnessWarnings(cols);
+        if (msg) {
+          msg.textContent = warnings.length
+            ? ("注意：" + warnings.join("；"))
+            : "对比含播放质量、增强执行与 fast-complete；画质对齐 analyzer（质量表推算）。";
+        }
+        const hist = $("historyPanel");
+        if (hist) hist.open = true;
+        panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      } catch (e) {
+        body.innerHTML = "";
+        if (msg) msg.textContent = String(e.message || e);
+      } finally {
+        if (btn) {
+          const n = selectedRuns.size;
+          btn.disabled = n < 2 || n > 4;
+        }
+      }
+    }
+
+    function historyDetail(runId) {
+      return [...document.querySelectorAll("tr.hist-detail")].find((el) => el.dataset.detailFor === runId) || null;
+    }
+
+    async function fillHistoryDetail(runId) {
+      const row = historyDetail(runId);
+      const box = row && row.querySelector(".hist-report");
+      if (!box) return;
+      const prev = box.querySelector("details.report-fold");
+      const keepOpen = !!(prev && prev.open);
+      box.textContent = "读取中…";
+      let report;
+      try {
+        report = await api("/runs/" + runId + "/analyzer");
+      } catch (e) {
+        report = { available: false, reason: String(e.message || e) };
+      }
+      if (openHistoryId !== runId) return;
+      const current = historyDetail(runId);
+      const target = current && current.querySelector(".hist-report");
+      if (!target) return;
+      target.innerHTML = reportHtml(report, { open: keepOpen });
+    }
+
+    function renderHistory(runs) {
+      const sorted = (runs || []).slice().sort((a, b) => runStamp(b) - runStamp(a));
+      historyRuns = sorted;
+      const host = $("runList");
+      if (!host) return sorted;
+      if (!sorted.length) {
+        host.innerHTML = '<p class="hint">暂无运行</p>';
+        return sorted;
+      }
+      if (openHistoryId && !sorted.some((run) => run.id === openHistoryId)) openHistoryId = null;
+      host.innerHTML = `<table class="hist"><thead><tr><th class="hist-pick"><input class="hist-all" type="checkbox" title="全选"></th><th>时间</th><th>实验</th><th>状态</th><th>重缓冲</th><th>带宽</th><th>QoE</th><th></th></tr></thead><tbody>${sorted.map((run) => {
+        const arm = firstArmMetrics(run);
+        const open = openHistoryId === run.id;
+        const busy = run.id === currentRunId && isRunLive(run);
+        if (busy) selectedRuns.delete(run.id);
+        const checked = selectedRuns.has(run.id) ? " checked" : "";
+        const disabled = busy ? " disabled" : "";
+        const recipe = M.recipeSummaryFromSpec
+          ? M.recipeSummaryFromSpec(run.spec || {})
+          : { title: "" };
+        const rowTitle = [run.id, recipe.title].filter(Boolean).join("\n");
+        const observing = currentRunId === run.id ? " is-observing" : "";
+        return `<tr class="hist-row${open ? " is-open" : ""}${observing}" data-run-id="${esc(run.id)}" title="${esc(rowTitle)}"><td class="hist-pick"><input class="hist-check" type="checkbox" value="${esc(run.id)}"${checked}${disabled}></td><td>${esc(formatRunTime(run))}</td><td>${esc(run.name || "—")}</td><td>${esc(RUN_STATUS_LABEL[run.status] || run.status || "—")}</td><td>${esc(fmtRebuffer(arm))}</td><td>${esc(fmtBandwidth(arm))}</td><td>${esc(fmtQoe(arm))}</td><td><a href="/v1/runs/${esc(run.id)}/export?format=csv">CSV</a></td></tr><tr class="hist-detail" data-detail-for="${esc(run.id)}"${open ? "" : " hidden"}><td colspan="8"><div class="hist-actions"><button type="button" class="hist-act" data-act="observe" data-run-id="${esc(run.id)}">载入观测</button><button type="button" class="hist-act" data-act="recipe" data-run-id="${esc(run.id)}">载入下次配方</button><button type="button" class="hist-act" data-act="rerun" data-run-id="${esc(run.id)}">按此重跑</button></div><div class="report hist-report"></div></td></tr>`;
+      }).join("")
+        }</tbody></table>`;
+      updateHistBar();
+      if (openHistoryId) fillHistoryDetail(openHistoryId);
+      return sorted;
     }
 
     async function loadExperiments() {
@@ -1666,64 +3156,168 @@
         await applySpecToForm(DEFAULT_SPEC);
         recipeInitialized = true;
       }
-      const [exps, runs] = await Promise.all([api("/experiments"), api("/runs")]);
-      const sortedRuns = (runs || []).slice().reverse();
-      $("runList").innerHTML = table(
-        ["id", "name", "status", ""],
-        sortedRuns.slice(0, 12).map((r) => [
-          `<span class="mono">${esc(r.id)}</span>`,
-          esc(r.name),
-          esc(r.status),
-          `<button type="button" class="action ghost" data-open-run="${esc(r.id)}">打开</button>`
-          + ` <a href="/v1/runs/${esc(r.id)}/export?format=csv">CSV</a>`,
-        ])
-      );
-      $("runList").querySelectorAll("[data-open-run]").forEach((btn) => {
-        btn.onclick = async () => {
-          const r = await api("/runs/" + btn.dataset.openRun);
-          renderRun(r);
-        };
-      });
-      $("expList").innerHTML = table(
-        ["id", "name", "runs"],
-        (exps || []).slice().reverse().slice(0, 12).map((e) => [
-          `<span class="mono">${esc(e.id)}</span>`,
-          esc(e.name),
-          esc((e.run_ids || []).length),
-        ])
-      );
-      updateHistorySummary(sortedRuns);
+      const runs = await api("/runs");
+      const sortedRuns = renderHistory(runs);
       updateRecipeSummary();
       if (currentRunId) {
-        const live = sortedRuns.find((r) => r.id === currentRunId);
+        const live = (sortedRuns || []).find((r) => r.id === currentRunId);
         if (live) renderRun(live);
       }
     }
 
-    async function loadJobs() {
-      const jobs = await api("/jobs");
-      const sorted = (jobs || []).slice().reverse();
-      $("jobList").innerHTML = table(
-        ["id", "plugin", "status", "steps"],
-        sorted.map((j) => [
-          `<span class="mono">${esc(j.id)}</span>`,
-          esc(j.plugin),
-          esc(j.status),
-          esc((j.steps || []).join(" → ")),
-        ])
-      );
+    function hideHistConfirm() {
+      const ask = $("histConfirm");
+      const btn = $("histDelete");
+      if (ask) ask.hidden = true;
+      if (btn) btn.hidden = false;
     }
 
-    async function loadSystem() {
-      const [health, sys] = await Promise.all([api("/health"), api("/system")]);
-      $("sysPre").textContent = JSON.stringify({ health, system: sys }, null, 2);
+    function updateHistBar() {
+      const bar = $("histBar");
+      const count = $("histCount");
+      if (!bar || !count) return;
+      const n = selectedRuns.size;
+      bar.hidden = n < 1;
+      count.textContent = "已选 " + n + " 项";
+      if (n < 1) {
+        hideHistConfirm();
+        hideComparePanel();
+      }
+      const cmp = $("histCompare");
+      if (cmp) {
+        cmp.disabled = n < 2 || n > 4;
+        cmp.title = n > 4 ? "最多选 4 项" : (n < 2 ? "至少选 2 项" : "并排查看所选运行");
+      }
+      const all = document.querySelector("#runList .hist-all");
+      const boxes = [...document.querySelectorAll("#runList .hist-check:not(:disabled)")];
+      if (all) {
+        const picked = boxes.filter((box) => box.checked).length;
+        all.checked = boxes.length > 0 && picked === boxes.length;
+        all.indeterminate = picked > 0 && picked < boxes.length;
+        all.disabled = boxes.length < 1;
+      }
     }
+
+    $("histCompare").onclick = () => {
+      openCompare().catch((e) => {
+        const msg = $("compareMsg");
+        if (msg) msg.textContent = String(e.message || e);
+      });
+    };
+
+    $("compareClose").onclick = () => {
+      hideComparePanel();
+    };
+
+    $("histDelete").onclick = () => {
+      const n = selectedRuns.size;
+      if (!n) return;
+      $("histConfirmText").textContent = "删除这 " + n + " 次运行？遥测、指标和分析文件会一起删掉。";
+      $("histDelete").hidden = true;
+      $("histConfirm").hidden = false;
+      const msg = $("histMsg");
+      if (msg) msg.textContent = "";
+    };
+
+    $("histConfirmNo").onclick = () => {
+      hideHistConfirm();
+    };
+
+    $("histConfirmYes").onclick = async () => {
+      const ids = [...selectedRuns];
+      if (!ids.length) return;
+      const yes = $("histConfirmYes");
+      const no = $("histConfirmNo");
+      yes.disabled = true;
+      no.disabled = true;
+      try {
+        const result = await api("/runs/delete", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ids }),
+        });
+        (result.deleted || []).forEach((id) => selectedRuns.delete(id));
+        if (currentRunId && (result.deleted || []).includes(currentRunId)) {
+          currentRunId = null;
+          openHistoryId = null;
+          renderRun(null);
+        } else if (openHistoryId && (result.deleted || []).includes(openHistoryId)) {
+          openHistoryId = null;
+        }
+        const skipped = result.skipped || [];
+        await loadExperiments();
+        const msg = $("histMsg");
+        if (msg && skipped.length) {
+          msg.textContent = skipped.length + " 项仍在播放，没有删除。";
+          $("histBar").hidden = false;
+        }
+      } catch (e) {
+        const msg = $("histMsg");
+        if (msg) msg.textContent = String(e.message || e);
+      } finally {
+        yes.disabled = false;
+        no.disabled = false;
+        hideHistConfirm();
+      }
+    };
+
+    $("runList").addEventListener("change", (ev) => {
+      const box = ev.target;
+      if (!box || !box.classList) return;
+      if (box.classList.contains("hist-all")) {
+        document.querySelectorAll("#runList .hist-check:not(:disabled)").forEach((item) => {
+          item.checked = box.checked;
+          if (box.checked) selectedRuns.add(item.value);
+          else selectedRuns.delete(item.value);
+        });
+        updateHistBar();
+        return;
+      }
+      if (!box.classList.contains("hist-check")) return;
+      if (box.checked) selectedRuns.add(box.value);
+      else selectedRuns.delete(box.value);
+      updateHistBar();
+    });
+
+    $("runList").addEventListener("click", async (ev) => {
+      const actBtn = ev.target.closest("button.hist-act");
+      if (actBtn) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        const act = actBtn.dataset.act;
+        const id = actBtn.dataset.runId;
+        if (!act || !id) return;
+        actBtn.disabled = true;
+        try {
+          if (act === "observe") await loadObservation(id);
+          else if (act === "recipe") await loadNextRecipe(id);
+          else if (act === "rerun") await rerunFromHistory(id);
+        } catch (e) {
+          showRunErr(e.message || e);
+        } finally {
+          actBtn.disabled = false;
+        }
+        return;
+      }
+      if (ev.target.closest("a, input, button")) return;
+      const row = ev.target.closest("tr.hist-row");
+      if (!row) return;
+      const id = row.dataset.runId;
+      openHistoryId = openHistoryId === id ? null : id;
+      document.querySelectorAll("tr.hist-row").forEach((el) => {
+        el.classList.toggle("is-open", el.dataset.runId === openHistoryId);
+      });
+      document.querySelectorAll("tr.hist-detail").forEach((el) => {
+        el.hidden = el.dataset.detailFor !== openHistoryId;
+      });
+      if (openHistoryId) fillHistoryDetail(openHistoryId);
+    });
 
     async function refreshAll() {
       try {
         await api("/health");
         setConn(true, "控制面已连接 · Prism");
-        const panel = document.querySelector(".panel.active")?.id?.replace("panel-", "") || "library";
+        const panel = document.querySelector(".panel.active")?.id?.replace("panel-", "") || "experiments";
         await loadPanel(panel);
       } catch (e) {
         setConn(false, "控制面不可用：" + e.message);
@@ -1731,15 +3325,9 @@
     }
 
     async function loadPanel(name) {
-      if (name === "library") await loadLibrary();
-      else if (name === "experiments") await loadExperiments();
-      else if (name === "jobs") await loadJobs();
-      else if (name === "system") await loadSystem();
+      if (name === "experiments") await loadExperiments();
     }
 
-    $("btnMore").onclick = () => {
-      $("moreNav").hidden = !$("moreNav").hidden;
-    };
     document.querySelectorAll(".nav-btn[data-panel]").forEach((btn) => {
       btn.addEventListener("click", async () => {
         document.querySelectorAll(".nav-btn[data-panel]").forEach((b) => b.classList.remove("active"));
@@ -1774,14 +3362,18 @@
     };
     $("btnKeepFrames").onclick = async () => {
       if (!timeline.runId || !timeline.armId) {
-        $("frameMeta").textContent = "还没有可保留的画面";
+        setFrameMeta("还没有可保留的画面");
         return;
       }
       try {
-        await api(`/runs/${timeline.runId}/frames/save?arm_id=${encodeURIComponent(timeline.armId)}`, { method: "POST" });
-        $("frameMeta").textContent = "已保留";
+        const saved = await api(
+          `/runs/${timeline.runId}/frames/save?arm_id=${encodeURIComponent(timeline.armId)}`,
+          { method: "POST" },
+        );
+        const path = (saved && saved.path) || "";
+        setFrameMeta(path ? ("已保留到 " + path) : "已保留", path || "");
       } catch (e) {
-        $("frameMeta").textContent = String(e.message || e);
+        setFrameMeta(String(e.message || e));
       }
     };
     $("btnLive").onclick = async () => {
@@ -1791,13 +3383,20 @@
       } catch (e) { /* ignore */ }
       if (timeline.totals && Object.values(timeline.totals).some((n) => n > 0)) {
         const max = Math.max(...Object.values(timeline.totals));
-        $("frameMeta").textContent = max + " 帧";
+        setFrameMeta(max + " 帧");
+      } else {
+        setFrameMeta("");
       }
     };
     ["fldContent", "fldNes", "fldEnhancer", "fldRenderer", "fldTraceFile"].forEach((id) => {
       const el = $(id);
       if (el) el.addEventListener("change", onRecipeFormChange);
     });
+    if ($("fldWorkspace")) {
+      $("fldWorkspace").addEventListener("change", () => {
+        applyWorkspaceDefaults();
+      });
+    }
     $("fldNetMode").addEventListener("change", async () => {
       const on = $("fldNetMode").value === "trace";
       setTraceControlsEnabled(on);
@@ -1841,33 +3440,44 @@
         showRunErr(e.message || e);
       }
     };
+    async function startCurrentRecipe() {
+      const spec = resolveSpecFromEditor();
+      if ($("fldNetMode").value === "trace" && !(armPlayer(spec).trace || "").trim()) {
+        throw new Error("已选轨迹限速，但未选择轨迹文件");
+      }
+      if (!warnBeforeStart(spec)) return null;
+      if (!spec.metadata || typeof spec.metadata !== "object") spec.metadata = {};
+      if (M.recipeSummaryFromSpec) {
+        spec.metadata.name = M.recipeSummaryFromSpec(spec).shortName;
+      }
+      clearRunMsg();
+      setRunControls("preparing");
+      let run = await api("/runs", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          spec,
+          attach_players: true,
+          wait: false,
+        }),
+      });
+      run = await waitRunReady(run.id);
+      if (run.status === "failed") throw new Error(run.error || "preparation failed");
+      const armFail = (run.arms || []).find((a) => a.status === "failed");
+      if (armFail) {
+        throw new Error(armFail.error || ("播放器启动失败：" + armFail.id));
+      }
+      lastStartedSpec = JSON.parse(JSON.stringify(spec));
+      clearRunMsg();
+      setRecipeExpanded(false);
+      renderRun(run);
+      await loadExperiments();
+      return run;
+    }
+
     $("btnStartRun").onclick = async () => {
       try {
-        const spec = resolveSpecFromEditor();
-        if ($("fldNetMode").value === "trace" && !(armPlayer(spec).trace || "").trim()) {
-          throw new Error("已选轨迹限速，但未选择轨迹文件");
-        }
-        clearRunMsg();
-        setRunControls("preparing");
-        let run = await api("/runs", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            spec,
-            attach_players: true,
-            wait: false,
-          }),
-        });
-        run = await waitRunReady(run.id);
-        if (run.status === "failed") throw new Error(run.error || "preparation failed");
-        const armFail = (run.arms || []).find((a) => a.status === "failed");
-        if (armFail) {
-          throw new Error(armFail.error || ("播放器启动失败：" + armFail.id));
-        }
-        clearRunMsg();
-        setRecipeExpanded(false);
-        renderRun(run);
-        await loadExperiments();
+        await startCurrentRecipe();
       } catch (e) {
         showRunErr(e.message || e);
         setRunControls(currentRunId ? "stopped" : "idle");
@@ -1879,60 +3489,10 @@
       try {
         const run = await api("/runs/" + currentRunId + "/stop", { method: "POST" });
         clearRunMsg();
-        setRecipeExpanded(true);
         renderRun(run);
         await loadExperiments();
       } catch (e) {
         showRunErr(e.message || e);
-      }
-    };
-
-    $("btnBbb").onclick = async () => {
-      const box = $("homeMsg");
-      const btn = $("btnBbb");
-      btn.disabled = true;
-      box.className = "msg";
-      box.textContent = "读取 System preset…";
-      try {
-        const sys = await api("/system");
-        const preset = sys.presets?.bbb_dash;
-        if (!preset?.exists) {
-          box.className = "msg err";
-          box.textContent = "未找到 BBB DASH 树：" + (preset?.path || "");
-          return;
-        }
-        box.textContent = "导入中…";
-        const boot = await api("/bootstrap/import-dash", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            name: "bbb",
-            path: preset.path,
-            experiment_name: "prism-bbb",
-          }),
-        });
-        const jobId = boot.job?.id;
-        box.textContent = "等待 job " + jobId + " …";
-        let job = boot.job;
-        for (let i = 0; i < 80; i++) {
-          await new Promise((r) => setTimeout(r, 200));
-          job = await api("/jobs/" + jobId);
-          if (["succeeded", "failed", "skipped"].includes(job.status)) break;
-        }
-        if (job.status !== "succeeded") {
-          box.className = "msg err";
-          box.textContent = "导入失败：" + (job.error || job.status);
-          return;
-        }
-        const pubId = job.publication_id;
-        box.className = "msg ok";
-        box.textContent = "已导入 " + pubId;
-        await loadLibrary();
-      } catch (e) {
-        box.className = "msg err";
-        box.textContent = String(e.message || e);
-      } finally {
-        btn.disabled = false;
       }
     };
 

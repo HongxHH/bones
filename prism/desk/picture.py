@@ -7,9 +7,11 @@ import threading
 import urllib.parse
 import urllib.request
 
+from prism.desk.scrub import frame_caption, frames_page_url, pick_scrub_run, picture_put_body, picture_url, save_frames_url
+
 from PySide6.QtCore import QPoint, QRect, Qt, QThread, QTimer, Signal
 from PySide6.QtGui import QColor, QFont, QImage, QPainter
-from PySide6.QtWidgets import QHBoxLayout, QLabel, QPushButton, QVBoxLayout, QWidget
+from PySide6.QtWidgets import QHBoxLayout, QLabel, QPushButton, QSizePolicy, QSlider, QVBoxLayout, QWidget
 
 _STAT_KEYS = (
     "play",
@@ -301,10 +303,12 @@ def _read_focus(host: str, port: int, previous: int) -> dict | None:
     if not data.get("active"):
         return {"focus": False}
     seq = int(data.get("seq") or 0)
+    frame = int(data.get("frame") or 0)
     payload = {
         "focus": True,
         "seq": seq,
-        "line": f"{data.get('arm_id')}  ·  帧 {data.get('frame')}",
+        "frame": frame,
+        "line": f"{data.get('arm_id')}  ·  帧 {frame}",
         "port": 0,
         "paused": False,
     }
@@ -312,13 +316,13 @@ def _read_focus(host: str, port: int, previous: int) -> dict | None:
         return payload
     run_id = data.get("run_id")
     arm_id = data.get("arm_id")
-    frame = int(data.get("frame") or 0)
     query = urllib.parse.quote(str(arm_id), safe="")
     base = f"http://{host}:{port}/v1/runs/{run_id}/frames/{frame}"
     try:
         with urllib.request.urlopen(f"{base}?arm_id={query}", timeout=0.6) as resp:
             row = json.loads(resp.read().decode("utf-8"))
         payload["facts"] = _facts_from_frame(row)
+        payload["caption"] = frame_caption(row)
     except Exception:
         pass
     try:
@@ -334,7 +338,73 @@ def _read_focus(host: str, port: int, previous: int) -> dict | None:
     return payload
 
 
-def _pick_live_run(runs: list) -> dict | None:
+def _read_player_status(status_port: int) -> dict | None:
+    if status_port <= 0:
+        return None
+    try:
+        with urllib.request.urlopen(f"http://127.0.0.1:{status_port}/api/status", timeout=1.0) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+    except Exception:
+        return None
+    return data if isinstance(data, dict) else None
+
+
+def _latest_live_sample(host: str, port: int, run_id: str, arm_id: str) -> dict | None:
+    """Control-plane tail. Still updates while the player loop is inside a GPU forward."""
+    if not run_id or not arm_id:
+        return None
+    query = urllib.parse.urlencode({"arm_id": arm_id, "limit": "1"})
+    try:
+        with urllib.request.urlopen(f"http://{host}:{port}/v1/runs/{run_id}/live?{query}", timeout=0.6) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+    except Exception:
+        return None
+    samples = data.get("samples") if isinstance(data, dict) else None
+    if not samples:
+        return None
+    last = samples[-1]
+    return last if isinstance(last, dict) else None
+
+
+def _play_head(status: dict | None) -> int:
+    if not isinstance(status, dict):
+        return -1
+    for key in ("playing_segment", "segment_index"):
+        value = status.get(key)
+        if value is None or value == "":
+            continue
+        try:
+            return int(value)
+        except (TypeError, ValueError):
+            continue
+    return -1
+
+
+def _merge_live_status(player: dict | None, telemetry: dict | None) -> tuple[dict | None, str]:
+    """Pick HUD facts. Prefer the fresher play head; Lab telemetry often leads.
+
+    ``/api/status`` can briefly (or longer) report a sticky play index while
+    download/enhance keep moving — the left Lab pane still updates via
+    telemetry. Always compare both when available.
+    """
+    if player is None and telemetry is None:
+        return None, ""
+    if player is None:
+        return telemetry, "telemetry"
+    if telemetry is None:
+        return player, "player"
+    p_play = _play_head(player)
+    t_play = _play_head(telemetry)
+    if t_play > p_play:
+        merged = dict(player)
+        for key, value in telemetry.items():
+            if value is not None:
+                merged[key] = value
+        return merged, "telemetry+player"
+    return player, "player"
+
+
+def _pick_live_run(runs: list, host: str = "127.0.0.1", port: int = 8080) -> dict | None:
     live = [item for item in runs if item.get("status") == "running"]
     if not live:
         return None
@@ -346,37 +416,81 @@ def _pick_live_run(runs: list) -> dict | None:
         arm = next((item for item in arms if item.get("id") == arm_id), None)
         if arm is None:
             arm = next((item for item in arms if item.get("pid")), arms[0] if arms else None)
+        arm_id = (arm or {}).get("id") or arm_id
         status_port = int((arm or {}).get("status_port") or 0)
-        if not status_port or not (arm or {}).get("pid"):
-            continue
-        try:
-            with urllib.request.urlopen(f"http://127.0.0.1:{status_port}/api/status", timeout=0.4) as resp:
-                status = json.loads(resp.read().decode("utf-8"))
-        except Exception:
-            continue
-        return {"run": run, "arm": arm, "arm_id": (arm or {}).get("id") or arm_id, "status": status, "port": status_port}
-    return {"run": live[0], "arm": None, "arm_id": "", "status": None, "port": 0}
+        player_status = (
+            _read_player_status(status_port) if status_port and (arm or {}).get("pid") else None
+        )
+        tel_status = _latest_live_sample(host, port, str(run.get("id") or ""), str(arm_id or ""))
+        status, source = _merge_live_status(player_status, tel_status)
+        if status:
+            return {
+                "run": run,
+                "arm": arm,
+                "arm_id": arm_id,
+                "status": status,
+                "port": status_port,
+                "source": source,
+                "stale": False,
+            }
+    return {"run": live[0], "arm": None, "arm_id": "", "status": None, "port": 0, "stale": True}
+
+
+def _load_runs(host: str, port: int):
+    try:
+        with urllib.request.urlopen(f"http://{host}:{port}/v1/runs", timeout=0.6) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+    except Exception:
+        return None
+    return data if isinstance(data, list) else []
+
+
+def _scrub_snapshot(host: str, port: int, runs) -> dict | None:
+    target = pick_scrub_run(runs if isinstance(runs, list) else None)
+    if not target:
+        return None
+    try:
+        with urllib.request.urlopen(
+            frames_page_url(host, port, target["run_id"], target["arm_id"]),
+            timeout=0.6,
+        ) as resp:
+            page = json.loads(resp.read().decode("utf-8"))
+        total = int(page.get("total") or 0)
+    except Exception:
+        total = 0
+    return {**target, "total": total}
 
 
 def _fetch_hud(host: str, port: int) -> dict:
-    empty = {"arm": "", "facts": _blank_facts(), "paused": False, "port": 0}
-    try:
-        with urllib.request.urlopen(f"http://{host}:{port}/v1/runs", timeout=0.6) as resp:
-            runs = json.loads(resp.read().decode("utf-8"))
-    except Exception:
-        return empty
-    picked = _pick_live_run(runs or [])
+    empty = {"arm": "", "facts": _blank_facts(), "paused": False, "port": 0, "scrub": None, "stale": False}
+    runs = _load_runs(host, port)
+    if runs is None:
+        # Control plane itself did not answer. Keep whatever the bar already shows.
+        return {"arm": "", "facts": None, "paused": False, "port": 0, "scrub": None, "stale": True}
+    scrub = _scrub_snapshot(host, port, runs)
+    picked = _pick_live_run(runs, host, port)
     if not picked:
+        empty["scrub"] = scrub
         return empty
-    status = picked.get("status") or {}
-    paused = bool(status.get("paused")) if status else False
-    facts = _facts_from_status(status, paused) if status else _blank_facts("播放")
+    status = picked.get("status") if isinstance(picked.get("status"), dict) else None
+    if not status:
+        return {
+            "arm": picked.get("arm_id") or "",
+            "facts": None,
+            "paused": False,
+            "port": int(picked.get("port") or 0),
+            "scrub": scrub,
+            "stale": True,
+        }
+    paused = bool(status.get("paused"))
     return {
         "arm": picked.get("arm_id") or "臂",
-        "facts": facts,
+        "facts": _facts_from_status(status, paused),
         "paused": paused,
         "port": int(picked.get("port") or 0),
-        "compare": bool(status.get("compare_view")) if status else False,
+        "compare": bool(status.get("compare_view")),
+        "scrub": scrub,
+        "stale": False,
     }
 
 
@@ -398,6 +512,8 @@ class _HudWorker(QThread):
             focus = _read_focus(self._host, self._port, self._focus_seq)
             if focus and focus.get("focus"):
                 self._focus_seq = int(focus.get("seq") or 0)
+                runs = _load_runs(self._host, self._port)
+                focus["scrub"] = _scrub_snapshot(self._host, self._port, runs or [])
                 self.updated.emit(focus)
             else:
                 self._focus_seq = -1
@@ -411,6 +527,8 @@ class _HudWorker(QThread):
 
 
 class PicturePane(QWidget):
+    _note = Signal(str)
+
     def __init__(self, host: str = "127.0.0.1", port: int = 8080) -> None:
         super().__init__()
         self.setObjectName("stage")
@@ -497,12 +615,43 @@ class PicturePane(QWidget):
         self._chip.setObjectName("hudChip")
         self._chip.clicked.connect(self._show_hud)
         self._chip.hide()
+        self._scrub_run = ""
+        self._scrub_arm = ""
+        self._scrub_drag = False
+        self._await_focus = False
+        self._await_left = 0
+        self._scrub = QWidget(self)
+        self._scrub.setObjectName("scrub")
+        scrub_row = QHBoxLayout(self._scrub)
+        scrub_row.setContentsMargins(10, 4, 10, 4)
+        scrub_row.setSpacing(8)
+        self._slider = QSlider(Qt.Orientation.Horizontal)
+        self._slider.setRange(0, 0)
+        self._slider.setEnabled(False)
+        self._scrub_meta = QLabel("—")
+        self._scrub_meta.setObjectName("scrubMeta")
+        self._scrub_meta.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
+        self._keep = QPushButton("保留")
+        self._keep.setToolTip("把当前内存中的帧归档到磁盘，便于事后回看")
+        self._keep.clicked.connect(self._keep_frames)
+        scrub_row.addWidget(self._slider, 1)
+        scrub_row.addWidget(self._scrub_meta, 1)
+        scrub_row.addWidget(self._keep)
+        self._scrub.hide()
+        self._scrub_timer = QTimer(self)
+        self._scrub_timer.setSingleShot(True)
+        self._scrub_timer.timeout.connect(self._commit_scrub)
+        self._slider.sliderPressed.connect(self._begin_scrub)
+        self._slider.valueChanged.connect(self._queue_scrub)
+        self._slider.sliderReleased.connect(self._end_scrub)
+        self._note.connect(self._scrub_meta.setText)
         self._worker = _HudWorker(host, port)
         self._worker.updated.connect(self._apply_hud)
         self._worker.start()
 
     def close_sink(self) -> None:
         self._timer.stop()
+        self._scrub_timer.stop()
         self._worker.stop()
         self._worker.wait(800)
         self._sink.close()
@@ -517,14 +666,143 @@ class PicturePane(QWidget):
             return 0
         return 72
 
+    def _scrub_bar_height(self) -> int:
+        if not self._scrub.isVisible():
+            return 0
+        return 36
+
+    def _chrome_height(self) -> int:
+        return self._hud_height() + self._scrub_bar_height()
+
     def _place_hud(self) -> None:
-        height = self._hud_height()
-        self._bar.setGeometry(0, max(0, self.height() - height), self.width(), height)
+        hud = self._hud_height()
+        scrub = self._scrub_bar_height()
+        self._scrub.setGeometry(0, max(0, self.height() - hud - scrub), self.width(), scrub)
+        self._bar.setGeometry(0, max(0, self.height() - hud), self.width(), hud)
         self._chip.setGeometry(self.width() - 64, 10, 52, 26)
+
+    def _hide_scrub(self) -> None:
+        if not self._scrub.isVisible():
+            return
+        self._scrub.hide()
+        self._place_hud()
+
+    def _apply_scrub(self, scrub, info: dict) -> None:
+        if not isinstance(scrub, dict):
+            if not info.get("focus"):
+                self._hide_scrub()
+            return
+        total = int(scrub.get("total") or 0)
+        if total < 1:
+            self._scrub_run = ""
+            self._scrub_arm = ""
+            self._hide_scrub()
+            return
+        self._scrub_run = str(scrub.get("run_id") or "")
+        self._scrub_arm = str(scrub.get("arm_id") or "")
+        if not self._scrub.isVisible():
+            self._scrub.show()
+            self._place_hud()
+        last = max(0, total - 1)
+        self._slider.setEnabled(True)
+        if self._slider.maximum() != last:
+            self._slider.blockSignals(True)
+            self._slider.setMaximum(last)
+            self._slider.blockSignals(False)
+        if self._scrub_drag:
+            return
+        if self._await_focus and not info.get("focus"):
+            self._await_left -= 1
+            if self._await_left > 0:
+                return
+            self._await_focus = False
+        if info.get("focus"):
+            self._await_focus = False
+            frame = min(last, max(0, int(info.get("frame") or 0)))
+            self._slider.blockSignals(True)
+            self._slider.setValue(frame)
+            self._slider.blockSignals(False)
+            if info.get("caption"):
+                self._scrub_meta.setText(str(info["caption"]))
+            return
+        self._slider.blockSignals(True)
+        self._slider.setValue(last)
+        self._slider.blockSignals(False)
+        self._scrub_meta.setText(f"{total} 帧")
+
+    def _begin_scrub(self) -> None:
+        self._scrub_drag = True
+        self._hold = True
+        self._await_focus = True
+        self._await_left = 4
+
+    def _queue_scrub(self, _value: int) -> None:
+        if not self._scrub_drag:
+            return
+        self._scrub_timer.start(60)
+
+    def _end_scrub(self) -> None:
+        self._commit_scrub()
+        self._scrub_drag = False
+
+    def _commit_scrub(self) -> None:
+        run_id = self._scrub_run
+        arm_id = self._scrub_arm
+        if not run_id or not arm_id:
+            return
+        frame = int(self._slider.value())
+        host = self._worker._host
+        port = self._worker._port
+        url = picture_url(host, port)
+        body = picture_put_body(run_id, arm_id, frame)
+
+        def go() -> None:
+            try:
+                req = urllib.request.Request(
+                    url,
+                    data=body,
+                    headers={"Content-Type": "application/json"},
+                    method="PUT",
+                )
+                urllib.request.urlopen(req, timeout=1.0).read()
+            except Exception:
+                return
+
+        threading.Thread(target=go, daemon=True).start()
+
+    def _keep_frames(self) -> None:
+        run_id = self._scrub_run
+        arm_id = self._scrub_arm
+        if not run_id or not arm_id:
+            self._scrub_meta.setText("还没有可保留的画面")
+            return
+        host = self._worker._host
+        port = self._worker._port
+        url = save_frames_url(host, port, run_id, arm_id)
+
+        def go() -> None:
+            text = "保留失败"
+            try:
+                req = urllib.request.Request(
+                    url,
+                    data=b"{}",
+                    headers={"Content-Type": "application/json"},
+                    method="POST",
+                )
+                with urllib.request.urlopen(req, timeout=3.0) as resp:
+                    data = json.loads(resp.read().decode("utf-8"))
+                path = str((data or {}).get("path") or "")
+                text = ("已保留到 " + path) if path else "已保留"
+            except Exception:
+                text = "保留失败"
+            self._note.emit(text)
+
+        threading.Thread(target=go, daemon=True).start()
 
     def _apply_hud(self, info: object) -> None:
         if not isinstance(info, dict):
             return
+        self._apply_scrub(info.get("scrub"), info)
         if not info.get("focus"):
             self._status_port = int(info.get("port") or 0)
         self._sync_compare(info.get("compare"))
@@ -546,7 +824,9 @@ class PicturePane(QWidget):
         self._live.hide()
         self._pause.show()
         self._paused = bool(info.get("paused"))
-        self._show_facts(info.get("facts") or _blank_facts())
+        facts = info.get("facts")
+        if not info.get("stale") and facts:
+            self._show_facts(facts)
         self._pause.setText("继续" if self._paused else "暂停")
         self._pause.setEnabled(self._status_port > 0)
         if was_hold:
@@ -661,6 +941,8 @@ class PicturePane(QWidget):
         threading.Thread(target=go, daemon=True).start()
 
     def _go_live(self) -> None:
+        self._await_focus = False
+        self._scrub_drag = False
         host = self._worker._host
         port = self._worker._port
 
@@ -698,7 +980,7 @@ class PicturePane(QWidget):
 
     def _view_pixels(self) -> tuple[int, int]:
         scale = self._pixel_scale()
-        return int(self.width() * scale), int(max(0, self.height() - self._hud_height()) * scale)
+        return int(self.width() * scale), int(max(0, self.height() - self._chrome_height()) * scale)
 
     def mousePressEvent(self, event) -> None:  # noqa: N802
         if event.button() == Qt.MouseButton.LeftButton and self._compare and self._image is not None:
@@ -788,7 +1070,7 @@ class PicturePane(QWidget):
     def paintEvent(self, _event) -> None:  # noqa: N802
         painter = QPainter(self)
         painter.fillRect(self.rect(), QColor("#0e1a22"))
-        view = QRect(0, 0, self.width(), max(0, self.height() - self._hud_height()))
+        view = QRect(0, 0, self.width(), max(0, self.height() - self._chrome_height()))
         if self._image is None or self._image.isNull():
             painter.setPen(QColor(238, 243, 245, 140))
             font = QFont("Segoe UI", 16)
@@ -838,7 +1120,7 @@ class PicturePane(QWidget):
 
     def _set_wipe(self, x: float) -> None:
         image = self._image
-        view = QRect(0, 0, self.width(), max(0, self.height() - self._hud_height()))
+        view = QRect(0, 0, self.width(), max(0, self.height() - self._chrome_height()))
         if image is None or image.isNull():
             span = max(1, view.width())
             self._wipe = min(1.0, max(0.0, x / span))
@@ -852,7 +1134,7 @@ class PicturePane(QWidget):
         image = self._image
         if image is None:
             return False
-        view = QRect(0, 0, self.width(), max(0, self.height() - self._hud_height()))
+        view = QRect(0, 0, self.width(), max(0, self.height() - self._chrome_height()))
         dest, _src = self._frame_dest(image, view)
         split = dest.x() + int(dest.width() * self._wipe)
         return abs(x - split) <= 8

@@ -1,0 +1,55 @@
+{
+  "video": "bbb",
+  "trace": "0913",
+  "built_at": "2026-10-27T21:24:56",
+  "source_archive": "results/archive/d3/d3_summary_20261027-204646.json",
+  "rows": [
+    {
+      "arm": "tool_greedy",
+      "trace": "0913",
+      "QOE": 60.15136387126142,
+      "avg_vmaf": 74.16095641276254,
+      "dur_stall": 1.482177972793579,
+      "num_stall": 2,
+      "n_segments": 159,
+      "tool_or_level_hist": {
+        "None": 14,
+        "2": 42,
+        "3": 83,
+        "5": 18,
+        "1": 2
+      },
+      "result_file": "player/output/data/d3/0913_tool_greedy/tool_greedy_multitask_fast-True_video-bbb_trace-report.2010-09-13_1003CEST_20261027-205926.json",
+      "ok": true
+    },
+    {
+      "arm": "fixed_sr_high",
+      "trace": "0913",
+      "QOE": 50.16859599032096,
+      "avg_vmaf": 64.15809648068705,
+      "dur_stall": 4.097021818161011,
+      "num_stall": 2,
+      "n_segments": 159,
+      "tool_or_level_hist": {
+        "None": 2,
+        "3": 157
+      },
+      "result_file": "player/output/data/d3/0913_fixed_sr_high/always_greedy_imdn_fast-True_video-bbb_trace-report.2010-09-13_1003CEST_20261027-211128.json",
+      "ok": true
+    },
+    {
+      "arm": "none",
+      "trace": "0913",
+      "QOE": 47.79207442140356,
+      "avg_vmaf": 63.152548387286856,
+      "dur_stall": 6.215143918991089,
+      "num_stall": 3,
+      "n_segments": 159,
+      "tool_or_level_hist": {
+        "None": 159
+      },
+      "result_file": "player/output/data/d3/0913_none/always_greedy_imdn_fast-True_video-bbb_trace-report.2010-09-13_1003CEST_20261027-212455.json",
+      "ok": true
+    }
+  ]
+}

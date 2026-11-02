@@ -35,6 +35,7 @@ class TelemetryPublisher:
         self._log = log or logging.getLogger("TelemetryPublisher")
         self._last_telemetry = 0.0
         self._last_state: Optional[str] = None
+        self._post_task: Optional[asyncio.Task] = None
 
     def enabled(self) -> bool:
         config = self._get_config()
@@ -51,6 +52,45 @@ class TelemetryPublisher:
         now = time.monotonic()
         if now - self._last_telemetry < max(0.1, interval_ms / 1000.0):
             return
+        if self._post_task is not None and not self._post_task.done():
+            return
+        # Reserve the slot, then post on a later loop turn so playback can continue.
+        self._last_telemetry = time.monotonic()
+        task = asyncio.create_task(self._post_snapshot(), name="telemetry-post")
+        task.add_done_callback(self._log_task_error)
+        self._post_task = task
+
+    def _log_task_error(self, task: asyncio.Task) -> None:
+        if task.cancelled():
+            return
+        exc = task.exception()
+        if exc is not None:
+            self._log.warning("telemetry post task failed: %s", exc)
+
+    async def flush(self) -> None:
+        """Wait for the in-flight background post. Swallows its error so END can still send."""
+        task = self._post_task
+        if task is None or task.done():
+            return
+        try:
+            await task
+        except Exception as exc:
+            self._log.warning("telemetry post task failed: %s", exc)
+
+    async def force_report(self) -> None:
+        """Post one sample even if the interval has not elapsed (e.g. END).
+
+        Waits out any background post first so the END sample is the only writer.
+        """
+        if not self.enabled():
+            return
+        await self.flush()
+        await self._post_snapshot()
+        self._last_telemetry = time.monotonic()
+
+    async def _post_snapshot(self) -> None:
+        config = self._get_config()
+        assert config is not None
         snap = self._get_snapshot()
         state_name = str(snap.get("state") or "")
         event = None
@@ -85,4 +125,4 @@ class TelemetryPublisher:
             await asyncio.sleep(0.05 * (attempt + 1))
         if last_err:
             self._log.warning("telemetry post failed after retries: %s", last_err)
-        self._last_telemetry = now
+        self._last_telemetry = time.monotonic()

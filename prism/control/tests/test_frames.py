@@ -42,6 +42,21 @@ def test_frame_archive_roundtrip(tmp_path: Path):
     assert (tmp_path / "arm" / "count.txt").read_text(encoding="ascii").strip() == "1"
 
 
+def test_iter_frame_rows_follows_appended_index(tmp_path: Path):
+    from prism.control.frames import iter_frame_rows
+
+    root = tmp_path / "arm"
+    root.mkdir()
+    index = root / "frames.jsonl"
+    index.write_text('{"frame": 0, "segment": 1}\n', encoding="utf-8")
+    assert [row["frame"] for row in iter_frame_rows(root)] == [0]
+    with index.open("a", encoding="utf-8") as handle:
+        handle.write('{"frame": 1, "segment": 1}\n')
+    assert [row["frame"] for row in iter_frame_rows(root)] == [0, 1]
+    index.write_text('{"frame": 9, "segment": 2}\n', encoding="utf-8")
+    assert [row["frame"] for row in iter_frame_rows(root)] == [9]
+
+
 def test_player_cmd_includes_frame_archive(tmp_path: Path):
     cmd = player_cmd(
         "http://127.0.0.1:8080/manifest.mpd",

@@ -54,6 +54,29 @@ def test_note_state_and_stall_in_build():
     assert snap.build()["stall_s_total"] == 2.0
 
 
+def test_playing_segment_prefers_player_current_index():
+    """Player index is set before listeners; stale renderer index must not win."""
+    runtime = RuntimeMetrics.__new__(RuntimeMetrics)
+    runtime.sample = lambda: {}  # type: ignore[method-assign]
+    snap = StatusSnapshot(runtime=runtime)
+    snap.segment_index = 106
+    snap.player = SimpleNamespace(_current_index=107, state=State.READY, _paused=False, _position=428.0)  # type: ignore[assignment]
+    snap.renderer = SimpleNamespace(  # type: ignore[assignment]
+        # Still on previous segment until Renderer.on_segment_playback_start runs.
+        get_current_render_segment_index=lambda: 106,
+        is_playing=True,
+        is_enhance=True,
+        current_segment_enhance_action=2,
+        _frame_enhanced=None,
+        frame_archive=None,
+    )
+    out = snap.build()
+    assert out["playing_segment"] == 107
+    assert out["segment_index"] == 107
+    assert out["playing_enhanced"] is True
+    assert out["playing_enhance_level"] == 2
+
+
 def test_enhancing_segment_not_sticky_when_idle():
     runtime = RuntimeMetrics.__new__(RuntimeMetrics)
     runtime.sample = lambda: {}  # type: ignore[method-assign]
