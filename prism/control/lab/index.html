@@ -1748,10 +1748,19 @@
       if (!currentRunId || telemetryInFlight) return;
       telemetryInFlight = true;
       try {
+        const wasLive = currentControlsLive();
         const live = await api(`/runs/${currentRunId}/live?limit=120`);
         setRunControls(live.status || "idle");
         const running = live.status === "running" || live.status === "preparing";
         if (!running) setTelemetryPolling(false);
+        // Natural end-of-play never hits Stop; refresh history once on that edge
+        // so the row leaves「运行中」and picks up rebuffer / bandwidth / QoE.
+        if (wasLive && !running) {
+          try {
+            const runs = await api("/runs");
+            renderHistory(runs);
+          } catch (e) { /* history can lag independently of live */ }
+        }
         const armId = live.arm_id || live.active_arm_id || (live.arms && live.arms[0] && live.arms[0].id);
         const samples = live.samples || [];
         const last = samples.length ? samples[samples.length - 1] : null;
@@ -2022,7 +2031,7 @@
               mod_status: "status",
               trace: "",
               use_fast_complete: false,
-              latency_adapt: false,
+              latency_adapt: true,
               collect_system_metrics: true,
             },
           },
@@ -2220,6 +2229,7 @@
         if (player.mod_enhancer) arm.player.mod_enhancer = player.mod_enhancer;
         if (player.mod_renderer) arm.player.mod_renderer = player.mod_renderer;
         if (player.use_fast_complete != null) arm.player.use_fast_complete = !!player.use_fast_complete;
+        if (player.latency_adapt != null) arm.player.latency_adapt = !!player.latency_adapt;
         if (ws.metrics) base.spec.metrics = JSON.parse(JSON.stringify(ws.metrics));
         if (ws.cards) base.spec.cards = JSON.parse(JSON.stringify(ws.cards));
       }

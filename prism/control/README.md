@@ -90,7 +90,7 @@ pytest prism/control/tests -q
 
 - 推荐 workspace：`baseline`（fast-complete 关、OpenCV 出画）。只要段计时、不要画面时用 `headless`。
 - `opengl` 渲染器只按段时长 `sleep`，不是 GPU 出画。跨次对比不要把它和 `opencv` 混用。
-- 默认可复现项：`use_fast_complete=false`、`latency_adapt=false`、`collect_system_metrics=false`。需要在线改延迟表时显式打开 `latency_adapt`。
+- 默认可复现项：`use_fast_complete=false`、`collect_system_metrics=false`。`latency_adapt` 默认开启：本机首次（或缺 GPU 指纹）重测 `imdn_latency.json`，之后每次跑完 EWMA 回写；精确对比请显式设 `latency_adapt=false`。
 - Lab 运行中轮询 `GET /v1/runs/{id}/live`（尾部样本 + 标量摘要）。完整 Bundle 在停跑或 `GET /metrics` 时计算，不要挂在 1Hz 上。
 - `prefer: compute` 会跑 ffmpeg，只走完整 metrics，不走 live。
 - 声明式 Spec 只有一个 arm。`POST /runs/{id}/advance` 与 `arm_mode=parallel` 不是 Lab 路径。

@@ -338,7 +338,7 @@ class PlayerComposer:
             "--latency_adapt",
             type=_parse_bool_arg,
             required=False,
-            help="Online EWMA latency / safe-factor updates (true/false, default false)",
+            help="Online EWMA latency / safe-factor updates (true/false, default true)",
         )
         parser.add_argument(
             "--fixed_enhance_action",

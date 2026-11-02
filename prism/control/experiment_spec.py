@@ -21,7 +21,7 @@ class ArmPlayerSpec(BaseModel):
     telemetry_interval_ms: int = 500
     collect_system_metrics: bool = False
     use_fast_complete: bool = False
-    latency_adapt: bool = False
+    latency_adapt: bool = True
     # Phase-3 recovery: pin NES enhance level / segment recovery policy.
     fixed_enhance_action: Optional[int] = None
     recovery_mode: str = "none"

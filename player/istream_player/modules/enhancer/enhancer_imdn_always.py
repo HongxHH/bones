@@ -291,7 +291,9 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
         # self.log.info("Quality table: {}".format(self.quality_table))
         
         self.use_fast_complete = config.use_fast_complete
-        self.latency_adapt = bool(getattr(config, "latency_adapt", False))
+        # Default on: first run on this GPU remasures; each run EWMA-updates the table.
+        self.latency_adapt = bool(getattr(config, "latency_adapt", True))
+        self._latency_table_file = None
 
         # 阶段3：段内恢复（剩余工作量触发）
         mode = str(getattr(config, "recovery_mode", "none") or "none").strip().lower()
@@ -955,7 +957,7 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
         """
         根据增强结果动态更新安全因子
         """
-        if not getattr(self, "latency_adapt", False):
+        if not getattr(self, "latency_adapt", True):
             return
         # 记录本次结果到历史
         self._safe_factor_history.append({
@@ -1140,61 +1142,106 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
         model.load_state_dict(torch.load(url))
         return model
 
+    def _latency_device_id(self) -> str:
+        """Stable-enough id so a pulled table from another GPU is not reused blindly."""
+        try:
+            if torch.cuda.is_available():
+                idx = 0
+                dev = str(getattr(self, "device", "") or "")
+                if ":" in dev:
+                    try:
+                        idx = int(dev.split(":")[-1])
+                    except ValueError:
+                        idx = torch.cuda.current_device()
+                elif dev.startswith("cuda"):
+                    idx = torch.cuda.current_device()
+                name = torch.cuda.get_device_name(idx)
+                major, minor = torch.cuda.get_device_capability(idx)
+                return f"cuda:{idx}:{name}:sm_{major}{minor}"
+        except Exception:
+            pass
+        return f"cpu:{getattr(self, 'device', 'cpu')}"
+
+    def _read_latency_file(self, file_name: str):
+        """Return (table, device_id). Legacy bare arrays have device_id=None → remasure."""
+        if not os.path.exists(file_name):
+            return None, None
+        try:
+            with open(file_name, encoding="utf-8") as f:
+                data = json.load(f)
+        except Exception as exc:
+            self.log.warning("Failed to read %s (%s); will remasure", file_name, exc)
+            return None, None
+        if isinstance(data, list):
+            return np.asarray(data, dtype=float), None
+        if isinstance(data, dict) and "table" in data:
+            return np.asarray(data["table"], dtype=float), data.get("device")
+        self.log.warning("Unrecognized latency file shape in %s; will remasure", file_name)
+        return None, None
+
+    def _write_latency_file(self, file_name: str, table) -> None:
+        payload = {
+            "version": 1,
+            "device": self._latency_device_id(),
+            "table": np.asarray(table, dtype=float).tolist(),
+        }
+        with open(file_name, "w", encoding="utf-8") as f:
+            json.dump(payload, f, indent=4)
+            f.write("\n")
+
     # 测量模型延迟的方法
     async def measure_latency(self, resolution_set, model_pool, file_name="imdn_latency.json"):
         """
-        预热增强模型并测量其延迟
+        Load a per-GPU latency table, or remasure when missing / wrong device.
+
+        File format: ``{"version": 1, "device": "...", "table": [[...], ...]}``.
+        Legacy bare 5×5 arrays are treated as unscoped and remasured once.
         """
         if getattr(self, "video_dataset", "bbb") == "tos":
             file_name = "imdn_latency_tos.json"
-        # 如果延迟文件已存在，直接加载
-        if os.path.exists(file_name):
-            latency_table = json.load(open(file_name))
-            return np.array(latency_table)
+        self._latency_table_file = file_name
+        current = self._latency_device_id()
+        cached, saved_device = self._read_latency_file(file_name)
+        if cached is not None and saved_device == current:
+            self.log.info("Loaded latency table for %s from %s", current, file_name)
+            return cached
+        if cached is not None and saved_device != current:
+            self.log.info(
+                "Latency table device mismatch (%r vs %r); remasuring into %s",
+                saved_device,
+                current,
+                file_name,
+            )
+        else:
+            self.log.info("Start measuring latency (first time on this device) → %s", file_name)
 
-        # 记录延迟测量开始信息
-        self.log.info("Start measuring latency (only for the first time)")
-        # 初始化延迟集合字典
         latency_set = {}
-        # 遍历所有需要增强的分辨率
         for repr_idx in resolution_set:
             width, height, scale = resolution_set[repr_idx]
-            # 遍历所有增强级别
             for level in [1, 2, 3]:
-                # 初始化数据池
                 data_pool = []
-                # 生成测试数据（预热轮数 + 测量轮数）
                 for i in range(self.warmup_epoch + self.measure_epoch):
                     data_pool.append(torch.rand((1, 3, height, width)).to(self.device))
                     await asyncio.sleep(0)
 
-                # 检查模型是否存在
                 if (scale, level) not in model_pool:
                     continue
-                # 获取对应模型
                 model = model_pool[(scale, level)]
-                # 设置为评估模式
                 model.eval()
-                # 预热阶段
                 with torch.no_grad():
                     for i in range(self.warmup_epoch):
                         tensor = data_pool[i]
                         model(tensor)
                         await asyncio.sleep(0)
 
-                    # 同步CUDA操作
                     torch.cuda.synchronize()
-                    # 开始测量
                     start_time = time.perf_counter()
                     for i in range(self.measure_epoch):
                         tensor = data_pool[i + self.warmup_epoch]
                         model(tensor)
                         await asyncio.sleep(0)
-                    # 同步CUDA操作
                     torch.cuda.synchronize()
-                    # 结束测量
                     end_time = time.perf_counter()
-                    # 计算平均延迟
                     latency_set[(scale, level)] = (end_time - start_time) / self.measure_epoch
 
         # 构建延迟表：比特率(240p, 360p, 480p, 720p, 1080p)，级别(无, 低, 中, 高, 超)
@@ -1202,9 +1249,8 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
         for setting in latency_set:
             repr_idx, level = setting
             latency_table[4 - repr_idx, level] = latency_set[(repr_idx, level)]
-        # 保存延迟表到文件
-        json.dump(latency_table.tolist(), open(file_name, "w"), indent=4)
-        self.log.info("Latency measurement completed")
+        self._write_latency_file(file_name, latency_table)
+        self.log.info("Latency measurement completed for %s", current)
         return latency_table
 
     # EWMA 平滑更新延迟表（abort/fast_complete/正常完成都调用）
@@ -1221,7 +1267,7 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
             processed_frames: 已处理的帧数（用于推算每帧延迟）
             segment_index: 段索引（用于内容特征匹配）
         """
-        if not getattr(self, "latency_adapt", False):
+        if not getattr(self, "latency_adapt", True):
             return
         if processed_frames <= 0 or elapsed_time <= 0:
             return
@@ -1339,7 +1385,7 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
     def experiment_facts(self) -> Optional[dict]:
         """Live mechanism totals for telemetry."""
         facts: dict = {
-            "latency_adapt": bool(getattr(self, "latency_adapt", False)),
+            "latency_adapt": bool(getattr(self, "latency_adapt", True)),
         }
         table = getattr(self, "latency_table", None)
         if table is not None:
@@ -1406,14 +1452,21 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
         # 返回剩余任务时间（总时间 - 已用时间）
         return max(self.task_total - (time.perf_counter() - self.task_start), 0)
 
-    # 播放完成后，将延迟信息写回文件
+    # 播放完成后，将 EWMA 后的延迟表写回启动文件（下次冷启动继续用）
     def write_latency_table(self):
-        if not getattr(self, "latency_adapt", False):
+        if not getattr(self, "latency_adapt", True):
             return
-        directory = getattr(self, "run_dir", None) or "."
-        os.makedirs(directory, exist_ok=True)
-        path = os.path.join(directory, "latency_table.json")
-        json.dump(self.latency_table.tolist(), open(path, "w"), indent=4)
+        path = getattr(self, "_latency_table_file", None) or "imdn_latency.json"
+        if getattr(self, "video_dataset", "bbb") == "tos" and path == "imdn_latency.json":
+            path = "imdn_latency_tos.json"
+        table = getattr(self, "latency_table", None)
+        if table is None:
+            return
+        try:
+            self._write_latency_file(path, table)
+            self.log.info("Wrote adapted latency table to %s", path)
+        except Exception as exc:
+            self.log.warning("Failed to write latency table to %s: %s", path, exc)
 
     # 段播放开始事件处理器
     async def on_segment_playback_start(self, segments: Dict[int, Segment]):

@@ -450,7 +450,7 @@ async def create_run_from_spec(
     dumped["provenance"] = {
         "git_sha": _git_rev() or "",
         "renderer": arm_player.mod_renderer if arm_player else "",
-        "latency_adapt": bool(arm_player.latency_adapt) if arm_player else False,
+        "latency_adapt": bool(arm_player.latency_adapt) if arm_player else True,
         "use_fast_complete": bool(arm_player.use_fast_complete) if arm_player else False,
         "collect_system_metrics": bool(spec.spec.collect.system_metrics),
     }

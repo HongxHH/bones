@@ -134,8 +134,9 @@ class PlayerConfig:
 
     # 是否启用 fast-complete。命令行 --use_fast_complete true/false 可覆盖。
     use_fast_complete: bool = False
-    # 在线更新延迟表和 safe_factor。精确对比实验保持关闭，避免同配置跑出不同决策。
-    latency_adapt: bool = False
+    # 在线 EWMA 更新延迟表 / safe_factor，并在跑完写回 imdn_latency.json。
+    # 本机首次（或缺 GPU 指纹）会重测；精确对比实验请显式关掉，避免同配置决策漂移。
+    latency_adapt: bool = True
 
     # D5 消融（tool_greedy）：忽略缓冲 slack / 段墙钟门 → no_slack 臂
     tool_ignore_slack: bool = False

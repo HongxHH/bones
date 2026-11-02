@@ -137,7 +137,7 @@ def assemble_run_bundle(
             "quality_source": quality_source,
             "outcome_source": outcome_source,
             "renderer": str(player.get("mod_renderer") or spec_prov.get("renderer") or ""),
-            "latency_adapt": bool(player.get("latency_adapt", spec_prov.get("latency_adapt", False))),
+            "latency_adapt": bool(player.get("latency_adapt", spec_prov.get("latency_adapt", True))),
             "use_fast_complete": bool(player.get("use_fast_complete", spec_prov.get("use_fast_complete", False))),
             "git_sha": str(spec_prov.get("git_sha") or ""),
         },

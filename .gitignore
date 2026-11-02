@@ -34,6 +34,11 @@ __pycache__/
 *.npz
 *.npy
 
+# 本机 GPU 延迟表（首次重测 / latency_adapt 回写；勿提交到仓库）
+player/imdn_latency.json
+player/imdn_latency_tos.json
+player/latency_table.json
+
 # 训练数据集（图片序列，非代码）
 enhance/IMDN/dataset/
 enhance/IMDN/data/
