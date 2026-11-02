@@ -20,6 +20,7 @@ from .experiment_spec import (
 )
 from .frames import claim_current_frames
 from .orchestrator.state import PlatformState, new_id
+from .plugins.mpdutil import parse_ladder_from_mpd
 from .schemas import (
     ArmRuntime,
     Asset,
@@ -29,6 +30,7 @@ from .schemas import (
     Job,
     JobKind,
     JobStatus,
+    Publication,
     RunStatus,
     Session,
     SessionStatus,
@@ -79,6 +81,100 @@ def _publish_cache_key(plugin: str, asset_path: str, params: dict[str, Any]) -> 
     return hashlib.sha256(blob.encode("utf-8")).hexdigest()[:16]
 
 
+def _stable_pub_id_for_path(path: Path) -> str:
+    digest = hashlib.sha1(str(path.resolve()).encode("utf-8")).hexdigest()[:12]
+    return f"pub_{digest}"
+
+
+def _dash_root_and_mpd(path: Path) -> tuple[Path, str]:
+    if path.is_file() and path.suffix.lower() == ".mpd":
+        return path.parent.resolve(), path.name
+    if path.is_dir():
+        mpds = sorted(path.glob("*.mpd"), key=lambda p: (p.name.lower() != "bbb.mpd", p.name))
+        if not mpds:
+            raise FileNotFoundError(f"No MPD found under {path}")
+        return path.resolve(), mpds[0].name
+    raise FileNotFoundError(f"DASH source not found: {path}")
+
+
+def _find_publication_for_path(state: PlatformState, path: Path) -> Optional[Publication]:
+    resolved = path.resolve()
+    stable_id = _stable_pub_id_for_path(resolved)
+    existing = state.publications.get(stable_id)
+    if existing is not None:
+        root = state.publication_root(existing)
+        if (root / existing.mpd_name).is_file():
+            return existing
+    for pub in state.publications.values():
+        extra = pub.extra or {}
+        for key in ("source_path", "serve_root"):
+            raw = extra.get(key)
+            if not raw:
+                continue
+            try:
+                if Path(str(raw)).resolve() == resolved:
+                    if (state.publication_root(pub) / pub.mpd_name).is_file():
+                        return pub
+            except OSError:
+                continue
+        asset = state.assets.get(pub.asset_id)
+        if asset and asset.source_path:
+            try:
+                if Path(asset.source_path).resolve() == resolved:
+                    if (state.publication_root(pub) / pub.mpd_name).is_file():
+                        return pub
+            except OSError:
+                continue
+    return None
+
+
+async def _register_inplace_dash_publication(
+    state: PlatformState,
+    *,
+    path: Path,
+    experiment_id: str,
+) -> str:
+    """Bind a local DASH tree as a publication without copying into var/publications."""
+    root, mpd_name = _dash_root_and_mpd(path)
+    mpd_path = root / mpd_name
+    ladder, duration = parse_ladder_from_mpd(mpd_path.read_text(encoding="utf-8"))
+    pub_id = _stable_pub_id_for_path(path.resolve())
+    existing = state.publications.get(pub_id)
+    if existing is not None and (state.publication_root(existing) / existing.mpd_name).is_file():
+        return pub_id
+
+    asset = Asset(
+        id=new_id("asset"),
+        name=path.name,
+        source_path=str(path.resolve()),
+        kind="dash_tree",
+        extra={"inplace": True},
+    )
+    await state.add_asset(asset)
+    pub = Publication(
+        id=pub_id,
+        asset_id=asset.id,
+        title=path.name,
+        mpd_name=mpd_name,
+        ladder=ladder,
+        segment_duration=4.0,
+        extra={
+            "source_path": str(path.resolve()),
+            "serve_root": str(root),
+            "inplace": True,
+            "duration_s": duration,
+            "bound_by_experiment": experiment_id,
+        },
+    )
+    await state.add_publication(pub)
+    if experiment_id and experiment_id in state.experiments:
+        exp = state.experiments[experiment_id]
+        if pub.id not in exp.publication_ids:
+            exp.publication_ids.append(pub.id)
+            state.persist()
+    return pub_id
+
+
 async def _run_content_job(
     state: PlatformState,
     *,
@@ -107,7 +203,11 @@ async def _run_content_job(
 
 
 async def resolve_publication_id(state: PlatformState, source: str, *, experiment_id: str) -> str:
-    """Resolve identity/import_dash publication from publication: id or DASH path."""
+    """Resolve identity/import_dash publication from publication: id or DASH path.
+
+    Path sources are bound in-place (serve_root → original tree) and reused across
+    experiments so Lab no longer accumulates copied pub_* trees for BBB.
+    """
     kind, value = resolve_content_source(source)
     if kind == "publication":
         if value not in state.publications:
@@ -116,15 +216,10 @@ async def resolve_publication_id(state: PlatformState, source: str, *, experimen
     path = _abs_path(value)
     if not path.exists():
         raise ValueError(f"content path not found: {path}")
-    asset = Asset(id=new_id("asset"), name=path.name, source_path=str(path), kind="dash_tree")
-    await state.add_asset(asset)
-    return await _run_content_job(
-        state,
-        plugin="import_dash",
-        asset=asset,
-        params={"title": path.name},
-        experiment_id=experiment_id,
-    )
+    found = _find_publication_for_path(state, path)
+    if found is not None:
+        return found.id
+    return await _register_inplace_dash_publication(state, path=path, experiment_id=experiment_id)
 
 
 async def resolve_arm_publication(
@@ -585,32 +680,43 @@ def schedule_finalize(state: PlatformState, run_id: str, *, ask_stop: bool) -> a
     return task
 
 
+def _run_has_arm_metrics(run: ExperimentRun) -> bool:
+    arms = (run.metrics or {}).get("arms") if isinstance(run.metrics, dict) else None
+    return isinstance(arms, dict) and bool(arms)
+
+
 async def finalize_run(state: PlatformState, run_id: str, *, ask_stop: bool) -> None:
     """Wait for the player to exit and write analyzer JSON, then mark the run stopped."""
     from .attach import pid_alive
     from .telemetry import persist_run_metrics
 
     run = state.runs.get(run_id)
-    if run is None or run.status == RunStatus.STOPPED:
+    if run is None:
         return
-    if ask_stop:
+    # reconcile_dead_runs used to mark STOPPED without writing metrics; still finish those.
+    if run.status == RunStatus.STOPPED and _run_has_arm_metrics(run):
+        return
+    if ask_stop and run.status != RunStatus.STOPPED:
         for arm in run.arms:
             if arm.pid and arm.status_port:
                 await _ask_player_stop(int(arm.status_port))
-    deadline = time.monotonic() + FINISH_WAIT_S
-    while time.monotonic() < deadline:
-        if not any(arm.pid and pid_alive(arm.pid) for arm in run.arms):
-            break
-        await asyncio.sleep(0.25)
-    else:
-        for arm in run.arms:
-            if arm.pid and pid_alive(arm.pid):
-                try:
-                    kill_pid(arm.pid)
-                except Exception as exc:
-                    log.warning("kill pid %s: %s", arm.pid, exc)
+    if run.status != RunStatus.STOPPED:
+        deadline = time.monotonic() + FINISH_WAIT_S
+        while time.monotonic() < deadline:
+            if not any(arm.pid and pid_alive(arm.pid) for arm in run.arms):
+                break
+            await asyncio.sleep(0.25)
+        else:
+            for arm in run.arms:
+                if arm.pid and pid_alive(arm.pid):
+                    try:
+                        kill_pid(arm.pid)
+                    except Exception as exc:
+                        log.warning("kill pid %s: %s", arm.pid, exc)
     run = state.runs.get(run_id)
-    if run is None or run.status == RunStatus.STOPPED:
+    if run is None:
+        return
+    if run.status == RunStatus.STOPPED and _run_has_arm_metrics(run):
         return
     for arm in run.arms:
         arm.pid = None
@@ -628,7 +734,8 @@ async def finalize_run(state: PlatformState, run_id: str, *, ask_stop: bool) -> 
     for arm in run.arms:
         arm.metrics = (metrics.get("arms") or {}).get(arm.id) or {}
     run.status = RunStatus.STOPPED
-    run.stopped_at = utcnow()
+    if run.stopped_at is None:
+        run.stopped_at = utcnow()
     run.updated_at = utcnow()
     await state.update_run(run)
 
@@ -645,27 +752,67 @@ def _player_alive(run: ExperimentRun) -> bool:
 
 
 def reconcile_dead_runs(state: PlatformState) -> None:
-    """Runs left at 'running' after the player is gone should not stay locked."""
+    """Runs left at 'running' after the player is gone should not stay locked.
+
+    Route them through finalize so history gets rebuffer / bandwidth / QoE.
+    Also backfill stopped runs that still have telemetry but empty metrics.
+    """
     now = time.time()
     for run in list(state.runs.values()):
-        if run.status not in (RunStatus.RUNNING, RunStatus.PREPARING):
+        if run.status in (RunStatus.RUNNING, RunStatus.PREPARING):
+            if _player_alive(run):
+                continue
+            started = run.started_at or run.created_at
+            age_s = now - started.timestamp() if started is not None else 0.0
+            had_pid = any(arm.pid for arm in run.arms)
+            if run.status == RunStatus.PREPARING or (not had_pid and age_s < 120):
+                continue
+            try:
+                asyncio.get_running_loop()
+            except RuntimeError:
+                _mark_stopped_without_finalize(state, run)
+                _persist_metrics_inplace(state, run)
+                continue
+            schedule_finalize(state, run.id, ask_stop=False)
             continue
-        if _player_alive(run):
-            continue
-        started = run.started_at or run.created_at
-        age_s = now - started.timestamp() if started is not None else 0.0
-        had_pid = any(arm.pid for arm in run.arms)
-        if run.status == RunStatus.PREPARING or (not had_pid and age_s < 120):
-            continue
-        for arm in run.arms:
-            arm.pid = None
-            if arm.status == "attached":
-                arm.status = "stopped"
-        run.status = RunStatus.STOPPED
-        if run.stopped_at is None:
-            run.stopped_at = utcnow()
-        run.updated_at = utcnow()
-        state.store.save_entity("runs", run)
+        if run.status == RunStatus.STOPPED and not _run_has_arm_metrics(run):
+            _persist_metrics_inplace(state, run)
+
+
+def _mark_stopped_without_finalize(state: PlatformState, run: ExperimentRun) -> None:
+    for arm in run.arms:
+        arm.pid = None
+        if arm.status == "attached":
+            arm.status = "stopped"
+    run.status = RunStatus.STOPPED
+    if run.stopped_at is None:
+        run.stopped_at = utcnow()
+    run.updated_at = utcnow()
+    state.store.save_entity("runs", run)
+
+
+def _persist_metrics_inplace(state: PlatformState, run: ExperimentRun) -> None:
+    """Write summary for stopped/orphaned runs that still have telemetry on disk."""
+    from .telemetry import persist_run_metrics, telemetry_path
+
+    if _run_has_arm_metrics(run):
+        return
+    if not run.arms:
+        return
+    tel = telemetry_path(state, run, run.arms[0].id)
+    if not tel.is_file() or tel.stat().st_size <= 0:
+        return
+    try:
+        metrics = persist_run_metrics(state, run)
+    except Exception as exc:
+        log.warning("persist metrics for %s: %s", run.id, exc)
+        return
+    run.metrics = metrics
+    for arm in run.arms:
+        arm.metrics = (metrics.get("arms") or {}).get(arm.id) or {}
+    run.updated_at = utcnow()
+    state.store.save_entity("runs", run)
+    state.runs[run.id] = run
 
 
 async def delete_runs(state: PlatformState, run_ids: list[str]) -> dict[str, Any]:

@@ -3,7 +3,7 @@ setlocal
 cd /d "%~dp0"
 
 echo.
-echo [Prism] restart UI (Lab window only)...
+echo [Prism] Full restart: control plane + Lab UI + players...
 powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0prism\scripts\restart_ui.ps1"
 set ERR=%ERRORLEVEL%
 

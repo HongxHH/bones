@@ -28,7 +28,7 @@ async def serve_publication(publication_id: str, path: str, request: Request):
     pub = state.publications.get(publication_id)
     if pub is None:
         raise HTTPException(status_code=404, detail="publication not found")
-    root = state.store.publication_dir(publication_id)
+    root = state.publication_root(pub)
     target = _safe_join(root, path)
     if not target.exists() or not target.is_file():
         raise HTTPException(status_code=404, detail="file not found")
@@ -45,7 +45,7 @@ async def serve_session_mpd(session_id: str, request: Request):
     pub = state.publications.get(session.publication_id)
     if pub is None:
         raise HTTPException(status_code=404, detail="publication not found")
-    mpd_path = state.store.publication_dir(pub.id) / pub.mpd_name
+    mpd_path = state.publication_root(pub) / pub.mpd_name
     if not mpd_path.exists():
         raise HTTPException(status_code=404, detail="mpd not found")
     delivery = session.extra.get("delivery") or "session_filter"
@@ -79,7 +79,7 @@ async def serve_session_media(session_id: str, path: str, request: Request):
     pub = state.publications.get(session.publication_id)
     if pub is None:
         raise HTTPException(status_code=404, detail="publication not found")
-    root = state.store.publication_dir(pub.id)
+    root = state.publication_root(pub)
     target = _safe_join(root, path)
     if not target.exists() or not target.is_file():
         raise HTTPException(status_code=404, detail="file not found")

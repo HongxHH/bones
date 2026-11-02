@@ -622,21 +622,28 @@ class PicturePane(QWidget):
         self._await_left = 0
         self._scrub = QWidget(self)
         self._scrub.setObjectName("scrub")
-        scrub_row = QHBoxLayout(self._scrub)
-        scrub_row.setContentsMargins(10, 4, 10, 4)
-        scrub_row.setSpacing(8)
+        scrub_col = QVBoxLayout(self._scrub)
+        scrub_col.setContentsMargins(12, 6, 12, 6)
+        scrub_col.setSpacing(4)
         self._slider = QSlider(Qt.Orientation.Horizontal)
+        self._slider.setObjectName("scrubSlider")
         self._slider.setRange(0, 0)
         self._slider.setEnabled(False)
+        self._slider.setMinimumHeight(18)
+        self._slider.setMaximumHeight(18)
         self._scrub_meta = QLabel("—")
         self._scrub_meta.setObjectName("scrubMeta")
         self._scrub_meta.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
         self._keep = QPushButton("保留")
         self._keep.setToolTip("把当前内存中的帧归档到磁盘，便于事后回看")
         self._keep.clicked.connect(self._keep_frames)
-        scrub_row.addWidget(self._slider, 1)
-        scrub_row.addWidget(self._scrub_meta, 1)
-        scrub_row.addWidget(self._keep)
+        scrub_meta_row = QHBoxLayout()
+        scrub_meta_row.setContentsMargins(0, 0, 0, 0)
+        scrub_meta_row.setSpacing(8)
+        scrub_meta_row.addWidget(self._scrub_meta, 1)
+        scrub_meta_row.addWidget(self._keep, 0)
+        scrub_col.addWidget(self._slider)
+        scrub_col.addLayout(scrub_meta_row)
         self._scrub.hide()
         self._scrub_timer = QTimer(self)
         self._scrub_timer.setSingleShot(True)
@@ -669,7 +676,7 @@ class PicturePane(QWidget):
     def _scrub_bar_height(self) -> int:
         if not self._scrub.isVisible():
             return 0
-        return 36
+        return 52
 
     def _chrome_height(self) -> int:
         return self._hud_height() + self._scrub_bar_height()

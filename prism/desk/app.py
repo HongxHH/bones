@@ -218,31 +218,63 @@ def _stylesheet() -> str:
     #hud QPushButton#hudOn { background: #0d6e6a; }
     #hud QPushButton:hover, #hudChip:hover { background: rgba(13, 110, 106, 0.55); }
     #scrub {
-      background: rgba(14, 26, 34, 0.92);
-      border-top: 1px solid rgba(238, 243, 245, 0.12);
+      background: rgba(14, 26, 34, 0.94);
+      border-top: 1px solid rgba(143, 224, 218, 0.18);
     }
     #scrubMeta {
-      color: rgba(238, 243, 245, 0.82);
+      color: rgba(238, 243, 245, 0.78);
       background: transparent;
-      font-size: 12px;
+      font-size: 11px;
+      letter-spacing: 0.01em;
     }
     #scrub QPushButton {
       color: #eef3f5;
-      background: rgba(238, 243, 245, 0.12);
-      border: 0;
-      padding: 4px 10px;
+      background: rgba(238, 243, 245, 0.10);
+      border: 1px solid rgba(238, 243, 245, 0.14);
+      border-radius: 4px;
+      padding: 3px 10px;
+      font-size: 11px;
+      min-height: 22px;
     }
-    #scrub QPushButton:hover { background: rgba(13, 110, 106, 0.55); }
-    #scrub QSlider::groove:horizontal {
-      height: 4px;
-      background: rgba(238, 243, 245, 0.22);
-      border-radius: 2px;
+    #scrub QPushButton:hover {
+      background: rgba(13, 110, 106, 0.55);
+      border-color: rgba(143, 224, 218, 0.35);
     }
-    #scrub QSlider::handle:horizontal {
-      width: 12px;
+    #scrubSlider {
+      background: transparent;
+      padding: 0 2px;
+    }
+    #scrubSlider::groove:horizontal {
+      height: 6px;
+      background: rgba(238, 243, 245, 0.14);
+      border: 1px solid rgba(238, 243, 245, 0.08);
+      border-radius: 3px;
+    }
+    #scrubSlider::sub-page:horizontal {
+      background: #0d6e6a;
+      border-radius: 3px;
+    }
+    #scrubSlider::add-page:horizontal {
+      background: transparent;
+      border-radius: 3px;
+    }
+    #scrubSlider::handle:horizontal {
+      width: 14px;
+      height: 14px;
       margin: -5px 0;
       background: #8fe0da;
-      border-radius: 6px;
+      border: 2px solid #eef3f5;
+      border-radius: 8px;
+    }
+    #scrubSlider::handle:horizontal:hover {
+      background: #b7f0eb;
+    }
+    #scrubSlider::handle:horizontal:pressed {
+      background: #0d6e6a;
+      border-color: #8fe0da;
+    }
+    #scrubSlider:disabled {
+      opacity: 0.45;
     }
     """
 

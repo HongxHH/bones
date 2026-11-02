@@ -4,6 +4,7 @@ import asyncio
 import os
 import uuid
 from datetime import datetime, timezone
+from pathlib import Path
 from typing import Optional
 
 from pydantic import BaseModel
@@ -170,11 +171,22 @@ class PlatformState:
         if len(self.origin_logs) > 2000:
             self.origin_logs = self.origin_logs[-1000:]
 
+    def publication_root(self, pub: Publication) -> Path:
+        """Directory Origin serves for a publication.
+
+        Path-backed identity imports may set extra.serve_root to the original
+        DASH tree (no copy under prism/var/publications).
+        """
+        serve_root = (pub.extra or {}).get("serve_root")
+        if serve_root:
+            return Path(str(serve_root))
+        return self.store.publication_dir(pub.id)
+
     def publication_mpd_path(self, publication_id: str) -> Optional[str]:
         pub = self.publications.get(publication_id)
         if pub is None:
             return None
-        return str(self.store.publication_dir(publication_id) / pub.mpd_name)
+        return str(self.publication_root(pub) / pub.mpd_name)
 
     def origin_publication_url(self, publication_id: str) -> str:
         pub = self.publications[publication_id]

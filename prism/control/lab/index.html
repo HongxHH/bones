@@ -312,22 +312,6 @@
       flex: 0 0 auto;
     }
 
-    .sec-aside {
-      flex: 1 1 auto;
-      min-width: 0;
-      font-weight: 500;
-      font-size: 12px;
-      color: var(--muted);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      text-align: right;
-    }
-
-    details.sec[open]>summary .sec-aside {
-      display: none;
-    }
-
     .report {
       margin-top: 12px;
     }
@@ -697,31 +681,24 @@
       font-weight: 600;
     }
 
-    .monitor {
-      margin: 0 0 10px;
+    details#monitor>summary.monitor-head {
+      margin: 0;
     }
 
-    .monitor-head {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 8px;
-      margin: 0 0 8px;
-    }
-
-    .monitor-label {
-      font-weight: 650;
-      font-size: 13px;
-      color: var(--ink);
+    #monitor>.sec-body {
+      padding-top: 10px;
     }
 
     #monitorContext {
+      flex: 1 1 auto;
       min-width: 0;
+      margin-left: auto;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
       text-align: right;
       font-size: 12px;
+      font-weight: 500;
     }
 
     .hist-actions {
@@ -750,6 +727,7 @@
     .timeline {
       background: var(--panel);
       border: 1px solid var(--line);
+      border-radius: 8px;
       padding: 8px 12px 10px;
       margin: 0 0 8px;
     }
@@ -786,9 +764,63 @@
     }
 
     .timeline input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
       width: 100%;
-      margin: 6px 0 4px;
+      height: 18px;
+      margin: 8px 0 4px;
+      background: transparent;
+      cursor: pointer;
       accent-color: var(--accent);
+    }
+
+    .timeline input[type="range"]:disabled {
+      opacity: 0.45;
+      cursor: default;
+    }
+
+    .timeline input[type="range"]::-webkit-slider-runnable-track {
+      height: 6px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent), var(--accent)) 0 / var(--tl-pct, 0%) 100% no-repeat,
+        rgba(14, 26, 34, 0.10);
+    }
+
+    .timeline input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 14px;
+      height: 14px;
+      margin-top: -4px;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      background: #0d6e6a;
+      box-shadow: 0 0 0 1px rgba(13, 110, 106, 0.28);
+    }
+
+    .timeline input[type="range"]:hover::-webkit-slider-thumb {
+      background: #0a5552;
+    }
+
+    .timeline input[type="range"]::-moz-range-track {
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(14, 26, 34, 0.10);
+    }
+
+    .timeline input[type="range"]::-moz-range-progress {
+      height: 6px;
+      border-radius: 999px;
+      background: var(--accent);
+    }
+
+    .timeline input[type="range"]::-moz-range-thumb {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      background: #0d6e6a;
+      box-shadow: 0 0 0 1px rgba(13, 110, 106, 0.28);
     }
 
     .tl-arms {
@@ -919,22 +951,8 @@
       margin: 12px 0 0;
     }
 
-    .scoreboard.is-pending {
-      padding: 10px 14px;
-    }
-
-    .score-pending {
-      margin: 0;
-      font-size: 12px;
-      color: var(--muted);
-    }
-
     body.in-shell .scoreboard {
       padding: 10px 10px 8px;
-    }
-
-    body.in-shell .scoreboard.is-pending {
-      padding: 8px 10px;
     }
 
     body.in-shell .score-card {
@@ -1277,10 +1295,6 @@
       height: 36px;
     }
 
-    body.in-shell .monitor-head {
-      margin-bottom: 6px;
-    }
-
     body.in-shell #timeline {
       display: none;
     }
@@ -1290,6 +1304,16 @@
     body.in-shell[data-state="idle"] #pipeline .meter:not(.is-sys),
     body.in-shell[data-state="idle"] #valRebuffer {
       display: none;
+    }
+
+    body.in-shell[data-state="idle"] details#monitor {
+      border: 0;
+      background: transparent;
+    }
+
+    body.in-shell[data-state="idle"] details#monitor>.sec-body {
+      padding: 0;
+      border-top: 0;
     }
   </style>
 </head>
@@ -1325,7 +1349,6 @@
           <summary>
             <span class="sec-row">
               <span class="sec-title" id="recipeTitle">配方</span>
-              <span class="sec-aside" id="recipeSummary">—</span>
             </span>
           </summary>
           <div class="sec-body">
@@ -1376,70 +1399,77 @@
         </details>
 
         <!-- C. 观测 -->
-        <div class="monitor" id="monitor">
-          <div class="monitor-head">
-            <span class="monitor-label">观测</span>
-            <span class="quiet" id="monitorContext" title=""></span>
-          </div>
+        <details class="sec" id="monitor" open>
+          <summary class="monitor-head">
+            <span class="sec-row">
+              <span class="sec-title">观测</span>
+              <span class="quiet" id="monitorContext" title=""></span>
+            </span>
+          </summary>
+          <div class="sec-body">
 
-          <section class="scoreboard" aria-label="本次指标" hidden>
-            <div id="qualityFoot"></div>
-            <p class="quiet" id="qualityNote" hidden></p>
-            <div class="report" id="playbackReport" hidden></div>
-          </section>
+            <section class="scoreboard" aria-label="本次指标" hidden>
+              <div id="qualityFoot"></div>
+              <p class="quiet" id="qualityNote" hidden></p>
+              <div class="report" id="playbackReport" hidden></div>
+            </section>
 
-          <div class="timeline" id="timeline">
-            <div class="tl-top">
-              <span class="quiet">时间轴</span>
-              <div class="tl-actions">
-                <button type="button" id="btnLive">直播</button>
-                <button type="button" id="btnKeepFrames" title="把当前内存中的帧归档到磁盘，便于事后回看">保留</button>
+            <div class="timeline" id="timeline">
+              <div class="tl-top">
+                <span class="quiet">时间轴</span>
+                <div class="tl-actions">
+                  <button type="button" id="btnLive">直播</button>
+                  <button type="button" id="btnKeepFrames" title="把当前内存中的帧归档到磁盘，便于事后回看">保留</button>
+                </div>
+              </div>
+              <input id="frameSlider" type="range" min="0" max="0" value="0" disabled />
+              <p class="quiet" id="frameMeta" hidden>—</p>
+            </div>
+
+            <div class="pipeline" id="pipeline">
+              <div class="meter is-dup">
+                <div class="meter-head"><span class="meter-name">下载缓冲</span><b class="meter-value" id="valDown">—</b>
+                </div>
+                <canvas class="spark" id="chartDown" width="480" height="64"></canvas>
+              </div>
+              <div class="meter">
+                <button type="button" class="meter-toggle" id="btnPendingInv" aria-expanded="false">
+                  <span class="meter-name">待增强</span>
+                  <b class="meter-value" id="valPending">—</b>
+                </button>
+                <div class="inv-panel" id="invPending" hidden></div>
+                <canvas class="spark" id="chartPending" width="480" height="64"></canvas>
+              </div>
+              <div class="meter">
+                <button type="button" class="meter-toggle" id="btnReadyInv" aria-expanded="false">
+                  <span class="meter-name">已增强就绪</span>
+                  <b class="meter-value" id="valReady">—</b>
+                </button>
+                <div class="inv-panel" id="invReady" hidden></div>
+                <canvas class="spark" id="chartReady" width="480" height="64"></canvas>
+              </div>
+              <div class="meter is-dup">
+                <div class="meter-head"><span class="meter-name">下载带宽</span><b class="meter-value" id="valBw">—</b>
+                </div>
+                <canvas class="spark" id="chartBw" width="480" height="64"></canvas>
+              </div>
+              <div class="meter is-sys" id="meterCpu">
+                <div class="meter-head"><span class="meter-name">CPU</span><b class="meter-value" id="valCpu">—</b>
+                </div>
+                <canvas class="spark" id="chartCpu" width="480" height="64"></canvas>
+              </div>
+              <div class="meter is-sys" id="meterGpu">
+                <div class="meter-head"><span class="meter-name">GPU</span><b class="meter-value" id="valGpu">—</b>
+                </div>
+                <canvas class="spark" id="chartGpu" width="480" height="64"></canvas>
+              </div>
+              <div class="pipeline-foot">
+                <span id="valRebuffer">重缓冲 —</span>
+                <span id="valSysExtra">整机 CPU —</span>
               </div>
             </div>
-            <input id="frameSlider" type="range" min="0" max="0" value="0" disabled />
-            <p class="quiet" id="frameMeta" hidden>—</p>
           </div>
-
-          <div class="pipeline" id="pipeline">
-            <div class="meter is-dup">
-              <div class="meter-head"><span class="meter-name">下载缓冲</span><b class="meter-value" id="valDown">—</b>
-              </div>
-              <canvas class="spark" id="chartDown" width="480" height="64"></canvas>
-            </div>
-            <div class="meter">
-              <button type="button" class="meter-toggle" id="btnPendingInv" aria-expanded="false">
-                <span class="meter-name">待增强</span>
-                <b class="meter-value" id="valPending">—</b>
-              </button>
-              <div class="inv-panel" id="invPending" hidden></div>
-              <canvas class="spark" id="chartPending" width="480" height="64"></canvas>
-            </div>
-            <div class="meter">
-              <button type="button" class="meter-toggle" id="btnReadyInv" aria-expanded="false">
-                <span class="meter-name">已增强就绪</span>
-                <b class="meter-value" id="valReady">—</b>
-              </button>
-              <div class="inv-panel" id="invReady" hidden></div>
-              <canvas class="spark" id="chartReady" width="480" height="64"></canvas>
-            </div>
-            <div class="meter is-dup">
-              <div class="meter-head"><span class="meter-name">下载带宽</span><b class="meter-value" id="valBw">—</b></div>
-              <canvas class="spark" id="chartBw" width="480" height="64"></canvas>
-            </div>
-            <div class="meter is-sys" id="meterCpu">
-              <div class="meter-head"><span class="meter-name">CPU</span><b class="meter-value" id="valCpu">—</b></div>
-              <canvas class="spark" id="chartCpu" width="480" height="64"></canvas>
-            </div>
-            <div class="meter is-sys" id="meterGpu">
-              <div class="meter-head"><span class="meter-name">GPU</span><b class="meter-value" id="valGpu">—</b></div>
-              <canvas class="spark" id="chartGpu" width="480" height="64"></canvas>
-            </div>
-            <div class="pipeline-foot">
-              <span id="valRebuffer">重缓冲 —</span>
-              <span id="valSysExtra">整机 CPU —</span>
-            </div>
-          </div>
-        </div>
+        </details>
 
         <!-- D. 历史 -->
         <details class="sec" id="historyPanel">
@@ -1804,16 +1834,14 @@
       const board = scoreboardEl();
       const note = $("qualityNote");
       if (opts && opts.pendingFinal) {
-        if (board) board.classList.add("is-pending");
-        setScoreboardVisible(true);
-        foot.innerHTML = '<p class="score-pending">播放中 · 停跑后计算 QoE / VMAF</p>';
+        foot.innerHTML = "";
         if (note) {
           note.textContent = "";
           note.hidden = true;
         }
+        setScoreboardVisible(false);
         return;
       }
-      if (board) board.classList.remove("is-pending");
       const arms = (metrics && metrics.arms) || {};
       const armMetrics = (armId && arms[armId]) || first;
       const cards = (metrics && metrics.cards && metrics.cards.length) ? metrics.cards : [
@@ -1883,6 +1911,14 @@
       return `#${row.frame} · 段 ${row.segment} · ${row.representation} · 增强 ${level} · ${enhanced}${model}${scale}${vmaf}`;
     }
 
+    function paintTimelineTrack(slider) {
+      if (!slider) return;
+      const max = Number(slider.max) || 0;
+      const val = Number(slider.value) || 0;
+      const pct = max > 0 ? Math.max(0, Math.min(100, (val / max) * 100)) : 0;
+      slider.style.setProperty("--tl-pct", pct.toFixed(2) + "%");
+    }
+
     async function refreshTimeline(run, opts) {
       const slider = $("frameSlider");
       if (!slider) return;
@@ -1892,6 +1928,7 @@
         slider.disabled = true;
         slider.value = "0";
         slider.max = "0";
+        paintTimelineTrack(slider);
         setFrameMeta("");
         return;
       }
@@ -1925,6 +1962,7 @@
       slider.max = String(last);
       slider.disabled = max < 1;
       if (!timeline.scrubbing && Number(slider.value) > last) slider.value = String(last);
+      paintTimelineTrack(slider);
       if (max < 1) setFrameMeta("");
       else if (!timeline.holding && !timeline.scrubbing) setFrameMeta(max + " 帧");
     }
@@ -2052,53 +2090,18 @@
           if (hist) hist.open = false;
         }
       }
-      updateRecipeSummary();
+      if (live && prev !== s) setMonitorExpanded(true);
     }
 
-    function optLabel(sel) {
-      if (!sel || sel.selectedIndex < 0) return "—";
-      const t = (sel.options[sel.selectedIndex].textContent || sel.value || "—").trim();
-      return t || "—";
-    }
-
-    function clipLabel(text, max) {
-      if (M.clipText) return M.clipText(text, max) || "—";
-      const t = String(text || "—").trim();
-      if (t.length <= max) return t;
-      return t.slice(0, Math.max(1, max - 1)) + "…";
-    }
-
-    function updateRecipeSummary() {
-      const el = $("recipeSummary");
-      if (!el) return;
-      const live = ($("runControls") || {}).dataset &&
-        (["running", "preparing"].includes($("runControls").dataset.state));
-      try {
-        const summary = M.recipeSummaryFromSpec
-          ? M.recipeSummaryFromSpec(buildSpecFromForm(), { partMax: 14 })
-          : null;
-        if (summary) {
-          el.textContent = summary.line;
-          el.title = (live ? "仅影响下次开始\n" : "") + summary.title;
-          return;
-        }
-      } catch (e) { /* form may be mid-init */ }
-      const content = clipLabel(optLabel($("fldContent")), 16);
-      const ws = clipLabel(optLabel($("fldWorkspace")), 16);
-      const nes = optLabel($("fldNes"));
-      const enh = optLabel($("fldEnhancer"));
-      const net = $("fldNetMode") && $("fldNetMode").value === "trace"
-        ? (clipLabel(($("fldTraceFile") && $("fldTraceFile").value) || "轨迹", 18))
-        : "TCP";
-      const ren = optLabel($("fldRenderer"));
-      const line = [ws, content, nes, enh, net, ren].filter((part) => part && part !== "—").join(" · ");
-      el.textContent = line;
-      el.title = (live ? "仅影响下次开始 · " : "") + line;
+    function setMonitorExpanded(open) {
+      const panel = $("monitor");
+      if (!panel) return;
+      panel.open = !!open;
     }
 
     function syncRunChip(run) {
-      // Control bar stays a short verb (运行中 / 已停止). Recipe detail lives in
-      // 配方 / 观测悬停，不在按钮旁再跟一串条件摘要。
+      // Control bar stays a short verb (运行中 / 已停止). Recipe detail lives on
+      // the status tooltip and 观测悬停，不在按钮旁再跟一串条件摘要。
       const status = $("runStatus");
       if (!status) return;
       if (!run || !run.id) {
@@ -2204,7 +2207,6 @@
       if (player.mod_enhancer && $("fldEnhancer")) $("fldEnhancer").value = player.mod_enhancer;
       if (player.mod_renderer && $("fldRenderer")) $("fldRenderer").value = player.mod_renderer;
       updateWorkspaceHint();
-      updateRecipeSummary();
     }
 
     function buildSpecFromForm() {
@@ -2351,7 +2353,6 @@
       } finally {
         suppressFormSync = false;
         updateWorkspaceHint();
-        updateRecipeSummary();
       }
     }
 
@@ -2378,9 +2379,16 @@
 
     async function refreshContentChoices() {
       const pubs = await api("/publications");
+      // Path-backed identity bindings (extra.inplace / serve_root) are auto-managed
+      // when picking BBB — don't clutter the dropdown with duplicated pub_* rows.
+      const manualPubs = (pubs || []).filter((p) => {
+        const extra = p.extra || {};
+        if (extra.inplace || extra.serve_root) return false;
+        return true;
+      });
       contentChoices = [
         { value: "path:player/data/video_mp4box", label: "BBB" },
-        ...(pubs || []).map((p) => ({
+        ...manualPubs.map((p) => ({
           value: "publication:" + p.id,
           label: (p.title || p.id) + " · " + p.id,
         })),
@@ -2389,7 +2397,6 @@
     }
 
     function onRecipeFormChange() {
-      updateRecipeSummary();
       updateWorkspaceHint();
     }
 
@@ -2723,6 +2730,7 @@
       openHistoryId = runId;
       renderRun(run);
       const mon = $("monitor");
+      setMonitorExpanded(true);
       if (mon && mon.scrollIntoView) mon.scrollIntoView({ behavior: "smooth", block: "start" });
       await loadExperiments();
     }
@@ -3158,7 +3166,6 @@
       }
       const runs = await api("/runs");
       const sortedRuns = renderHistory(runs);
-      updateRecipeSummary();
       if (currentRunId) {
         const live = (sortedRuns || []).find((r) => r.id === currentRunId);
         if (live) renderRun(live);
@@ -3356,7 +3363,9 @@
     bindInventoryToggle("btnPendingInv", "invPending");
 
     $("frameSlider").oninput = () => {
-      const frame = Number($("frameSlider").value);
+      const slider = $("frameSlider");
+      paintTimelineTrack(slider);
+      const frame = Number(slider.value);
       if (timeline.timer) clearTimeout(timeline.timer);
       timeline.timer = setTimeout(() => scrubTo(frame), 60);
     };

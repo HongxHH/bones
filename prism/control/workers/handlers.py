@@ -87,7 +87,7 @@ class TaskHandlers:
         delivery = session.extra.get("delivery") or job.params.get("delivery") or "session_filter"
         adapter = self.state.registry.delivery_adapter(delivery)
         pub = self.state.publications[session.publication_id]
-        mpd_path = self.state.store.publication_dir(pub.id) / pub.mpd_name
+        mpd_path = self.state.publication_root(pub) / pub.mpd_name
         xml = mpd_path.read_text(encoding="utf-8")
         resolved = adapter.resolve_mpd(
             mpd_xml=xml,

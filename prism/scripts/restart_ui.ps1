@@ -32,21 +32,30 @@ function Test-PrismHealth([int]$port) {
     }
 }
 
-function Test-PrismLab([int]$port) {
-    try {
-        $r = Invoke-WebRequest -Uri "http://127.0.0.1:$port/lab/" -UseBasicParsing -TimeoutSec 3
-        return ($r.StatusCode -ge 200 -and $r.StatusCode -lt 300)
-    } catch {
-        return $false
-    }
-}
-
 function Stop-PrismControlPlane([int]$port) {
-    Get-NetTCPConnection -LocalPort $port -State Listen -ErrorAction SilentlyContinue | ForEach-Object {
-        Write-Host "[Prism] Stopping stale control plane pid=$($_.OwningProcess) on :$port"
-        cmd /c "taskkill /PID $($_.OwningProcess) /F" | Out-Null
+    $listenPids = @(
+        Get-NetTCPConnection -LocalPort $port -State Listen -ErrorAction SilentlyContinue |
+            Select-Object -ExpandProperty OwningProcess -Unique
+    )
+    foreach ($procId in $listenPids) {
+        if (-not $procId) { continue }
+        Write-Host "[Prism] Stopping control plane pid=$procId on :$port"
+        cmd /c "taskkill /PID $procId /F /T" | Out-Null
     }
-    Start-Sleep -Milliseconds 500
+    # Also catch serve/control modules that may not hold the listen socket yet.
+    Get-CimInstance Win32_Process |
+        Where-Object {
+            $_.Name -match '^python(w)?\.exe$' -and
+            (
+                ([string]$_.CommandLine -match " -m prism\.control(\s|$)") -or
+                ([string]$_.CommandLine -match " -m prism\s+serve(\s|$)")
+            )
+        } |
+        ForEach-Object {
+            Write-Host "[Prism] Stopping control module pid=$($_.ProcessId)"
+            cmd /c "taskkill /PID $($_.ProcessId) /F /T" | Out-Null
+        }
+    Start-Sleep -Milliseconds 700
 }
 
 function Test-IsPrismDeskCommand([string]$cmd) {
@@ -61,12 +70,24 @@ function Test-IsPrismDeskCommand([string]$cmd) {
     return $false
 }
 
+function Test-IsPrismPlayerCommand([string]$cmd) {
+    if ([string]::IsNullOrWhiteSpace($cmd)) { return $false }
+    return ($cmd -match "play\.py")
+}
+
 function Get-PrismDeskProcesses {
-    # Avoid WQL OR filters (unreliable across hosts); filter names in PowerShell.
     Get-CimInstance Win32_Process |
         Where-Object {
             $_.Name -match '^python(w)?\.exe$' -and
             (Test-IsPrismDeskCommand ([string]$_.CommandLine))
+        }
+}
+
+function Get-PrismPlayerProcesses {
+    Get-CimInstance Win32_Process |
+        Where-Object {
+            $_.Name -match '^python(w)?\.exe$' -and
+            (Test-IsPrismPlayerCommand ([string]$_.CommandLine))
         }
 }
 
@@ -78,7 +99,7 @@ function Stop-PrismDesk {
     }
     foreach ($p in $desk) {
         Write-Host "[Prism] Closing UI pid=$($p.ProcessId)"
-        cmd /c "taskkill /PID $($p.ProcessId) /F" | Out-Null
+        cmd /c "taskkill /PID $($p.ProcessId) /F /T" | Out-Null
     }
     $deadline = (Get-Date).AddSeconds(5)
     while ((Get-Date) -lt $deadline) {
@@ -88,57 +109,67 @@ function Stop-PrismDesk {
     Write-Host "[Prism] Warning: some UI processes may still be exiting."
 }
 
+function Stop-PrismPlayers {
+    $players = @(Get-PrismPlayerProcesses)
+    if ($players.Count -eq 0) {
+        Write-Host "[Prism] No player process found."
+        return
+    }
+    foreach ($p in $players) {
+        Write-Host "[Prism] Stopping player pid=$($p.ProcessId)"
+        cmd /c "taskkill /PID $($p.ProcessId) /F /T" | Out-Null
+    }
+    $deadline = (Get-Date).AddSeconds(5)
+    while ((Get-Date) -lt $deadline) {
+        if (@(Get-PrismPlayerProcesses).Count -eq 0) { return }
+        Start-Sleep -Milliseconds 200
+    }
+    Write-Host "[Prism] Warning: some player processes may still be exiting."
+}
+
 try {
     $cfg = Get-PrismConfig
-    Write-Host "[Prism] Restart UI only (Lab window). Player will keep running."
+    Write-Host "[Prism] Full restart: control plane + Lab UI + player processes"
     Write-Host "[Prism] python=$($cfg.python)"
     Write-Host "[Prism] repo=$($cfg.repo)"
+    Write-Host "[Prism] port=$($cfg.port)"
 
     Stop-PrismDesk
+    Stop-PrismPlayers
+    Stop-PrismControlPlane $cfg.port
 
-    $planeUp = Test-PrismHealth $cfg.port
-    if ($planeUp -and -not (Test-PrismLab $cfg.port)) {
-        Write-Host "[Prism] Control plane health OK but /lab/ is broken; restarting control plane..."
-        Stop-PrismControlPlane $cfg.port
-        $planeUp = $false
+    if (Test-PrismHealth $cfg.port) {
+        throw "port $($cfg.port) still healthy after stop; refuse to start a second control plane"
     }
 
     $args = @("-m", "prism", "--bind", "127.0.0.1", "--port", "$($cfg.port)")
-    if ($planeUp) {
-        $args += "--no-server"
-        Write-Host "[Prism] Control plane still up on :$($cfg.port); reopening window..."
-    } else {
-        Write-Host "[Prism] Control plane down; starting server + window..."
-    }
-
+    Write-Host "[Prism] Starting control plane + Lab window..."
     $proc = Start-Process -FilePath $cfg.python -ArgumentList $args -WorkingDirectory $cfg.repo -PassThru
     if (-not $proc) {
         throw "failed to start $($cfg.python) $($args -join ' ')"
     }
     Write-Host "[Prism] Started UI pid=$($proc.Id)"
 
-    # Desk may spawn the control plane asynchronously; give it a moment, then verify.
     Start-Sleep -Seconds 2
     if ($proc.HasExited) {
         throw "UI process exited immediately (code=$($proc.ExitCode)). Check PySide6 / imports from repo root."
     }
-    if (-not $planeUp) {
-        $ok = $false
-        for ($i = 0; $i -lt 40; $i++) {
-            if (Test-PrismHealth $cfg.port) { $ok = $true; break }
-            if ($proc.HasExited) {
-                throw "UI exited while waiting for control plane (code=$($proc.ExitCode))"
-            }
-            Start-Sleep -Milliseconds 500
+
+    $ok = $false
+    for ($i = 0; $i -lt 40; $i++) {
+        if (Test-PrismHealth $cfg.port) { $ok = $true; break }
+        if ($proc.HasExited) {
+            throw "UI exited while waiting for control plane (code=$($proc.ExitCode))"
         }
-        if (-not $ok) {
-            Write-Host "[Prism] Warning: control plane not healthy yet on :$($cfg.port) (window may still be connecting)."
-        } else {
-            Write-Host "[Prism] Control plane ready on :$($cfg.port)"
-        }
+        Start-Sleep -Milliseconds 500
+    }
+    if (-not $ok) {
+        Write-Host "[Prism] Warning: control plane not healthy yet on :$($cfg.port) (window may still be connecting)."
+    } else {
+        Write-Host "[Prism] Control plane ready on :$($cfg.port)"
     }
 
-    Write-Host "[Prism] UI relaunched. Player was not restarted."
+    Write-Host "[Prism] Full restart done."
     exit 0
 } catch {
     Write-Host "[Prism] Error: $($_.Exception.Message)"
