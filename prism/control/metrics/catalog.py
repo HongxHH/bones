@@ -13,6 +13,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Optional
 
+from .frame_quality import FrameQualityIndex
+
 
 def normalize_model(name: str) -> str:
     text = (name or "").strip().lower()
@@ -143,13 +145,25 @@ class QualityCatalog:
         self._remote_pulled: set[tuple[str, str]] = set()
         self._compute_attempted: set[str] = set()
         self._explicit: dict[tuple[str, str], Any] = {}
+        self._frame_index: Optional[FrameQualityIndex] = None
+
+    def _frames(self) -> FrameQualityIndex:
+        if self._frame_index is None:
+            self._frame_index = FrameQualityIndex(self.repo_root)
+        return self._frame_index
 
     def static_matrix(self, content_id: str, model: str) -> Optional[list]:
         model = normalize_model(model)
         cache_key = (content_id, model)
         if cache_key in self._static:
             return self._static[cache_key]
-        matrix = None
+        matrix = self._frames().static_matrix(content_id, model)
+        if matrix is not None:
+            explicit = self._explicit.get(cache_key)
+            if isinstance(explicit, list):
+                matrix = explicit
+            self._static[cache_key] = matrix
+            return matrix
         for cid, mid, rel in _STATIC_TABLES:
             if cid == content_id and mid == model:
                 path = self.repo_root / rel
@@ -160,6 +174,42 @@ class QualityCatalog:
             matrix = explicit
         self._static[cache_key] = matrix
         return matrix
+
+    def _from_frame_baseline(
+        self,
+        content_id: str,
+        model: str,
+        repr_index: int,
+        level: int,
+        segment_index: Optional[int],
+        frame_in_segment: Optional[int],
+        granularity: str,
+        key: QualityKey,
+    ) -> Optional[QualityHit]:
+        index = self._frames()
+        if not index.has_content(content_id, model):
+            return None
+        value: Optional[float] = None
+        if granularity == "frame" and segment_index is not None and frame_in_segment is not None:
+            value = index.frame_score(
+                content_id, repr_index, level, int(segment_index), int(frame_in_segment), model
+            )
+        elif segment_index is not None:
+            value = index.segment_mean(content_id, repr_index, level, int(segment_index), model)
+        else:
+            matrix = index.static_matrix(content_id, model)
+            if matrix and 0 <= repr_index < len(matrix):
+                row = matrix[repr_index]
+                if 0 <= level < len(row):
+                    value = _valid(row[level])
+        if value is None:
+            return None
+        return QualityHit(
+            value,
+            "frame_baseline",
+            provenance={"source": "frame_baseline", "purpose": "quality_baseline"},
+            key=asdict(key),
+        )
 
     def segment_pack(self, content_id: str, model: str) -> Optional[dict]:
         model = normalize_model(model)
@@ -204,7 +254,7 @@ class QualityCatalog:
         scale: str = "",
         partial: str = "none",
         model_ver: str = "",
-        sources: tuple[str, ...] = ("store", "static", "segment_pack"),
+        sources: tuple[str, ...] = ("store", "frame_baseline", "static", "segment_pack"),
     ) -> Optional[QualityHit]:
         model = normalize_model(model)
         key = QualityKey(
@@ -247,6 +297,19 @@ class QualityCatalog:
                     value = _valid(frames[frame_in_segment])
                     if value is not None:
                         return QualityHit(value, stored.provenance.get("source") or "local_store", provenance=stored.provenance, key=asdict(seg_key))
+        if "frame_baseline" in sources:
+            hit = self._from_frame_baseline(
+                content_id,
+                model,
+                int(repr_index),
+                int(level),
+                segment_index,
+                frame_in_segment,
+                granularity,
+                key,
+            )
+            if hit is not None:
+                return hit
         if "static" in sources:
             matrix = self.static_matrix(content_id, model)
             if matrix and 0 <= int(repr_index) < len(matrix) and isinstance(matrix[int(repr_index)], list):

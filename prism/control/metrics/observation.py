@@ -95,9 +95,15 @@ def observations_from_analyzer(
     analyzer_segments: list[dict[str, Any]] | None,
     *,
     model_default: str = "imdn",
+    segment_origin: int = 1,
 ) -> list[dict[str, Any]]:
     """Build observations solely from the player analyzer segment list."""
-    return merge_analyzer_outcomes([], analyzer_segments, model_default=model_default)
+    return merge_analyzer_outcomes(
+        [],
+        analyzer_segments,
+        model_default=model_default,
+        segment_origin=segment_origin,
+    )
 
 
 def merge_analyzer_outcomes(
@@ -105,6 +111,7 @@ def merge_analyzer_outcomes(
     analyzer_segments: list[dict[str, Any]] | None,
     *,
     model_default: str = "imdn",
+    segment_origin: int = 1,
 ) -> list[dict[str, Any]]:
     """Overlay player-analyzer segment outcomes onto telemetry/frame observations.
 
@@ -130,7 +137,7 @@ def merge_analyzer_outcomes(
         if slot is None:
             slot = _blank(index, model_default)
             by_index[index] = slot
-        _apply_analyzer_segment(slot, seg)
+        _apply_analyzer_segment(slot, seg, segment_origin=segment_origin)
     return [by_index[i] for i in sorted(by_index)]
 
 
@@ -162,7 +169,12 @@ def _apply_playing_outcome(slot: dict[str, Any], sample: dict[str, Any], planned
             slot["outcome_source"] = "telemetry_planned"
 
 
-def _apply_analyzer_segment(slot: dict[str, Any], seg: dict[str, Any]) -> None:
+def _apply_analyzer_segment(
+    slot: dict[str, Any],
+    seg: dict[str, Any],
+    *,
+    segment_origin: int = 1,
+) -> None:
     download = _as_int(seg.get("download_action"))
     if download is None:
         download = _as_int(seg.get("quality"))
@@ -203,6 +215,10 @@ def _apply_analyzer_segment(slot: dict[str, Any], seg: dict[str, Any]) -> None:
             slot["partial"] = "fast_complete"
             slot["ratio"] = ratio
             slot["is_enhance"] = True
+            slot["enhanced_cnt"] = enhanced
+            slot["played_frames"] = total
+            interval = _as_int(seg.get("enhance_frame_interval"))
+            slot["enhance_frame_interval"] = 0 if interval is None else interval
     elif is_enhance is True:
         slot["level"] = planned if planned is not None else int(slot.get("level") or 0)
         slot["partial"] = "none"
@@ -212,6 +228,9 @@ def _apply_analyzer_segment(slot: dict[str, Any], seg: dict[str, Any]) -> None:
     if isinstance(real, (int, float)):
         slot["real_vmaf"] = float(real)
     slot["outcome_source"] = "analyzer"
+    index = _as_int(slot.get("index"))
+    if index is not None:
+        slot["quality_index"] = index - int(segment_origin)
 
 
 def _apply_frames(slot: dict[str, Any], rows: list[dict[str, Any]], model_default: str) -> None:
@@ -276,6 +295,9 @@ def _blank(index: int, model_default: str) -> dict[str, Any]:
         "scale": "",
         "partial": "none",
         "ratio": None,
+        "enhanced_cnt": None,
+        "played_frames": None,
+        "enhance_frame_interval": None,
         "frames": [],
         "real_vmaf": None,
         "is_enhance": None,

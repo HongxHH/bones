@@ -341,6 +341,12 @@ class PlayerComposer:
             help="Online EWMA latency / safe-factor updates (true/false, default true)",
         )
         parser.add_argument(
+            "--quality_source",
+            type=str,
+            required=False,
+            help="BONES quality table: static (default) or frame_catalog",
+        )
+        parser.add_argument(
             "--fixed_enhance_action",
             type=int,
             required=False,

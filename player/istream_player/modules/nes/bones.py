@@ -64,6 +64,7 @@ class BONESController(Module, NESController):
         """
         # 从配置中设置缓冲区大小（转换为毫秒）
         self.buffer_size = config.buffer_duration * 1000
+        self.quality_source = str(getattr(config, "quality_source", "static") or "static")
         # 存储所有依赖组件的引用
         self.download_buffer = download_buffer  # 下载缓冲区
         self.enhance_buffer = enhance_buffer    # 增强缓冲区
@@ -99,14 +100,26 @@ class BONESController(Module, NESController):
                 self.first_download = False
             else:
                 # 后续下载：使用BONES算法进行智能决策
-                download_action, enhance_action = self.bones_decision(adaptation_set)
+                segment_index = None
+                if getattr(self, "quality_source", "static") == "frame_catalog":
+                    import sys
+                    from pathlib import Path
+
+                    repo = Path(__file__).resolve().parents[4]
+                    if str(repo) not in sys.path:
+                        sys.path.insert(0, str(repo))
+                    from prism.control.metrics.frame_quality import quality_segment_index
+
+                    origin = int(getattr(self.scheduler, "first_segment", 1) or 1)
+                    segment_index = quality_segment_index(index, origin)
+                download_action, enhance_action = self.bones_decision(adaptation_set, segment_index)
             # 记录选择结果
             download_actions[adaptation_set.id] = download_action
             enhance_actions[adaptation_set.id] = enhance_action
 
         return download_actions, enhance_actions
 
-    def bones_decision(self, adaptation_set: AdaptationSet):
+    def bones_decision(self, adaptation_set: AdaptationSet, segment_index: Optional[int] = None):
         """
         BONES决策算法 - 为单个自适应集选择最优的下载和增强动作
         基于Lyapunov优化理论，平衡质量、延迟和缓冲状态
@@ -137,7 +150,10 @@ class BONESController(Module, NESController):
         self.buff_down = self.download_buffer.buffer_level(continuous=True) * 1000  # 下载缓冲水位
         self.buff_enh = self.enhance_buffer.buffer_level(continuous=True) * 1000   # 增强缓冲水位
         # 获取增强质量表（VMAF分数）
-        self.vmaf_enh_avg = self.enhancer.get_quality_table()
+        if segment_index is None:
+            self.vmaf_enh_avg = self.enhancer.get_quality_table()
+        else:
+            self.vmaf_enh_avg = self.enhancer.get_quality_table(segment_index=segment_index)
         # 质量表按完整 5 档梯子准备。实验若只放出其中几档，表和段大小形状对不上，决策会直接退出。
         n_repr = len(bitrate)
         self.enhance_time = self._fit_rungs(self.enhance_time, n_repr)

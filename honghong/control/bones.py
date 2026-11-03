@@ -60,8 +60,25 @@ class BONES(Simulator):
         """
         下载会话开始：基于当前缓冲/估计状态选择 (action_down, action_enh)
         """
+        # 质量用 data/quality 的当前段（缺段用全片均值）。增强耗时仍来自 enhance 文件。
+        if not (self.quick_start and not self.model_ready):
+            self._use_catalog_quality(self.idx_down)
         # 计算联合动作（下载码率索引 action_down，增强方法索引 action_enh）
         self.action_down, self.action_enh = self._bones_control()
+
+    def _use_catalog_quality(self, segment_index: int) -> None:
+        try:
+            from control.frame_quality_results import catalog_decision_table
+        except Exception:
+            return
+        table = catalog_decision_table(int(segment_index))
+        if table is None or self.vmaf_enh_avg is None:
+            return
+        fitted = np.array(self.vmaf_enh_avg, copy=True)
+        rows = min(fitted.shape[0], table.shape[0])
+        cols = min(fitted.shape[1], table.shape[1])
+        fitted[:rows, :cols] = table[:rows, :cols]
+        self.vmaf_enh_avg = fitted
 
         if self.logger.is_verbose():
             self.logger.write("(control) download {} enhance {}".format(

@@ -137,6 +137,9 @@ class PlayerConfig:
     # 在线 EWMA 更新延迟表 / safe_factor，并在跑完写回 imdn_latency.json。
     # 本机首次（或缺 GPU 指纹）会重测；精确对比实验请显式关掉，避免同配置决策漂移。
     latency_adapt: bool = True
+    # static = startup quality json. frame_catalog = per-segment means from data/quality.
+    # Only BONES consults this. Default experiments stay on static.
+    quality_source: str = "static"
 
     # D5 消融（tool_greedy）：忽略缓冲 slack / 段墙钟门 → no_slack 臂
     tool_ignore_slack: bool = False

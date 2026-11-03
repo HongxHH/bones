@@ -1367,6 +1367,14 @@
                 <select id="fldNes"></select>
               </div>
               <div class="field">
+                <label for="fldQualitySource">选档质量表</label>
+                <select id="fldQualitySource">
+                  <option value="static">静态表</option>
+                  <option value="frame_catalog">逐段测量</option>
+                </select>
+                <span class="field-hint">选 BONES 时用逐段测量：按当前段的实测画质选下载档和增强档。</span>
+              </div>
+              <div class="field">
                 <label for="fldEnhancer">增强器</label>
                 <select id="fldEnhancer"></select>
               </div>
@@ -2213,6 +2221,12 @@
       if (!ws) return;
       const player = ws.player || {};
       if (player.mod_nes && $("fldNes")) $("fldNes").value = player.mod_nes;
+      const quality = $("fldQualitySource");
+      if (quality) {
+        quality.value = player.quality_source === "frame_catalog" || player.quality_source === "static"
+          ? player.quality_source
+          : (player.mod_nes === "bones" ? "frame_catalog" : "static");
+      }
       if (player.mod_enhancer && $("fldEnhancer")) $("fldEnhancer").value = player.mod_enhancer;
       if (player.mod_renderer && $("fldRenderer")) $("fldRenderer").value = player.mod_renderer;
       updateWorkspaceHint();
@@ -2235,6 +2249,7 @@
       }
       base.spec.content = { source: $("fldContent").value || DEFAULT_SPEC.spec.content.source };
       arm.player.mod_nes = $("fldNes").value || arm.player.mod_nes || "always_greedy";
+      arm.player.quality_source = ($("fldQualitySource") && $("fldQualitySource").value) || "static";
       arm.player.mod_enhancer = $("fldEnhancer").value || arm.player.mod_enhancer || "imdn";
       if (arm.player.mod_enhancer === "imdn_always") arm.player.mod_enhancer = "imdn";
       arm.player.mod_renderer = $("fldRenderer").value || arm.player.mod_renderer || "opencv";
@@ -2335,6 +2350,13 @@
         const p = armPlayer(spec);
         if (p.mod_nes && [...$("fldNes").options].some((o) => o.value === p.mod_nes)) {
           $("fldNes").value = p.mod_nes;
+        }
+        const quality = $("fldQualitySource");
+        if (quality) {
+          const saved = p.quality_source === "frame_catalog" || p.quality_source === "static"
+            ? p.quality_source
+            : ($("fldNes").value === "bones" ? "frame_catalog" : "static");
+          quality.value = saved;
         }
         const enhancerId = p.mod_enhancer === "imdn_always" ? "imdn" : p.mod_enhancer;
         if (enhancerId && [...$("fldEnhancer").options].some((o) => o.value === enhancerId)) {
@@ -3407,10 +3429,17 @@
         setFrameMeta("");
       }
     };
-    ["fldContent", "fldNes", "fldEnhancer", "fldRenderer", "fldTraceFile"].forEach((id) => {
+    ["fldContent", "fldNes", "fldEnhancer", "fldRenderer", "fldTraceFile", "fldQualitySource"].forEach((id) => {
       const el = $(id);
       if (el) el.addEventListener("change", onRecipeFormChange);
     });
+    if ($("fldNes")) {
+      $("fldNes").addEventListener("change", () => {
+        const quality = $("fldQualitySource");
+        if (!quality) return;
+        quality.value = $("fldNes").value === "bones" ? "frame_catalog" : "static";
+      });
+    }
     if ($("fldWorkspace")) {
       $("fldWorkspace").addEventListener("change", () => {
         applyWorkspaceDefaults();

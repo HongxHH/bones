@@ -22,6 +22,8 @@ class ArmPlayerSpec(BaseModel):
     collect_system_metrics: bool = False
     use_fast_complete: bool = False
     latency_adapt: bool = True
+    # static | frame_catalog. frame_catalog changes BONES bitrate/enhance choices.
+    quality_source: str = "static"
     # Phase-3 recovery: pin NES enhance level / segment recovery policy.
     fixed_enhance_action: Optional[int] = None
     recovery_mode: str = "none"

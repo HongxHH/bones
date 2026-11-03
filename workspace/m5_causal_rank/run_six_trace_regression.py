@@ -50,7 +50,7 @@ def make_args(trace_path, oracle_rank):
     args.monitor = False
     args.autotune = False
     args.quick_start = False
-    args.per_frame_path = os.path.join(REPO, r"data\bbb\per_frame_quality.json")
+    args.per_frame_path = None
     args.oracle_rank = oracle_rank
     return args
 

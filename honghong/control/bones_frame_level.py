@@ -11,7 +11,6 @@ M3 起不再使用在线帧级 DP（含原线性有符号平滑惩罚，B2 随�
 """
 import sys
 import os
-import json
 import numpy as np
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -24,10 +23,9 @@ class BONESFrameLevel(BONES):
     def __init__(self, args):
         super().__init__(args)
 
-        per_frame_path = getattr(args, 'per_frame_path',
-                                  r"E:\dev\Code\Python\bones\data\bbb\per_frame_quality.json")
-        with open(per_frame_path) as f:
-            self.per_frame_data = json.load(f)
+        from control.frame_quality_results import load_per_frame_data
+
+        self.per_frame_data = load_per_frame_data(args)
 
         # 仿真器码率索引 -> 分辨率
         self.bitrate_to_res = {0: 240, 1: 360, 2: 480, 3: 720, 4: 1080}

@@ -95,14 +95,23 @@
 
 ## 消费方迁移清单
 
-1. 三控制器（`control/bones_frame_level.py`、`bones_incremental.py`、`bones_combined.py`）新增 `data/quality/` 读取，替换 `data/bbb/per_frame_quality.json`；
-2. 对比实验中所有策略（含 BONES 基线）的画质评分统一从权威帧数据现算段值，保证一把尺子；
-3. 复跑 `workspace/m5_causal_rank/run_oracle_vs_edf.py` 与 `run_six_trace_regression.py`，确认结论方向（EDF 对 BONES 5/6 胜、oracle 头间约 0.05–0.15）；
-4. `data/bbb/per_frame_quality.json` 改名 `.deprecated`，`workspace/vbr_sims/frame_level/README.md` 加替换注记；
-5. 更新 `docs/current_state.md` 与本文件，精确 git add 提交（脚本、`data/quality/`、文档；不提交 tmp/log/视频）。
+已完成（Lab A+B）：`prism/control/metrics/frame_quality.py` 读取本目录产物；`QualityCatalog` 优先 `frame_baseline`；Lab QoE 按播出结局用段均值重算，不再直接采用 analyzer 旧表 `real_vmaf`。
+
+已完成（仿真 C）：`honghong/control/frame_quality_results.py` 把本目录装成三控制器要的 `results` 键。`bones_frame_level` / `bones_incremental` / `bones_combined` 默认走这套；`args.per_frame_path` 仍可指向旧 json。两个 m5 入口不再写死旧路径。
+
+已完成（播放器 D）：`quality_source=frame_catalog` 时，只有 BONES 按当前段使用这里的段均值。默认 `static`，baseline / fast_complete 选档不变。缺段用全片均值，非法格仍不可选。
+
+仿真 BONES 的选档质量也改为当前段（缺段用全片均值），增强耗时仍用 enhance 文件。播放器分析报告的段 VMAF 与 Lab 同一套段分；没有权威数据时才用静态表。
+
+`data/bbb/per_frame_quality.json` 留给尚未迁移的 `gain_predictor` 和 `vbr_sims/frame_level`。
+
+待办：
+
+1. 复跑 `workspace/m5_causal_rank/run_oracle_vs_edf.py` 与 `run_six_trace_regression.py`，确认换尺后的方向；
+2. 旧脚本若还要对照，再考虑给 `per_frame_quality.json` 加弃用说明。
 
 ## 不做
 
-- 不改 BONES 基线的 ABR 决策逻辑；
+- 默认不改 BONES 的 ABR；只有显式 `quality_source=frame_catalog` 才用逐段权威表；
 - 不重测已封板工作线的历史结论，仅在新数据上复跑当前主线对比；
 - 4K、旁路线不并入本基线。

@@ -1412,8 +1412,39 @@ class IMDNEnhancerAlways(Module, Enhancer, PlayerEventListener):
             }
         return facts
 
+    def _catalog_segment_table(self, segment_index: int):
+        """5×5 segment means from data/quality. None when that content has no files."""
+        import sys
+        from pathlib import Path
+
+        content_id = getattr(self, "video_dataset", "bbb") or "bbb"
+        if content_id == "tos":
+            return None
+        repo = Path(__file__).resolve().parents[4]
+        if str(repo) not in sys.path:
+            sys.path.insert(0, str(repo))
+        from prism.control.metrics.frame_quality import FrameQualityIndex
+        index = getattr(self, "_frame_quality_index", None)
+        if index is None:
+            index = FrameQualityIndex(repo)
+            self._frame_quality_index = index
+        matrix = index.decision_matrix(content_id, int(segment_index))
+        if matrix is None:
+            return None
+        table = np.full((len(matrix), len(matrix[0])), -np.inf, dtype=float)
+        for row_index, row in enumerate(matrix):
+            for level, value in enumerate(row):
+                if value is not None:
+                    table[row_index, level] = float(value)
+        return table
+
     # 获取质量表的方法 - 假设增强质量元数据在本地存在
-    def get_quality_table(self):
+    def get_quality_table(self, segment_index: int = None):
+        source = str(getattr(getattr(self, "config", None), "quality_source", "static") or "static")
+        if source == "frame_catalog" and segment_index is not None:
+            catalog = IMDNEnhancerAlways._catalog_segment_table(self, int(segment_index))
+            if catalog is not None:
+                return catalog
         # 根据内容感知标志选择不同的质量表文件
         if self.content_aware:
             file_name = "imdn_bbb_quality.json"

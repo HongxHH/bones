@@ -8,7 +8,6 @@ M3 起与 bones_frame_level 共用 FrameEnhanceQueue：BONES 段级码率/最大
 """
 import sys
 import os
-import json
 import numpy as np
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -21,10 +20,9 @@ class BONESCombined(BONES):
     def __init__(self, args):
         super().__init__(args)
 
-        per_frame_path = getattr(args, 'per_frame_path',
-                                  r"E:\dev\Code\Python\bones\data\bbb\per_frame_quality.json")
-        with open(per_frame_path) as f:
-            self.per_frame_data = json.load(f)
+        from control.frame_quality_results import load_per_frame_data
+
+        self.per_frame_data = load_per_frame_data(args)
 
         self.bitrate_to_res = {0: 240, 1: 360, 2: 480, 3: 720, 4: 1080}
         self.res_to_idx = {240: 0, 360: 1, 480: 2}

@@ -17,6 +17,7 @@ from .remote import pull_remote_catalog
 _ANALYZER_TABLE_REASON = (
     "画质来自播放器质量表推算（与 analyzer 一致；abort/FC 按播出结局），不是实测 libvmaf"
 )
+_FRAME_BASELINE_REASON = "段分来自 data/quality 真测聚合，按播出结局加权"
 
 
 def metrics_settings(run: ExperimentRun) -> dict[str, Any]:
@@ -64,6 +65,7 @@ def assemble_run_bundle(
             observations = observations_from_analyzer(
                 analyzer_segments,
                 model_default=model_default,
+                segment_origin=int(analyzer_report.get("segment_origin") or 1),
             )
             frame_rows: list[dict[str, Any]] = []
         else:
@@ -90,6 +92,7 @@ def assemble_run_bundle(
             samples,
         )
         _align_fast_complete_recipe(derived, analyzer_report, settings["recipes"])
+        _override_fc_quality_drop(derived, quality)
         status, reasons = _status(observations, quality, derived)
         dropped = int(summary.get("frame_archive_dropped") or 0)
         if dropped > 0 and not analyzer_segments:
@@ -279,6 +282,7 @@ def ingest_measure_job(state, job) -> None:
             observations = observations_from_analyzer(
                 analyzer_segments,
                 model_default=model,
+                segment_origin=int(analyzer_report.get("segment_origin") or 1),
             )
             frame_rows = []
         else:
@@ -362,6 +366,7 @@ def _resolve_arm(
                 "vmaf": None if row["vmaf"] is None else round(float(row["vmaf"]), 6),
                 "source": row["source"],
                 "degraded": row["degraded"],
+                "quality_drop": row.get("quality_drop"),
             }
             for row in scored
         ],
@@ -386,14 +391,8 @@ def _score_observation(catalog: QualityCatalog, content_id: str, obs: dict[str, 
         "vmaf": None,
         "source": "",
         "degraded": False,
+        "quality_drop": None,
     }
-    # Player analyzer already applied abort / fast-complete blending.
-    real = obs.get("real_vmaf")
-    if isinstance(real, (int, float)) and obs.get("outcome_source") == "analyzer":
-        base["vmaf"] = float(real)
-        base["source"] = "analyzer"
-        base["degraded"] = False
-        return base
     if frames:
         hits: list[QualityHit] = []
         for row in frames:
@@ -412,7 +411,7 @@ def _score_observation(catalog: QualityCatalog, content_id: str, obs: dict[str, 
                 repr_index=int(obs["repr_index"]),
                 model=str(row.get("model") or obs["model"]),
                 level=level_i,
-                segment_index=int(obs["index"]),
+                segment_index=_quality_segment(obs),
                 frame_in_segment=frame_i,
                 granularity="frame",
                 scale=str(row.get("scale") or obs.get("scale") or ""),
@@ -427,21 +426,95 @@ def _score_observation(catalog: QualityCatalog, content_id: str, obs: dict[str, 
             base["source"] = hits[0].source
             base["degraded"] = any(hit.degraded for hit in hits)
             return base
+    level = int(obs["level"])
+    baseline = _frame_index(catalog).has_content(content_id, str(obs.get("model") or "imdn"))
+    interval = _as_int(obs.get("enhance_frame_interval")) or 0
+    enhanced_cnt = _as_int(obs.get("enhanced_cnt"))
+    prefix_fast = (
+        obs.get("partial") == "fast_complete"
+        and interval <= 0
+        and enhanced_cnt is not None
+        and baseline
+    )
+    if prefix_fast:
+        prefix = _prefix_score(catalog, content_id, obs, level, int(enhanced_cnt))
+        if prefix is not None:
+            base.update(prefix)
+            return base
     ratio = obs.get("ratio")
-    if isinstance(ratio, float) and 0 < ratio < 1 and int(obs["level"]) > 0:
+    ratio_mix = isinstance(ratio, float) and 0 < ratio < 1 and level > 0
+    if ratio_mix and not prefix_fast:
         low = _lookup_level(catalog, content_id, obs, 0)
-        high = _lookup_level(catalog, content_id, obs, int(obs["level"]))
+        high = _lookup_level(catalog, content_id, obs, level)
         if low and high and low.value is not None and high.value is not None:
             base["vmaf"] = low.value * (1 - ratio) + high.value * ratio
             base["source"] = "mixed"
             base["degraded"] = True
             return base
-    hit = _lookup_level(catalog, content_id, obs, int(obs["level"]))
-    if hit and hit.value is not None:
-        base["vmaf"] = hit.value
-        base["source"] = hit.source
-        base["degraded"] = hit.degraded
+    if not prefix_fast:
+        hit = _lookup_level(catalog, content_id, obs, level)
+        if hit and hit.value is not None and (hit.source == "frame_baseline" or not baseline):
+            base["vmaf"] = hit.value
+            base["source"] = hit.source
+            base["degraded"] = hit.degraded
+            return base
+    if baseline and level > 0:
+        # Requested SR cell is absent (720/1080). The player does not enhance these rungs.
+        plain = _lookup_level(catalog, content_id, obs, 0)
+        if plain and plain.value is not None and plain.source == "frame_baseline":
+            base["vmaf"] = plain.value
+            base["source"] = "frame_baseline"
+            base["degraded"] = False
+            return base
+        return base
+    if baseline:
+        return base
+    # Catalog miss: analyzer real_vmaf is the old static-table estimate.
+    real = obs.get("real_vmaf")
+    if isinstance(real, (int, float)) and obs.get("outcome_source") == "analyzer":
+        base["vmaf"] = float(real)
+        base["source"] = "analyzer_fallback"
+        base["degraded"] = True
     return base
+
+
+def _quality_segment(obs: dict[str, Any]) -> int:
+    if obs.get("quality_index") is not None:
+        return int(obs["quality_index"])
+    return int(obs["index"])
+
+
+def _frame_index(catalog: QualityCatalog):
+    return catalog._frames()
+
+
+def _as_int(value: Any) -> Optional[int]:
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        return None
+    return int(value)
+
+
+def _prefix_score(
+    catalog: QualityCatalog,
+    content_id: str,
+    obs: dict[str, Any],
+    level: int,
+    enhanced_cnt: int,
+) -> Optional[dict[str, Any]]:
+    index = _frame_index(catalog)
+    model = str(obs.get("model") or "imdn")
+    repr_index = int(obs["repr_index"])
+    segment = _quality_segment(obs)
+    played = index.playback_mean(content_id, repr_index, level, segment, enhanced_cnt, model)
+    full = index.segment_mean(content_id, repr_index, level, segment, model)
+    if played is None or full is None:
+        return None
+    return {
+        "vmaf": played,
+        "source": "frame_baseline",
+        "degraded": False,
+        "quality_drop": full - played,
+    }
 
 
 def _lookup_level(catalog, content_id, obs, level: int) -> Optional[QualityHit]:
@@ -450,7 +523,7 @@ def _lookup_level(catalog, content_id, obs, level: int) -> Optional[QualityHit]:
         repr_index=int(obs["repr_index"]),
         model=str(obs["model"]),
         level=level,
-        segment_index=int(obs["index"]),
+        segment_index=_quality_segment(obs),
         granularity="segment",
         scale=str(obs.get("scale") or ""),
         partial="none" if level == 0 else str(obs.get("partial") or "none"),
@@ -480,8 +553,10 @@ def _quality_source_label(quality: dict[str, Any]) -> str:
         if row.get("vmaf") is None:
             continue
         src = str(row.get("source") or "")
-        if src == "analyzer":
+        if src in {"analyzer", "analyzer_fallback"}:
             labels.append("analyzer")
+        elif src == "frame_baseline":
+            labels.append("local_catalog")
         elif src == "libvmaf" or "compute" in src:
             labels.append("compute")
         elif "remote" in src:
@@ -632,6 +707,23 @@ def _align_fast_complete_recipe(
     }
 
 
+def _override_fc_quality_drop(derived: dict[str, Any], quality: dict[str, Any]) -> None:
+    """Replace the analyzer's old-table drop with the frame-baseline prefix drop."""
+    recipe = derived.get("fast_complete_v1")
+    if not isinstance(recipe, dict):
+        return
+    drops = [
+        float(row["quality_drop"])
+        for row in (quality.get("segments") or [])
+        if isinstance(row.get("quality_drop"), (int, float))
+    ]
+    if not drops:
+        return
+    inputs = dict(recipe.get("inputs") or {})
+    inputs["quality_drop_avg"] = sum(drops) / len(drops)
+    recipe["inputs"] = inputs
+
+
 def _status(observations, quality, derived) -> tuple[str, list[str]]:
     """Label how trustworthy the scores are.
 
@@ -668,9 +760,14 @@ def _status(observations, quality, derived) -> tuple[str, list[str]]:
     )
     if measured and not quality.get("degraded"):
         return "complete", reasons
-    # Offline table / analyzer / mixed estimates are usable but not measured.
-    analyzer_all = bool(scored_sources) and all(src == "analyzer" for src in scored_sources)
-    if analyzer_all:
+    # Offline aggregates are usable but not a fresh libvmaf of this run.
+    baseline = bool(scored_sources) and all(src == "frame_baseline" for src in scored_sources)
+    analyzer_all = bool(scored_sources) and all(
+        src in {"analyzer", "analyzer_fallback"} for src in scored_sources
+    )
+    if baseline:
+        reasons.append(_FRAME_BASELINE_REASON)
+    elif analyzer_all:
         reasons.append(_ANALYZER_TABLE_REASON)
     else:
         reasons.append("画质分用的是离线质量表推算，不是实测 libvmaf")

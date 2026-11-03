@@ -248,6 +248,7 @@
       trace: trace,
       useFast: !!player.use_fast_complete,
       latencyAdapt: !!player.latency_adapt,
+      frameCatalog: player.quality_source === "frame_catalog",
       systemMetrics: systemMetrics,
     };
   }
@@ -269,6 +270,7 @@
       parts.renderer ? "渲染 " + parts.renderer : "",
       parts.trace ? "轨迹 " + parts.trace : "网络 TCP",
       parts.useFast ? "fast-complete 开" : "",
+      parts.frameCatalog ? "逐段测量" : "",
       parts.latencyAdapt ? "latency_adapt 开" : "",
       parts.systemMetrics ? "系统指标 开" : "系统指标 关",
     ].filter(Boolean);

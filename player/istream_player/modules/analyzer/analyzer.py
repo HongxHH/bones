@@ -551,6 +551,71 @@ class PlaybackAnalyzer(
     # async def on_gpu_usage_update(self, usage: float) -> None:
 
 
+    def _uses_exit_counts(self, segment) -> bool:
+        counts = segment.exit_frame_counts
+        return counts is not None and sum(int(count) for count in counts) > 0
+
+    def _catalog_played(self, segment, repr_index: int, level: int):
+        """Segment VMAF from data/quality. None when that content has no files."""
+        repo = Path(__file__).resolve().parents[4]
+        if str(repo) not in sys.path:
+            sys.path.insert(0, str(repo))
+        from prism.control.metrics.frame_quality import FrameQualityIndex, quality_segment_index
+
+        index = getattr(self, "_frame_quality_index", None)
+        if index is None:
+            index = FrameQualityIndex(repo)
+            self._frame_quality_index = index
+        content = getattr(self._enhancer, "video_dataset", "bbb") or "bbb"
+        interval = int(segment.enhance_frame_interval or 0) if segment.enhance_frame_interval is not None else 0
+        enhanced = None
+        ratio = None
+        scored_level = 0 if not segment.is_enhance else int(level)
+        if segment.fast_complete and segment.is_enhance:
+            enhanced_cnt = int(segment.enhanced_cnt or 0)
+            interpolated = int(segment.interpolated_cnt or 0)
+            total = enhanced_cnt + interpolated
+            ratio = (enhanced_cnt / total) if total else 0.0
+            if interval <= 0:
+                enhanced = enhanced_cnt
+        return index.played_score(
+            content,
+            int(repr_index),
+            scored_level,
+            quality_segment_index(int(segment.index), self._segment_origin()),
+            enhanced_frames=enhanced,
+            interval=interval,
+            ratio=ratio,
+        )
+
+    def _segment_origin(self) -> int:
+        mpd = getattr(self._mpd_provider, "mpd", None)
+        ids = []
+        if mpd is not None:
+            for adaptation_set in mpd.adaptation_sets.values():
+                for representation in adaptation_set.representations.values():
+                    ids.extend(representation.segments.keys())
+        return min(ids) if ids else 1
+
+    def _apply_catalog_vmaf(self, segment, score: dict) -> None:
+        segment.base_vmaf = score["base"]
+        segment.enhance_vmaf = score["full"]
+        segment.real_vmaf = score["real"]
+        segment.enhanced_frame_vmaf = score["full"]
+        segment.non_enhanced_frame_vmaf = score["base"]
+        if segment.fast_complete and segment.is_enhance:
+            enhanced_cnt = int(segment.enhanced_cnt or 0)
+            interpolated = int(segment.interpolated_cnt or 0)
+            total = enhanced_cnt + interpolated
+            ratio = (enhanced_cnt / total) if total else 0.0
+            segment.enhance_ratio = ratio
+            segment.quality_drop_due_to_fast = score["full"] - score["real"]
+            interval = int(segment.enhance_frame_interval or 0) if segment.enhance_frame_interval is not None else 0
+            if interval > 0:
+                segment.quality_switches_within_segment = 2 * enhanced_cnt
+            else:
+                segment.quality_switches_within_segment = 1 if 0 < ratio < 1 else 0
+
     def save(self, output: io.TextIOBase | TextIO) -> None:
         """
         保存分析结果到输出流
@@ -645,6 +710,11 @@ class PlaybackAnalyzer(
         for analyzer_segment in self._segments_by_url.values():
             if analyzer_segment.quality is not None:
                 q_idx = int(analyzer_segment.quality)
+                e_idx_for_catalog = int(analyzer_segment.enhance_action) if analyzer_segment.is_enhance else 0
+                catalog = self._catalog_played(analyzer_segment, q_idx, e_idx_for_catalog)
+                if catalog is not None and not self._uses_exit_counts(analyzer_segment):
+                    self._apply_catalog_vmaf(analyzer_segment, catalog)
+                    continue
                 analyzer_segment.base_vmaf = self.quality_table[q_idx, 0]
                 # 如果该段没有执行增强，则增强索引为0
                 if analyzer_segment.is_enhance:
@@ -849,6 +919,7 @@ class PlaybackAnalyzer(
             "environment": self.env_info,           # 实验环境元数据
             "gpu_metrics": self.gpu_metrics,        # GPU 指标（显存峰值等）
             "startup_metrics": self.startup_metrics, # 启动延迟指标
+            "segment_origin": self._segment_origin(),
             "segments": list(map(asdict, self._segments_by_url.values())),  # 段数据
             "stalls": list(map(asdict, self._stalls)),         # 卡顿数据
             "states": [{"time": time, "state": str(state), "position": pos} for time, state, pos in self._states],  # 状态数据

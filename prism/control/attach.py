@@ -82,6 +82,8 @@ def player_cmd(
     args.extend(["--collect_system_metrics", "true" if sys_metrics else "false"])
     args.extend(["--use_fast_complete", "true" if player.get("use_fast_complete") else "false"])
     args.extend(["--latency_adapt", "true" if player.get("latency_adapt") else "false"])
+    quality_source = str(player.get("quality_source") or "static").strip() or "static"
+    args.extend(["--quality_source", quality_source])
     fixed_enh = player.get("fixed_enhance_action", None)
     if fixed_enh is not None:
         args.extend(["--fixed_enhance_action", str(int(fixed_enh))])
